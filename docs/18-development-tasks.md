@@ -84,7 +84,6 @@ Codebase aktif berada di `hanquran-app/` (Next.js App Router). **Konten Quran** 
 **Belum selesai:**
 
 - Persist posisi audio terakhir
-- Wire `lastRead` → kartu Lanjutkan Hafalan (Home masih mock)
 - Wire favorit ke `useUserStore` (Home masih state lokal)
 - Word-by-word highlight (Post-MVP)
 - PWA manifest & install prompt (Phase 6)
@@ -101,7 +100,7 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 | File                      | Route         | Keterangan                                           |
 | ------------------------- | ------------- | ---------------------------------------------------- |
-| `app/page.tsx`            | `/` (Beranda) | ✓ Data nyata — `useSurahList`                        |
+| `app/page.tsx`            | `/` (Beranda) | ✓ Data nyata — `useSurahList`, kartu Lanjutkan Hafalan dari `lastRead` |
 | `app/surah/[id]/page.tsx` | `/surah/[id]` | ✓ Data nyata + audio + RepeatEngine terintegrasi |
 | `app/focus/[id]/page.tsx` | `/focus/[id]` | ✓ Baca fokus — ayat nyata, tanpa word highlight (MVP) |
 | `app/settings/page.tsx`   | `/settings`   | ✓ Bahasa, qari, ukuran teks Arab, aksesibilitas, status offline & cache |
@@ -127,9 +126,9 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 `services/quran/data-loader.ts` | `mappers.ts` | `quran-service.ts` | `audio-service.ts` | `audio-config.ts` | `paths.ts` | `app-types.ts` | `dataset-types.ts` | `index.ts`
 
-## Hooks (11 file)
+## Hooks (13 file)
 
-`hooks/use-media-query.ts` | `use-surah-list.ts` | `use-surah.ts` | `use-reciters.ts` | `use-ayah-audio.ts` | `use-reading-display.ts` | `use-surah-detail-bottom-inset.ts` | `use-surah-repeat-playback.ts` | `use-arabic-text-size.ts` | `use-preferred-reciter.ts` | `use-surah-offline-download.ts`
+`hooks/use-media-query.ts` | `use-surah-list.ts` | `use-surah.ts` | `use-reciters.ts` | `use-ayah-audio.ts` | `use-reading-display.ts` | `use-surah-detail-bottom-inset.ts` | `use-surah-repeat-playback.ts` | `use-arabic-text-size.ts` | `use-preferred-reciter.ts` | `use-surah-offline-download.ts` | `use-persist-last-viewed.ts` | `use-is-client.ts`
 
 ## i18n (2 file + messages)
 
@@ -155,9 +154,9 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 # ✅ 4. Completed Tasks
 
-**Total development task yang benar-benar selesai: 52**
+**Total development task yang benar-benar selesai: 53**
 
-Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **128 test passing**).
+Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **138 test passing**).
 
 ### Phase 0 — selesai (7/7, 24 Juni 2026) ✅
 
@@ -201,6 +200,11 @@ Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **128 test passing**).
 1. ✅ Persist `contrastMode` & `smoothAnimation` via `useUserStore` di `/settings`
 2. ✅ `AccessibilityProvider` — kontras tinggi (`data-contrast`) & animasi (`MotionConfig` + `data-motion`)
 3. ✅ CSS global untuk mode kontras tinggi & reduced motion
+
+### Lanjutkan Hafalan (24 Juni 2026)
+
+1. ✅ `usePersistLastViewed` — simpan surat/ayat aktif ke Dexie `lastRead` dari Surah Detail & Focus
+2. ✅ `ContinueReadingSection` di Beranda — kartu hanya tampil jika `lastViewed` ada; link ke `/surah/[id]?ayah=`
 
 ### Store & offline (terintegrasi)
 
@@ -361,6 +365,24 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
 - [x] [UPDATE] Hapus kontrol terjemahan dari Settings
   - File: `app/settings/page.tsx`
   - Prioritas: P1
+
+---
+
+## Phase 1d — Lanjutkan Hafalan (PB-008)
+
+**Total: 2 tasks | P1: 2**
+
+### Disarankan (P1)
+
+- [x] [NEW] Hook `usePersistLastViewed` — simpan posisi terakhir ke Dexie `lastRead`
+  - File: `hooks/use-persist-last-viewed.ts`, `stores/userStore.ts`, `app/surah/[id]/page.tsx`, `app/focus/[id]/page.tsx`
+  - Prioritas: P1
+  - **Ringkasan:** Dipanggil saat ayat aktif berubah di Surah Detail & Focus Mode
+
+- [x] [UPDATE] Wire kartu Lanjutkan Hafalan di Beranda ke `lastViewed`
+  - File: `components/continue-reading.tsx` (`ContinueReadingSection`), `app/page.tsx`
+  - Prioritas: P1
+  - **Ringkasan:** Kartu hanya tampil jika data `lastRead` tersedia; navigasi ke posisi tersimpan
 
 ---
 
@@ -912,6 +934,7 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [x] Surah Detail & Focus Mode ter-wire
 - [x] Section Terjemahan dihapus dari Settings
 - [x] Aksesibilitas Settings — persist & terapkan global (`AccessibilityProvider`)
+- [x] Lanjutkan Hafalan — `lastRead` persist + `ContinueReadingSection` di Beranda
 
 ### Phase 2 — Audio
 - [x] AudioController service selesai — class, integrasi UI, BroadcastChannel ✅
@@ -1010,7 +1033,7 @@ MVP HanQuran dianggap **selesai** ketika seluruh kondisi berikut terpenuhi:
 
 - [x] Data surat dimuat dari `public/data/`* via `services/quran/` (Static Dataset Architecture)
 - [x] Preferensi pengguna (locale, ukuran teks, terjemahan/transliterasi visible) tersimpan di Dexie
-- [ ] Surat/ayat terakhir dilihat tersimpan di Dexie `lastRead` — store ada, UI `ContinueReading` belum wire
+- [x] Surat/ayat terakhir dilihat tersimpan di Dexie `lastRead` — `usePersistLastViewed` + `ContinueReadingSection`
 - [ ] Favorit surat persisten — `toggleFavorite` ada, Home masih state lokal
 
 ## Offline & PWA

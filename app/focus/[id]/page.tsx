@@ -23,6 +23,7 @@ import { usePreferredReciterId } from '@/hooks/use-preferred-reciter';
 import { useSurah } from '@/hooks/use-surah';
 import { useReadingDisplay } from '@/hooks/use-reading-display';
 import { useSurahRepeatPlayback } from '@/hooks/use-surah-repeat-playback';
+import { usePersistLastViewed } from '@/hooks/use-persist-last-viewed';
 import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
 import type { SurahData } from '@/services/quran';
 
@@ -55,6 +56,8 @@ function FocusModeLoaded({
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   const totalAyahs = surah.ayahs.length;
+
+  usePersistLastViewed(surah.number, activeAyah);
 
   const {
     isActiveAyahPlaying,

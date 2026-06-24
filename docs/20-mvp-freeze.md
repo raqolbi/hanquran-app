@@ -164,8 +164,8 @@ Counter menampilkan target aktif dan jumlah tersisa. Repeat berjalan otomatis ta
 
 ## 4.8 Last Read / Lanjutkan Hafalan (PB-008) — P1
 
-- Posisi terakhir (surat + ayat) disimpan otomatis di Dexie `lastRead` — store ada; **belum dipanggil dari UI**
-- Tersedia tombol "Lanjutkan Hafalan" di Home — komponen ada; **data masih hardcoded**
+- Posisi terakhir (surat + ayat) disimpan otomatis di Dexie `lastRead` — `usePersistLastViewed` di Surah Detail & Focus ✅
+- Kartu "Lanjutkan Hafalan" di Home — `ContinueReadingSection`; hanya tampil jika `lastViewed` ada ✅
 - Tidak memerlukan akun atau login
 
 ## 4.9 Favorit Surat (PB-009) — P2
@@ -469,7 +469,7 @@ MVP HanQuran V1 dinyatakan **selesai** hanya jika seluruh kondisi berikut terpen
 - [x] Repeat berjalan otomatis sesuai konfigurasi tanpa interaksi tambahan
 - [x] Focus Mode menampilkan satu ayat dalam layout bebas distraksi dengan data nyata
 - [x] Navigasi ayat di Focus Mode (`/focus/[id]`) berfungsi tanpa keluar dari mode
-- [ ] "Lanjutkan Hafalan" tersedia di Home dan membuka posisi terakhir yang tersimpan
+- [x] "Lanjutkan Hafalan" tersedia di Home dan membuka posisi terakhir yang tersimpan
 
 ## 9.2 Data & State
 
@@ -478,7 +478,7 @@ MVP HanQuran V1 dinyatakan **selesai** hanya jika seluruh kondisi berikut terpen
 - [x] Preferensi pengguna (bahasa UI, qari, ukuran teks, terjemahan ayat, konfigurasi repeat) tersimpan di Dexie dan persisten antar sesi
 - [x] Bahasa UI (`settings.appLocale`: `id` | `en`) dapat diubah di Pengaturan dan memperbarui seluruh label aplikasi via `next-intl`
 - [x] Arti surat & terjemahan ayat mengikuti `appLocale` (`getSurahMeaning`, `lib/translation-language.ts`)
-- [ ] Posisi terakhir (surat + ayat) tersimpan otomatis di Dexie `lastRead`
+- [x] Posisi terakhir (surat + ayat) tersimpan otomatis di Dexie `lastRead`
 - [ ] Favorit surat persisten di Dexie — store ada; Home masih state lokal
 
 ## 9.3 Offline & PWA
