@@ -117,7 +117,9 @@
       "quranData": "Data Al-Qur'an",
       "clearCache": "Hapus Cache",
       "clearCacheTitle": "Hapus cache?",
-      "clearCacheDescription": "Audio dan data Al-Qur'an yang sudah tersimpan akan dihapus. Kamu perlu koneksi internet untuk memuatnya kembali."
+      "clearCacheDescription": "Audio yang sudah tersimpan akan dihapus. Kamu perlu koneksi internet untuk mengunduhnya kembali.",
+      "clearCacheInProgress": "Menghapus…",
+      "clearCacheFailed": "Gagal menghapus cache. Coba lagi."
     },
     "accessibility": {
       "title": "Aksesibilitas",

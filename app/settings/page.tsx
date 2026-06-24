@@ -14,6 +14,7 @@ import {
 } from '@/lib/arabic-text-size';
 import { routes } from '@/lib/routes';
 import { formatMegabytes } from '@/lib/format-bytes';
+import { clearOfflineAudioCache } from '@/services/cache-manager';
 import { useUserStore } from '@/stores/userStore';
 import { selectBadgeVariant, useOfflineStore } from '@/stores/offlineStore';
 import { normalizeReciterId } from '@/lib/reciter-preference';
@@ -72,10 +73,32 @@ export default function SettingsPage() {
   const quranDataCached = true;
 
   const [confirmClearOpen, setConfirmClearOpen] = useState(false);
+  const [isClearingCache, setIsClearingCache] = useState(false);
+  const [clearCacheError, setClearCacheError] = useState<string | null>(null);
+  const [offlineUiReady, setOfflineUiReady] = useState(false);
 
   useEffect(() => {
-    void useOfflineStore.getState().refreshManifest();
+    let cancelled = false;
+
+    void useOfflineStore
+      .getState()
+      .refreshManifest()
+      .finally(() => {
+        if (!cancelled) {
+          setOfflineUiReady(true);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
+
+  const displayBadgeStatus = offlineUiReady ? badgeStatus : 'online';
+  const displayAudioCacheMb = offlineUiReady
+    ? audioCacheMb
+    : formatMegabytes(0);
+  const clearCacheDisabled = !offlineUiReady || totalSizeBytes === 0;
 
   const textSizeOptions: ReadonlyArray<SegmentedOption<ArabicTextSize>> = [
     { value: 'small', label: t('textSize.small') },
@@ -97,7 +120,19 @@ export default function SettingsPage() {
   };
 
   const handleClearCache = () => {
-    setConfirmClearOpen(false);
+    setClearCacheError(null);
+    setIsClearingCache(true);
+
+    void clearOfflineAudioCache()
+      .then(() => {
+        setConfirmClearOpen(false);
+      })
+      .catch(() => {
+        setClearCacheError(t('offline.clearCacheFailed'));
+      })
+      .finally(() => {
+        setIsClearingCache(false);
+      });
   };
 
   const handleLocaleChange = (locale: AppLocale) => {
@@ -168,13 +203,13 @@ export default function SettingsPage() {
           description={t('offline.description')}
         >
           <div className="space-y-4">
-            <OfflineStatusBadge status={badgeStatus} />
+            <OfflineStatusBadge status={displayBadgeStatus} />
 
             <dl className="space-y-2 text-sm">
               <div className="flex items-center justify-between">
                 <dt className="text-muted-foreground">{t('offline.audioCached')}</dt>
                 <dd className="font-medium text-foreground">
-                  {audioCacheMb} MB
+                  {displayAudioCacheMb} MB
                 </dd>
               </div>
               <div className="flex items-center justify-between">
@@ -187,13 +222,22 @@ export default function SettingsPage() {
 
             <button
               type="button"
-              onClick={() => setConfirmClearOpen(true)}
-              disabled={totalSizeBytes === 0}
+              onClick={() => {
+                setClearCacheError(null);
+                setConfirmClearOpen(true);
+              }}
+              disabled={clearCacheDisabled}
               className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-border bg-white px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <Trash2 size={16} />
               {t('offline.clearCache')}
             </button>
+
+            {clearCacheError ? (
+              <p className="text-sm text-destructive" role="alert">
+                {clearCacheError}
+              </p>
+            ) : null}
           </div>
         </SettingsSection>
 
@@ -236,6 +280,7 @@ export default function SettingsPage() {
         open={confirmClearOpen}
         onOpenChange={setConfirmClearOpen}
         onConfirm={handleClearCache}
+        isClearing={isClearingCache}
       />
     </div>
   );
@@ -308,12 +353,14 @@ interface ClearCacheDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
+  isClearing?: boolean;
 }
 
 function ClearCacheDialog({
   open,
   onOpenChange,
   onConfirm,
+  isClearing = false,
 }: ClearCacheDialogProps) {
   const t = useTranslations('settings.offline');
   const tCommon = useTranslations('common');
@@ -329,16 +376,18 @@ function ClearCacheDialog({
           <button
             type="button"
             onClick={() => onOpenChange(false)}
-            className="inline-flex h-11 items-center justify-center rounded-lg border border-border bg-white px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            disabled={isClearing}
+            className="inline-flex h-11 items-center justify-center rounded-lg border border-border bg-white px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             {tCommon('cancel')}
           </button>
           <button
             type="button"
             onClick={onConfirm}
-            className="inline-flex h-11 items-center justify-center rounded-lg bg-destructive/10 px-5 text-sm font-medium text-destructive transition-colors hover:bg-destructive/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive/40"
+            disabled={isClearing}
+            className="inline-flex h-11 items-center justify-center rounded-lg bg-destructive/10 px-5 text-sm font-medium text-destructive transition-colors hover:bg-destructive/20 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive/40"
           >
-            {t('clearCache')}
+            {isClearing ? t('clearCacheInProgress') : t('clearCache')}
           </button>
         </div>
       </DialogContent>
