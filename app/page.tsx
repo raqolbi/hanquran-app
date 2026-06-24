@@ -11,14 +11,18 @@ import { FilterChips } from '@/components/filter-chips';
 import { SurahCard } from '@/components/surah-card';
 import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
 import { useSurahList } from '@/hooks/use-surah-list';
+import { useUserStore } from '@/stores/userStore';
 
 export default function Home() {
   const t = useTranslations('errors');
+  const tHome = useTranslations('home');
   const tLoading = useTranslations('loading');
   const { surahs, loading, error, retry } = useSurahList();
+  const favorites = useUserStore((s) => s.favorites);
+  const toggleFavorite = useUserStore((s) => s.toggleFavorite);
+  const isFavorite = useUserStore((s) => s.isFavorite);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
-  const [favorites, setFavorites] = useState<string[]>(['Al-Faatiha', 'Al-Baqarah']);
 
   const filteredSurahs = useMemo(() => {
     return surahs.filter((surah) => {
@@ -29,23 +33,20 @@ export default function Home() {
         surah.arabicName.includes(searchQuery);
       const matchesFilter =
         selectedFilter === 'all' ||
-        (selectedFilter === 'favorites' && favorites.includes(surah.englishName));
+        (selectedFilter === 'favorites' && favorites.includes(surah.number));
       return matchesSearch && matchesFilter;
     });
   }, [surahs, searchQuery, selectedFilter, favorites]);
 
-  const handleToggleFavorite = (surahName: string) => {
-    setFavorites((prev) =>
-      prev.includes(surahName)
-        ? prev.filter((s) => s !== surahName)
-        : [...prev, surahName],
-    );
-  };
-
   const surahsWithFavorites = filteredSurahs.map((surah) => ({
     ...surah,
-    isFavorited: favorites.includes(surah.englishName),
+    isFavorited: isFavorite(surah.number),
   }));
+
+  const emptyMessage =
+    selectedFilter === 'favorites' && !searchQuery
+      ? tHome('favoritesEmpty')
+      : t('noSearchResults');
 
   return (
     <div className="min-h-screen bg-background">
@@ -93,7 +94,7 @@ export default function Home() {
                       ayahCount={surah.ayahCount}
                       type={surah.type}
                       isFavorited={surah.isFavorited}
-                      onToggleFavorite={() => handleToggleFavorite(surah.englishName)}
+                      onToggleFavorite={() => void toggleFavorite(surah.number)}
                     />
                   </motion.div>
                 ))
@@ -116,7 +117,7 @@ export default function Home() {
                       d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                     />
                   </svg>
-                  <p className="text-muted-foreground">{t('noSearchResults')}</p>
+                  <p className="text-muted-foreground">{emptyMessage}</p>
                 </motion.div>
               )}
             </motion.div>

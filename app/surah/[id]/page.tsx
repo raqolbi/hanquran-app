@@ -22,6 +22,7 @@ import { usePersistLastViewed } from '@/hooks/use-persist-last-viewed';
 import { usePreferredReciterId } from '@/hooks/use-preferred-reciter';
 import { downloadManifestKey } from '@/services/download-manifest-key';
 import { useOfflineStore } from '@/stores/offlineStore';
+import { useUserStore } from '@/stores/userStore';
 import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
 import type { SurahData } from '@/services/quran';
 
@@ -48,9 +49,10 @@ function SurahDetailLoaded({
     toggleTransliteration,
   } = useReadingDisplay();
   const [activeAyah, setActiveAyah] = useState(startAyah);
-  const [isFavorited, setIsFavorited] = useState(false);
   const [completedAyahs, setCompletedAyahs] = useState<number[]>([]);
   const [repeatSettingsOpen, setRepeatSettingsOpen] = useState(false);
+  const isFavorited = useUserStore((s) => s.favorites.includes(surah.number));
+  const toggleFavorite = useUserStore((s) => s.toggleFavorite);
 
   usePersistLastViewed(surah.number, activeAyah);
 
@@ -103,7 +105,7 @@ function SurahDetailLoaded({
           type={surah.type}
           isFavorited={isFavorited}
           isOfflineReady={isOfflineReady}
-          onToggleFavorite={() => setIsFavorited(!isFavorited)}
+          onToggleFavorite={() => void toggleFavorite(surah.number)}
         />
 
         <div className="max-w-3xl mx-auto px-4 pb-4">
