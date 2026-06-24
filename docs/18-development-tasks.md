@@ -84,7 +84,6 @@ Codebase aktif berada di `hanquran-app/` (Next.js App Router). **Konten Quran** 
 **Belum selesai:**
 
 - Persist posisi audio terakhir
-- Wire favorit ke `useUserStore` (Home masih state lokal)
 - Word-by-word highlight (Post-MVP)
 - PWA manifest & install prompt (Phase 6)
 - E2E / verifikasi offline playback
@@ -100,7 +99,7 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 | File                      | Route         | Keterangan                                           |
 | ------------------------- | ------------- | ---------------------------------------------------- |
-| `app/page.tsx`            | `/` (Beranda) | ✓ Data nyata — `useSurahList`, kartu Lanjutkan Hafalan dari `lastRead` |
+| `app/page.tsx`            | `/` (Beranda) | ✓ Data nyata — `useSurahList`, Lanjutkan Hafalan, favorit persisten (`useUserStore`) |
 | `app/surah/[id]/page.tsx` | `/surah/[id]` | ✓ Data nyata + audio + RepeatEngine terintegrasi |
 | `app/focus/[id]/page.tsx` | `/focus/[id]` | ✓ Baca fokus — ayat nyata, tanpa word highlight (MVP) |
 | `app/settings/page.tsx`   | `/settings`   | ✓ Bahasa, qari, ukuran teks Arab, aksesibilitas, status offline & cache |
@@ -154,9 +153,9 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 # ✅ 4. Completed Tasks
 
-**Total development task yang benar-benar selesai: 53**
+**Total development task yang benar-benar selesai: 54**
 
-Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **138 test passing**).
+Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **141 test passing**).
 
 ### Phase 0 — selesai (7/7, 24 Juni 2026) ✅
 
@@ -205,6 +204,11 @@ Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **138 test passing**).
 
 1. ✅ `usePersistLastViewed` — simpan surat/ayat aktif ke Dexie `lastRead` dari Surah Detail & Focus
 2. ✅ `ContinueReadingSection` di Beranda — kartu hanya tampil jika `lastViewed` ada; link ke `/surah/[id]?ayah=`
+
+### Favorit Surat (24 Juni 2026)
+
+1. ✅ Beranda — filter Favorit & toggle heart via `useUserStore.toggleFavorite` (Dexie `favorites`, key `surahId`)
+2. ✅ Surah Detail — tombol favorit di header ter-wire ke store yang sama
 
 ### Store & offline (terintegrasi)
 
@@ -383,6 +387,24 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
   - File: `components/continue-reading.tsx` (`ContinueReadingSection`), `app/page.tsx`
   - Prioritas: P1
   - **Ringkasan:** Kartu hanya tampil jika data `lastRead` tersedia; navigasi ke posisi tersimpan
+
+---
+
+## Phase 1e — Favorit Surat (PB-009)
+
+**Total: 2 tasks | P2: 2**
+
+### Nice to Have (P2)
+
+- [x] [UPDATE] Wire favorit persisten di Beranda ke `useUserStore`
+  - File: `app/page.tsx`, `components/surah-card.tsx`
+  - Prioritas: P2
+  - **Ringkasan:** Filter `Favorit` memakai `favorites: number[]` dari Dexie; toggle heart memanggil `toggleFavorite(surahId)`
+
+- [x] [UPDATE] Wire tombol favorit di Surah Detail ke `useUserStore`
+  - File: `app/surah/[id]/page.tsx`, `components/surah-detail-header.tsx`
+  - Prioritas: P2
+  - **Ringkasan:** Status favorit sinkron dengan Beranda & persisten antar sesi
 
 ---
 
@@ -935,6 +957,7 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [x] Section Terjemahan dihapus dari Settings
 - [x] Aksesibilitas Settings — persist & terapkan global (`AccessibilityProvider`)
 - [x] Lanjutkan Hafalan — `lastRead` persist + `ContinueReadingSection` di Beranda
+- [x] Favorit surat persisten — `toggleFavorite` di Beranda & Surah Detail
 
 ### Phase 2 — Audio
 - [x] AudioController service selesai — class, integrasi UI, BroadcastChannel ✅
@@ -1034,7 +1057,7 @@ MVP HanQuran dianggap **selesai** ketika seluruh kondisi berikut terpenuhi:
 - [x] Data surat dimuat dari `public/data/`* via `services/quran/` (Static Dataset Architecture)
 - [x] Preferensi pengguna (locale, ukuran teks, terjemahan/transliterasi visible) tersimpan di Dexie
 - [x] Surat/ayat terakhir dilihat tersimpan di Dexie `lastRead` — `usePersistLastViewed` + `ContinueReadingSection`
-- [ ] Favorit surat persisten — `toggleFavorite` ada, Home masih state lokal
+- [x] Favorit surat persisten — `useUserStore.toggleFavorite` di Beranda & Surah Detail
 
 ## Offline & PWA
 
