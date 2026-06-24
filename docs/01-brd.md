@@ -330,12 +330,49 @@ Acceptance:
 
 ### Translation Toggle
 
-User dapat menampilkan atau menyembunyikan terjemahan.
+User dapat menampilkan atau menyembunyikan terjemahan **ayat** (konten Quran dari dataset).
 
 Acceptance:
 
 - Default hidden
+- Toggle di **Verse Display Controls** pada Surah Detail — selalu terlihat
 - Dapat diaktifkan kapan saja
+- Terpisah dari bahasa UI aplikasi (lihat FR-011)
+- Tidak ada di halaman Pengaturan
+
+---
+
+## FR-009b
+
+### Transliteration Toggle
+
+User dapat menampilkan atau menyembunyikan transliterasi ayat.
+
+Acceptance:
+
+- Default hidden
+- Toggle di Verse Display Controls — satu baris dengan Terjemahan dan Fokus
+- Independen dari Translation Toggle
+- Persisten di Dexie (`settings.transliterationVisible`)
+
+---
+
+## FR-011
+
+### Application Language
+
+User dapat memilih bahasa antarmuka aplikasi.
+
+Acceptance:
+
+- Bahasa didukung: Bahasa Indonesia (`id`) dan English (`en`)
+- Deteksi otomatis pada first launch (browser locale + timezone) — lihat `docs/21-i18n-and-locale.md`
+- Preferensi persisten di Dexie (`settings.appLocale`)
+- Pengguna dapat mengganti bahasa di Pengaturan kapan saja
+- Perubahan bahasa memperbarui menu, navigasi, dialog, label, tombol, empty state, dan notifikasi
+- Teks Arab ayat, transliterasi, audio, dan recitation **tidak** berubah
+
+Framework implementasi: **`next-intl`**
 
 ---
 
@@ -417,7 +454,7 @@ Data Al-Qur'an:
 Sumber:
 
 - Dataset statis `public/data/*` (konten Quran & terjemahan)
-- EveryAyah CDN (audio)
+- CDN audio tilawah (eksternal)
 - `data/reciters.json` (metadata qari)
 
 Lihat `docs/07-api-integration.md`.
@@ -490,6 +527,7 @@ Karena Anda berencana menjadikannya proyek open source, saya sarankan setelah BR
 4. Module Catalog
 5. Database Schema (IndexedDB)
 6. Data Integration Specification (`docs/07-api-integration.md`)
+7. Internationalization Specification (`docs/21-i18n-and-locale.md`)
 7. UI/UX Wireframe
 
 Urutan tersebut akan membuat implementasi Next.js jauh lebih terstruktur dibanding langsung mulai coding.

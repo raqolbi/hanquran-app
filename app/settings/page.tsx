@@ -4,8 +4,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'motion/react';
 import { ArrowLeft, Trash2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { routes } from '@/lib/routes';
+import { useUserStore } from '@/stores/userStore';
+import { normalizeReciterId } from '@/lib/reciter-preference';
 
 import { Logo } from '@/components/shared/Logo';
 import { Switch } from '@/components/ui/switch';
@@ -38,42 +41,55 @@ import {
 
 import { useReciters } from '@/hooks/use-reciters';
 
-// ---------- Domain types ----------
-
 type TextSize = 'small' | 'medium' | 'large';
 
-const TEXT_SIZE_OPTIONS: ReadonlyArray<SegmentedOption<TextSize>> = [
-  { value: 'small', label: 'Kecil' },
-  { value: 'medium', label: 'Sedang' },
-  { value: 'large', label: 'Besar' },
-];
-
-// Arabic font sizes follow design-system.md (32 / 40 / 48 px)
 const TEXT_SIZE_PX: Record<TextSize, number> = {
   small: 32,
   medium: 40,
   large: 48,
 };
 
-// ---------- Page ----------
+const LOCALE_OPTIONS: ReadonlyArray<SegmentedOption<AppLocale>> = [
+  { value: 'id', label: 'Bahasa Indonesia' },
+  { value: 'en', label: 'English' },
+];
 
 export default function SettingsPage() {
-  const { reciters, defaultReciterId } = useReciters();
-  const [qari, setQari] = useState(defaultReciterId);
-  const [showTranslation, setShowTranslation] = useState(true);
+  const t = useTranslations('settings');
+  const tCommon = useTranslations('common');
+  const appLocale = useUserStore((s) => s.settings.appLocale);
+  const reciterId = useUserStore((s) => s.settings.reciterId);
+  const updateSettings = useUserStore((s) => s.updateSettings);
+
+  const { reciters } = useReciters();
   const [textSize, setTextSize] = useState<TextSize>('medium');
   const [highContrast, setHighContrast] = useState(false);
   const [smoothAnimation, setSmoothAnimation] = useState(true);
 
-  // Offline state — fake but selectable so design QA can preview all 5 variants.
   const [connectionStatus] = useState<ConnectionStatus>('offline_ready');
   const [audioCacheMb, setAudioCacheMb] = useState(24);
   const [quranDataCached, setQuranDataCached] = useState(true);
 
   const [confirmClearOpen, setConfirmClearOpen] = useState(false);
 
+  const textSizeOptions: ReadonlyArray<SegmentedOption<TextSize>> = [
+    { value: 'small', label: t('textSize.small') },
+    { value: 'medium', label: t('textSize.medium') },
+    { value: 'large', label: t('textSize.large') },
+  ];
+
+  const localeOptions = LOCALE_OPTIONS.map((option) => ({
+    ...option,
+    label: t(`language.${option.value}`),
+  }));
+
   const selectedQariName =
-    reciters.find((reciter) => reciter.id === qari)?.name ?? 'Pilih qari';
+    reciters.find((reciter) => reciter.id === reciterId)?.name ??
+    t('qari.selectPlaceholder');
+
+  const handleReciterChange = (value: string) => {
+    void updateSettings({ reciterId: value });
+  };
 
   const handleClearCache = () => {
     setAudioCacheMb(0);
@@ -81,19 +97,39 @@ export default function SettingsPage() {
     setConfirmClearOpen(false);
   };
 
+  const handleLocaleChange = (locale: AppLocale) => {
+    void updateSettings({ appLocale: locale });
+  };
+
   return (
     <div className="min-h-dvh bg-background pb-16">
       <SettingsHeader />
 
       <main className="mx-auto w-full max-w-2xl space-y-6 px-4 py-6 sm:px-6">
-        {/* Qari */}
         <SettingsSection
-          title="Qari"
-          description="Pilih suara qari favorit untuk bacaan audio."
+          title={t('language.title')}
+          description={t('language.description')}
         >
-          <Select value={qari} onValueChange={setQari}>
-            <SelectTrigger aria-label="Pilih qari">
-              <SelectValue placeholder="Pilih qari">{selectedQariName}</SelectValue>
+          <SegmentedControl
+            value={appLocale}
+            onChange={handleLocaleChange}
+            options={localeOptions}
+            ariaLabel={t('language.ariaLabel')}
+          />
+        </SettingsSection>
+
+        <SettingsSection
+          title={t('qari.title')}
+          description={t('qari.description')}
+        >
+          <Select
+            value={normalizeReciterId(reciterId)}
+            onValueChange={handleReciterChange}
+          >
+            <SelectTrigger aria-label={t('qari.selectAriaLabel')}>
+              <SelectValue placeholder={t('qari.selectPlaceholder')}>
+                {selectedQariName}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               {reciters.map((option) => (
@@ -105,63 +141,39 @@ export default function SettingsPage() {
           </Select>
         </SettingsSection>
 
-        {/* Terjemahan */}
         <SettingsSection
-          title="Terjemahan"
-          description="Atur tampilan terjemahan ayat secara default."
-        >
-          <SettingsRow
-            label={
-              showTranslation
-                ? 'Tampilkan terjemahan'
-                : 'Sembunyikan terjemahan'
-            }
-            description="Berlaku pada semua surat."
-            control={
-              <Switch
-                checked={showTranslation}
-                onCheckedChange={setShowTranslation}
-                aria-label="Tampilkan terjemahan"
-              />
-            }
-          />
-        </SettingsSection>
-
-        {/* Ukuran Teks */}
-        <SettingsSection
-          title="Ukuran Teks"
-          description="Ukuran teks Arab pada layar baca dan Mode Fokus."
+          title={t('textSize.title')}
+          description={t('textSize.description')}
         >
           <div className="space-y-4">
             <SegmentedControl
               value={textSize}
               onChange={setTextSize}
-              options={TEXT_SIZE_OPTIONS}
-              ariaLabel="Ukuran teks Arab"
+              options={textSizeOptions}
+              ariaLabel={t('textSize.ariaLabel')}
             />
             <TextSizePreview size={textSize} />
           </div>
         </SettingsSection>
 
-        {/* Offline & Cache */}
         <SettingsSection
-          title="Offline & Cache"
-          description="Status data tersimpan untuk penggunaan tanpa internet."
+          title={t('offline.title')}
+          description={t('offline.description')}
         >
           <div className="space-y-4">
             <OfflineStatusBadge status={connectionStatus} />
 
             <dl className="space-y-2 text-sm">
               <div className="flex items-center justify-between">
-                <dt className="text-muted-foreground">Audio tersimpan</dt>
+                <dt className="text-muted-foreground">{t('offline.audioCached')}</dt>
                 <dd className="font-medium text-foreground">
                   {audioCacheMb} MB
                 </dd>
               </div>
               <div className="flex items-center justify-between">
-                <dt className="text-muted-foreground">Data Al-Qur'an</dt>
+                <dt className="text-muted-foreground">{t('offline.quranData')}</dt>
                 <dd className="font-medium text-foreground">
-                  {quranDataCached ? 'Tersimpan' : 'Belum tersimpan'}
+                  {quranDataCached ? tCommon('cached') : tCommon('notCached')}
                 </dd>
               </div>
             </dl>
@@ -173,39 +185,38 @@ export default function SettingsPage() {
               className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-border bg-white px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <Trash2 size={16} />
-              Hapus Cache
+              {t('offline.clearCache')}
             </button>
           </div>
         </SettingsSection>
 
-        {/* Aksesibilitas */}
         <SettingsSection
-          title="Aksesibilitas"
-          description="Sesuaikan tampilan agar lebih nyaman digunakan."
+          title={t('accessibility.title')}
+          description={t('accessibility.description')}
         >
           <div className="divide-y divide-border">
             <div className="pb-4">
               <SettingsRow
-                label="Kontras tinggi"
-                description="Tingkatkan kontras teks dan latar."
+                label={t('accessibility.highContrast')}
+                description={t('accessibility.highContrastDescription')}
                 control={
                   <Switch
                     checked={highContrast}
                     onCheckedChange={setHighContrast}
-                    aria-label="Aktifkan kontras tinggi"
+                    aria-label={t('accessibility.highContrastAriaLabel')}
                   />
                 }
               />
             </div>
             <div className="pt-4">
               <SettingsRow
-                label="Animasi halus"
-                description="Matikan untuk mengurangi gerakan pada layar."
+                label={t('accessibility.smoothAnimation')}
+                description={t('accessibility.smoothAnimationDescription')}
                 control={
                   <Switch
                     checked={smoothAnimation}
                     onCheckedChange={setSmoothAnimation}
-                    aria-label="Aktifkan animasi halus"
+                    aria-label={t('accessibility.smoothAnimationAriaLabel')}
                   />
                 }
               />
@@ -223,13 +234,11 @@ export default function SettingsPage() {
   );
 }
 
-// ---------- Page sub-components ----------
-
 function SettingsHeader() {
   const router = useRouter();
+  const t = useTranslations('settings');
+  const tCommon = useTranslations('common');
 
-  // Settings is a leaf screen; "Back" should return to whichever screen
-  // opened it. Fall back to Home if there is no history (e.g. direct URL).
   const handleBack = () => {
     if (typeof window !== 'undefined' && window.history.length > 1) {
       router.back();
@@ -250,12 +259,12 @@ function SettingsHeader() {
           type="button"
           onClick={handleBack}
           className="-ml-2 inline-flex h-10 w-10 items-center justify-center rounded-lg text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          aria-label="Kembali"
+          aria-label={tCommon('back')}
         >
           <ArrowLeft size={20} />
         </button>
         <Logo size={24} alt="" />
-        <h1 className="text-lg font-semibold text-foreground">Pengaturan</h1>
+        <h1 className="text-lg font-semibold text-foreground">{t('title')}</h1>
       </div>
     </motion.header>
   );
@@ -266,10 +275,12 @@ interface TextSizePreviewProps {
 }
 
 function TextSizePreview({ size }: TextSizePreviewProps) {
+  const tCommon = useTranslations('common');
+
   return (
     <div className="rounded-xl border border-border bg-muted/40 px-4 py-5">
       <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-        Pratinjau
+        {tCommon('preview')}
       </p>
       <motion.p
         key={size}
@@ -297,15 +308,15 @@ function ClearCacheDialog({
   onOpenChange,
   onConfirm,
 }: ClearCacheDialogProps) {
+  const t = useTranslations('settings.offline');
+  const tCommon = useTranslations('common');
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Hapus cache?</DialogTitle>
-          <DialogDescription>
-            Audio dan data Al-Qur'an yang sudah tersimpan akan dihapus. Kamu
-            perlu koneksi internet untuk memuatnya kembali.
-          </DialogDescription>
+          <DialogTitle>{t('clearCacheTitle')}</DialogTitle>
+          <DialogDescription>{t('clearCacheDescription')}</DialogDescription>
         </DialogHeader>
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3">
           <button
@@ -313,14 +324,14 @@ function ClearCacheDialog({
             onClick={() => onOpenChange(false)}
             className="inline-flex h-11 items-center justify-center rounded-lg border border-border bg-white px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            Batal
+            {tCommon('cancel')}
           </button>
           <button
             type="button"
             onClick={onConfirm}
             className="inline-flex h-11 items-center justify-center rounded-lg bg-destructive/10 px-5 text-sm font-medium text-destructive transition-colors hover:bg-destructive/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive/40"
           >
-            Hapus Cache
+            {t('clearCache')}
           </button>
         </div>
       </DialogContent>

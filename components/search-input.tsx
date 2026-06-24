@@ -2,12 +2,14 @@
 
 import { motion } from 'motion/react';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface SearchInputProps {
   onSearch?: (query: string) => void;
 }
 
 export function SearchInput({ onSearch }: SearchInputProps) {
+  const t = useTranslations('home');
   const [value, setValue] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,9 +44,9 @@ export function SearchInput({ onSearch }: SearchInputProps) {
             type="text"
             value={value}
             onChange={handleChange}
-            placeholder="Cari surat..."
+            placeholder={t('searchPlaceholder')}
             className="w-full pl-12 pr-4 py-3 rounded-lg bg-secondary border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-            aria-label="Cari surat"
+            aria-label={t('searchAriaLabel')}
           />
         </div>
       </div>

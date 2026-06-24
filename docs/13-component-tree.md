@@ -25,7 +25,7 @@ HanQuran
 │  │  └─ SurahCard (list)
 │  ├─ SurahDetail (app/surah/[id]/page.tsx)
 │  │  ├─ SurahDetailHeader
-│  │  ├─ ActionBar
+│  │  ├─ VerseDisplayControls
 │  │  ├─ AyahCard (list)
 │  │  ├─ AudioPlayer (sticky)
 │  │  └─ RepeatSelector (floating)
@@ -41,7 +41,7 @@ HanQuran
 
 ├─ Screen Components
 │  ├─ Header
-│  ├─ ActionBar
+│  ├─ VerseDisplayControls
 │  ├─ SurahDetailHeader
 │  ├─ SurahCard
 │  ├─ AyahCard
@@ -86,7 +86,7 @@ Semua penjelasan ditulis dalam Bahasa Indonesia dan mengikuti implementasi saat 
 - SurahDetail (app/surah/[id]/page.tsx)
   - Tujuan: Menyajikan daftar ayat pada sebuah surat, kontrol audio, dan fitur repeat/fokus.
   - Tanggung jawab: Mengelola ayat aktif, status pemutaran, pengaturan repeat, dan membuka Mode Fokus.
-  - Dependensi utama: `SurahDetailHeader`, `ActionBar`, `AyahCard`, `AudioPlayer`, `RepeatSelector`, `RepeatSettingsDialog`, `lib/surahs-data`.
+  - Dependensi utama: `SurahDetailHeader`, `VerseDisplayControls`, `AyahCard`, `AudioPlayer`, `RepeatSelector`, `RepeatSettingsDialog`, `lib/surahs-data`.
   - Reusable: Tidak (halaman spesifik).
 
 - FocusMode (app/focus/[id]/page.tsx)
@@ -96,9 +96,9 @@ Semua penjelasan ditulis dalam Bahasa Indonesia dan mengikuti implementasi saat 
   - Reusable: Tidak (mode khusus), namun beberapa subkomponen reusable.
 
 - Settings (app/settings/page.tsx)
-  - Tujuan: Menyediakan konfigurasi aplikasi (qari, ukuran teks, offline, dsb.).
-  - Tanggung jawab: Menyusun sections pengaturan, menampilkan status offline dan kontrol UI untuk memilih opsi.
-  - Dependensi utama: `SettingsSection`, `SettingsRow`, `OfflineStatusBadge`, `components/ui/*` primitives.
+  - Tujuan: Menyediakan konfigurasi aplikasi (bahasa UI, qari, ukuran teks, offline, dsb.).
+  - Tanggung jawab: Menyusun sections pengaturan termasuk **Bahasa Aplikasi**, menampilkan status offline dan kontrol UI untuk memilih opsi.
+  - Dependensi utama: `SettingsSection`, `SettingsRow`, `LanguageSetting`, `OfflineStatusBadge`, `next-intl`, `components/ui/*` primitives. Spesifikasi: `docs/21-i18n-and-locale.md`.
   - Reusable: Tidak (halaman konfigurasi), beberapa sub-komponen bersifat reusable.
 
 **Komponen Layar (Screen Components)**
@@ -111,8 +111,9 @@ Untuk setiap entri: Tujuan / Tanggung jawab / Dependensi / Reusable
   - Dependensi utama: `routes` util.
   - Reusable: Ya (dipakai di beberapa halaman).
 
-- `ActionBar`
-  - Tujuan: Kontrol cepat di halaman surat (toggle terjemahan, ke Mode Fokus).
+- `VerseDisplayControls` (alias `ActionBar`)
+  - Tujuan: Kontrol tampilan ayat di halaman surat — Terjemahan, Transliterasi, Fokus — selalu terlihat dalam satu baris horizontal di bawah header.
+  - Spesifikasi: `docs/22-verse-display-controls.md`
   - Tanggung jawab: Menyediakan tombol aksi yang relevan untuk konteks SurahDetail.
   - Dependensi utama: props callback dari SurahDetail.
   - Reusable: Ya (dipakai pada SurahDetail dan konteks lain jika perlu).
@@ -130,7 +131,7 @@ Untuk setiap entri: Tujuan / Tanggung jawab / Dependensi / Reusable
   - Reusable: Ya.
 
 - `AyahCard`
-  - Tujuan: Menampilkan satu ayat (teks arab + terjemahan opsional) di halaman SurahDetail.
+  - Tujuan: Menampilkan satu ayat (Arab + transliterasi opsional + terjemahan opsional) di halaman SurahDetail.
   - Tanggung jawab: Menangani state isActive/isCompleted UI dan klik untuk memilih ayat.
   - Dependensi utama: props dari SurahDetail.
   - Reusable: Ya (lihat daftar ayat).
@@ -210,7 +211,7 @@ Untuk setiap entri: Tujuan / Tanggung jawab / Dependensi / Reusable
 **Komponen Bersama (Shared Components)**
 
 Ini adalah komponen yang digunakan lintas halaman sebagai building block:
-- `Header`, `BottomNavigation`, `OfflineStatusBadge`, `AudioPlayer`, `RepeatSettingsDialog`, `RepeatStatus`, `ActionBar`, `SearchInput`, `FilterChips`, `ContinueReading`, `Favorites`.
+- `Header`, `BottomNavigation`, `OfflineStatusBadge`, `AudioPlayer`, `RepeatSettingsDialog`, `RepeatStatus`, `VerseDisplayControls`, `SearchInput`, `FilterChips`, `ContinueReading`, `Favorites`.
 
 Untuk setiap shared component, tanggung jawab dan dependensi sudah dicantumkan di atas pada bagian Screen Components.
 

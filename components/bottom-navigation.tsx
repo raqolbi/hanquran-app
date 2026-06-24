@@ -3,18 +3,20 @@
 import { motion } from 'motion/react';
 import { Home, Settings } from 'lucide-react';
 import { useState } from 'react';
-
-const NAV_ITEMS = [
-  { id: 'home', label: 'Beranda', icon: Home },
-  { id: 'settings', label: 'Pengaturan', icon: Settings },
-];
+import { useTranslations } from 'next-intl';
 
 interface BottomNavigationProps {
   onNavigate?: (id: string) => void;
 }
 
 export function BottomNavigation({ onNavigate }: BottomNavigationProps) {
+  const t = useTranslations('nav');
   const [active, setActive] = useState('home');
+
+  const navItems = [
+    { id: 'home', label: t('home'), icon: Home },
+    { id: 'settings', label: t('settings'), icon: Settings },
+  ];
 
   const handleClick = (id: string) => {
     setActive(id);
@@ -30,7 +32,7 @@ export function BottomNavigation({ onNavigate }: BottomNavigationProps) {
     >
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center">
-          {NAV_ITEMS.map((item, index) => {
+          {navItems.map((item) => {
             const Icon = item.icon;
             return (
               <motion.button

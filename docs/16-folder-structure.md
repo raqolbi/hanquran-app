@@ -50,9 +50,11 @@ Dokumen ini mendefinisikan struktur folder yang direkomendasikan untuk HanQuran 
 │  ├─ components/
 │  │  ├─ ui/                    # primitives (Button, Dialog, Drawer, Select, Switch)
 │  │  ├─ shared/                # shared components (Logo, Header, OfflineBadge)
-│  │  ├─ screens/               # screen-level components (SurahDetailHeader, ActionBar)
+│  │  ├─ screens/               # screen-level components (SurahDetailHeader, VerseDisplayControls)
 │  │  └─ atoms/                 # sangat kecil, optional
-│  ├─ lib/                      # utilities, data providers (surahs-data, routes, repeat-options)
+│  ├─ lib/                      # utilities, route helpers (routes, repeat-options)
+│  ├─ messages/                 # next-intl: id.json, en.json (UI strings)
+│  ├─ i18n/                     # next-intl config, locale detection
 │  ├─ hooks/                    # reusable hooks (useMediaQuery, useAudioController)
 │  ├─ services/                 # SW, download manager, audio controller, api client
 │  ├─ stores/                   # zustand stores (audio, user, repeat, offline)
@@ -74,7 +76,8 @@ Dokumen ini mendefinisikan struktur folder yang direkomendasikan untuk HanQuran 
 ## 4. Penjelasan Setiap Folder
 - `app/` — Next.js App Router: tempat halaman (server+client components), layouts, dan routing. Gunakan struktur file/route sesuai Next.js (folder per route).
 - `components/` — Semua komponen UI. Subfolder disusun untuk kemudahan: `ui/` (primitives), `shared/` (brand + utilities), `screens/` (komponen yang mewakili bagian layar), `atoms/` (komponen sangat kecil).
-- `lib/` — Pure helpers, data fixtures (`surahs-data.ts`), route builders (`routes.ts`), repeat logic helpers.
+- `lib/` — Pure helpers, route builders (`routes.ts`), repeat logic helpers.
+- `messages/` + `i18n/` — Lokalisasi UI via **`next-intl`** (`id`, `en`). Lihat `docs/21-i18n-and-locale.md`.
 - `hooks/` — Custom React hooks yang reusable (harus client-side). Contoh: `useMediaQuery`, `useAudioController`.
 - `services/` — Layanan aplikasi yang berinteraksi dengan platform: `service-worker/`, `download-manager.ts`, `audio-controller.ts`, `api/` (jika ada sinkronisasi server).
 - `stores/` — Client state stores (Zustand): `audioStore.ts`, `userStore.ts`, `repeatStore.ts`, `offlineStore.ts`. Simpan di sini agar mudah dicari.
@@ -103,7 +106,7 @@ components/
 │  └─ offline-status-badge.tsx
 ├─ screens/            # screen specific components (composed from ui + shared)
 │  ├─ surah-detail-header.tsx
-│  ├─ action-bar.tsx
+│  ├─ action-bar.tsx              # legacy name → VerseDisplayControls (docs/22)
 │  └─ audio-player.tsx
 ├─ atoms/              # very small components (AyahWordHighlight, Chip)
 └─ index.ts            # optional barrel export
@@ -122,20 +125,23 @@ Prinsip:
 services/
 ├─ audio-controller.ts      # jembatan HTMLAudioElement ↔ useAudioStore
 ├─ download-manager.ts      # orchestration unduh audio ke Cache Storage
-├─ db/                      # Dexie setup dan migrasi
-│  ├─ db.ts                 # Dexie instance + schema v1 (13 tabel)
+├─ db/                      # Dexie — hanya data pengguna
+│  ├─ db.ts                 # Dexie instance + schema v2
 │  └─ migrations.ts         # migrasi antar versi Dexie
-├─ api/                     # Repository Layer (public/data/*, EveryAyah)
-│  ├─ QuranRepository.ts    # Local-First: Dexie first, API fallback
-│  └─ AudioRepository.ts    # Cache Storage first, download fallback
+├─ quran/                   # Static Dataset service layer (konten Quran)
+│  ├─ quran-service.ts
+│  ├─ data-loader.ts
+│  ├─ mappers.ts
+│  └─ audio-service.ts
 └─ sw/                      # service worker source (workbox / manual sw)
    └─ service-worker.js
 ```
 
 Catatan:
-- `services/db/db.ts` berisi instance Dexie tunggal yang digunakan oleh seluruh Repository.
+- `services/quran/` adalah satu-satunya jalur akses konten Quran — **bukan** Dexie.
+- `services/db/db.ts` hanya untuk data pengguna (settings, favorites, dll.).
 - Service Worker adalah sumber kebenaran untuk file di Cache Storage. Client memverifikasi via `caches.match`.
-- Komponen tidak boleh mengakses `services/db/` atau `services/api/` secara langsung — semua melalui Store actions.
+- Komponen tidak boleh mengakses `services/db/` atau `services/quran/` secara langsung — konten Quran via hooks, data pengguna via Store.
 
 ---
 

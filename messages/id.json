@@ -1,0 +1,162 @@
+{
+  "common": {
+    "back": "Kembali",
+    "cancel": "Batal",
+    "apply": "Terapkan",
+    "settings": "Pengaturan",
+    "preview": "Pratinjau",
+    "online": "Online",
+    "offline": "Offline",
+    "offlineReady": "Siap Offline",
+    "offlineReadyLong": "Offline Siap Digunakan",
+    "downloading": "Sedang Mengunduh",
+    "downloadFailed": "Gagal Mengunduh",
+    "ayah": "Ayat",
+    "ayahs": "ayat",
+    "meccan": "Makkiyah",
+    "medinan": "Madaniyah",
+    "all": "Semua",
+    "favorites": "Favorit",
+    "addFavorite": "Tambahkan ke favorit",
+    "removeFavorite": "Hapus dari favorit",
+    "backToSurahList": "Kembali ke daftar surat",
+    "done": "Selesai",
+    "repeat": "Repeat",
+    "target": "Target",
+    "play": "Putar",
+    "pause": "Jeda",
+    "cached": "Tersimpan",
+    "notCached": "Belum tersimpan"
+  },
+  "loading": {
+    "default": "Memuat",
+    "surahList": "Memuat daftar surat...",
+    "surah": "Memuat surat...",
+    "focusMode": "Memuat Mode Fokus..."
+  },
+  "errors": {
+    "loadSurahListFailed": "Gagal memuat daftar surat.",
+    "loadSurahFailed": "Gagal memuat surat.",
+    "surahNotFound": "Surat tidak ditemukan.",
+    "noSearchResults": "Surat tidak ditemukan. Coba ubah kata pencarian.",
+    "dataLoadTitle": "Gagal memuat data",
+    "dataLoadHint": "Periksa koneksi internet Anda, lalu coba lagi.",
+    "retryLoad": "Coba lagi",
+    "backToHome": "Ke beranda"
+  },
+  "home": {
+    "searchPlaceholder": "Cari surat...",
+    "searchAriaLabel": "Cari surat",
+    "continueMemorization": "Lanjutkan Hafalan",
+    "ayahProgress": "{ayah} • {percent}% selesai",
+    "memorizedProgress": "{current} dari {total} ayat sudah dihafal",
+    "encouragement": "Terus semangat! Kamu hebat.",
+    "continueReadingAria": "Lanjutkan {surah} ayat {ayah}",
+    "myFavorites": "Favorit Saya",
+    "favoritesEmpty": "Tandai surat favorit untuk melihatnya di sini"
+  },
+  "surah": {
+    "translation": "Terjemahan",
+    "transliteration": "Transliterasi",
+    "focus": "Fokus",
+    "ayahLabel": "Ayat {number}",
+    "previousAyah": "Ayat sebelumnya",
+    "nextAyah": "Ayat berikutnya",
+    "audioProgress": "Progres audio",
+    "ayahRemaining": "Ayat {ayah} • {count} tersisa"
+  },
+  "focus": {
+    "exit": "Keluar",
+    "exitAriaLabel": "Keluar dari Mode Fokus",
+    "ayahCounter": "Ayat {current} / {total}",
+    "openRepeatSettings": "Buka Pengaturan Repeat",
+    "previousAyah": "Ayat Sebelum",
+    "nextAyah": "Ayat Berikut"
+  },
+  "settings": {
+    "title": "Pengaturan",
+    "language": {
+      "title": "Bahasa Aplikasi",
+      "description": "Pilih bahasa untuk menu, tombol, dan pesan aplikasi.",
+      "id": "Bahasa Indonesia",
+      "en": "English",
+      "ariaLabel": "Bahasa aplikasi"
+    },
+    "qari": {
+      "title": "Qari",
+      "description": "Pilih suara qari favorit untuk bacaan audio.",
+      "selectPlaceholder": "Pilih qari",
+      "selectAriaLabel": "Pilih qari"
+    },
+    "translation": {
+      "title": "Terjemahan",
+      "description": "Atur tampilan terjemahan ayat secara default.",
+      "show": "Tampilkan terjemahan",
+      "hide": "Sembunyikan terjemahan",
+      "scope": "Berlaku pada semua surat.",
+      "toggleAriaLabel": "Tampilkan terjemahan"
+    },
+    "textSize": {
+      "title": "Ukuran Teks",
+      "description": "Ukuran teks Arab pada layar baca dan Mode Fokus.",
+      "small": "Kecil",
+      "medium": "Sedang",
+      "large": "Besar",
+      "ariaLabel": "Ukuran teks Arab"
+    },
+    "offline": {
+      "title": "Offline & Cache",
+      "description": "Status data tersimpan untuk penggunaan tanpa internet.",
+      "audioCached": "Audio tersimpan",
+      "quranData": "Data Al-Qur'an",
+      "clearCache": "Hapus Cache",
+      "clearCacheTitle": "Hapus cache?",
+      "clearCacheDescription": "Audio dan data Al-Qur'an yang sudah tersimpan akan dihapus. Kamu perlu koneksi internet untuk memuatnya kembali."
+    },
+    "accessibility": {
+      "title": "Aksesibilitas",
+      "description": "Sesuaikan tampilan agar lebih nyaman digunakan.",
+      "highContrast": "Kontras tinggi",
+      "highContrastDescription": "Tingkatkan kontras teks dan latar.",
+      "highContrastAriaLabel": "Aktifkan kontras tinggi",
+      "smoothAnimation": "Animasi halus",
+      "smoothAnimationDescription": "Matikan untuk mengurangi gerakan pada layar.",
+      "smoothAnimationAriaLabel": "Aktifkan animasi halus"
+    }
+  },
+  "repeat": {
+    "settingsTitle": "Pengaturan Repeat",
+    "settingsDescription": "Pilih jumlah dan target pengulangan.",
+    "settingsAriaLabel": "Pengaturan Repeat",
+    "countTitle": "Jumlah Repeat",
+    "countAriaLabel": "Jumlah repeat",
+    "targetAriaLabel": "Target repeat",
+    "infinite": "Infinite",
+    "targetCurrentAyah": "Ayat Aktif",
+    "targetCurrentAyahHint": "Mengulang ayat yang sedang aktif.",
+    "targetRange": "Range Ayat",
+    "targetRangeHint": "Mengulang range ayat tertentu.",
+    "targetEntireSurah": "Surat Ini",
+    "targetEntireSurahHint": "Mengulang seluruh surat dari awal sampai akhir.",
+    "rangeTitle": "Range Ayat",
+    "fromAyah": "Dari Ayat",
+    "toAyah": "Sampai Ayat",
+    "rangeInvalid": "Range harus di antara 1 dan {max}, serta Dari ≤ Sampai.",
+    "statusActiveAyah": "Ayat Aktif",
+    "statusAyahDetail": "Ayat {ayah} • {remaining}",
+    "statusRange": "Range Ayat {from}-{to}",
+    "statusSurah": "Surat {name}",
+    "remainingInfinite": "∞ tersisa",
+    "remainingCount": "{count}x tersisa",
+    "cycleProgress": "Siklus {current} / {total}",
+    "atAyah": "Sedang di Ayat {ayah}",
+    "atAyahOfTotal": "Sedang di Ayat {current} dari {total}",
+    "previewAyah": "Ayat {ayah} • {count}",
+    "previewRange": "Ayat {from}-{to} • {count}",
+    "previewSurah": "{surah} • {count}"
+  },
+  "nav": {
+    "home": "Beranda",
+    "settings": "Pengaturan"
+  }
+}

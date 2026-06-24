@@ -38,8 +38,21 @@ Fokus utama:
 Fokus sekunder:
 
 - Membaca Al-Qur'an
-- Terjemahan
+- Terjemahan ayat (dataset, terpisah dari bahasa UI)
 - Tadabbur
+
+---
+
+## Multilingual Application UI
+
+Antarmuka aplikasi (menu, label, dialog, pengaturan) mendukung:
+
+- **Bahasa Indonesia** (`id`)
+- **English** (`en`)
+
+Framework: **`next-intl`**. Detail: `docs/21-i18n-and-locale.md`.
+
+Teks Arab Al-Qur'an, transliterasi, audio, dan dataset Quran **tidak** mengikuti pengaturan bahasa UI.
 
 ---
 

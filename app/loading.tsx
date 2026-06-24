@@ -1,11 +1,17 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 import { LogoWithText } from '@/components/shared/Logo';
 
 export default function Loading() {
+  const t = useTranslations('loading');
+
   return (
     <div
       role="status"
       aria-live="polite"
-      aria-label="Memuat"
+      aria-label={t('default')}
       className="flex min-h-dvh items-center justify-center bg-background px-6"
     >
       <div className="flex flex-col items-center gap-6">

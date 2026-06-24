@@ -267,9 +267,23 @@ Elemen penting lain muncul di konteks layar:
 * Membaca ayat dengan nyaman
 * Mengontrol audio tanpa bingung
 * Masuk ke mode hafalan dengan cepat
-* Translation tetap opsional
+* Translation dan transliterasi opsional — dikontrol dari Verse Display Controls
 * Repeat mudah digunakan tanpa memenuhi layar
 * Mendukung penggunaan offline
+
+---
+
+## Verse Display Controls
+
+Tiga kontrol tampilan ayat dalam **satu baris horizontal** langsung di bawah meta surat. Selalu terlihat — tidak di bottom sheet, overflow menu, atau Pengaturan.
+
+```text
+[✓ Terjemahan] [○ Transliterasi] [🎯 Fokus]
+```
+
+Spesifikasi lengkap: `docs/22-verse-display-controls.md`.
+
+Urutan render ayat (jika semua ON): Arab → Transliterasi → Terjemahan.
 
 ---
 
@@ -280,10 +294,11 @@ Elemen penting lain muncul di konteks layar:
 │ ← Daftar Surat                       │
 │                                      │
 │ Al-Ikhlas                        ☆   │
+│ الْإِخْلَاص                          │
 │ 4 ayat • Makkiyah                    │
 │ ● Offline Ready                      │
 │                                      │
-│ [Terjemahan OFF] [Mode Fokus]            │
+│ [○ Terjemahan] [○ Transliterasi] [🎯 Fokus] │
 │                                      │
 │ ┌──────────────────────────────────┐ │
 │ │ Ayat 1                           │ │
@@ -564,11 +579,12 @@ Ayat 4
 │ Al-Ikhlas                        ☆   │
 │ 4 ayat • Makkiyah                    │
 │                                      │
-│ [Terjemahan ON] [Mode Fokus]         │
+│ [✓ Terjemahan] [✓ Transliterasi] [🎯 Fokus] │
 │                                      │
 │ ┌──────────────────────────────────┐ │
 │ │ Ayat 1                           │ │
 │ │ قُلْ هُوَ ٱللَّهُ أَحَدٌ          │ │
+│ │ Qul huwallahu ahad               │ │
 │ │                                  │ │
 │ │ Katakanlah: Dialah Allah,        │ │
 │ │ Yang Maha Esa.                   │ │
@@ -596,11 +612,14 @@ Ayat 4
 
 ```text
 ┌──────────────────────────────────────────────────────────────────┐
-│ ← Daftar Surat                      [Terjemahan OFF] [Mode Fokus]   │
+│ ← Daftar Surat                                                   │
 ├──────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │ Al-Ikhlas                                              ☆         │
+│ الْإِخْلَاص                                                        │
 │ 4 ayat • Makkiyah • ● Offline Ready                              │
+│                                                                  │
+│ [○ Terjemahan] [○ Transliterasi] [🎯 Fokus]                     │
 │                                                                  │
 │ ┌──────────────────────────────────────────────────────────────┐ │
 │ │ Ayat 1                                                     │ │
@@ -631,11 +650,13 @@ Ayat 4
 
 ```text
 ┌──────────────────────────────────────────────────────────────────┐
-│ ← Daftar Surat                      [Terjemahan ON] [Mode Fokus]   │
+│ ← Daftar Surat                                                   │
 ├──────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │ Al-Ikhlas                                              ☆         │
 │ 4 ayat • Makkiyah                                                │
+│                                                                  │
+│ [✓ Terjemahan] [○ Transliterasi] [🎯 Fokus]                     │
 │                                                                  │
 │ ┌──────────────────────────────────────────────────────────────┐ │
 │ │ Ayat 1                                                     │ │
@@ -694,8 +715,10 @@ Notes:
 * Audio bar sticky di bawah pada mobile.
 * Tap ayat untuk menjadikannya ayat aktif.
 * Ayat aktif memiliki highlight lembut.
-* Translation bersifat global sesuai settings.
-* Toggle Terjemahan pada halaman surat mengubah preferensi global pengguna.
+* Verse Display Controls selalu terlihat di bawah header surat (satu baris horizontal).
+* Toggle Terjemahan dan Transliterasi mengubah preferensi global (`settings`) — bukan per-surat.
+* Mode Fokus mempertahankan state Terjemahan dan Transliterasi; hanya mengubah layout baca.
+* Urutan render ayat: Arab → Transliterasi → Terjemahan (konsisten di Surah Detail dan Focus Mode).
 * Repeat default menggunakan target "Ayat Aktif".
 * Tap Repeat Selector membuka Bottom Sheet Pengaturan Repeat.
 * Target repeat lanjutan tersedia melalui bottom sheet pengaturan repeat.
@@ -715,6 +738,13 @@ Notes:
 - Menonjolkan ayat aktif
 - Memudahkan repeat terus-menerus
 - Memberi rasa tenang dan fokus
+- **Mempertahankan** preferensi Terjemahan dan Transliterasi dari sesi Surah Detail
+
+## Prinsip Konten
+
+> Mode Fokus mengubah cara ayat disajikan, bukan konten apa yang ditampilkan.
+
+Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `docs/22-verse-display-controls.md` (Bagian 4).
 
 ---
 
@@ -916,13 +946,13 @@ Notes:
 │ ← Kembali            Pengaturan      │
 │                                      │
 │ ┌──────────────────────────────────┐ │
-│ │ Ukuran Teks Arab                 │ │
-│ │ [Kecil] [Sedang] [Besar]         │ │
+│ │ Bahasa Aplikasi                  │ │
+│ │ [Bahasa Indonesia] [English]     │ │
 │ └──────────────────────────────────┘ │
 │                                      │
 │ ┌──────────────────────────────────┐ │
-│ │ Terjemahan Default               │ │
-│ │ [On / Off]                       │ │
+│ │ Ukuran Teks Arab                 │ │
+│ │ [Kecil] [Sedang] [Besar]         │ │
 │ └──────────────────────────────────┘ │
 │                                      │
 │ ┌──────────────────────────────────┐ │
@@ -952,25 +982,20 @@ Notes:
 ├──────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │ ┌─────────────────────┐   ┌─────────────────────┐               │
-│ │ Ukuran Teks Arab    │   │ Terjemahan Default │               │
-│ │                     │   │                     │               │
-│ │ Kecil Sedang Besar  │   │      ON / OFF      │               │
+│ │ Bahasa Aplikasi     │   │ Ukuran Teks Arab    │               │
+│ │ ID / EN             │   │ Kecil Sedang Besar  │               │
 │ └─────────────────────┘   └─────────────────────┘               │
 │                                                                  │
 │ ┌─────────────────────┐   ┌─────────────────────┐               │
 │ │ Reciter             │   │ Kontras Tinggi      │               │
-│ │                     │   │                     │               │
 │ │ Misyari Alafasy ▼   │   │      ON / OFF       │               │
 │ └─────────────────────┘   └─────────────────────┘               │
 │                                                                  │
-│ ┌──────────────────────────────────────────────────────────────┐ │
-│ │ Offline & Cache                                              │ │
-│ │                                                             │ │
-│ │ Audio tersimpan : 24 MB                                     │ │
-│ │ Data Quran      : Cached                                    │ │
-│ │                                                             │ │
-│ │ [ Bersihkan Cache ]                                         │ │
-│ └──────────────────────────────────────────────────────────────┘ │
+│ ┌─────────────────────┐   ┌─────────────────────┐               │
+│ │ Offline & Cache     │   │                     │               │
+│ │ Audio: 24 MB        │   │                     │               │
+│ │ [ Bersihkan Cache ] │   │                     │               │
+│ └─────────────────────┘   └─────────────────────┘               │
 │                                                                  │
 └──────────────────────────────────────────────────────────────────┘
 ```
@@ -982,6 +1007,7 @@ Notes:
 - Semua setting harus langsung terasa hasilnya
 - `Clear cache` perlu konfirmasi
 - Bahasa setting harus ramah non-teknis
+- Label UI mengikuti `settings.appLocale` (`id` | `en`) via `next-intl` — lihat `docs/21-i18n-and-locale.md`
 
 ---
 
@@ -1271,18 +1297,18 @@ Color: #FBBF24
 
 ## Translation Toggle
 
+> **Digantikan:** Kontrol Terjemahan dan Transliterasi kini bagian dari **Verse Display Controls** di bawah header surat. Lihat `docs/22-verse-display-controls.md`.
+
 ### OFF
 
 ```text
-Terjemahan
-○ OFF
+○ Terjemahan
 ```
 
 ### ON
 
 ```text
-Terjemahan
-● ON
+✓ Terjemahan
 ```
 
 Warna:

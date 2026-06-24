@@ -8,12 +8,13 @@
 
 HanQuran tidak menggunakan backend sendiri.
 
-Penyimpanan data lokal menggunakan dua layer:
+Penyimpanan data menggunakan tiga layer:
 
-- **Dexie (IndexedDB)** — data terstruktur: data Quran, preferensi pengguna, progress hafalan, manifest unduhan
-- **Cache Storage** — file audio biner dan aset web yang di-cache Service Worker
+- **`public/data/*`** — sumber kebenaran konten Quran (statis, dihasilkan)
+- **Dexie (IndexedDB)** — data pengguna: preferensi, favorit, last read, manifest offline, growth tables
+- **Cache Storage** — file audio MP3 (Phase 5, Service Worker)
 
-HanQuran diposisikan sebagai platform hafalan jangka panjang. Schema Dexie dirancang untuk mendukung evolusi fitur dari MVP hingga fase Growth dan Future tanpa migrasi besar.
+> **Keputusan MVP:** Konten Quran **tidak** disimpan di Dexie. Lihat `docs/23-static-dataset-architecture.md`.
 
 ---
 
@@ -21,54 +22,43 @@ HanQuran diposisikan sebagai platform hafalan jangka panjang. Schema Dexie diran
 
 | Storage | Teknologi | Digunakan Untuk |
 |---------|-----------|-----------------|
-| IndexedDB | Dexie.js | Data Quran, preferensi, progress, bookmark, favorit, statistik, catatan, manifest |
-| Cache Storage | Cache Storage API | File audio MP3, aset statis, response API yang di-cache |
+| Static files | `public/data/*` | Surat, ayat, terjemahan, word timings (sumber kebenaran) |
+| IndexedDB | Dexie.js | Preferensi, favorit, last read, bookmark, progress, manifest offline |
+| Cache Storage | Cache Storage API | File audio MP3, aset statis (Phase 5) |
+| In-memory | `Map` di `services/quran/` | Cache sesi — hindari fetch ulang dalam satu tab |
 
 ---
 
 # 3. Prinsip Desain Database
 
-## Local First
+## Static Dataset untuk Konten Quran
 
-Data selalu dibaca dari Dexie terlebih dahulu. API hanya dipanggil jika data tidak ditemukan secara lokal.
+Konten Quran dibaca langsung dari `public/data/*` via `services/quran/`.
 
 ```text
-App → Dexie → Data Ada? → Ya → Tampilkan
-                        → Tidak → Fetch API → Simpan Dexie → Tampilkan
+hooks → services/quran/ → fetch(/data/quran/*.json)
 ```
+
+Tidak ada tabel Dexie untuk surat, ayat, terjemahan, atau word timings.
 
 ---
 
-## Repository Pattern
-
-Komponen tidak boleh mengakses Dexie secara langsung. Semua akses data melalui Repository Layer:
+## Dexie untuk Data Pengguna
 
 ```text
-UI → Store (Zustand) → Repository → Dexie → public/data/* (fallback)
+UI → Store (Zustand) → Dexie
 ```
 
----
-
-## Stable Quran Data
-
-Data Quran yang relatif stabil disimpan dengan pola cache-first:
-
-- Surahs
-- Ayahs
-- Translations
-- Word timings
+Komponen tidak mengakses Dexie secara langsung — hanya melalui action store.
 
 ---
 
 ## Platform Evolution Schema
 
-Schema dirancang untuk mendukung tiga fase evolusi platform:
-
-| Fase | Tabel Aktif |
-|------|-------------|
-| MVP | `settings`, `surahs`, `ayahs`, `translations`, `wordTimings`, `favorites`, `lastRead`, `reciters`, `downloadManifest` |
+| Fase | Tabel Dexie Aktif |
+|------|-------------------|
+| MVP | `settings`, `favorites`, `lastRead`, `downloadManifest` |
 | Growth | `bookmarks`, `memorization_progress`, `murajaah_sessions`, `statistics`, `notes` |
-| Future | Field sync (ditambahkan via migration) |
 
 ---
 
@@ -76,16 +66,19 @@ Schema dirancang untuk mendukung tiga fase evolusi platform:
 
 ```text
 Name:    hanquran-db
-Version: 1
+Version: 2  (v1 menyertakan tabel konten Quran — dihapus di v2)
 ```
 
-Version dinaikkan setiap ada perubahan schema yang tidak backward-compatible (tabel baru, index baru, perubahan primary key).
+Version dinaikkan setiap ada perubahan schema yang tidak backward-compatible.
 
 ---
 
 # 5. IndexedDB Tables
 
-## 5.1 `surahs`
+> **Usang (schema v1, dihapus v2):** `surahs`, `ayahs`, `translations`, `wordTimings`, `reciters`.
+> Bagian 5.1–5.5 di bawah ini dipertahankan sebagai referensi historis saja.
+
+## 5.1 `surahs` — ⚠️ DIHAPUS (v2)
 
 ### Purpose
 
@@ -303,8 +296,10 @@ Menyimpan preferensi UI global pengguna.
 ```ts
 interface SettingsRecord {
   id: 'default';
+  appLocale: 'id' | 'en';
   fontSize: number;
   translationVisible: boolean;
+  transliterationVisible: boolean;
   contrastMode: 'default' | 'high';
   smoothAnimation: boolean;
   qariId: number;
@@ -320,6 +315,8 @@ interface SettingsRecord {
 ### Notes
 
 - Record tunggal dengan `id: 'default'`
+- `appLocale`: bahasa UI aplikasi (`id` | `en`). Lihat `docs/21-i18n-and-locale.md`.
+- `translationVisible` / `transliterationVisible`: dikontrol dari **Verse Display Controls** pada Surah Detail — bukan dari Pengaturan. Lihat `docs/22-verse-display-controls.md`.
 - Dapat diperluas via migration tanpa mengubah primary key
 - Phase: **MVP**
 

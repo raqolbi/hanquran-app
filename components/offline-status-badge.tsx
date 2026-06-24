@@ -1,6 +1,7 @@
 'use client';
 
 import { AlertTriangle, Download, Wifi, WifiOff } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { cn } from '@/lib/utils';
 
@@ -16,49 +17,44 @@ interface OfflineStatusBadgeProps {
   className?: string;
 }
 
-interface BadgeVariant {
-  label: string;
-  icon: React.ReactNode;
-  tone: string;
-}
-
-const VARIANTS: Record<ConnectionStatus, BadgeVariant> = {
-  online: {
-    label: 'Online',
-    icon: <Wifi size={14} aria-hidden />,
-    tone: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-  },
-  offline_ready: {
-    label: 'Offline Siap Digunakan',
-    icon: <span className="text-base leading-none" aria-hidden>🟢</span>,
-    tone: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-  },
-  downloading: {
-    label: 'Sedang Mengunduh',
-    icon: <Download size={14} aria-hidden />,
-    tone: 'bg-amber-50 text-amber-800 border-amber-200',
-  },
-  download_failed: {
-    label: 'Gagal Mengunduh',
-    icon: <AlertTriangle size={14} aria-hidden />,
-    tone: 'bg-red-50 text-red-700 border-red-200',
-  },
-  offline: {
-    label: 'Offline',
-    icon: <WifiOff size={14} aria-hidden />,
-    tone: 'bg-muted text-muted-foreground border-border',
-  },
-};
-
-/**
- * Spec §21: Badge status koneksi & cache.
- * Mendukung 5 state: online, offline_ready, downloading, download_failed, offline.
- */
 export function OfflineStatusBadge({
   status,
   className,
 }: OfflineStatusBadgeProps) {
-  const variant = VARIANTS[status];
+  const t = useTranslations('common');
+
+  const variants: Record<
+    ConnectionStatus,
+    { label: string; icon: React.ReactNode; tone: string }
+  > = {
+    online: {
+      label: t('online'),
+      icon: <Wifi size={14} aria-hidden />,
+      tone: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+    },
+    offline_ready: {
+      label: t('offlineReadyLong'),
+      icon: <span className="text-base leading-none" aria-hidden>🟢</span>,
+      tone: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+    },
+    downloading: {
+      label: t('downloading'),
+      icon: <Download size={14} aria-hidden />,
+      tone: 'bg-amber-50 text-amber-800 border-amber-200',
+    },
+    download_failed: {
+      label: t('downloadFailed'),
+      icon: <AlertTriangle size={14} aria-hidden />,
+      tone: 'bg-red-50 text-red-700 border-red-200',
+    },
+    offline: {
+      label: t('offline'),
+      icon: <WifiOff size={14} aria-hidden />,
+      tone: 'bg-muted text-muted-foreground border-border',
+    },
+  };
+
+  const variant = variants[status];
 
   return (
     <span

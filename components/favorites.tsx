@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import { Heart } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface FavoritesProps {
   favorites: string[];
@@ -10,6 +11,7 @@ interface FavoritesProps {
 }
 
 export function Favorites({ favorites, onToggleFavorite }: FavoritesProps) {
+  const t = useTranslations('home');
   const [isShowingFavorites, setIsShowingFavorites] = useState(false);
 
   return (
@@ -28,7 +30,7 @@ export function Favorites({ favorites, onToggleFavorite }: FavoritesProps) {
             size={18} 
             className={`transition-all ${isShowingFavorites ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`}
           />
-          <span className="font-medium text-foreground">Favorit Saya</span>
+          <span className="font-medium text-foreground">{t('myFavorites')}</span>
           {favorites.length > 0 && (
             <span className="text-xs bg-primary text-white px-2 py-1 rounded-full ml-2">
               {favorites.length}
@@ -72,7 +74,7 @@ export function Favorites({ favorites, onToggleFavorite }: FavoritesProps) {
           animate={{ opacity: 1 }}
           className="mt-2 p-4 rounded-xl bg-secondary/30 text-center text-muted-foreground text-sm"
         >
-          Tandai surat favorit untuk melihatnya di sini
+          {t('favoritesEmpty')}
         </motion.div>
       )}
     </motion.div>

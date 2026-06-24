@@ -1,108 +1,112 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { SurahDetailHeader } from '@/components/surah-detail-header';
-import { ActionBar } from '@/components/action-bar';
+import { SurahDetailTopChrome } from '@/components/surah-detail-top-chrome';
+import { VerseDisplayControls } from '@/components/verse-display-controls';
 import { AyahCard } from '@/components/ayah-card';
 import { AudioPlayer } from '@/components/audio-player';
+import { SurahDetailScrollSpacer } from '@/components/surah-detail-scroll-spacer';
 import { RepeatSelector } from '@/components/repeat-selector';
-import {
-  RepeatSettingsDialog,
-  type RepeatSettingsConfig,
-} from '@/components/repeat-settings-dialog';
-import {
-  type RepeatCount,
-  type RepeatTarget,
-} from '@/lib/repeat-options';
+import { RepeatSettingsDialog } from '@/components/repeat-settings-dialog';
 import { routes } from '@/lib/routes';
 import { useSurah } from '@/hooks/use-surah';
-import { useAyahAudioUrl } from '@/hooks/use-ayah-audio';
-import { getDefaultReciterId } from '@/services/quran';
+import { useReadingDisplay } from '@/hooks/use-reading-display';
+import { useSurahDetailBottomInset } from '@/hooks/use-surah-detail-bottom-inset';
+import { useSurahRepeatPlayback } from '@/hooks/use-surah-repeat-playback';
+import { usePreferredReciterId } from '@/hooks/use-preferred-reciter';
+import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
+import type { SurahData } from '@/services/quran';
 
 interface SurahDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default function SurahDetailPage({ params }: SurahDetailPageProps) {
-  const resolvedParams = React.use(params);
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const startAyah = parseInt(searchParams.get('ayah') || '1', 10);
+interface SurahDetailLoadedProps {
+  surah: SurahData;
+  surahIdParam: string;
+  startAyah: number;
+}
 
-  const { surah, loading, error } = useSurah(resolvedParams.id);
+function SurahDetailLoaded({
+  surah,
+  surahIdParam,
+  startAyah,
+}: SurahDetailLoadedProps) {
+  const router = useRouter();
+  const {
+    showTranslation,
+    showTransliteration,
+    toggleTranslation,
+    toggleTransliteration,
+  } = useReadingDisplay();
   const [activeAyah, setActiveAyah] = useState(startAyah);
-  const [showTranslation, setShowTranslation] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [repeatCount, setRepeatCount] = useState<RepeatCount>(5);
   const [completedAyahs, setCompletedAyahs] = useState<number[]>([]);
-  const [repeatTarget, setRepeatTarget] = useState<RepeatTarget>('current_ayah');
-  const [rangeFrom, setRangeFrom] = useState<number | undefined>(undefined);
-  const [rangeTo, setRangeTo] = useState<number | undefined>(undefined);
   const [repeatSettingsOpen, setRepeatSettingsOpen] = useState(false);
 
-  const reciterId = getDefaultReciterId();
-  const audioUrl = useAyahAudioUrl(
-    reciterId,
-    surah?.number ?? Number.parseInt(resolvedParams.id, 10),
-    activeAyah,
-  );
+  const reciterId = usePreferredReciterId();
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground">Memuat surat...</p>
-      </div>
-    );
-  }
-
-  if (error || !surah) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center px-4">
-        <p className="text-destructive text-center">{error ?? 'Surat tidak ditemukan.'}</p>
-      </div>
-    );
-  }
-
-  const repeatStatusProps = {
-    targetType: repeatTarget,
+  const {
+    isPlaying,
+    togglePlayback,
+    navigateAyah,
+    prefetchNextAyah,
     repeatCount,
-    currentCycle: 1,
-    activeAyah,
-    totalAyahs: surah.ayahs.length,
+    repeatTarget,
     rangeFrom,
     rangeTo,
+    repeatStatusProps,
+    showRepeatStatus,
+    handleCountChange,
+    handleApplyRepeatSettings,
+    pause,
+  } = useSurahRepeatPlayback({
+    surahId: surah.number,
+    activeAyah,
+    totalAyahs: surah.ayahs.length,
+    reciterId,
     surahName: surah.englishName,
-  };
+    setActiveAyah,
+  });
 
-  const handleApplyRepeatSettings = (config: RepeatSettingsConfig) => {
-    setRepeatCount(config.repeatCount);
-    setRepeatTarget(config.targetType);
-    setRangeFrom(config.fromAyah);
-    setRangeTo(config.toAyah);
-  };
+  const { bottomInset, repeatPanelBottom, audioChromeHeight, audioRef, repeatRef } =
+    useSurahDetailBottomInset({
+      enabled: true,
+      remeasureKey: `${isPlaying}-${showTranslation}-${showTransliteration}`,
+    });
+
+  useEffect(() => {
+    prefetchNextAyah();
+  }, [prefetchNextAyah]);
 
   return (
-    <div className="min-h-screen bg-background pb-28">
-      <SurahDetailHeader
-        surahName={surah.englishName}
-        arabicName={surah.arabicName}
-        ayahCount={surah.ayahs.length}
-        type={surah.type}
-        isFavorited={isFavorited}
-        isOfflineReady={true}
-        onToggleFavorite={() => setIsFavorited(!isFavorited)}
-      />
+    <div className="min-h-screen bg-background">
+      <SurahDetailTopChrome>
+        <SurahDetailHeader
+          surahName={surah.englishName}
+          arabicName={surah.arabicName}
+          ayahCount={surah.ayahs.length}
+          type={surah.type}
+          isFavorited={isFavorited}
+          isOfflineReady={true}
+          onToggleFavorite={() => setIsFavorited(!isFavorited)}
+        />
 
-      <ActionBar
-        showTranslation={showTranslation}
-        onToggleTranslation={() => setShowTranslation(!showTranslation)}
-        onFocusMode={() =>
-          router.push(routes.focus(resolvedParams.id, activeAyah))
-        }
-      />
+        <VerseDisplayControls
+          sticky={false}
+          showTranslation={showTranslation}
+          showTransliteration={showTransliteration}
+          onToggleTranslation={toggleTranslation}
+          onToggleTransliteration={toggleTransliteration}
+          onFocusMode={() =>
+            router.push(routes.focus(surahIdParam, activeAyah))
+          }
+        />
+      </SurahDetailTopChrome>
 
       <div className="max-w-3xl mx-auto px-4 py-6">
         <motion.div
@@ -116,35 +120,47 @@ export default function SurahDetailPage({ params }: SurahDetailPageProps) {
               key={ayah.number}
               number={ayah.number}
               arabic={ayah.arabic}
+              transliteration={ayah.transliteration}
               translation={ayah.translation}
               isActive={activeAyah === ayah.number}
               isCompleted={completedAyahs.includes(ayah.number)}
+              showTransliteration={showTransliteration}
               showTranslation={showTranslation}
-              onClick={() => setActiveAyah(ayah.number)}
+              onClick={() => {
+                if (ayah.number !== activeAyah && isPlaying) {
+                  pause();
+                }
+                setActiveAyah(ayah.number);
+              }}
             />
           ))}
+          <SurahDetailScrollSpacer height={bottomInset} />
         </motion.div>
       </div>
 
       <AudioPlayer
-        surahName={surah.englishName}
+        ref={audioRef}
+        surahId={surah.number}
         currentAyah={activeAyah}
-        totalAyahs={surah.ayahs.length}
-        isPlaying={isPlaying}
-        repeatCount={repeatCount}
-        audioUrl={audioUrl}
-        onPlayPause={() => setIsPlaying(!isPlaying)}
+        reciterId={reciterId}
+        onTogglePlay={() => void togglePlayback()}
         onPrevious={() =>
-          setActiveAyah((prev) => (prev > 1 ? prev - 1 : surah.ayahs.length))
+          navigateAyah(
+            activeAyah > 1 ? activeAyah - 1 : surah.ayahs.length,
+          )
         }
         onNext={() =>
-          setActiveAyah((prev) => (prev < surah.ayahs.length ? prev + 1 : 1))
+          navigateAyah(
+            activeAyah < surah.ayahs.length ? activeAyah + 1 : 1,
+          )
         }
-        onRepeatCountChange={setRepeatCount}
-        onOpenRepeatSettings={() => setRepeatSettingsOpen(true)}
       />
 
-      <div className="fixed bottom-28 right-4 w-48">
+      <div
+        ref={repeatRef}
+        className="fixed right-4 z-40 w-48 max-w-[calc(100vw-2rem)]"
+        style={{ bottom: repeatPanelBottom }}
+      >
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -153,9 +169,10 @@ export default function SurahDetailPage({ params }: SurahDetailPageProps) {
         >
           <RepeatSelector
             count={repeatCount}
-            isActive={isPlaying}
+            isActive={showRepeatStatus}
             statusProps={repeatStatusProps}
-            onCountChange={setRepeatCount}
+            bottomChromeHeight={audioChromeHeight}
+            onCountChange={handleCountChange}
             onOpenSettings={() => setRepeatSettingsOpen(true)}
           />
         </motion.div>
@@ -174,5 +191,47 @@ export default function SurahDetailPage({ params }: SurahDetailPageProps) {
         onApply={handleApplyRepeatSettings}
       />
     </div>
+  );
+}
+
+export default function SurahDetailPage({ params }: SurahDetailPageProps) {
+  const t = useTranslations('errors');
+  const tLoading = useTranslations('loading');
+  const resolvedParams = React.use(params);
+  const searchParams = useSearchParams();
+  const startAyah = parseInt(searchParams.get('ayah') || '1', 10);
+
+  const { surah, loading, error, retry } = useSurah(resolvedParams.id);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground">{tLoading('surah')}</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <DataLoadErrorFallback message={error} onRetry={retry} variant="page" />
+    );
+  }
+
+  if (!surah) {
+    return (
+      <DataLoadErrorFallback
+        message={t('surahNotFound')}
+        onRetry={retry}
+        variant="page"
+      />
+    );
+  }
+
+  return (
+    <SurahDetailLoaded
+      surah={surah}
+      surahIdParam={resolvedParams.id}
+      startAyah={startAyah}
+    />
   );
 }

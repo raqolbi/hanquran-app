@@ -2,6 +2,7 @@
 
 import { motion } from 'motion/react';
 import { Pause, Play } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface FocusModePlayerProps {
   isPlaying: boolean;
@@ -9,19 +10,15 @@ interface FocusModePlayerProps {
   onPlayPause: () => void;
 }
 
-/**
- * Spec §16 + wireframe §8: player Focus Mode hanya berisi progress bar dan
- * tombol Play/Pause. Navigasi antar-ayat berada di komponen terpisah
- * (Tombol Ayat Sebelum / Ayat Berikut).
- */
 export function FocusModePlayer({
   isPlaying,
   progress,
   onPlayPause,
 }: FocusModePlayerProps) {
+  const t = useTranslations('common');
+
   return (
     <div>
-      {/* Progress */}
       <div className="mb-5 h-1.5 w-full overflow-hidden rounded-full bg-border">
         <motion.div
           className="h-full rounded-full bg-primary"
@@ -30,13 +27,12 @@ export function FocusModePlayer({
         />
       </div>
 
-      {/* Play / Pause */}
       <div className="flex items-center justify-center">
         <button
           type="button"
           onClick={onPlayPause}
           className="rounded-full bg-primary p-4 text-white shadow-md transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          aria-label={isPlaying ? 'Jeda' : 'Putar'}
+          aria-label={isPlaying ? t('pause') : t('play')}
         >
           {isPlaying ? (
             <Pause size={26} fill="white" />

@@ -1,13 +1,16 @@
 'use client';
 
 import { motion } from 'motion/react';
+import { useTranslations } from 'next-intl';
 
 interface AyahCardProps {
   number: number;
   arabic: string;
+  transliteration?: string;
   translation?: string;
   isActive?: boolean;
   isCompleted?: boolean;
+  showTransliteration?: boolean;
   showTranslation?: boolean;
   onClick?: () => void;
 }
@@ -15,12 +18,16 @@ interface AyahCardProps {
 export function AyahCard({
   number,
   arabic,
+  transliteration,
   translation,
   isActive = false,
   isCompleted = false,
+  showTransliteration = false,
   showTranslation = false,
   onClick,
 }: AyahCardProps) {
+  const t = useTranslations('surah');
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -42,10 +49,12 @@ export function AyahCard({
         {isCompleted && !isActive && (
           <div className="text-lg text-primary">✓</div>
         )}
-        <span className="text-sm font-medium text-muted-foreground">Ayat {number}</span>
+        <span className="text-sm font-medium text-muted-foreground">
+          {t('ayahLabel', { number })}
+        </span>
       </div>
 
-      <div className="mb-4">
+      <div className="space-y-4">
         <p
           className="text-4xl font-serif text-foreground leading-relaxed text-center"
           style={{ lineHeight: 1.9 }}
@@ -53,15 +62,27 @@ export function AyahCard({
         >
           {arabic}
         </p>
-      </div>
 
-      {showTranslation && translation && (
-        <div className="border-t border-border pt-4">
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            {translation}
+        {showTransliteration && transliteration && (
+          <p className="text-center text-sm italic text-muted-foreground leading-relaxed">
+            {transliteration}
           </p>
-        </div>
-      )}
+        )}
+
+        {showTranslation && translation && (
+          <div
+            className={
+              showTransliteration && transliteration
+                ? 'border-t border-border pt-4'
+                : undefined
+            }
+          >
+            <p className="text-sm text-muted-foreground leading-relaxed text-center">
+              {translation}
+            </p>
+          </div>
+        )}
+      </div>
     </motion.div>
   );
 }

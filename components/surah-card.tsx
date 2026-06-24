@@ -3,6 +3,7 @@
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { Heart } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { routes } from '@/lib/routes';
 
@@ -27,8 +28,9 @@ export function SurahCard({
   type,
   isFavorited = false,
   onToggleFavorite,
-  onClick,
 }: SurahCardProps) {
+  const t = useTranslations('common');
+
   return (
     <Link href={routes.surah(number)}>
       <motion.div
@@ -50,10 +52,10 @@ export function SurahCard({
           <p className="text-sm text-muted-foreground mb-2">{meaning}</p>
           <div className="flex items-center gap-3 flex-wrap">
             <span className="text-xs px-2.5 py-1 rounded-full bg-accent/10 text-accent-foreground font-medium">
-              {ayahCount} ayat
+              {ayahCount} {t('ayahs')}
             </span>
             <span className="text-xs px-2.5 py-1 rounded-full border border-border text-muted-foreground">
-              {type === 'Meccan' ? 'Makkiyah' : 'Madaniyah'}
+              {type === 'Meccan' ? t('meccan') : t('medinan')}
             </span>
           </div>
         </div>
@@ -61,11 +63,12 @@ export function SurahCard({
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={(e) => {
+              e.preventDefault();
               e.stopPropagation();
               onToggleFavorite?.();
             }}
             className="p-1.5 hover:bg-secondary rounded-lg transition-colors"
-            aria-label={isFavorited ? 'Hapus dari favorit' : 'Tambahkan ke favorit'}
+            aria-label={isFavorited ? t('removeFavorite') : t('addFavorite')}
           >
             <Heart
               size={20}
