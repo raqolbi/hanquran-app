@@ -12,160 +12,98 @@ import {
 import { cn } from '@/lib/utils';
 import { FocusModePlayer } from '@/components/focus-mode-player';
 import { RepeatStatus } from '@/components/repeat-status';
-import {
-  RepeatSettingsDialog,
-  type RepeatSettingsConfig,
-} from '@/components/repeat-settings-dialog';
+import { RepeatSettingsDialog } from '@/components/repeat-settings-dialog';
 import {
   INFINITE,
   getRepeatOption,
-  type RepeatCount,
-  type RepeatTarget,
 } from '@/lib/repeat-options';
 import { routes } from '@/lib/routes';
-import { useAudio } from '@/hooks/use-audio';
+import { useArabicTextSize } from '@/hooks/use-arabic-text-size';
 import { usePreferredReciterId } from '@/hooks/use-preferred-reciter';
 import { useSurah } from '@/hooks/use-surah';
 import { useReadingDisplay } from '@/hooks/use-reading-display';
+import { useSurahRepeatPlayback } from '@/hooks/use-surah-repeat-playback';
 import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
+import type { SurahData } from '@/services/quran';
 
 interface FocusModePageProps {
   params: Promise<{ id: string }>;
 }
 
-export default function FocusModePage({ params }: FocusModePageProps) {
-  const t = useTranslations('errors');
-  const tLoading = useTranslations('loading');
+interface FocusModeLoadedProps {
+  surah: SurahData;
+  surahIdParam: string;
+  startAyah: number;
+}
+
+function FocusModeLoaded({
+  surah,
+  surahIdParam,
+  startAyah,
+}: FocusModeLoadedProps) {
   const tFocus = useTranslations('focus');
   const tRepeat = useTranslations('repeat');
   const tCommon = useTranslations('common');
-  const resolvedParams = React.use(params);
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const startAyah = parseInt(searchParams.get('ayah') ?? '1', 10);
-
-  const { surah, loading, error, retry } = useSurah(resolvedParams.id);
   const { showTranslation, showTransliteration } = useReadingDisplay();
+  const { focusArabicStyle } = useArabicTextSize();
   const reciterId = usePreferredReciterId();
-  const {
-    isPlaying,
-    progress,
-    toggleAyah,
-    playAyah,
-    isCurrentAyah,
-    prefetchNextAyah,
-  } = useAudio();
-  const totalAyahs = surah?.ayahs.length ?? 0;
 
-  const [activeAyah, setActiveAyah] = useState(startAyah);
-  const [repeatCount, setRepeatCount] = useState<RepeatCount>(5);
-  const [repeatTarget, setRepeatTarget] =
-    useState<RepeatTarget>('current_ayah');
-  const [rangeFrom, setRangeFrom] = useState<number | undefined>(undefined);
-  const [rangeTo, setRangeTo] = useState<number | undefined>(undefined);
+  const [activeAyah, setActiveAyah] = useState(
+    Math.min(Math.max(startAyah, 1), surah.ayahs.length),
+  );
   const [settingsOpen, setSettingsOpen] = useState(false);
 
+  const totalAyahs = surah.ayahs.length;
+
+  const {
+    isActiveAyahPlaying,
+    audioProgress,
+    togglePlayback,
+    navigateAyah,
+    prefetchNextAyah,
+    repeatCount,
+    repeatStatusProps,
+    showRepeatStatus,
+    handleApplyRepeatSettings,
+  } = useSurahRepeatPlayback({
+    surahId: surah.number,
+    activeAyah,
+    totalAyahs,
+    reciterId,
+    surahName: surah.englishName,
+    setActiveAyah,
+  });
+
   useEffect(() => {
-    if (surah) {
-      setActiveAyah(Math.min(Math.max(startAyah, 1), surah.ayahs.length));
-    }
-  }, [surah, startAyah]);
+    setActiveAyah(Math.min(Math.max(startAyah, 1), surah.ayahs.length));
+  }, [startAyah, surah.ayahs.length]);
 
   const currentAyah = useMemo(
-    () => surah?.ayahs.find((a) => a.number === activeAyah) ?? surah?.ayahs[0],
-    [surah, activeAyah],
+    () => surah.ayahs.find((a) => a.number === activeAyah) ?? surah.ayahs[0],
+    [surah.ayahs, activeAyah],
   );
 
-  const showAsPlaying =
-    Boolean(surah) && isPlaying && isCurrentAyah(surah.number, activeAyah);
-
-  const audioProgress =
-    surah && isCurrentAyah(surah.number, activeAyah) ? progress : 0;
-
   useEffect(() => {
-    if (!surah) return;
-    prefetchNextAyah({
-      surahId: surah.number,
-      ayahNumber: activeAyah,
-      reciterId,
-      totalAyahs: surah.ayahs.length,
-    });
-  }, [surah, activeAyah, reciterId, prefetchNextAyah]);
-
-  if (loading) {
-    return (
-      <div className="min-h-dvh bg-background flex items-center justify-center">
-        <p className="text-muted-foreground">{tLoading('focusMode')}</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <DataLoadErrorFallback message={error} onRetry={retry} variant="page" />
-    );
-  }
-
-  if (!surah || !currentAyah) {
-    return (
-      <DataLoadErrorFallback
-        message={t('surahNotFound')}
-        onRetry={retry}
-        variant="page"
-      />
-    );
-  }
+    prefetchNextAyah();
+  }, [activeAyah, prefetchNextAyah]);
 
   const repeatOption = getRepeatOption(repeatCount);
   const repeatLabel =
     repeatCount === INFINITE ? tRepeat('infinite') : repeatOption.label;
 
   const handleExit = () => {
-    router.push(routes.surah(resolvedParams.id, activeAyah));
+    router.push(routes.surah(surahIdParam, activeAyah));
   };
 
   const handlePrevAyah = () => {
     if (activeAyah <= 1) return;
-    const next = activeAyah - 1;
-    setActiveAyah(next);
-    if (showAsPlaying) {
-      void playAyah({
-        surahId: surah.number,
-        ayahNumber: next,
-        reciterId,
-        totalAyahs: surah.ayahs.length,
-      });
-    }
+    navigateAyah(activeAyah - 1);
   };
 
   const handleNextAyah = () => {
     if (activeAyah >= totalAyahs) return;
-    const next = activeAyah + 1;
-    setActiveAyah(next);
-    if (showAsPlaying) {
-      void playAyah({
-        surahId: surah.number,
-        ayahNumber: next,
-        reciterId,
-        totalAyahs: surah.ayahs.length,
-      });
-    }
-  };
-
-  const handleTogglePlay = () => {
-    void toggleAyah({
-      surahId: surah.number,
-      ayahNumber: activeAyah,
-      reciterId,
-      totalAyahs: surah.ayahs.length,
-    });
-  };
-
-  const handleApplyRepeat = (config: RepeatSettingsConfig) => {
-    setRepeatCount(config.repeatCount);
-    setRepeatTarget(config.targetType);
-    setRangeFrom(config.fromAyah);
-    setRangeTo(config.toAyah);
+    navigateAyah(activeAyah + 1);
   };
 
   return (
@@ -209,10 +147,7 @@ export default function FocusModePage({ params }: FocusModePageProps) {
             <p
               dir="rtl"
               className="font-serif text-foreground"
-              style={{
-                fontSize: 'clamp(3rem, 7vw, 3.5rem)',
-                lineHeight: 1.9,
-              }}
+              style={focusArabicStyle}
             >
               {currentAyah.arabic}
             </p>
@@ -246,9 +181,9 @@ export default function FocusModePage({ params }: FocusModePageProps) {
         className="relative z-10 mx-auto w-full max-w-2xl px-4 pb-6 sm:px-8 sm:pb-10"
       >
         <FocusModePlayer
-          isPlaying={showAsPlaying}
+          isPlaying={isActiveAyahPlaying}
           progress={audioProgress}
-          onPlayPause={handleTogglePlay}
+          onPlayPause={() => void togglePlayback()}
           onPrevious={handlePrevAyah}
           onNext={handleNextAyah}
           isPreviousDisabled={activeAyah <= 1}
@@ -263,7 +198,7 @@ export default function FocusModePage({ params }: FocusModePageProps) {
             className={cn(
               'inline-flex items-center gap-2 rounded-full border px-4 h-10 text-sm font-medium transition-all duration-200 ease-out',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-              showAsPlaying
+              showRepeatStatus
                 ? 'border-transparent bg-primary text-white'
                 : 'border-border bg-white text-foreground hover:border-primary/40',
             )}
@@ -274,37 +209,71 @@ export default function FocusModePage({ params }: FocusModePageProps) {
             <ChevronDown size={16} className="opacity-70" />
           </button>
           <p className="text-xs text-muted-foreground text-center px-4">
-            {tFocus('repeatAutoSurahDetailHint')}
+            {tFocus('repeatSyncedHint')}
           </p>
         </div>
 
-        <div className="mt-4">
-          <RepeatStatus
-            targetType={repeatTarget}
-            repeatCount={repeatCount}
-            currentCycle={1}
-            activeAyah={activeAyah}
-            totalAyahs={totalAyahs}
-            rangeFrom={rangeFrom}
-            rangeTo={rangeTo}
-            surahName={surah.englishName}
-          />
-        </div>
-
+        {showRepeatStatus ? (
+          <div className="mt-4">
+            <RepeatStatus {...repeatStatusProps} />
+          </div>
+        ) : null}
       </motion.footer>
 
       <RepeatSettingsDialog
         open={settingsOpen}
         onOpenChange={setSettingsOpen}
-        repeatCount={repeatCount}
-        targetType={repeatTarget}
-        fromAyah={rangeFrom}
-        toAyah={rangeTo}
+        repeatCount={repeatStatusProps.repeatCount}
+        targetType={repeatStatusProps.targetType}
+        fromAyah={repeatStatusProps.rangeFrom}
+        toAyah={repeatStatusProps.rangeTo}
         currentAyah={activeAyah}
         totalAyahs={totalAyahs}
         surahName={surah.englishName}
-        onApply={handleApplyRepeat}
+        onApply={handleApplyRepeatSettings}
       />
     </div>
+  );
+}
+
+export default function FocusModePage({ params }: FocusModePageProps) {
+  const t = useTranslations('errors');
+  const tLoading = useTranslations('loading');
+  const resolvedParams = React.use(params);
+  const searchParams = useSearchParams();
+  const startAyah = parseInt(searchParams.get('ayah') ?? '1', 10);
+
+  const { surah, loading, error, retry } = useSurah(resolvedParams.id);
+
+  if (loading) {
+    return (
+      <div className="min-h-dvh bg-background flex items-center justify-center">
+        <p className="text-muted-foreground">{tLoading('focusMode')}</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <DataLoadErrorFallback message={error} onRetry={retry} variant="page" />
+    );
+  }
+
+  if (!surah) {
+    return (
+      <DataLoadErrorFallback
+        message={t('surahNotFound')}
+        onRetry={retry}
+        variant="page"
+      />
+    );
+  }
+
+  return (
+    <FocusModeLoaded
+      surah={surah}
+      surahIdParam={resolvedParams.id}
+      startAyah={startAyah}
+    />
   );
 }

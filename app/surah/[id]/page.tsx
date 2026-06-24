@@ -19,6 +19,7 @@ import { useReadingDisplay } from '@/hooks/use-reading-display';
 import { useSurahDetailBottomInset } from '@/hooks/use-surah-detail-bottom-inset';
 import { useSurahRepeatPlayback } from '@/hooks/use-surah-repeat-playback';
 import { usePreferredReciterId } from '@/hooks/use-preferred-reciter';
+import { downloadManifestKey } from '@/services/download-manifest-key';
 import { useOfflineStore } from '@/stores/offlineStore';
 import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
 import type { SurahData } from '@/services/quran';
@@ -52,7 +53,9 @@ function SurahDetailLoaded({
 
   const reciterId = usePreferredReciterId();
   const isOfflineReady =
-    useOfflineStore((s) => s.downloadStatuses[surah.number]) === 'ready';
+    useOfflineStore(
+      (s) => s.downloadStatuses[downloadManifestKey(surah.number, reciterId)],
+    ) === 'ready';
 
   const {
     isPlaying,

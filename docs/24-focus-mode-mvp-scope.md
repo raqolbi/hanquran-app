@@ -38,7 +38,7 @@ Simulasi interval tetap **dihapus** dari kode. Komponen `AyahWordHighlight` teta
 - Navigasi ayat sebelumnya / berikutnya tanpa keluar dari mode
 - **Audio per ayat** — play/pause + progress + navigasi ⏮/⏭ via `FocusModePlayer` (ikon & layout selaras `AudioPlayer` Surah Detail)
 - Tombol keluar kembali ke Surah Detail pada ayat aktif
-- UI repeat (konfigurasi) — **tanpa** otomasi pengulangan penuh (`RepeatEngine` di Surah Detail)
+- UI repeat (konfigurasi) — **sinkron** dengan `useRepeatStore` + otomasi `RepeatEngine` (sama seperti Surah Detail)
 
 ### Tidak termasuk ❌ (Post-MVP)
 

@@ -1,11 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'motion/react';
 import { ArrowLeft, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import {
+  ARABIC_TEXT_SIZE_PX,
+  fontSizeToTextSize,
+  textSizeToFontSize,
+  type ArabicTextSize,
+} from '@/lib/arabic-text-size';
 import { routes } from '@/lib/routes';
 import { formatMegabytes } from '@/lib/format-bytes';
 import { useUserStore } from '@/stores/userStore';
@@ -42,14 +48,6 @@ import {
 
 import { useReciters } from '@/hooks/use-reciters';
 
-type TextSize = 'small' | 'medium' | 'large';
-
-const TEXT_SIZE_PX: Record<TextSize, number> = {
-  small: 32,
-  medium: 40,
-  large: 48,
-};
-
 const LOCALE_OPTIONS: ReadonlyArray<SegmentedOption<AppLocale>> = [
   { value: 'id', label: 'Bahasa Indonesia' },
   { value: 'en', label: 'English' },
@@ -60,10 +58,11 @@ export default function SettingsPage() {
   const tCommon = useTranslations('common');
   const appLocale = useUserStore((s) => s.settings.appLocale);
   const reciterId = useUserStore((s) => s.settings.reciterId);
+  const fontSize = useUserStore((s) => s.settings.fontSize);
   const updateSettings = useUserStore((s) => s.updateSettings);
+  const textSize = fontSizeToTextSize(fontSize);
 
   const { reciters } = useReciters();
-  const [textSize, setTextSize] = useState<TextSize>('medium');
   const [highContrast, setHighContrast] = useState(false);
   const [smoothAnimation, setSmoothAnimation] = useState(true);
 
@@ -78,7 +77,7 @@ export default function SettingsPage() {
     void useOfflineStore.getState().refreshManifest();
   }, []);
 
-  const textSizeOptions: ReadonlyArray<SegmentedOption<TextSize>> = [
+  const textSizeOptions: ReadonlyArray<SegmentedOption<ArabicTextSize>> = [
     { value: 'small', label: t('textSize.small') },
     { value: 'medium', label: t('textSize.medium') },
     { value: 'large', label: t('textSize.large') },
@@ -103,6 +102,10 @@ export default function SettingsPage() {
 
   const handleLocaleChange = (locale: AppLocale) => {
     void updateSettings({ appLocale: locale });
+  };
+
+  const handleTextSizeChange = (size: ArabicTextSize) => {
+    void updateSettings({ fontSize: textSizeToFontSize(size) });
   };
 
   return (
@@ -152,7 +155,7 @@ export default function SettingsPage() {
           <div className="space-y-4">
             <SegmentedControl
               value={textSize}
-              onChange={setTextSize}
+              onChange={handleTextSizeChange}
               options={textSizeOptions}
               ariaLabel={t('textSize.ariaLabel')}
             />
@@ -275,7 +278,7 @@ function SettingsHeader() {
 }
 
 interface TextSizePreviewProps {
-  size: TextSize;
+  size: ArabicTextSize;
 }
 
 function TextSizePreview({ size }: TextSizePreviewProps) {
@@ -293,7 +296,7 @@ function TextSizePreview({ size }: TextSizePreviewProps) {
         transition={{ duration: 0.2, ease: 'easeOut' }}
         dir="rtl"
         className="text-center font-serif text-foreground"
-        style={{ fontSize: TEXT_SIZE_PX[size], lineHeight: 1.9 }}
+        style={{ fontSize: ARABIC_TEXT_SIZE_PX[size], lineHeight: 1.9 }}
       >
         بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ
       </motion.p>

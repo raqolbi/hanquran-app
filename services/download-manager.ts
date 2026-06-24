@@ -12,6 +12,7 @@ import {
   DOWNLOAD_CONCURRENCY,
   DOWNLOAD_MANIFEST_VERSION,
 } from '@/services/audio-cache-constants';
+import { downloadManifestKey } from '@/services/download-manifest-key';
 import type {
   DownloadProgressHandler,
   DownloadSurahParams,
@@ -29,47 +30,53 @@ export function buildSurahAudioUrls(
   );
 }
 
-async function putManifestDownloading(
+function manifestRecord(
   surahId: number,
-  ayahsCount: number,
-): Promise<void> {
-  await db.downloadManifest.put({
-    surahId,
-    status: 'downloading',
-    sizeBytes: 0,
-    ayahsCount,
-    cachedAt: Date.now(),
-    version: DOWNLOAD_MANIFEST_VERSION,
-  });
-}
-
-async function putManifestReady(
-  surahId: number,
+  reciterId: string,
+  status: 'downloading' | 'ready' | 'failed',
   ayahsCount: number,
   sizeBytes: number,
-): Promise<void> {
-  await db.downloadManifest.put({
+) {
+  return {
     surahId,
-    status: 'ready',
+    reciterId,
+    status,
     sizeBytes,
     ayahsCount,
     cachedAt: Date.now(),
     version: DOWNLOAD_MANIFEST_VERSION,
-  });
+  };
+}
+
+async function putManifestDownloading(
+  surahId: number,
+  reciterId: string,
+  ayahsCount: number,
+): Promise<void> {
+  await db.downloadManifest.put(
+    manifestRecord(surahId, reciterId, 'downloading', ayahsCount, 0),
+  );
+}
+
+async function putManifestReady(
+  surahId: number,
+  reciterId: string,
+  ayahsCount: number,
+  sizeBytes: number,
+): Promise<void> {
+  await db.downloadManifest.put(
+    manifestRecord(surahId, reciterId, 'ready', ayahsCount, sizeBytes),
+  );
 }
 
 async function putManifestFailed(
   surahId: number,
+  reciterId: string,
   ayahsCount: number,
 ): Promise<void> {
-  await db.downloadManifest.put({
-    surahId,
-    status: 'failed',
-    sizeBytes: 0,
-    ayahsCount,
-    cachedAt: Date.now(),
-    version: DOWNLOAD_MANIFEST_VERSION,
-  });
+  await db.downloadManifest.put(
+    manifestRecord(surahId, reciterId, 'failed', ayahsCount, 0),
+  );
 }
 
 async function responseSize(response: Response): Promise<number> {
@@ -116,6 +123,7 @@ export class DownloadManager {
     string,
     {
       surahId: number;
+      reciterId: string;
       resolve: (result: DownloadSurahResult) => void;
       reject: (error: Error) => void;
       onProgress?: DownloadProgressHandler;
@@ -145,8 +153,8 @@ export class DownloadManager {
     }
   }
 
-  async getManifestStatus(surahId: number) {
-    return db.downloadManifest.get(surahId);
+  async getManifestStatus(surahId: number, reciterId: string) {
+    return db.downloadManifest.get([surahId, reciterId]);
   }
 
   /**
@@ -162,13 +170,14 @@ export class DownloadManager {
     const { surahId, reciterId, ayahCount } = params;
     const urls = buildSurahAudioUrls(surahId, reciterId, ayahCount);
 
-    await putManifestDownloading(surahId, ayahCount);
-    useOfflineStore.getState().setDownloadStatus(surahId, 'downloading');
+    await putManifestDownloading(surahId, reciterId, ayahCount);
+    useOfflineStore.getState().setDownloadStatus(surahId, reciterId, 'downloading');
 
     const swAvailable = await this.isServiceWorkerAvailable();
     if (swAvailable) {
       return this.downloadViaServiceWorker({
         surahId,
+        reciterId,
         urls,
         onProgress,
       });
@@ -176,6 +185,7 @@ export class DownloadManager {
 
     return this.downloadViaClientCache({
       surahId,
+      reciterId,
       urls,
       ayahCount,
       onProgress,
@@ -184,6 +194,7 @@ export class DownloadManager {
 
   private downloadViaServiceWorker(input: {
     surahId: number;
+    reciterId: string;
     urls: string[];
     onProgress?: DownloadProgressHandler;
   }): Promise<DownloadSurahResult> {
@@ -192,6 +203,7 @@ export class DownloadManager {
     return new Promise<DownloadSurahResult>((resolve, reject) => {
       this.pending.set(requestId, {
         surahId: input.surahId,
+        reciterId: input.reciterId,
         resolve,
         reject,
         onProgress: input.onProgress,
@@ -210,25 +222,26 @@ export class DownloadManager {
 
   private async downloadViaClientCache(input: {
     surahId: number;
+    reciterId: string;
     urls: string[];
     ayahCount: number;
     onProgress?: DownloadProgressHandler;
   }): Promise<DownloadSurahResult> {
-    const { surahId, urls, ayahCount, onProgress } = input;
+    const { surahId, reciterId, urls, ayahCount, onProgress } = input;
 
     try {
       const sizeBytes = await downloadUrlsWithConcurrency(urls, (completed, total) => {
         onProgress?.({ surahId, completed, total });
       });
 
-      await putManifestReady(surahId, ayahCount, sizeBytes);
-      useOfflineStore.getState().setDownloadStatus(surahId, 'ready');
+      await putManifestReady(surahId, reciterId, ayahCount, sizeBytes);
+      useOfflineStore.getState().setDownloadStatus(surahId, reciterId, 'ready');
       await useOfflineStore.getState().refreshManifest();
 
       return { surahId, sizeBytes, ayahsCount: ayahCount };
     } catch (error) {
-      await putManifestFailed(surahId, ayahCount);
-      useOfflineStore.getState().setDownloadStatus(surahId, 'failed');
+      await putManifestFailed(surahId, reciterId, ayahCount);
+      useOfflineStore.getState().setDownloadStatus(surahId, reciterId, 'failed');
       await useOfflineStore.getState().refreshManifest();
       throw error instanceof Error ? error : new Error('Unduhan audio gagal');
     }
@@ -241,22 +254,32 @@ export class DownloadManager {
 
     switch (message.type) {
       case 'download-progress':
-        pending?.onProgress?.({
-          surahId: message.surahId,
-          completed: message.completed,
-          total: message.total,
-        });
-        useOfflineStore.getState().setDownloadStatus(message.surahId, 'downloading');
+        if (pending) {
+          pending.onProgress?.({
+            surahId: message.surahId,
+            completed: message.completed,
+            total: message.total,
+          });
+          useOfflineStore
+            .getState()
+            .setDownloadStatus(pending.surahId, pending.reciterId, 'downloading');
+        }
         break;
 
       case 'download-complete': {
         void (async () => {
+          const reciterId = pending?.reciterId;
+          if (!reciterId) return;
+
           await putManifestReady(
             message.surahId,
+            reciterId,
             message.ayahsCount,
             message.sizeBytes,
           );
-          useOfflineStore.getState().setDownloadStatus(message.surahId, 'ready');
+          useOfflineStore
+            .getState()
+            .setDownloadStatus(message.surahId, reciterId, 'ready');
           await useOfflineStore.getState().refreshManifest();
           pending?.resolve({
             surahId: message.surahId,
@@ -270,10 +293,16 @@ export class DownloadManager {
 
       case 'download-failed': {
         void (async () => {
+          const reciterId = pending?.reciterId;
+          if (!reciterId) return;
+
           const ayahsCount =
-            (await db.downloadManifest.get(message.surahId))?.ayahsCount ?? 0;
-          await putManifestFailed(message.surahId, ayahsCount);
-          useOfflineStore.getState().setDownloadStatus(message.surahId, 'failed');
+            (await db.downloadManifest.get([message.surahId, reciterId]))
+              ?.ayahsCount ?? 0;
+          await putManifestFailed(message.surahId, reciterId, ayahsCount);
+          useOfflineStore
+            .getState()
+            .setDownloadStatus(message.surahId, reciterId, 'failed');
           await useOfflineStore.getState().refreshManifest();
           pending?.reject(
             new Error(message.message ?? `Unduhan gagal (${message.reason})`),

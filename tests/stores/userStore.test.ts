@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { db } from '@/services/db/db';
 import { useUserStore } from '@/stores/userStore';
 import { getDefaultReciterId } from '@/services/quran';
+import { DEFAULT_ARABIC_FONT_SIZE_PX } from '@/lib/arabic-text-size';
 
 describe('useUserStore — reciterId', () => {
   beforeEach(async () => {
@@ -13,7 +14,7 @@ describe('useUserStore — reciterId', () => {
       settings: {
         id: 'default',
         appLocale: 'id',
-        fontSize: 28,
+        fontSize: DEFAULT_ARABIC_FONT_SIZE_PX,
         translationVisible: false,
         transliterationVisible: false,
         contrastMode: 'default',
@@ -59,5 +60,34 @@ describe('useUserStore — reciterId', () => {
     expect(useUserStore.getState().settings.reciterId).toBe(
       getDefaultReciterId(),
     );
+  });
+
+  it('menyimpan fontSize ke Dexie', async () => {
+    await useUserStore.getState().init();
+    await useUserStore.getState().updateSettings({ fontSize: 48 });
+
+    expect(useUserStore.getState().settings.fontSize).toBe(48);
+
+    const stored = await db.settings.get('default');
+    expect(stored?.fontSize).toBe(48);
+  });
+
+  it('menormalisasi fontSize legacy saat init', async () => {
+    await db.settings.put({
+      id: 'default',
+      appLocale: 'id',
+      fontSize: 28,
+      translationVisible: false,
+      transliterationVisible: false,
+      contrastMode: 'default',
+      smoothAnimation: true,
+      reciterId: getDefaultReciterId(),
+      translationResourceId: 33,
+      updatedAt: 1,
+    });
+
+    await useUserStore.getState().init();
+
+    expect(useUserStore.getState().settings.fontSize).toBe(32);
   });
 });

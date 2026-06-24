@@ -3,6 +3,8 @@
 import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
 
+import { useArabicTextSize } from '@/hooks/use-arabic-text-size';
+
 interface AyahCardProps {
   number: number;
   arabic: string;
@@ -27,6 +29,7 @@ export function AyahCard({
   onClick,
 }: AyahCardProps) {
   const t = useTranslations('surah');
+  const { arabicStyle } = useArabicTextSize();
 
   return (
     <motion.div
@@ -56,8 +59,8 @@ export function AyahCard({
 
       <div className="space-y-4">
         <p
-          className="text-4xl font-serif text-foreground leading-relaxed text-center"
-          style={{ lineHeight: 1.9 }}
+          className="font-serif text-foreground leading-relaxed text-center"
+          style={arabicStyle}
           dir="rtl"
         >
           {arabic}

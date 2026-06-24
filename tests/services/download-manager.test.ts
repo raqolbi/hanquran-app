@@ -66,10 +66,13 @@ describe('DownloadManager', () => {
     expect(result.sizeBytes).toBeGreaterThan(0);
     expect(progress).toEqual([1, 2, 3]);
 
-    const manifest = await db.downloadManifest.get(1);
+    const manifest = await db.downloadManifest.get([1, 'Alafasy_128kbps']);
     expect(manifest?.status).toBe('ready');
+    expect(manifest?.reciterId).toBe('Alafasy_128kbps');
     expect(manifest?.ayahsCount).toBe(3);
-    expect(useOfflineStore.getState().downloadStatuses[1]).toBe('ready');
+    expect(useOfflineStore.getState().downloadStatuses['1:Alafasy_128kbps']).toBe(
+      'ready',
+    );
   });
 
   it('menandai manifest gagal saat fetch error', async () => {
@@ -84,9 +87,11 @@ describe('DownloadManager', () => {
       }),
     ).rejects.toThrow();
 
-    const manifest = await db.downloadManifest.get(2);
+    const manifest = await db.downloadManifest.get([2, 'Alafasy_128kbps']);
     expect(manifest?.status).toBe('failed');
-    expect(useOfflineStore.getState().downloadStatuses[2]).toBe('failed');
+    expect(useOfflineStore.getState().downloadStatuses['2:Alafasy_128kbps']).toBe(
+      'failed',
+    );
   });
 
   it('memakai nama cache audio yang disepakati', async () => {
@@ -117,6 +122,7 @@ describe('DownloadManager', () => {
         'req-1',
         {
           surahId: 1,
+          reciterId: 'Alafasy_128kbps',
           resolve: () => resolve(),
           reject: vi.fn(),
         },
@@ -133,8 +139,9 @@ describe('DownloadManager', () => {
 
     await promise;
 
-    const manifest = await db.downloadManifest.get(1);
+    const manifest = await db.downloadManifest.get([1, 'Alafasy_128kbps']);
     expect(manifest?.status).toBe('ready');
+    expect(manifest?.reciterId).toBe('Alafasy_128kbps');
     expect(manifest?.sizeBytes).toBe(2048);
   });
 });

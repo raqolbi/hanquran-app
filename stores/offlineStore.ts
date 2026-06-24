@@ -9,6 +9,7 @@
 import { create } from 'zustand';
 import { db } from '@/services/db/db';
 import { measureAudioCacheStats } from '@/services/audio-cache-stats';
+import { downloadManifestKey } from '@/services/download-manifest-key';
 import type {
   ConnectionStatus,
   DownloadStatus,
@@ -18,7 +19,7 @@ import type {
 
 interface OfflineStateData {
   connectionStatus: ConnectionStatus;
-  downloadStatuses: Record<number, DownloadStatus>;
+  downloadStatuses: Record<string, DownloadStatus>;
   manifestSummary: ManifestSummary;
   initialized: boolean;
 }
@@ -27,7 +28,11 @@ interface OfflineActions {
   /** Baca ringkasan manifest dari Dexie & set status koneksi awal. */
   init: () => Promise<void>;
   setConnectionStatus: (status: ConnectionStatus) => void;
-  setDownloadStatus: (surahId: number, status: DownloadStatus) => void;
+  setDownloadStatus: (
+    surahId: number,
+    reciterId: string,
+    status: DownloadStatus,
+  ) => void;
   /** Hitung ulang ringkasan manifest dari Dexie + ukuran aktual Cache Storage audio. */
   refreshManifest: () => Promise<void>;
   /** Varian badge turunan (docs/15 Bagian 12.2). */
@@ -103,9 +108,12 @@ export const useOfflineStore = create<OfflineStateData & OfflineActions>()(
 
     setConnectionStatus: (connectionStatus) => set({ connectionStatus }),
 
-    setDownloadStatus: (surahId, status) =>
+    setDownloadStatus: (surahId, reciterId, status) =>
       set((s) => ({
-        downloadStatuses: { ...s.downloadStatuses, [surahId]: status },
+        downloadStatuses: {
+          ...s.downloadStatuses,
+          [downloadManifestKey(surahId, reciterId)]: status,
+        },
       })),
 
     refreshManifest: async () => {

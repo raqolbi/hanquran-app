@@ -4,8 +4,10 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { getTranslationLanguage } from '@/lib/translation-language';
 import type { SurahData } from '@/services/quran';
 import { getSurah } from '@/services/quran';
+import { useUserStore } from '@/stores/userStore';
 
 interface UseSurahResult {
   surah: SurahData | null;
@@ -14,8 +16,10 @@ interface UseSurahResult {
   retry: () => void;
 }
 
-export function useSurah(surahId: string, language = 'id'): UseSurahResult {
+export function useSurah(surahId: string): UseSurahResult {
   const t = useTranslations('errors');
+  const appLocale = useUserStore((s) => s.settings.appLocale);
+  const translationLanguage = getTranslationLanguage(appLocale);
   const [surah, setSurah] = useState<SurahData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +35,7 @@ export function useSurah(surahId: string, language = 'id'): UseSurahResult {
     let cancelled = false;
     setLoading(true);
 
-    getSurah(surahId, language)
+    getSurah(surahId, translationLanguage, appLocale)
       .then((data) => {
         if (!cancelled) {
           setSurah(data);
@@ -53,7 +57,7 @@ export function useSurah(surahId: string, language = 'id'): UseSurahResult {
     return () => {
       cancelled = true;
     };
-  }, [surahId, language, t, reloadToken]);
+  }, [appLocale, surahId, translationLanguage, t, reloadToken]);
 
   return { surah, loading, error, retry };
 }

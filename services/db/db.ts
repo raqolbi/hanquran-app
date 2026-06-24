@@ -32,7 +32,7 @@ export class HanQuranDB extends Dexie {
   favorites!: Table<FavoriteRecord, number>;
   lastRead!: Table<LastReadRecord, string>;
   settings!: Table<SettingsRecord, string>;
-  downloadManifest!: Table<DownloadManifestRecord, number>;
+  downloadManifest!: Table<DownloadManifestRecord, [number, string]>;
 
   // Growth Phase (schema tersedia, belum diisi di MVP)
   bookmarks!: Table<BookmarkRecord, string>;
@@ -54,7 +54,7 @@ export const db = new HanQuranDB();
 export const defaultSettings: SettingsRecord = {
   id: 'default',
   appLocale: 'id',
-  fontSize: 28,
+  fontSize: 40,
   translationVisible: false,
   transliterationVisible: false,
   contrastMode: 'default',

@@ -30,7 +30,7 @@ describe('offlineStore selectors', () => {
 
   it('selectBadgeVariant memprioritaskan downloading', () => {
     useOfflineStore.setState({
-      downloadStatuses: { 1: 'downloading' },
+      downloadStatuses: { '1:Alafasy_128kbps': 'downloading' },
     });
     expect(selectBadgeVariant(useOfflineStore.getState())).toBe('downloading');
   });
@@ -53,7 +53,7 @@ describe('offlineStore selectors', () => {
 
   it('selectConnectionIndicatorStatus menyembunyikan downloading di header', () => {
     useOfflineStore.setState({
-      downloadStatuses: { 1: 'downloading' },
+      downloadStatuses: { '1:Alafasy_128kbps': 'downloading' },
     });
     expect(selectConnectionIndicatorStatus(useOfflineStore.getState())).toBe(
       'online',
