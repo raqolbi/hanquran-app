@@ -36,6 +36,9 @@ HanQuran
 │  └─ Settings (app/settings/page.tsx)
 │     ├─ SettingsHeader
 │     ├─ SettingsSection / SettingsRow
+│     └─ Link → About (app/settings/about/page.tsx)
+│        ├─ AboutHeader
+│        └─ SettingsSection (info, mission, credits, repository)
 │     ├─ OfflineStatusBadge
 │     └─ UI primitives (Select, Switch, SegmentedControl)
 

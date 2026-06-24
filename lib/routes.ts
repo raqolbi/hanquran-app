@@ -17,6 +17,7 @@ const buildFocusHref = (surahId: SurahId, ayah?: number): string =>
 export const routes = {
   home: (): string => '/',
   settings: (): string => '/settings',
+  settingsAbout: (): string => '/settings/about',
   surah: buildSurahHref,
   focus: buildFocusHref,
 } as const;

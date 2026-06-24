@@ -208,6 +208,7 @@ Counter menampilkan target aktif dan jumlah tersisa. Repeat berjalan otomatis ta
 - Hapus cache ✅ — `services/cache-manager.ts`, konfirmasi di Settings
 - Status offline ✅
 - Aksesibilitas dasar — kontras tinggi & animasi halus persisten (`contrastMode`, `smoothAnimation`); diterapkan global via `AccessibilityProvider` ✅
+- **Tentang HanQuran** ✅ — `/settings/about`; informasi aplikasi, filosofi, credits, repository & lisensi (`docs/26-about-screen-spec.md`)
 
 ## 4.14 Lighthouse & Aksesibilitas (PB-012, PB-014) — P2
 
@@ -284,7 +285,7 @@ Fitur-fitur berikut **tidak boleh dikerjakan** dalam MVP. Seluruh request terkai
 
 # 6. Pembekuan Navigasi
 
-Navigasi MVP terdiri dari **empat halaman** berikut. Tidak ada route tambahan yang termasuk MVP.
+Navigasi MVP terdiri dari **empat halaman inti** berikut, ditambah **satu sub-halaman Pengaturan** untuk informasi aplikasi.
 
 | Route | Nama Halaman | Tujuan |
 |-------|--------------|--------|
@@ -292,6 +293,7 @@ Navigasi MVP terdiri dari **empat halaman** berikut. Tidak ada route tambahan ya
 | `/surah/[id]` | Detail Surat | Tampilan ayat, audio player, repeat system, tombol Focus Mode |
 | `/focus/[id]` | Mode Fokus | Layar baca bebas distraksi (satu ayat; tanpa word highlight MVP) |
 | `/settings` | Pengaturan | Bahasa UI, qari, ukuran teks, cache, aksesibilitas |
+| `/settings/about` | Tentang HanQuran | Informasi aplikasi, filosofi, credits, repository & lisensi (P1) |
 
 Query parameter yang diizinkan:
 - `/surah/[id]?ayah=[n]` — membuka halaman pada ayat tertentu
@@ -315,6 +317,7 @@ Home (/)
   ├── Surah Detail (/surah/[id])
   │     └── Focus Mode (/focus/[id])
   └── Pengaturan (/settings)
+        └── Tentang HanQuran (/settings/about)
 ```
 
 Alur navigasi canonical:
@@ -578,16 +581,17 @@ Tidak ada fitur tambahan yang boleh masuk MVP tanpa Change Control (Bagian 10).
 
 ## ✅ Navigation Freeze
 
-Empat route berikut adalah satu-satunya halaman MVP:
+Empat halaman inti MVP, ditambah sub-halaman Pengaturan untuk informasi aplikasi:
 
 ```
-/             — Home
-/surah/[id]   — Detail Surat
-/focus/[id]   — Mode Fokus
-/settings     — Pengaturan
+/                 — Home
+/surah/[id]       — Detail Surat
+/focus/[id]       — Mode Fokus
+/settings         — Pengaturan
+/settings/about   — Tentang HanQuran (P1)
 ```
 
-Tidak ada route lain yang termasuk MVP.
+Tidak ada route lain di luar daftar di atas yang termasuk MVP.
 
 ---
 
