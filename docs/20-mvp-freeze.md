@@ -28,7 +28,9 @@ Dokumen ini tidak menggantikan dokumen sebelumnya. Perannya hanya membekukan sco
 
 MVP HanQuran V1 adalah:
 
-> Aplikasi hafalan Al-Qur'an yang dapat berjalan offline, memungkinkan pengguna memilih surat, memutar audio per ayat, menggunakan sistem repeat untuk hafalan, menyorot kata per kata di Focus Mode, dan menyimpan preferensi secara lokal — tanpa memerlukan akun atau koneksi internet setelah data diunduh.
+> Aplikasi hafalan Al-Qur'an yang dapat berjalan offline, memungkinkan pengguna memilih surat, memutar audio per ayat, menggunakan sistem repeat untuk hafalan, membaca dalam Mode Fokus bebas distraksi, dan menyimpan preferensi secara lokal — tanpa memerlukan akun atau koneksi internet setelah data diunduh.
+
+> **Pembaruan 24 Juni 2026:** Word-by-word highlight **tidak** termasuk MVP V1 — lihat `docs/24-focus-mode-mvp-scope.md`.
 
 MVP berhasil jika pengguna dapat:
 
@@ -118,12 +120,13 @@ Berikut adalah seluruh fitur yang termasuk dalam MVP V1. Semua berasal dari Prod
 - Auto-advance ke ayat berikutnya
 - Indikator ayat yang sedang diputar
 
-## 4.5 Word-by-Word Highlight (PB-005) — P0
+## 4.5 Word-by-Word Highlight (PB-005) — ~~P0~~ Post-MVP
 
-- Setiap kata yang sedang dibaca ditandai secara real-time
-- Highlight sinkron dengan posisi audio
-- Transisi antar kata yang mulus
-- Berjalan di seluruh ayat
+> **Dicabut dari MVP V1** (24 Juni 2026). Dataset `word_by_word` kosong; lihat `docs/24-focus-mode-mvp-scope.md`.
+
+- ~~Setiap kata yang sedang dibaca ditandai secara real-time~~
+- ~~Highlight sinkron dengan posisi audio~~
+- Ditunda hingga sumber data word timing tersedia
 
 ## 4.6 Sistem Repeat (PB-006) — P0
 
@@ -149,10 +152,12 @@ Counter menampilkan target aktif dan jumlah tersisa. Repeat berjalan otomatis ta
 
 ## 4.7 Focus Mode (PB-007) — P1
 
-- Layar bebas distraksi: hanya menampilkan ayat, audio, repeat, dan progress minimal
-- Sembunyikan navigasi dan elemen non-esensial
-- Mode fullscreen
-- Highlight kata aktif sinkron dengan audio
+- Layar bebas distraksi: menampilkan satu ayat (Arab, transliterasi/terjemahan sesuai preferensi)
+- Sembunyikan daftar surat, navigasi utama, dan elemen non-esensial
+- Navigasi ayat sebelumnya/berikutnya dalam mode
+- **Audio per ayat** (play/pause, progress) via `FocusModePlayer`
+- **Tanpa** word-by-word highlight pada MVP V1
+- Repeat otomatis penuh tetap di Surah Detail (`/surah/[id]`)
 - Route: `/focus/[id]?ayah=[n]`
 
 ## 4.8 Last Read / Lanjutkan Hafalan (PB-008) — P1
@@ -170,7 +175,7 @@ Counter menampilkan target aktif dan jumlah tersisa. Repeat berjalan otomatis ta
 
 ## 4.10 Offline Cache (PB-010) — P0
 
-- Ayat, audio, dan word timing yang pernah diakses tersedia offline
+- Ayat dan audio yang pernah diakses tersedia offline
 - Cache Storage untuk file audio
 - Service Worker untuk caching aset statis
 - Indikator status offline di UI
@@ -281,7 +286,7 @@ Navigasi MVP terdiri dari **empat halaman** berikut. Tidak ada route tambahan ya
 |-------|--------------|--------|
 | `/` | Beranda (Home) | Daftar surat, pencarian, filter favorit, kartu "Lanjutkan Hafalan" |
 | `/surah/[id]` | Detail Surat | Tampilan ayat, audio player, repeat system, tombol Focus Mode |
-| `/focus/[id]` | Mode Fokus | Layar bebas distraksi dengan highlight kata-per-kata |
+| `/focus/[id]` | Mode Fokus | Layar baca bebas distraksi (satu ayat; tanpa word highlight MVP) |
 | `/settings` | Pengaturan | Bahasa UI, qari, ukuran teks, cache, aksesibilitas |
 
 Query parameter yang diizinkan:
@@ -458,7 +463,7 @@ MVP HanQuran V1 dinyatakan **selesai** hanya jika seluruh kondisi berikut terpen
 - [ ] Pengguna dapat memutar audio per ayat dengan play/pause/seek yang reliabel di mobile
 - [ ] Pengguna dapat mengaktifkan repeat (1×/5×/10×/25×/50×/∞) untuk ayat aktif, range ayat, atau seluruh surat
 - [ ] Repeat berjalan otomatis sesuai konfigurasi tanpa interaksi tambahan
-- [ ] Focus Mode menampilkan highlight kata-per-kata sinkron dengan audio
+- [ ] Focus Mode menampilkan satu ayat dalam layout bebas distraksi dengan data nyata
 - [ ] Navigasi ayat di Focus Mode (`/focus/[id]`) berfungsi tanpa keluar dari mode
 - [ ] "Lanjutkan Hafalan" tersedia di Home dan membuka posisi terakhir yang tersimpan
 

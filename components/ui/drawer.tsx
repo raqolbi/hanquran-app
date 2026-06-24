@@ -9,6 +9,7 @@ const Drawer = DrawerPrimitive.Root;
 const DrawerTrigger = DrawerPrimitive.Trigger;
 const DrawerPortal = DrawerPrimitive.Portal;
 const DrawerClose = DrawerPrimitive.Close;
+const DrawerViewport = DrawerPrimitive.Viewport;
 
 const DrawerBackdrop = React.forwardRef<
   HTMLDivElement,
@@ -34,27 +35,30 @@ const DrawerContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <DrawerPortal>
     <DrawerBackdrop />
-    <DrawerPrimitive.Popup
-      ref={ref}
-      className={cn(
-        'fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[640px]',
-        'bg-card text-card-foreground border-t border-border shadow-lg',
-        'rounded-t-3xl px-5 pt-3 pb-6',
-        'max-h-[85vh] overflow-y-auto',
-        'transition-all duration-200 ease-out',
-        'data-[starting-style]:translate-y-full',
-        'data-[ending-style]:translate-y-full',
-        'focus-visible:outline-none',
-        className,
-      )}
-      {...props}
-    >
-      <div
-        className="mx-auto mb-3 h-1 w-12 rounded-full bg-border"
-        aria-hidden
-      />
-      {children}
-    </DrawerPrimitive.Popup>
+    <DrawerViewport className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[640px]">
+      <DrawerPrimitive.Popup
+        ref={ref}
+        className={cn(
+          'bg-card text-card-foreground border-t border-border shadow-lg',
+          'rounded-t-3xl',
+          'max-h-[85vh] overflow-hidden',
+          'transition-all duration-200 ease-out',
+          'data-[starting-style]:translate-y-full',
+          'data-[ending-style]:translate-y-full',
+          'focus-visible:outline-none',
+          className,
+        )}
+        {...props}
+      >
+        <DrawerPrimitive.Content className="max-h-[85vh] overflow-y-auto px-5 pt-3 pb-6 outline-none">
+          <div
+            className="mx-auto mb-3 h-1 w-12 rounded-full bg-border"
+            aria-hidden
+          />
+          {children}
+        </DrawerPrimitive.Content>
+      </DrawerPrimitive.Popup>
+    </DrawerViewport>
   </DrawerPortal>
 ));
 DrawerContent.displayName = 'DrawerContent';
@@ -112,6 +116,7 @@ export {
   DrawerTrigger,
   DrawerPortal,
   DrawerBackdrop,
+  DrawerViewport,
   DrawerContent,
   DrawerHeader,
   DrawerFooter,

@@ -184,8 +184,10 @@ FR-003
 ## PB-005: Word-by-Word Highlight
 
 **Type:** Feature
-**Priority:** P0 — Must Have
-**Sprint:** 3
+**Priority:** ~~P0~~ **Post-MVP (P3)** — blocked: data timing belum tersedia
+**Sprint:** Post-MVP
+
+> Keputusan: `docs/24-focus-mode-mvp-scope.md` (24 Juni 2026). Field `word_by_word` di dataset kosong.
 
 ### Description
 
@@ -193,18 +195,15 @@ Setiap kata yang sedang dibaca oleh qari akan ditandai secara real-time.
 
 ### Acceptance Criteria
 
-- [x] Belum dikerjakan
-- [ ] Kata aktif berubah warna (highlight)
-- [ ] Highlight sinkron dengan posisi audio
-- [ ] Highlight transisi mulus antar kata
-- [ ] Bekerja di semua ayat
+- [ ] ~~Kata aktif berubah warna (highlight)~~ — Post-MVP
+- [ ] ~~Highlight sinkron dengan posisi audio~~ — Post-MVP
+- [ ] Komponen `AyahWordHighlight` siap; integrasi ditunda
 
-### Subtasks
+### Subtasks (Post-MVP)
 
-- [ ] Muat word timing dari dataset statis `public/data/*`
+- [ ] Sumber data word timing (isi `word_by_word` atau API)
 - [ ] Word-level timestamp mapping
-- [ ] Highlight component
-- [ ] Sinkronisasi dengan audio currentTime
+- [ ] Sinkronisasi dengan `AudioController.currentTime`
 
 ### Related FR
 
@@ -272,17 +271,17 @@ Tampilan layar bebas distraksi untuk fokus menghafal.
 
 ### Acceptance Criteria
 
-- [x] Belum dikerjakan
-- [ ] Hanya menampilkan ayat, audio, repeat, progress
-- [ ] Sembunyikan daftar surat, navigasi, dan elemen non-esensial
-- [ ] Mode fullscreen
-- [ ] Mudah diaktifkan/dinonaktifkan
+- [x] Layar fokus dengan ayat nyata dari dataset
+- [ ] Hanya menampilkan ayat + kontrol minimal (navigasi ayat, keluar, preferensi baca)
+- [ ] Sembunyikan daftar surat, navigasi utama, dan elemen non-esensial
+- [ ] Mudah diaktifkan/dinonaktifkan (tombol Fokus di Surah Detail)
+- [ ] **Tanpa** word-by-word highlight pada MVP V1
 
 ### Subtasks
 
-- [ ] Focus mode toggle
-- [ ] Hide/show non-essential UI
-- [ ] Fullscreen API
+- [x] Route `/focus/[id]` + konten ayat nyata
+- [x] Warisan preferensi terjemahan/transliterasi
+- [ ] Integrasi audio + RepeatEngine (Post-MVP atau fase lanjutan)
 
 ---
 

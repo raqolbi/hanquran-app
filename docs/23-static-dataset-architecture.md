@@ -122,6 +122,14 @@ Cache: **in-memory** (`Map` di `data-loader.ts`, variabel modul di `quran-servic
 2. Dokumentasi — selaraskan `docs/07`, `docs/06`, `docs/15`, `docs/04`, `docs/18`, dll.
 3. `AppProviders` — panggil `initStores()` untuk store pengguna (`repeatStore`, `offlineStore`)
 
+### 4.5 Word-by-word — tidak tersedia pada dataset saat ini
+
+| Aspek | Status |
+|-------|--------|
+| Field `word_by_word` di `public/data/quran/{id}.json` | Ada di schema, **kosong** (`{}`) |
+| Mapper `mapSurahToDetail` | Tidak memetakan word timing |
+| Focus Mode MVP | Teks ayat utuh saja — lihat `docs/24-focus-mode-mvp-scope.md` |
+
 ---
 
 ## 5. Service Layer — Kontrak MVP

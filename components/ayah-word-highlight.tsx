@@ -11,6 +11,9 @@ interface AyahWordHighlightProps {
 /**
  * Word-level highlight for the active Arabic token.
  *
+ * **Post-MVP:** Komponen disiapkan untuk integrasi word timing + audio.
+ * MVP V1 tidak mengaktifkan highlight — lihat `docs/24-focus-mode-mvp-scope.md`.
+ *
  * Visual contract (spec §10 and high-fidelity §6):
  *   default     → transparent background, primary text
  *   highlighted → #D1FAE5 background (emerald-100), #065F46 text (emerald-800)
