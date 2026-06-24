@@ -170,10 +170,10 @@ Counter menampilkan target aktif dan jumlah tersisa. Repeat berjalan otomatis ta
 
 ## 4.9 Favorit Surat (PB-009) — P2
 
-- Tombol favorit di setiap surat — UI ada
+- Tombol favorit di setiap surat — Beranda (`SurahCard`) & Surah Detail (`SurahDetailHeader`) ✅
 - Filter "Favorit" tersedia di Home ✅
-- Disimpan di Dexie `favorites` — `toggleFavorite` ada; **Home masih state lokal**
-- Persisten antar sesi — belum end-to-end
+- Disimpan di Dexie `favorites` via `useUserStore.toggleFavorite` ✅
+- Persisten antar sesi — end-to-end ✅
 
 ## 4.10 Offline Cache (PB-010) — P0
 
@@ -479,7 +479,7 @@ MVP HanQuran V1 dinyatakan **selesai** hanya jika seluruh kondisi berikut terpen
 - [x] Bahasa UI (`settings.appLocale`: `id` | `en`) dapat diubah di Pengaturan dan memperbarui seluruh label aplikasi via `next-intl`
 - [x] Arti surat & terjemahan ayat mengikuti `appLocale` (`getSurahMeaning`, `lib/translation-language.ts`)
 - [x] Posisi terakhir (surat + ayat) tersimpan otomatis di Dexie `lastRead`
-- [ ] Favorit surat persisten di Dexie — store ada; Home masih state lokal
+- [x] Favorit surat persisten di Dexie — `toggleFavorite` di Beranda & Surah Detail
 
 ## 9.3 Offline & PWA
 
