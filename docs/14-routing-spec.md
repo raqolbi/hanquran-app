@@ -36,9 +36,16 @@ Semua penjelasan menggunakan Bahasa Indonesia dan mengikuti implementasi saat in
 
 4. URL: `/settings`
    - Nama halaman: Pengaturan
-   - Tujuan: Menyediakan konfigurasi aplikasi seperti pilihan qari, ukuran teks, status offline/cache, dan aksesibilitas.
+   - Tujuan: Menyediakan konfigurasi aplikasi seperti pilihan qari, ukuran teks, status offline/cache, aksesibilitas, dan navigasi ke Tentang HanQuran.
    - Komponen utama: `SettingsHeader`, `SettingsSection`, `SettingsRow`, `OfflineStatusBadge`, primitives (`Select`, `Switch`, `SegmentedControl`).
-   - Aksi pengguna: Ubah qari, ubah preferensi tampilan, hapus cache, lihat status offline.
+   - Aksi pengguna: Ubah qari, ubah preferensi tampilan, hapus cache, lihat status offline, buka Tentang HanQuran.
+
+5. URL: `/settings/about`
+   - Nama halaman: Tentang HanQuran
+   - Tujuan: Menampilkan informasi resmi aplikasi — nama, versi, deskripsi, tujuan & filosofi, credits, repository & lisensi.
+   - Komponen utama: `AboutPage`, `SettingsSection`, metadata dari `lib/app-about.ts`, credits dari `data/about-credits.ts`.
+   - Aksi pengguna: Baca informasi aplikasi, buka tautan eksternal (repository, sumber audio), kembali ke Pengaturan.
+   - Spesifikasi: `docs/26-about-screen-spec.md`.
 
 ---
 
@@ -73,6 +80,7 @@ flowchart TB
   A[Home (/)] --> B[Surah Detail (/surah/[id])]
   B --> C[Focus Mode (/focus/[id])]
   A --> D[Settings (/settings)]
+  D --> H[About (/settings/about)]
   A --> E[Favorites (recommended)]
   A --> F[Search (optional)]
   D --> G[Offline Management (recommended /offline)]
@@ -95,6 +103,7 @@ sequenceDiagram
   Surah->>Focus: Tekan Mode Fokus -> /focus/2?ayah=5
   Focus->>Surah: Keluar -> kembali ke /surah/2?ayah=5
   User->>Settings: Buka /settings
+  User->>Settings: Tentang HanQuran -> /settings/about
 ```
 
 ---
@@ -109,13 +118,15 @@ sequenceDiagram
 | `SurahDetail` | Buka Repeat Settings | dialog lokal | `RepeatSettingsDialog` (Dialog/Drawer) |
 | `FocusMode` | Keluar | `/surah/[id]?ayah=` | router.push(routes.surah(...)) |
 | Global/Header | Pengaturan | `/settings` | Link dari `Header` (ikon) |
+| `Settings` | Tentang HanQuran | `/settings/about` | Baris navigasi di bagian bawah Pengaturan |
+| `About` | Kembali | `/settings` | Tombol kembali di header |
 
 ---
 
 ## Validasi konsistensi
 
 - App Router: rute diimplementasikan melalui folder `app/` — sesuai dengan App Router Next.js.
-- Helper: `lib/routes.ts` berisi pembangun route (`home`, `settings`, `surah`, `focus`) — gunakan helper ini untuk konsistensi.
+- Helper: `lib/routes.ts` berisi pembangun route (`home`, `settings`, `settingsAbout`, `surah`, `focus`) — gunakan helper ini untuk konsistensi.
 - **Locale UI:** MVP mempertahankan route tanpa prefix locale (`/settings`, bukan `/id/settings`). Bahasa UI dari `settings.appLocale` + `next-intl` — lihat `docs/21-i18n-and-locale.md`.
 - Wireframe / High-Fidelity / Component Spec:
   - Daftar rute di atas konsisten dengan halaman yang terdapat di `app/` dan komponen yang digunakan dalam wireframe/high-fidelity (mis. `Focus Mode`, `Surah Detail`, `Settings`).
@@ -130,6 +141,7 @@ Jika Anda ingin saya jalankan verifikasi lebih teknis (mis. memeriksa semua `Lin
 - `app/surah/[id]/page.tsx` — Surah Detail
 - `app/focus/[id]/page.tsx` — Focus Mode
 - `app/settings/page.tsx` — Settings
+- `app/settings/about/page.tsx` — Tentang HanQuran
 - `lib/routes.ts` — route helpers
 
 ---

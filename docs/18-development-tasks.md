@@ -4,7 +4,7 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 
 **Terakhir diperbarui:** 24 Juni 2026
 **Status:** 🚧 Sprint 2 — word-by-word ditunda Post-MVP (`docs/24`)
-**Total Development Tasks:** 86 (51 Selesai, 35 Belum Dimulai)
+**Total Development Tasks:** 91 (56 Selesai, 35 Belum Dimulai)
 **Arsitektur data:** `docs/23-static-dataset-architecture.md`
 
 ---
@@ -198,6 +198,14 @@ Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **175 test passing**).
 1. ✅ Persist `contrastMode` & `smoothAnimation` via `useUserStore` di `/settings`
 2. ✅ `AccessibilityProvider` — kontras tinggi (`data-contrast`) & animasi (`MotionConfig` + `data-motion`)
 3. ✅ CSS global untuk mode kontras tinggi & reduced motion
+
+### Tentang HanQuran (24 Juni 2026)
+
+1. ✅ Spesifikasi layar — `docs/26-about-screen-spec.md`
+2. ✅ Route `/settings/about` + `routes.settingsAbout()`
+3. ✅ Metadata terpusat — `lib/app-about.ts`, credits — `data/about-credits.ts`
+4. ✅ i18n namespace `about` (`id` / `en`)
+5. ✅ Link navigasi di halaman Pengaturan
 
 ### Lanjutkan Hafalan (24 Juni 2026)
 
