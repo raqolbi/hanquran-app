@@ -171,6 +171,28 @@ export function getDisplayCycle(runtime: RepeatRuntime): number {
   return runtime.cycleIndex + 1;
 }
 
+/**
+ * Apakah sesi repeat baru perlu dimulai saat user menekan play/pause toggle.
+ * Pause harus resume tanpa mereset `cycleIndex`.
+ */
+export function shouldBeginRepeatSession(params: {
+  isPlaying: boolean;
+  currentTrackMatchesAyah: boolean;
+  runtimeIsActive: boolean;
+}): boolean {
+  const { isPlaying, currentTrackMatchesAyah, runtimeIsActive } = params;
+
+  if (isPlaying && currentTrackMatchesAyah) {
+    return false;
+  }
+
+  if (!isPlaying && currentTrackMatchesAyah && runtimeIsActive) {
+    return false;
+  }
+
+  return true;
+}
+
 /** Sisa pengulangan untuk target `current_ayah`. */
 export function getRemainingAyahRepeats(
   config: RepeatConfig,
