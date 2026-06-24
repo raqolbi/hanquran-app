@@ -124,9 +124,9 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 `services/quran/data-loader.ts` | `mappers.ts` | `quran-service.ts` | `audio-service.ts` | `audio-config.ts` | `paths.ts` | `app-types.ts` | `dataset-types.ts` | `index.ts`
 
-## Hooks (14 file)
+## Hooks (15 file)
 
-`hooks/use-media-query.ts` | `use-surah-list.ts` | `use-surah.ts` | `use-reciters.ts` | `use-ayah-audio.ts` | `use-reading-display.ts` | `use-surah-detail-bottom-inset.ts` | `use-surah-repeat-playback.ts` | `use-arabic-text-size.ts` | `use-preferred-reciter.ts` | `use-surah-offline-download.ts` | `use-persist-last-viewed.ts` | `use-is-client.ts` | `use-install-prompt.ts`
+`hooks/use-media-query.ts` | `use-surah-list.ts` | `use-surah.ts` | `use-reciters.ts` | `use-ayah-audio.ts` | `use-reading-display.ts` | `use-surah-detail-bottom-inset.ts` | `use-surah-repeat-playback.ts` | `use-arabic-text-size.ts` | `use-preferred-reciter.ts` | `use-surah-offline-download.ts` | `use-persist-last-viewed.ts` | `use-is-client.ts` | `use-install-prompt.ts` | `use-track-surah-opened.ts`
 
 ## i18n (2 file + messages)
 
@@ -138,7 +138,7 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 ## Utilitas (7 file)
 
-`lib/routes.ts` | `lib/repeat-options.ts` | `lib/surah-detail-chrome.ts` | `lib/utils.ts` | `lib/arabic-text-size.ts` | `lib/translation-language.ts` | `lib/format-bytes.ts` | `lib/install-prompt.ts`
+`lib/routes.ts` | `lib/repeat-options.ts` | `lib/surah-detail-chrome.ts` | `lib/utils.ts` | `lib/arabic-text-size.ts` | `lib/translation-language.ts` | `lib/format-bytes.ts` | `lib/install-prompt.ts` | `lib/pwa-splash.ts` | `lib/analytics/`
 
 ## Aset Branding & PWA (5 aset)
 
@@ -152,9 +152,9 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 # ✅ 4. Completed Tasks
 
-**Total development task yang benar-benar selesai: 58**
+**Total development task yang benar-benar selesai: 62**
 
-Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **156 test passing**).
+Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **175 test passing**).
 
 ### Phase 0 — selesai (7/7, 24 Juni 2026) ✅
 
@@ -221,6 +221,25 @@ Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **156 test passing**).
 1. ✅ `public/offline.html` — halaman fallback statis (Bahasa Indonesia, branding, muat ulang)
 2. ✅ Cache `hanquran-shell-v1` — precache offline shell + strategi network-first navigasi di `sw.js`
 3. ✅ Prefetch `/offline.html` di `app/layout.tsx`
+
+### PWA Splash Screen (24 Juni 2026)
+
+1. ✅ Overlay splash statis di `app/layout.tsx` — logo + warna `#FAFAF8` / `#0F172A` (dark)
+2. ✅ Inline script deteksi `display-mode: standalone` untuk cold start instan
+3. ✅ `PwaSplashDismisser` — tutup splash setelah `load` (min 500 ms)
+4. ✅ Manifest — ikon maskable 192 & warna splash selaras design system
+
+### Deploy & Release (24 Juni 2026)
+
+1. ✅ `docs/25-deployment-vercel.md` — staging/preview/production di Vercel, checklist QA, rollback
+2. ✅ `RELEASE.md` — template catatan rilis + draf MVP `0.1.0`
+3. ✅ `docs/SETUP.md` §10 — ringkasan deploy + link ke panduan
+
+### Vercel Analytics (24 Juni 2026)
+
+1. ✅ `lib/analytics/` — abstraction custom events type-safe
+2. ✅ Wire ke surat, audio, favorit, last read, repeat
+3. ✅ `docs/analytics.md` — katalog event & panduan menambah event
 
 ### Store & offline (terintegrasi)
 
@@ -766,11 +785,12 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
 
 ### Disarankan (P1)
 
-- [ ] [UPDATE] Implementasi splash screen untuk peluncuran PWA
+- [x] [UPDATE] Implementasi splash screen untuk peluncuran PWA
   - Tujuan: Pengalaman loading bermerek saat pengguna membuka aplikasi yang terinstall
-  - File: `app/layout.tsx`, CSS, `public/manifest.json`
+  - File: `app/layout.tsx`, `app/globals.css`, `public/manifest.json`, `lib/pwa-splash.ts`, `components/shared/pwa-splash-dismisser.tsx`
   - Ketergantungan: Manifest PWA siap
   - Prioritas: P1
+  - **Ringkasan:** overlay statis + inline script standalone; dismiss setelah `window.load`; manifest ikon maskable
 
 - [ ] [UPDATE] Tambah `theme-color` untuk URL bar (mobile)
   - Tujuan: Konsistensi visual pada browser mobile
@@ -863,17 +883,19 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
 
 ### Wajib (P0)
 
-- [ ] [NEW] Setup staging environment (identik dengan production)
+- [x] [NEW] Setup staging environment (identik dengan production)
   - Tujuan: Uji proses rilis sebelum ke production
-  - File: Deployment config (Vercel, dll.)
+  - File: `docs/25-deployment-vercel.md`, `docs/SETUP.md` §10
   - Ketergantungan: Aplikasi siap untuk di-deploy
   - Prioritas: P0
+  - **Ringkasan:** workflow Vercel Preview + opsi branch `staging`; checklist QA; eksekusi saat connect repo
 
-- [ ] [DOC] Buat template release notes
+- [x] [DOC] Buat template release notes
   - Tujuan: Dokumentasi perubahan untuk pengguna
-  - File: `RELEASE.md` atau changelog
+  - File: `RELEASE.md`
   - Ketergantungan: Version scheme ditentukan
   - Prioritas: P0
+  - **Ringkasan:** SemVer `0.x` pre-MVP; template + draf entri `0.1.0`
 
 - [ ] [NEW] Implementasi error tracking / crash reporting (Sentry atau serupa)
   - Tujuan: Deteksi dan perbaiki masalah di production
@@ -881,11 +903,12 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
   - Ketergantungan: Akun Sentry setup
   - Prioritas: P0
 
-- [ ] [NEW] Setup analytics dasar (Plausible atau serupa)
-  - Tujuan: Lacak perilaku pengguna & penggunaan fitur secara privacy-friendly
-  - File: `lib/analytics.ts`, page events
-  - Ketergantungan: Akun analytics setup
+- [x] [NEW] Setup analytics dasar (Vercel Analytics + custom events)
+  - Tujuan: Lacak perilaku pengguna & penggunaan fitur
+  - File: `lib/analytics/`, `docs/analytics.md`, `app/layout.tsx`
+  - Ketergantungan: Deploy Vercel
   - Prioritas: P0
+  - **Ringkasan:** 5 custom events; helper type-safe; dokumentasi `docs/analytics.md`
 
 - [ ] [DOC] Susun strategi staged rollout: 10% → 50% → 100%
   - Tujuan: Deteksi masalah lebih awal, rollback cepat jika diperlukan
@@ -1024,10 +1047,10 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [ ] Performance metrics memenuhi target (Lighthouse >= 80)
 
 ### Phase 8 — Release
-- [ ] Staging environment siap
-- [ ] Release notes ditulis
+- [x] Staging environment — panduan Vercel (`docs/25-deployment-vercel.md`)
+- [x] Template release notes (`RELEASE.md`)
 - [ ] Error tracking terpasang
-- [ ] Analytics diimplementasi
+- [x] Analytics diimplementasi (`@vercel/analytics` + `lib/analytics/`)
 - [ ] Staged rollout plan siap
 - [ ] MVP ter-rilis!
 ```

@@ -9,6 +9,10 @@ import { create } from 'zustand';
 import { db, defaultSettings } from '@/services/db/db';
 import { createInitialRuntime } from '@/services/repeat-engine';
 import { getRepeatTabSync } from '@/services/repeat-tab-sync';
+import {
+  repeatTargetToAnalyticsMode,
+  trackRepeatEnabled,
+} from '@/lib/analytics';
 import type { RepeatConfig, RepeatRuntime } from '@/types';
 
 const defaultConfig: RepeatConfig = {
@@ -71,6 +75,7 @@ export const useRepeatStore = create<RepeatState & RepeatActions>()(
         runtime,
       });
       getRepeatTabSync()?.notifyConfigChanged(next, runtime);
+      trackRepeatEnabled({ mode: repeatTargetToAnalyticsMode(next.target) });
     },
 
     patchConfig: async (patch) => {

@@ -11,6 +11,7 @@ import {
   removeAudioPrefetchHints,
 } from '@/services/audio-prefetch';
 import { AudioTabSync } from '@/services/audio-tab-sync';
+import { trackAudioPlay } from '@/lib/analytics';
 import { useAudioStore } from '@/stores/audioStore';
 import type { AudioErrorCode, AudioTrack, PlaybackRate } from '@/types';
 
@@ -117,11 +118,13 @@ export class AudioController {
     const sameUrl =
       this.audio.src === track.url || this.audio.src.endsWith(track.url);
 
+    const isNewTrack = !sameUrl;
+
     this.tabSync?.notifyClaimPlay(track);
 
     store.play(track);
 
-    if (!sameUrl) {
+    if (isNewTrack) {
       this.audio.src = track.url;
       this.audio.preload = 'metadata';
       store.setCurrentTime(0);
@@ -135,6 +138,13 @@ export class AudioController {
 
     try {
       await this.audio.play();
+      if (isNewTrack) {
+        trackAudioPlay({
+          surahId: track.surahId,
+          ayahNumber: track.ayahNumber,
+          reciterId: track.reciterId,
+        });
+      }
     } catch (error) {
       const code = mapPlayError(error);
       if (code !== 'aborted') {

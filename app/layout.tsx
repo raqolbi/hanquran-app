@@ -38,6 +38,8 @@ export const viewport: Viewport = {
   ],
 }
 
+const PWA_LAUNCH_SCRIPT = `(function(){try{var m=window.matchMedia("(display-mode: standalone)");var s=m&&m.matches;var n=window.navigator;var i=n&&n.standalone;if(s||i)document.documentElement.classList.add("pwa-launching")}catch(e){}})();`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -46,9 +48,22 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${geistSans.variable} ${geistMono.variable}`}>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: PWA_LAUNCH_SCRIPT }} />
+        <link rel="preload" href="/branding/logo-with-text.png" as="image" />
         <link rel="prefetch" href="/offline.html" as="document" />
       </head>
       <body className="font-sans antialiased">
+        <div id="pwa-splash" className="pwa-splash" aria-hidden="true">
+          <img
+            src="/branding/logo-with-text.png"
+            alt="HanQuran"
+            width={240}
+            height={160}
+            className="pwa-splash__logo"
+            decoding="sync"
+            fetchPriority="high"
+          />
+        </div>
         <AppProviders>{children}</AppProviders>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

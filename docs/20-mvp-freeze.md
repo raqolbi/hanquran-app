@@ -190,7 +190,7 @@ Counter menampilkan target aktif dan jumlah tersisa. Repeat berjalan otomatis ta
 - `manifest.json` tersedia — `public/manifest.json`, ter-link di `app/layout.tsx` ✅
 - Service Worker terdaftar ✅
 - Dapat diinstal di perangkat (Add to Home Screen) — `InstallBanner` + `useInstallPrompt` ✅
-- Ikon aplikasi (`public/icons/` 192 & 512) ✅; splash screen belum; tema warna `#0F766E` ✅
+- Ikon aplikasi (`public/icons/` 192 & 512) ✅; splash screen in-app + manifest warna ✅; tema warna `#0F766E` ✅
 
 ## 4.12 Mobile Responsive (PB-013) — P0
 
@@ -499,9 +499,9 @@ MVP HanQuran V1 dinyatakan **selesai** hanya jika seluruh kondisi berikut terpen
 
 ## 9.5 Release
 
-- [ ] Staging environment siap dan telah diuji
+- [x] Panduan staging & production siap (`docs/25-deployment-vercel.md`) — uji di URL Vercel setelah connect repo
+- [x] Template release notes (`RELEASE.md`) — isi final saat rilis MVP
 - [ ] Error tracking terpasang
-- [ ] Release notes ditulis
 - [ ] Rollout plan tersedia
 
 ---
