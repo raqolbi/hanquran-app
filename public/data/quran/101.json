@@ -1,0 +1,69 @@
+{
+  "id": 101,
+  "name_ar": "القارعة",
+  "name_simple": "Al-Qaari'a",
+  "name_en": "The Calamity",
+  "meaning": "Hari Kiamat",
+  "description": "Surat ini terdiri atas 11 ayat, termasuk golongan surat-surat Makkiyyah, diturunkan sesudah surat Quraisy. Nama Al Qaari'ah diambil dari kata Al Qaari'ah yang terdapat pada ayat pertama, artinya mengetok dengan keras, kemudian kata ini dipakai untuk nama hari kiamat.",
+  "revelation_place": "meccan",
+  "ayah_count": 11,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ٱلْقَارِعَةُ",
+      "transliteration": "Al-qāri‘ah(tu)."
+    },
+    {
+      "ayah": 2,
+      "text": "مَا ٱلْقَارِعَةُ",
+      "transliteration": "Mal-qāri‘ah(tu)."
+    },
+    {
+      "ayah": 3,
+      "text": "وَمَآ أَدْرَىٰكَ مَا ٱلْقَارِعَةُ",
+      "transliteration": "Wa mā adrāka mal-qāri‘ah(tu)."
+    },
+    {
+      "ayah": 4,
+      "text": "يَوْمَ يَكُونُ ٱلنَّاسُ كَٱلْفَرَاشِ ٱلْمَبْثُوثِ",
+      "transliteration": "Yauma yakūnun-nāsu kal-farāsyil-mabṡūṡ(i)."
+    },
+    {
+      "ayah": 5,
+      "text": "وَتَكُونُ ٱلْجِبَالُ كَٱلْعِهْنِ ٱلْمَنفُوشِ",
+      "transliteration": "Wa takūnul-jibālu kal-‘ihnil-manfūsy(i)."
+    },
+    {
+      "ayah": 6,
+      "text": "فَأَمَّا مَن ثَقُلَتْ مَوَٰزِينُهُۥ",
+      "transliteration": "Fa ammā man ṡaqulat mawāzīnuh(ū)."
+    },
+    {
+      "ayah": 7,
+      "text": "فَهُوَ فِى عِيشَةٍ رَّاضِيَةٍ",
+      "transliteration": "Fa huwa fī ‘īsyatir rāḍiyah(tin)."
+    },
+    {
+      "ayah": 8,
+      "text": "وَأَمَّا مَنْ خَفَّتْ مَوَٰزِينُهُۥ",
+      "transliteration": "Wa ammā man khaffat mawāzīnuh(ū)."
+    },
+    {
+      "ayah": 9,
+      "text": "فَأُمُّهُۥ هَاوِيَةٌ",
+      "transliteration": "Fa ummuhū hāwiyah(tun)."
+    },
+    {
+      "ayah": 10,
+      "text": "وَمَآ أَدْرَىٰكَ مَا هِيَهْ",
+      "transliteration": "Wa mā adrāka mā hiyah."
+    },
+    {
+      "ayah": 11,
+      "text": "نَارٌ حَامِيَةٌۢ",
+      "transliteration": "Nārun ḥāmiyah(tun)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

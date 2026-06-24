@@ -1,0 +1,109 @@
+{
+  "id": 87,
+  "name_ar": "الأعلى",
+  "name_simple": "Al-A'laa",
+  "name_en": "The Most High",
+  "meaning": "Maha Tinggi",
+  "description": "Surat ini terdiri atas 19 ayat, termasuk golongan surat-surat Makkiyyah, dan diturunkan sesudah surat At Takwiir. Nama Al AÂ´laa diambil dari kata Al AÂ´laa yang terdapat pada ayat pertama, berarti Yang Paling Tinggi. Muslim meriwayatkan dalam kitab Al Jumu'ah, dan diriwayatkan pula oleh Ashhaabus Sunan, dari Nu'man ibnu Basyir bahwa Rasulullah s.a.w. pada shalat dua hari Raya (Fitri dan Adha) dan shalat Jum'at membaca surat Al AÂ´laa pada rakaat pertama, dan surat Al Ghaasyiyah pada rakaat kedua.",
+  "revelation_place": "meccan",
+  "ayah_count": 19,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ سَبِّحِ ٱسْمَ رَبِّكَ ٱلْأَعْلَى",
+      "transliteration": "Sabbiḥisma rabbikal-a‘lā."
+    },
+    {
+      "ayah": 2,
+      "text": "ٱلَّذِى خَلَقَ فَسَوَّىٰ",
+      "transliteration": "Allażī khalaqa fasawwā."
+    },
+    {
+      "ayah": 3,
+      "text": "وَٱلَّذِى قَدَّرَ فَهَدَىٰ",
+      "transliteration": "Wal-lażī qaddara fahadā."
+    },
+    {
+      "ayah": 4,
+      "text": "وَٱلَّذِىٓ أَخْرَجَ ٱلْمَرْعَىٰ",
+      "transliteration": "Wal-lażī akhrajal-mar‘ā."
+    },
+    {
+      "ayah": 5,
+      "text": "فَجَعَلَهُۥ غُثَآءً أَحْوَىٰ",
+      "transliteration": "Fa ja‘alahū guṡā'an aḥwā."
+    },
+    {
+      "ayah": 6,
+      "text": "سَنُقْرِئُكَ فَلَا تَنسَىٰٓ",
+      "transliteration": "Sanuqri'uka falā tansā."
+    },
+    {
+      "ayah": 7,
+      "text": "إِلَّا مَا شَآءَ ٱللَّهُ ۚ إِنَّهُۥ يَعْلَمُ ٱلْجَهْرَ وَمَا يَخْفَىٰ",
+      "transliteration": "Illā mā syā'allāh(u), innahū ya‘lamul-jahra wa mā yakhfā."
+    },
+    {
+      "ayah": 8,
+      "text": "وَنُيَسِّرُكَ لِلْيُسْرَىٰ",
+      "transliteration": "Wa nuyassiruka lil-yusrā."
+    },
+    {
+      "ayah": 9,
+      "text": "فَذَكِّرْ إِن نَّفَعَتِ ٱلذِّكْرَىٰ",
+      "transliteration": "Fa żakkir in nafa‘atiż-żikrā."
+    },
+    {
+      "ayah": 10,
+      "text": "سَيَذَّكَّرُ مَن يَخْشَىٰ",
+      "transliteration": "Sayażżakkaru may yakhsyā."
+    },
+    {
+      "ayah": 11,
+      "text": "وَيَتَجَنَّبُهَا ٱلْأَشْقَى",
+      "transliteration": "Wa yatajannabuhal-asyqā."
+    },
+    {
+      "ayah": 12,
+      "text": "ٱلَّذِى يَصْلَى ٱلنَّارَ ٱلْكُبْرَىٰ",
+      "transliteration": "Allażī yaṣlan-nāral-kubrā."
+    },
+    {
+      "ayah": 13,
+      "text": "ثُمَّ لَا يَمُوتُ فِيهَا وَلَا يَحْيَىٰ",
+      "transliteration": "Ṡumma lā yamūtu fīhā wa lā yaḥyā."
+    },
+    {
+      "ayah": 14,
+      "text": "قَدْ أَفْلَحَ مَن تَزَكَّىٰ",
+      "transliteration": "Qad aflaḥa man tazakkā."
+    },
+    {
+      "ayah": 15,
+      "text": "وَذَكَرَ ٱسْمَ رَبِّهِۦ فَصَلَّىٰ",
+      "transliteration": "Wa żakarasma rabbihī fa ṣallā."
+    },
+    {
+      "ayah": 16,
+      "text": "بَلْ تُؤْثِرُونَ ٱلْحَيَوٰةَ ٱلدُّنْيَا",
+      "transliteration": "Bal tu'ṡirūnal-ḥayātad-dun-yā."
+    },
+    {
+      "ayah": 17,
+      "text": "وَٱلْـَٔاخِرَةُ خَيْرٌ وَأَبْقَىٰٓ",
+      "transliteration": "Wal-ākhiratu khairuw wa abqā."
+    },
+    {
+      "ayah": 18,
+      "text": "إِنَّ هَٰذَا لَفِى ٱلصُّحُفِ ٱلْأُولَىٰ",
+      "transliteration": "Inna hāżā lafiṣ-ṣuḥufil-ūlā."
+    },
+    {
+      "ayah": 19,
+      "text": "صُحُفِ إِبْرَٰهِيمَ وَمُوسَىٰ",
+      "transliteration": "Ṣuḥufi ibrāhīma wa mūsā."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

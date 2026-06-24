@@ -1,0 +1,264 @@
+{
+  "id": 77,
+  "name_ar": "المرسلات",
+  "name_simple": "Al-Mursalaat",
+  "name_en": "The Emissaries",
+  "meaning": "Malaikat Yang Diutus",
+  "description": "Surat Al Mursalaat terdiri atas 50 ayat, termasuk golongan surat-surat Makkiyah, diturunkan sesudah surat Al Humazah. Dinamai Al Mursalaat (Malaikat-Malaikat yang diutus), diambil dari perkataan Al Mursalaat yang terdapat pada ayat pertama surat ini. Dinamai juga Amma yatasaa aluun diambil dari perkataan Amma yatasaa aluun yang terdapat pada ayat 1 surat ini.",
+  "revelation_place": "meccan",
+  "ayah_count": 50,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وَٱلْمُرْسَلَٰتِ عُرْفًا",
+      "transliteration": "Wal-mursalāti ‘urfā(n)."
+    },
+    {
+      "ayah": 2,
+      "text": "فَٱلْعَٰصِفَٰتِ عَصْفًا",
+      "transliteration": "Fal-‘āṣifāti ‘aṣfā(n)."
+    },
+    {
+      "ayah": 3,
+      "text": "وَٱلنَّٰشِرَٰتِ نَشْرًا",
+      "transliteration": "Wan-nāsyirāti nasyrā(n)."
+    },
+    {
+      "ayah": 4,
+      "text": "فَٱلْفَٰرِقَٰتِ فَرْقًا",
+      "transliteration": "Fal-fāriqāti farqā(n)."
+    },
+    {
+      "ayah": 5,
+      "text": "فَٱلْمُلْقِيَٰتِ ذِكْرًا",
+      "transliteration": "Fal-mulqiyāti żikrā(n)."
+    },
+    {
+      "ayah": 6,
+      "text": "عُذْرًا أَوْ نُذْرًا",
+      "transliteration": "‘Użran au nużrā(n)."
+    },
+    {
+      "ayah": 7,
+      "text": "إِنَّمَا تُوعَدُونَ لَوَٰقِعٌ",
+      "transliteration": "Innamā tū‘adūna lawāqi‘(un)."
+    },
+    {
+      "ayah": 8,
+      "text": "فَإِذَا ٱلنُّجُومُ طُمِسَتْ",
+      "transliteration": "Fa iżan-nujūmu ṭumisat."
+    },
+    {
+      "ayah": 9,
+      "text": "وَإِذَا ٱلسَّمَآءُ فُرِجَتْ",
+      "transliteration": "Wa iżas-samā'u furijat."
+    },
+    {
+      "ayah": 10,
+      "text": "وَإِذَا ٱلْجِبَالُ نُسِفَتْ",
+      "transliteration": "Wa iżal-jibālu nusifat."
+    },
+    {
+      "ayah": 11,
+      "text": "وَإِذَا ٱلرُّسُلُ أُقِّتَتْ",
+      "transliteration": "Wa iżar-rusulu uqqitat."
+    },
+    {
+      "ayah": 12,
+      "text": "لِأَىِّ يَوْمٍ أُجِّلَتْ",
+      "transliteration": "Li'ayyi yaumin ujjilat."
+    },
+    {
+      "ayah": 13,
+      "text": "لِيَوْمِ ٱلْفَصْلِ",
+      "transliteration": "Liyaumil-faṣl(i)."
+    },
+    {
+      "ayah": 14,
+      "text": "وَمَآ أَدْرَىٰكَ مَا يَوْمُ ٱلْفَصْلِ",
+      "transliteration": "Wa mā adrāka mā yaumul-faṣl(i)."
+    },
+    {
+      "ayah": 15,
+      "text": "وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ",
+      "transliteration": "Wailuy yauma'iżil lil-mukażżibīn(a)."
+    },
+    {
+      "ayah": 16,
+      "text": "أَلَمْ نُهْلِكِ ٱلْأَوَّلِينَ",
+      "transliteration": "Alam nuhlikil-awwalīn(a)."
+    },
+    {
+      "ayah": 17,
+      "text": "ثُمَّ نُتْبِعُهُمُ ٱلْـَٔاخِرِينَ",
+      "transliteration": "Ṡumma nutbi‘uhumul-ākhirīn(a)."
+    },
+    {
+      "ayah": 18,
+      "text": "كَذَٰلِكَ نَفْعَلُ بِٱلْمُجْرِمِينَ",
+      "transliteration": "Każālika naf‘alu bil-mujrimīn(a)."
+    },
+    {
+      "ayah": 19,
+      "text": "وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ",
+      "transliteration": "Wailuy yauma'iżil lil-mukażżibīn(a)."
+    },
+    {
+      "ayah": 20,
+      "text": "أَلَمْ نَخْلُقكُّم مِّن مَّآءٍ مَّهِينٍ",
+      "transliteration": "Alam nakhluqkum mim mā'im mahīn(in)."
+    },
+    {
+      "ayah": 21,
+      "text": "فَجَعَلْنَٰهُ فِى قَرَارٍ مَّكِينٍ",
+      "transliteration": "Fa ja‘alnāhu fī qarārim makīn(in)."
+    },
+    {
+      "ayah": 22,
+      "text": "إِلَىٰ قَدَرٍ مَّعْلُومٍ",
+      "transliteration": "Ilā qadarim ma‘lūm(in)."
+    },
+    {
+      "ayah": 23,
+      "text": "فَقَدَرْنَا فَنِعْمَ ٱلْقَٰدِرُونَ",
+      "transliteration": "Fa qadarnā, fani‘mal-qādirūn(a)."
+    },
+    {
+      "ayah": 24,
+      "text": "وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ",
+      "transliteration": "Wailuy yauma'iżil lil-mukażżibīn(a)."
+    },
+    {
+      "ayah": 25,
+      "text": "أَلَمْ نَجْعَلِ ٱلْأَرْضَ كِفَاتًا",
+      "transliteration": "Alam naj‘alil-arḍa kifātā(n)."
+    },
+    {
+      "ayah": 26,
+      "text": "أَحْيَآءً وَأَمْوَٰتًا",
+      "transliteration": "Aḥyā'aw wa amwātā(n)."
+    },
+    {
+      "ayah": 27,
+      "text": "وَجَعَلْنَا فِيهَا رَوَٰسِىَ شَٰمِخَٰتٍ وَأَسْقَيْنَٰكُم مَّآءً فُرَاتًا",
+      "transliteration": "Wa ja‘alnā fīhā rawāsiya syāmikhātiw wa asqainākum mā'an furātā(n)."
+    },
+    {
+      "ayah": 28,
+      "text": "وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ",
+      "transliteration": "Wailuy yauma'iżil lil-mukażżibīn(a)."
+    },
+    {
+      "ayah": 29,
+      "text": "ٱنطَلِقُوٓا۟ إِلَىٰ مَا كُنتُم بِهِۦ تُكَذِّبُونَ",
+      "transliteration": "Inṭaliqū ilā mā kuntum bihī tukażżibūn(a)."
+    },
+    {
+      "ayah": 30,
+      "text": "ٱنطَلِقُوٓا۟ إِلَىٰ ظِلٍّ ذِى ثَلَٰثِ شُعَبٍ",
+      "transliteration": "Inṭaliqū ilā ẓillin żī ṡalāṡi syu‘ab(in)."
+    },
+    {
+      "ayah": 31,
+      "text": "لَّا ظَلِيلٍ وَلَا يُغْنِى مِنَ ٱللَّهَبِ",
+      "transliteration": "Lā ẓalīliw wa lā yugnī minal-lahab(i)."
+    },
+    {
+      "ayah": 32,
+      "text": "إِنَّهَا تَرْمِى بِشَرَرٍ كَٱلْقَصْرِ",
+      "transliteration": "Innahā tarmī bisyararin kal-qaṣr(i)."
+    },
+    {
+      "ayah": 33,
+      "text": "كَأَنَّهُۥ جِمَٰلَتٌ صُفْرٌ",
+      "transliteration": "Ka'annahū jimālatun ṣufr(un)."
+    },
+    {
+      "ayah": 34,
+      "text": "وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ",
+      "transliteration": "Wailuy yauma'iżil lil-mukażżibīn(a)."
+    },
+    {
+      "ayah": 35,
+      "text": "هَٰذَا يَوْمُ لَا يَنطِقُونَ",
+      "transliteration": "Hāżā yaumu lā yanṭiqūn(a)."
+    },
+    {
+      "ayah": 36,
+      "text": "وَلَا يُؤْذَنُ لَهُمْ فَيَعْتَذِرُونَ",
+      "transliteration": "Wa lā yu'żanu lahum fa ya‘tażirūn(a)."
+    },
+    {
+      "ayah": 37,
+      "text": "وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ",
+      "transliteration": "Wailuy yauma'iżil lil-mukażżibīn(a)."
+    },
+    {
+      "ayah": 38,
+      "text": "هَٰذَا يَوْمُ ٱلْفَصْلِ ۖ جَمَعْنَٰكُمْ وَٱلْأَوَّلِينَ",
+      "transliteration": "Hāżā yaumul-faṣli jama‘nākum wal-awwalīn(a)."
+    },
+    {
+      "ayah": 39,
+      "text": "فَإِن كَانَ لَكُمْ كَيْدٌ فَكِيدُونِ",
+      "transliteration": "Fa'in kāna lakum kaidun fakīdūn(i)."
+    },
+    {
+      "ayah": 40,
+      "text": "وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ",
+      "transliteration": "Wailuy yauma'iżil lil-mukażżibīn(a)."
+    },
+    {
+      "ayah": 41,
+      "text": "إِنَّ ٱلْمُتَّقِينَ فِى ظِلَٰلٍ وَعُيُونٍ",
+      "transliteration": "Innal-muttaqīna fī ẓilāliw wa ‘uyūn(in)."
+    },
+    {
+      "ayah": 42,
+      "text": "وَفَوَٰكِهَ مِمَّا يَشْتَهُونَ",
+      "transliteration": "Wa fawākiha mimmā yasytahūn(a)."
+    },
+    {
+      "ayah": 43,
+      "text": "كُلُوا۟ وَٱشْرَبُوا۟ هَنِيٓـًٔۢا بِمَا كُنتُمْ تَعْمَلُونَ",
+      "transliteration": "Kulū wasyrabū hanī'am bimā kuntum ta‘malūn(a)."
+    },
+    {
+      "ayah": 44,
+      "text": "إِنَّا كَذَٰلِكَ نَجْزِى ٱلْمُحْسِنِينَ",
+      "transliteration": "Innā każālika najzil-muḥsinīn(a)."
+    },
+    {
+      "ayah": 45,
+      "text": "وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ",
+      "transliteration": "Wailuy yauma'iżil lil-mukażżibīn(a)."
+    },
+    {
+      "ayah": 46,
+      "text": "كُلُوا۟ وَتَمَتَّعُوا۟ قَلِيلًا إِنَّكُم مُّجْرِمُونَ",
+      "transliteration": "Kulū wa tamatta‘ū qalīlan innakum mujrimūn(a)."
+    },
+    {
+      "ayah": 47,
+      "text": "وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ",
+      "transliteration": "Wailuy yauma'iżil lil-mukażżibīn(a)."
+    },
+    {
+      "ayah": 48,
+      "text": "وَإِذَا قِيلَ لَهُمُ ٱرْكَعُوا۟ لَا يَرْكَعُونَ",
+      "transliteration": "Wa iżā qīla lahumurka‘ū lā yarka‘ūn(a)."
+    },
+    {
+      "ayah": 49,
+      "text": "وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ",
+      "transliteration": "Wailuy yauma'iżil lil-mukażżibīn(a)."
+    },
+    {
+      "ayah": 50,
+      "text": "فَبِأَىِّ حَدِيثٍۭ بَعْدَهُۥ يُؤْمِنُونَ",
+      "transliteration": "Fa bi'ayyi ḥadīṡim ba‘dahū yu'minūn(a)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

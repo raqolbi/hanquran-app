@@ -1,0 +1,90 @@
+'use client';
+
+import { motion } from 'motion/react';
+import { ArrowLeft, Heart } from 'lucide-react';
+import Link from 'next/link';
+
+import { routes } from '@/lib/routes';
+
+interface SurahDetailHeaderProps {
+  surahName: string;
+  arabicName: string;
+  ayahCount: number;
+  type: 'Meccan' | 'Medinan';
+  isFavorited?: boolean;
+  isOfflineReady?: boolean;
+  onToggleFavorite?: () => void;
+}
+
+export function SurahDetailHeader({
+  surahName,
+  arabicName,
+  ayahCount,
+  type,
+  isFavorited = false,
+  isOfflineReady = true,
+  onToggleFavorite,
+}: SurahDetailHeaderProps) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="sticky top-0 z-40 bg-white border-b border-border"
+    >
+      {/* Back Button */}
+      <div className="max-w-3xl mx-auto px-4 py-3 flex items-center">
+        <Link
+          href={routes.home()}
+          className="p-2 hover:bg-secondary rounded-lg transition-colors -ml-2"
+          aria-label="Kembali ke daftar surat"
+        >
+          <ArrowLeft size={20} className="text-foreground" />
+        </Link>
+      </div>
+
+      {/* Meta Information */}
+      <div className="max-w-3xl mx-auto px-4 py-6 border-t border-border">
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold text-foreground">{surahName}</h1>
+            <p className="text-sm text-muted-foreground mt-1">{arabicName}</p>
+          </div>
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={onToggleFavorite}
+            className="p-2 hover:bg-secondary rounded-lg transition-colors"
+            aria-label={isFavorited ? 'Hapus dari favorit' : 'Tambahkan ke favorit'}
+          >
+            <Heart
+              size={24}
+              className={`${
+                isFavorited ? 'fill-red-500 text-red-500' : 'text-muted-foreground'
+              }`}
+            />
+          </motion.button>
+        </div>
+
+        {/* Stats */}
+        <div className="flex items-center gap-4 flex-wrap">
+          <span className="text-sm text-muted-foreground">
+            {ayahCount} ayat
+          </span>
+          <span className="text-sm text-muted-foreground">•</span>
+          <span className="text-sm text-muted-foreground">
+            {type === 'Meccan' ? 'Makkiyah' : 'Madaniyah'}
+          </span>
+          {isOfflineReady && (
+            <>
+              <span className="text-sm text-muted-foreground">•</span>
+              <div className="flex items-center gap-1.5">
+                <div className="w-2 h-2 rounded-full bg-primary" />
+                <span className="text-sm text-foreground font-medium">Siap Offline</span>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+}

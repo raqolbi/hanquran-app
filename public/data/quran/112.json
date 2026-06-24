@@ -1,0 +1,34 @@
+{
+  "id": 112,
+  "name_ar": "الإخلاص",
+  "name_simple": "Al-Ikhlaas",
+  "name_en": "Sincerity",
+  "meaning": "Ikhlas",
+  "description": "Surat ini terdiri atas 4 ayat, termasuk golongan surat-surat Makkiyyah, diturunkan sesudah sesudah surat An Naas. Dinamakan Al Ikhlas karena surat ini sepenuhnya menegaskan kemurnian keesaan Allah s.w.t.",
+  "revelation_place": "meccan",
+  "ayah_count": 4,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ قُلْ هُوَ ٱللَّهُ أَحَدٌ",
+      "transliteration": "Qul huwallāhu aḥad(un)."
+    },
+    {
+      "ayah": 2,
+      "text": "ٱللَّهُ ٱلصَّمَدُ",
+      "transliteration": "Allāhuṣ-ṣamad(u)."
+    },
+    {
+      "ayah": 3,
+      "text": "لَمْ يَلِدْ وَلَمْ يُولَدْ",
+      "transliteration": "Lam yalid wa lam yūlad."
+    },
+    {
+      "ayah": 4,
+      "text": "وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ",
+      "transliteration": "Wa lam yakul lahū kufuwan aḥad(un)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

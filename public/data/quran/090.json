@@ -1,0 +1,114 @@
+{
+  "id": 90,
+  "name_ar": "البلد",
+  "name_simple": "Al-Balad",
+  "name_en": "The City",
+  "meaning": "Negeri",
+  "description": "Surat Al Balad terdiri atas 20 ayat, termasuk golongan surat-surat Makkiyyah, diturunkan sesudah surat Qaaf. Dinamai Al Balad, diambil dari perkataan Al Balad yang terdapat pada ayat pertama surat ini. Yang dimaksud dengan kota di sini ialah kota Mekah.",
+  "revelation_place": "meccan",
+  "ayah_count": 20,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ لَآ أُقْسِمُ بِهَٰذَا ٱلْبَلَدِ",
+      "transliteration": "Lā uqsimu bihāżal-balad(i)."
+    },
+    {
+      "ayah": 2,
+      "text": "وَأَنتَ حِلٌّۢ بِهَٰذَا ٱلْبَلَدِ",
+      "transliteration": "Wa anta ḥillum bihāżal-balad(i)."
+    },
+    {
+      "ayah": 3,
+      "text": "وَوَالِدٍ وَمَا وَلَدَ",
+      "transliteration": "Wa wālidiw wa mā walad(a)."
+    },
+    {
+      "ayah": 4,
+      "text": "لَقَدْ خَلَقْنَا ٱلْإِنسَٰنَ فِى كَبَدٍ",
+      "transliteration": "Laqad khalaqnal-insāna fī kabad(in)."
+    },
+    {
+      "ayah": 5,
+      "text": "أَيَحْسَبُ أَن لَّن يَقْدِرَ عَلَيْهِ أَحَدٌ",
+      "transliteration": "Ayaḥsabu allay yaqdira ‘alaihi aḥad(un)."
+    },
+    {
+      "ayah": 6,
+      "text": "يَقُولُ أَهْلَكْتُ مَالًا لُّبَدًا",
+      "transliteration": "Yaqūlu ahlaktu mālal lubadā(n)."
+    },
+    {
+      "ayah": 7,
+      "text": "أَيَحْسَبُ أَن لَّمْ يَرَهُۥٓ أَحَدٌ",
+      "transliteration": "Ayaḥsabu allam yarahū aḥad(un)."
+    },
+    {
+      "ayah": 8,
+      "text": "أَلَمْ نَجْعَل لَّهُۥ عَيْنَيْنِ",
+      "transliteration": "Alam naj‘al lahū ‘ainain(i)."
+    },
+    {
+      "ayah": 9,
+      "text": "وَلِسَانًا وَشَفَتَيْنِ",
+      "transliteration": "Wa lisānaw wa syafatain(i)."
+    },
+    {
+      "ayah": 10,
+      "text": "وَهَدَيْنَٰهُ ٱلنَّجْدَيْنِ",
+      "transliteration": "Wa hadaināhun-najdain(i)."
+    },
+    {
+      "ayah": 11,
+      "text": "فَلَا ٱقْتَحَمَ ٱلْعَقَبَةَ",
+      "transliteration": "Falaqtaḥamal-‘aqabah(ta)."
+    },
+    {
+      "ayah": 12,
+      "text": "وَمَآ أَدْرَىٰكَ مَا ٱلْعَقَبَةُ",
+      "transliteration": "Wa mā adrāka mal-‘aqabah(tu)."
+    },
+    {
+      "ayah": 13,
+      "text": "فَكُّ رَقَبَةٍ",
+      "transliteration": "Fakku raqabah(tin)."
+    },
+    {
+      "ayah": 14,
+      "text": "أَوْ إِطْعَٰمٌ فِى يَوْمٍ ذِى مَسْغَبَةٍ",
+      "transliteration": "Au iṭ‘āmun fī yaumin żī masgabah(tin)."
+    },
+    {
+      "ayah": 15,
+      "text": "يَتِيمًا ذَا مَقْرَبَةٍ",
+      "transliteration": "Yatīman żā maqrabah(tin)."
+    },
+    {
+      "ayah": 16,
+      "text": "أَوْ مِسْكِينًا ذَا مَتْرَبَةٍ",
+      "transliteration": "Au miskīnan żā matrabah(tin)."
+    },
+    {
+      "ayah": 17,
+      "text": "ثُمَّ كَانَ مِنَ ٱلَّذِينَ ءَامَنُوا۟ وَتَوَاصَوْا۟ بِٱلصَّبْرِ وَتَوَاصَوْا۟ بِٱلْمَرْحَمَةِ",
+      "transliteration": "Ṡumma kāna minal-lażīna āmanū wa tawāṣau biṣ-ṣabri wa tawāṣau bil-marḥamah(ti)."
+    },
+    {
+      "ayah": 18,
+      "text": "أُو۟لَٰٓئِكَ أَصْحَٰبُ ٱلْمَيْمَنَةِ",
+      "transliteration": "Ulā'ika aṣḥābul-maimanah(ti)."
+    },
+    {
+      "ayah": 19,
+      "text": "وَٱلَّذِينَ كَفَرُوا۟ بِـَٔايَٰتِنَا هُمْ أَصْحَٰبُ ٱلْمَشْـَٔمَةِ",
+      "transliteration": "Wal-lażīna kafarū bi'āyātinā hum aṣḥābul-masy'amah(ti)."
+    },
+    {
+      "ayah": 20,
+      "text": "عَلَيْهِمْ نَارٌ مُّؤْصَدَةٌۢ",
+      "transliteration": "‘Alaihim nārum mu'ṣadah(tun)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

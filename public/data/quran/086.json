@@ -1,0 +1,99 @@
+{
+  "id": 86,
+  "name_ar": "الطارق",
+  "name_simple": "At-Taariq",
+  "name_en": "The Morning Star",
+  "meaning": "Yang Datang Di Malam Hari",
+  "description": "Surat Ath Thaariq terdiri atas 17 ayat, termasuk golongan surat-surat Makkiyah, diturunkan sesudah surat Al Balad. Dinamai Ath Thaariq (yang datang di malam hari) diambil dari perkataan Ath Thaariq yang terdapat pada ayat 1 surat ini.",
+  "revelation_place": "meccan",
+  "ayah_count": 17,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وَٱلسَّمَآءِ وَٱلطَّارِقِ",
+      "transliteration": "Was-samā'i waṭ-ṭāriq(i)."
+    },
+    {
+      "ayah": 2,
+      "text": "وَمَآ أَدْرَىٰكَ مَا ٱلطَّارِقُ",
+      "transliteration": "Wa mā adrāka maṭ-ṭāriq(u)."
+    },
+    {
+      "ayah": 3,
+      "text": "ٱلنَّجْمُ ٱلثَّاقِبُ",
+      "transliteration": "An-najmuṡ-ṡāqib(u)."
+    },
+    {
+      "ayah": 4,
+      "text": "إِن كُلُّ نَفْسٍ لَّمَّا عَلَيْهَا حَافِظٌ",
+      "transliteration": "In kullu nafsil lammā ‘alaihā ḥāfiẓ(un)."
+    },
+    {
+      "ayah": 5,
+      "text": "فَلْيَنظُرِ ٱلْإِنسَٰنُ مِمَّ خُلِقَ",
+      "transliteration": "Falyanẓuril-insānu mimma khuliq(a)."
+    },
+    {
+      "ayah": 6,
+      "text": "خُلِقَ مِن مَّآءٍ دَافِقٍ",
+      "transliteration": "Khuliqa mim mā'in dāfiq(in)."
+    },
+    {
+      "ayah": 7,
+      "text": "يَخْرُجُ مِنۢ بَيْنِ ٱلصُّلْبِ وَٱلتَّرَآئِبِ",
+      "transliteration": "Yakhruju mim bainiṣ-ṣulbi wat-tarā'ib(i)."
+    },
+    {
+      "ayah": 8,
+      "text": "إِنَّهُۥ عَلَىٰ رَجْعِهِۦ لَقَادِرٌ",
+      "transliteration": "Innahū ‘alā raj‘ihī laqādir(un)."
+    },
+    {
+      "ayah": 9,
+      "text": "يَوْمَ تُبْلَى ٱلسَّرَآئِرُ",
+      "transliteration": "Yauma tublas-sarā'ir(u)."
+    },
+    {
+      "ayah": 10,
+      "text": "فَمَا لَهُۥ مِن قُوَّةٍ وَلَا نَاصِرٍ",
+      "transliteration": "Famā lahū min quwwatiw wa lā nāṣir(in)."
+    },
+    {
+      "ayah": 11,
+      "text": "وَٱلسَّمَآءِ ذَاتِ ٱلرَّجْعِ",
+      "transliteration": "Was-samā'i żātir-raj‘(i)."
+    },
+    {
+      "ayah": 12,
+      "text": "وَٱلْأَرْضِ ذَاتِ ٱلصَّدْعِ",
+      "transliteration": "Wal-arḍi żātiṣ-ṣad‘(i)."
+    },
+    {
+      "ayah": 13,
+      "text": "إِنَّهُۥ لَقَوْلٌ فَصْلٌ",
+      "transliteration": "Innahū laqaulun faṣl(un)."
+    },
+    {
+      "ayah": 14,
+      "text": "وَمَا هُوَ بِٱلْهَزْلِ",
+      "transliteration": "Wa mā huwa bil-hazl(i)."
+    },
+    {
+      "ayah": 15,
+      "text": "إِنَّهُمْ يَكِيدُونَ كَيْدًا",
+      "transliteration": "Innahum yakīdūna kaidā(n)."
+    },
+    {
+      "ayah": 16,
+      "text": "وَأَكِيدُ كَيْدًا",
+      "transliteration": "Wa akīdu kaidā(n)."
+    },
+    {
+      "ayah": 17,
+      "text": "فَمَهِّلِ ٱلْكَٰفِرِينَ أَمْهِلْهُمْ رُوَيْدًۢا",
+      "transliteration": "Fa mahhilil-kāfirīna amhilhum ruwaidā(n)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

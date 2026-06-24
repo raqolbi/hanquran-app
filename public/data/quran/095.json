@@ -1,0 +1,54 @@
+{
+  "id": 95,
+  "name_ar": "التين",
+  "name_simple": "At-Tin",
+  "name_en": "The Fig",
+  "meaning": "Buah Tin",
+  "description": "Surat ini terdiri atas 8 ayat, termasuk golongan surat-surat Makkiyah, diturunkan sesudah surat Al Buruuj. Nama At Tiin diambil dari kata At Tiin yang terdapat pada ayat pertama surat ini yang artinya buah Tin.",
+  "revelation_place": "meccan",
+  "ayah_count": 8,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِّسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وَٱلتِّينِ وَٱلزَّيْتُونِ",
+      "transliteration": "Wat-tīni waz-zaitūn(i)."
+    },
+    {
+      "ayah": 2,
+      "text": "وَطُورِ سِينِينَ",
+      "transliteration": "Wa ṭūri sīnīn(a)."
+    },
+    {
+      "ayah": 3,
+      "text": "وَهَٰذَا ٱلْبَلَدِ ٱلْأَمِينِ",
+      "transliteration": "Wa hāżal-baladil-amīn(i)."
+    },
+    {
+      "ayah": 4,
+      "text": "لَقَدْ خَلَقْنَا ٱلْإِنسَٰنَ فِىٓ أَحْسَنِ تَقْوِيمٍ",
+      "transliteration": "Laqad khalaqnal-insāna fī aḥsani taqwīm(in)."
+    },
+    {
+      "ayah": 5,
+      "text": "ثُمَّ رَدَدْنَٰهُ أَسْفَلَ سَٰفِلِينَ",
+      "transliteration": "Ṡumma radadnāhu asfala sāfilīn(a)."
+    },
+    {
+      "ayah": 6,
+      "text": "إِلَّا ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّٰلِحَٰتِ فَلَهُمْ أَجْرٌ غَيْرُ مَمْنُونٍ",
+      "transliteration": "Illal-lażīna āmanū wa ‘amiluṣ-ṣāliḥāti falahum ajrun gairu mamnūn(in)."
+    },
+    {
+      "ayah": 7,
+      "text": "فَمَا يُكَذِّبُكَ بَعْدُ بِٱلدِّينِ",
+      "transliteration": "Famā yukażżibuka ba‘du bid-dīn(i)."
+    },
+    {
+      "ayah": 8,
+      "text": "أَلَيْسَ ٱللَّهُ بِأَحْكَمِ ٱلْحَٰكِمِينَ",
+      "transliteration": "Alaisallāhu bi'aḥkamil-ḥākimīn(a)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

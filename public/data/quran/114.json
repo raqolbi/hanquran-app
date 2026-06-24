@@ -1,0 +1,44 @@
+{
+  "id": 114,
+  "name_ar": "الناس",
+  "name_simple": "An-Naas",
+  "name_en": "Mankind",
+  "meaning": "Manusia",
+  "description": "Surat ini terdiri atas 6 ayat, termasuk golongan surat-surat Makkiyah, diturunkan sesudah surat Al Falaq. Nama An Naas diambil dari An Naas yang berulang kali disebut dalam surat ini yang artinya manusia.",
+  "revelation_place": "meccan",
+  "ayah_count": 6,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ قُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ",
+      "transliteration": "Qul a‘ūżu birabbin-nās(i)."
+    },
+    {
+      "ayah": 2,
+      "text": "مَلِكِ ٱلنَّاسِ",
+      "transliteration": "Malikin-nās(i)."
+    },
+    {
+      "ayah": 3,
+      "text": "إِلَٰهِ ٱلنَّاسِ",
+      "transliteration": "Ilāhin-nās(i)."
+    },
+    {
+      "ayah": 4,
+      "text": "مِن شَرِّ ٱلْوَسْوَاسِ ٱلْخَنَّاسِ",
+      "transliteration": "Min syarril-waswāsil-khannās(i)."
+    },
+    {
+      "ayah": 5,
+      "text": "ٱلَّذِى يُوَسْوِسُ فِى صُدُورِ ٱلنَّاسِ",
+      "transliteration": "Allażī yuwaswisu fī ṣudūrin-nās(i)."
+    },
+    {
+      "ayah": 6,
+      "text": "مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ",
+      "transliteration": "Minal jinnati wan-nās(i)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

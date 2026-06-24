@@ -1,0 +1,109 @@
+{
+  "id": 82,
+  "name_ar": "الإنفطار",
+  "name_simple": "Al-Infitaar",
+  "name_en": "The Cleaving",
+  "meaning": "Terbelah",
+  "description": "Surat ini terdiri atas 19 ayat, termasuk golongan surat-surat Makkiyah dan diturunkan sesudah surat An Naazi'aat. Al Infithaar yang dijadikan nama untuk surat ini adalah kata asal dari kata Infatharat (terbelah) yang terdapat pada ayat pertama.",
+  "revelation_place": "meccan",
+  "ayah_count": 19,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ إِذَا ٱلسَّمَآءُ ٱنفَطَرَتْ",
+      "transliteration": "Iżas-samā'unfaṭarat."
+    },
+    {
+      "ayah": 2,
+      "text": "وَإِذَا ٱلْكَوَاكِبُ ٱنتَثَرَتْ",
+      "transliteration": "Wa iżal-kawākibuntaṡarat."
+    },
+    {
+      "ayah": 3,
+      "text": "وَإِذَا ٱلْبِحَارُ فُجِّرَتْ",
+      "transliteration": "Wa iżal-biḥāru fujjirat."
+    },
+    {
+      "ayah": 4,
+      "text": "وَإِذَا ٱلْقُبُورُ بُعْثِرَتْ",
+      "transliteration": "Wa iżal-qubūru bu‘ṡirat."
+    },
+    {
+      "ayah": 5,
+      "text": "عَلِمَتْ نَفْسٌ مَّا قَدَّمَتْ وَأَخَّرَتْ",
+      "transliteration": "‘Alimat nafsum mā qaddamat wa akhkharat."
+    },
+    {
+      "ayah": 6,
+      "text": "يَٰٓأَيُّهَا ٱلْإِنسَٰنُ مَا غَرَّكَ بِرَبِّكَ ٱلْكَرِيمِ",
+      "transliteration": "Yā ayyuhal-insānu mā garraka birabbikal-karīm(i)."
+    },
+    {
+      "ayah": 7,
+      "text": "ٱلَّذِى خَلَقَكَ فَسَوَّىٰكَ فَعَدَلَكَ",
+      "transliteration": "Allażī khalaqaka fa sawwāka fa ‘adalak(a)."
+    },
+    {
+      "ayah": 8,
+      "text": "فِىٓ أَىِّ صُورَةٍ مَّا شَآءَ رَكَّبَكَ",
+      "transliteration": "Fī ayyi ṣūratim mā syā'a rakkabak(a)."
+    },
+    {
+      "ayah": 9,
+      "text": "كَلَّا بَلْ تُكَذِّبُونَ بِٱلدِّينِ",
+      "transliteration": "Kallā bal tukażżibūna bid-dīn(i)."
+    },
+    {
+      "ayah": 10,
+      "text": "وَإِنَّ عَلَيْكُمْ لَحَٰفِظِينَ",
+      "transliteration": "Wa inna ‘alaikum laḥāfiẓīn(a)."
+    },
+    {
+      "ayah": 11,
+      "text": "كِرَامًا كَٰتِبِينَ",
+      "transliteration": "Kirāman kātibīn(a)."
+    },
+    {
+      "ayah": 12,
+      "text": "يَعْلَمُونَ مَا تَفْعَلُونَ",
+      "transliteration": "Ya‘lamūna mā taf‘alūn(a)."
+    },
+    {
+      "ayah": 13,
+      "text": "إِنَّ ٱلْأَبْرَارَ لَفِى نَعِيمٍ",
+      "transliteration": "Innal-abrāra lafī na‘īm(in)."
+    },
+    {
+      "ayah": 14,
+      "text": "وَإِنَّ ٱلْفُجَّارَ لَفِى جَحِيمٍ",
+      "transliteration": "Wa innal-fujjāra lafī jaḥīm(in)."
+    },
+    {
+      "ayah": 15,
+      "text": "يَصْلَوْنَهَا يَوْمَ ٱلدِّينِ",
+      "transliteration": "Yaṣlaunahā yaumad-dīn(i)."
+    },
+    {
+      "ayah": 16,
+      "text": "وَمَا هُمْ عَنْهَا بِغَآئِبِينَ",
+      "transliteration": "Wa mā hum ‘anhā bigā'ibīn(a)."
+    },
+    {
+      "ayah": 17,
+      "text": "وَمَآ أَدْرَىٰكَ مَا يَوْمُ ٱلدِّينِ",
+      "transliteration": "Wa mā adrāka mā yaumud-dīn(i)."
+    },
+    {
+      "ayah": 18,
+      "text": "ثُمَّ مَآ أَدْرَىٰكَ مَا يَوْمُ ٱلدِّينِ",
+      "transliteration": "Ṡumma mā adrāka mā yaumud-dīn(i)."
+    },
+    {
+      "ayah": 19,
+      "text": "يَوْمَ لَا تَمْلِكُ نَفْسٌ لِّنَفْسٍ شَيْـًٔا ۖ وَٱلْأَمْرُ يَوْمَئِذٍ لِّلَّهِ",
+      "transliteration": "Yauma lā tamliku nafsul linafsin syai'ā(n), wal-amru yauma'iżil lillāh(i)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

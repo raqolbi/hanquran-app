@@ -1,0 +1,49 @@
+{
+  "id": 107,
+  "name_ar": "الماعون",
+  "name_simple": "Al-Maa'un",
+  "name_en": "Almsgiving",
+  "meaning": "Barang Yang Berguna",
+  "description": "Surat ini terdiri atas 7 ayat, termasuk golongan surat-surat Makkiyyah, diturunkan sesudah surat At Taakatsur. Nama Al Maa'uun diambil dari kata Al Maa'uun yang terdapat pada ayat 7, artinya barang-barang yang berguna.",
+  "revelation_place": "meccan",
+  "ayah_count": 7,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ أَرَءَيْتَ ٱلَّذِى يُكَذِّبُ بِٱلدِّينِ",
+      "transliteration": "Ara'aital-lażī yukażżibu bid-dīn(i)."
+    },
+    {
+      "ayah": 2,
+      "text": "فَذَٰلِكَ ٱلَّذِى يَدُعُّ ٱلْيَتِيمَ",
+      "transliteration": "Fa żālikal-lażī yadu‘‘ul-yatīm(a)."
+    },
+    {
+      "ayah": 3,
+      "text": "وَلَا يَحُضُّ عَلَىٰ طَعَامِ ٱلْمِسْكِينِ",
+      "transliteration": "Wa lā yaḥuḍḍu ‘alā ṭa‘āmil-miskīn(i)."
+    },
+    {
+      "ayah": 4,
+      "text": "فَوَيْلٌ لِّلْمُصَلِّينَ",
+      "transliteration": "Fawailul lil-muṣallīn(a)."
+    },
+    {
+      "ayah": 5,
+      "text": "ٱلَّذِينَ هُمْ عَن صَلَاتِهِمْ سَاهُونَ",
+      "transliteration": "Allażīna hum ‘an ṣalātihim sāhūn(a)."
+    },
+    {
+      "ayah": 6,
+      "text": "ٱلَّذِينَ هُمْ يُرَآءُونَ",
+      "transliteration": "Allażīna hum yurā'ūn(a)."
+    },
+    {
+      "ayah": 7,
+      "text": "وَيَمْنَعُونَ ٱلْمَاعُونَ",
+      "transliteration": "Wa yamna‘ūnal-mā‘ūn(a)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}
