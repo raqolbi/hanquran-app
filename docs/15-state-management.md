@@ -574,7 +574,7 @@ Jika ada perbedaan antar dokumen tentang state, dokumen ini menjadi acuan final.
 * [x] Tambah `BroadcastChannel('hanquran:audio')` untuk sinkronisasi lintas tab audio (`services/audio-tab-sync.ts`).
 * [x] Tambah `BroadcastChannel('hanquran:repeat')` untuk sinkronisasi lintas tab repeat.
 * [x] Hubungkan komponen `AudioPlayer`, `RepeatStatus`, `OfflineStatusBadge` ke selector store.
-* [ ] Implementasi aksi **Hapus Cache** sesuai aturan Bagian 6.4 — UI ada, logika belum.
+* [x] Implementasi aksi **Hapus Cache** sesuai aturan Bagian 6.4 — `services/cache-manager.ts`, Settings UI.
 * [x] Tulis unit test untuk action store dan integrasi `audio-controller` ↔ store.
 
 ---
