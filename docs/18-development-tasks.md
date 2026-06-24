@@ -3,7 +3,7 @@
 Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi HanQuran menuju MVP. Berisi daftar pekerjaan teknis yang dapat langsung dikerjakan developer.
 
 **Terakhir diperbarui:** 24 Juni 2026
-**Status:** 🚧 Sprint 2 — Static Dataset Architecture disetujui; Phase 1 data selesai; lanjut Phase 2
+**Status:** 🚧 Sprint 2 — word-by-word ditunda Post-MVP (`docs/24`)
 **Total Development Tasks:** 86 (39 Selesai, 47 Belum Dimulai)
 **Arsitektur data:** `docs/23-static-dataset-architecture.md`
 
@@ -62,7 +62,7 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 1c        | Verse Display Controls            | 4      | 0      | 4      | 0     | 4       | ✅ Selesai               |
 | 2         | Audio Controller & State          | 11     | 6      | 3      | 2     | 8       | 🟡 P1 persist posisi   |
 | 3         | Repeat Engine & Configuration     | 9      | 6      | 2      | 1     | 6       | 🟡 Keyboard shortcuts berikutnya |
-| 4         | Focus Mode Refinement             | 8      | 5      | 1      | 2     | 0       | ⏳ Belum Dimulai         |
+| 4         | Word Highlight (Focus Mode)       | 8      | 0      | 0      | 8     | 0       | ⏸️ Post-MVP — lihat `docs/24` |
 | 5         | Implementasi Strategi Offline     | 11     | 7      | 3      | 1     | 1       | ⏳ Skeleton store saja   |
 | 6         | PWA & Packaging                   | 8      | 5      | 2      | 1     | 0       | ⏳ Belum Dimulai         |
 | 7         | Testing & Quality Assurance       | 9      | 6      | 2      | 1     | 2       | ⏳ Audio + repeat unit ✅ |
@@ -78,12 +78,13 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 
 Codebase aktif berada di `hanquran-app/` (Next.js App Router). **Konten Quran** dimuat dari `public/data/*` via `services/quran/`. **Data pengguna** persisten di Dexie via Zustand stores.
 
-**Arsitektur resmi MVP:** `docs/23-static-dataset-architecture.md`
+**Arsitektur resmi MVP:** `docs/23-static-dataset-architecture.md`  
+**Scope Mode Fokus:** `docs/24-focus-mode-mvp-scope.md` (word-by-word **bukan** MVP V1)
 
 **Belum selesai:**
 
-- Integrasi `RepeatEngine` ke Focus Mode
 - Persist posisi audio terakhir
+- Word-by-word highlight (Post-MVP)
 
 ---
 
@@ -98,7 +99,7 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 | ------------------------- | ------------- | ---------------------------------------------------- |
 | `app/page.tsx`            | `/` (Beranda) | ✓ Data nyata — `useSurahList`                        |
 | `app/surah/[id]/page.tsx` | `/surah/[id]` | ✓ Data nyata + audio + RepeatEngine terintegrasi |
-| `app/focus/[id]/page.tsx` | `/focus/[id]` | ✓ Data nyata + warisan preferensi baca               |
+| `app/focus/[id]/page.tsx` | `/focus/[id]` | ✓ Baca fokus — ayat nyata, tanpa word highlight (MVP) |
 | `app/settings/page.tsx`   | `/settings`   | ✓ Bahasa Aplikasi + pilihan qari (terhubung ke audio) |
 
 
@@ -515,45 +516,32 @@ Verifikasi: `npm run build` dan `npm run test` (15 test) lulus.
 
 ---
 
-## Phase 4 — Word Highlight (Focus Mode)
+## Phase 4 — Word Highlight (Post-MVP)
 
-**Total: 8 tasks | P0: 5 | P1: 1 | P2: 1 | P3: 1**
+**Total: 8 tasks | Status: ⏸️ Ditunda — bukan blocker MVP V1**
 
-> Route yang digunakan: `/focus/[id]` sesuai `docs/14-routing-spec.md`. File halaman: `app/focus/[id]/page.tsx`. Query opsional: `?ayah=<number>`.
+> **Keputusan 24 Juni 2026:** `docs/24-focus-mode-mvp-scope.md`. Dataset `word_by_word` kosong; simulasi interval dihapus dari kode. Mode Fokus MVP = layar baca bebas distraksi tanpa highlight kata.
 
-### Wajib (P0)
+> Route: `/focus/[id]` — `app/focus/[id]/page.tsx`. Query opsional: `?ayah=<number>`.
+
+### Post-MVP (seluruh task Phase 4)
 
 - [ ] [REFACTOR] Perhalus komponen `AyahWordHighlight` untuk transisi highlight state
-  - Tujuan: Pastikan transisi visual halus saat highlight kata berubah
-  - File: `components/ayah-word-highlight.tsx`
-  - Ketergantungan: Komponen sudah ada
-  - Prioritas: P0
+  - Prioritas: Post-MVP
 
-- [ ] [UPDATE] Implementasi logika timing kata-per-kata di FocusMode
-  - Tujuan: Otomasi perpindahan highlight kata (interval berbasis milidetik)
-  - File: `app/focus/[id]/page.tsx`
-  - Ketergantungan: Komponen `AyahWordHighlight` sudah berfungsi
-  - Prioritas: P0
+- [ ] [UPDATE] Implementasi logika timing kata-per-kata di FocusMode (sinkron audio, bukan interval mock)
+  - Prioritas: Post-MVP
 
-- [ ] [UPDATE] Integrasi FocusMode dengan repeat engine
-  - Tujuan: Dukung repeat target dalam focus mode (ulang ayat saat ini, range, seluruh surat)
-  - File: `app/focus/[id]/page.tsx`, `services/repeat-engine.ts`
-  - Ketergantungan: FocusMode berjalan, `RepeatEngine` sudah siap
-  - Prioritas: P0
+- [ ] [UPDATE] Integrasi FocusMode dengan repeat engine + audio
+  - Prioritas: Post-MVP
 
-- [ ] [UPDATE] Tambah tombol play/pause & progress bar untuk FocusMode
-  - Tujuan: Kontrol penuh dari focus mode
-  - File: `components/focus-mode-player.tsx`
-  - Ketergantungan: Struktur halaman FocusMode
-  - Prioritas: P0
+- [ ] [UPDATE] Play/pause & progress bar FocusMode terhubung audio nyata
+  - Prioritas: Post-MVP
 
-- [ ] [UPDATE] Implementasi navigasi panah (prev/next ayat) di FocusMode
-  - Tujuan: Pindah antar ayat tanpa keluar dari focus mode
-  - File: `app/focus/[id]/page.tsx`
-  - Ketergantungan: Halaman FocusMode
-  - Prioritas: P0
+- [ ] [UPDATE] Navigasi prev/next ayat di FocusMode (sudah ada di MVP; polish opsional)
+  - Prioritas: Post-MVP
 
-### Disarankan (P1)
+### Disarankan (P1) — Post-MVP
 
 - [ ] [UPDATE] Aksesibilitas: keyboard navigation & dukungan screen reader untuk word highlight
   - Tujuan: Pastikan focus mode dapat digunakan oleh pengguna berkebutuhan khusus
@@ -921,12 +909,11 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [x] Persistensi konfigurasi ke Dexie (`settings.repeatConfig`) end-to-end di UI
 - [x] Unit tests passing (80 test)
 
-### Phase 4 — Focus Mode
-- [ ] AyahWordHighlight component diperhalus
-- [ ] Logika timing FocusMode diimplementasi
-- [ ] Integrasi FocusMode + repeat selesai
-- [ ] Play/pause & navigasi berfungsi
-- [ ] Route /focus/[id] konsisten di seluruh codebase
+### Phase 4 — Focus Mode / Word Highlight (Post-MVP)
+- [x] Mode Fokus MVP — layar baca bebas distraksi, ayat nyata, navigasi ayat
+- [ ] Word-by-word highlight + sinkron audio
+- [ ] Integrasi FocusMode + RepeatEngine + audio
+- [x] Navigasi antar ayat di `/focus/[id]` berfungsi
 
 ### Phase 5 — Offline
 - [ ] DownloadManager service berjalan
@@ -991,7 +978,7 @@ MVP HanQuran dianggap **selesai** ketika seluruh kondisi berikut terpenuhi:
 - [x] Pengguna dapat membuka daftar surat dan menavigasi ke surat manapun
 - [ ] Pengguna dapat memutar audio per ayat dengan play/pause/seek yang reliabel
 - [ ] Pengguna dapat mengaktifkan repeat (1×/3×/5×/∞) untuk ayat saat ini, range ayat, atau seluruh surat
-- [ ] Focus Mode menampilkan highlight kata-per-kata dan dapat di-pause/dilanjutkan
+- [ ] Focus Mode menampilkan satu ayat dalam layout bebas distraksi (tanpa word highlight MVP)
 - [ ] Navigasi antar ayat di Focus Mode (`/focus/[id]`) berfungsi tanpa keluar dari mode
 
 ## Data & State

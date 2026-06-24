@@ -29,9 +29,9 @@ Semua penjelasan menggunakan Bahasa Indonesia dan mengikuti implementasi saat in
 
 3. URL: `/focus/[id]` (contoh: `/focus/2`)
    - Nama halaman: Focus Mode (Mode Fokus)
-   - Tujuan: Mode membaca fokus yang menyorot kata-per-kata dan mendukung pengulangan (repeat).
-   - Komponen utama: `AyahWordHighlight` (banyak), `FocusModePlayer`, `RepeatStatus`, `RepeatSettingsDialog`.
-   - Aksi pengguna: Putar / jeda highlight, navigasi ayat sebelumnya/berikutnya, buka pengaturan repeat, keluar ke halaman surah.
+   - Tujuan: Layar baca bebas distraksi — satu ayat nyata (Arab + transliterasi/terjemahan sesuai preferensi). **Tanpa** word-by-word highlight pada MVP V1 (`docs/24-focus-mode-mvp-scope.md`).
+   - Komponen utama: teks ayat, `FocusModePlayer`, `RepeatStatus`, `RepeatSettingsDialog`.
+   - Aksi pengguna: Putar/jeda audio ayat, navigasi ayat sebelumnya/berikutnya, buka pengaturan repeat, keluar ke halaman surah.
    - Query opsional: `?ayah=<number>` untuk memulai dari ayat tertentu.
 
 4. URL: `/settings`

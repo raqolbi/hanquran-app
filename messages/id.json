@@ -70,6 +70,8 @@
     "exitAriaLabel": "Keluar dari Mode Fokus",
     "ayahCounter": "Ayat {current} / {total}",
     "openRepeatSettings": "Buka Pengaturan Repeat",
+    "repeatSurahDetailHint": "Pengulangan otomatis tersedia di halaman Surat.",
+    "repeatAutoSurahDetailHint": "Pengulangan otomatis tersedia di halaman Surat. Audio dapat diputar di sini.",
     "previousAyah": "Ayat Sebelum",
     "nextAyah": "Ayat Berikut"
   },
