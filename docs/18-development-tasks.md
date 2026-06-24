@@ -86,7 +86,6 @@ Codebase aktif berada di `hanquran-app/` (Next.js App Router). **Konten Quran** 
 - Persist posisi audio terakhir
 - Wire `lastRead` → kartu Lanjutkan Hafalan (Home masih mock)
 - Wire favorit ke `useUserStore` (Home masih state lokal)
-- Aksesibilitas Settings (`contrastMode`, `smoothAnimation`) belum persist
 - Word-by-word highlight (Post-MVP)
 - PWA manifest & install prompt (Phase 6)
 - E2E / verifikasi offline playback
@@ -105,7 +104,7 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 | `app/page.tsx`            | `/` (Beranda) | ✓ Data nyata — `useSurahList`                        |
 | `app/surah/[id]/page.tsx` | `/surah/[id]` | ✓ Data nyata + audio + RepeatEngine terintegrasi |
 | `app/focus/[id]/page.tsx` | `/focus/[id]` | ✓ Baca fokus — ayat nyata, tanpa word highlight (MVP) |
-| `app/settings/page.tsx`   | `/settings`   | ✓ Bahasa, qari, ukuran teks Arab, status offline & cache |
+| `app/settings/page.tsx`   | `/settings`   | ✓ Bahasa, qari, ukuran teks Arab, aksesibilitas, status offline & cache |
 
 
 ## Komponen Layar (19 komponen)
@@ -156,7 +155,7 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 # ✅ 4. Completed Tasks
 
-**Total development task yang benar-benar selesai: 51**
+**Total development task yang benar-benar selesai: 52**
 
 Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **128 test passing**).
 
@@ -196,6 +195,12 @@ Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **128 test passing**).
 2. ✅ Hook `useReadingDisplay` + field `transliterationVisible` di Dexie
 3. ✅ Wire Surah Detail & Focus Mode — lihat `docs/verse-display-controls-implementation.md`
 4. ✅ Hapus section Terjemahan dari Settings
+
+### Aksesibilitas Settings (24 Juni 2026)
+
+1. ✅ Persist `contrastMode` & `smoothAnimation` via `useUserStore` di `/settings`
+2. ✅ `AccessibilityProvider` — kontras tinggi (`data-contrast`) & animasi (`MotionConfig` + `data-motion`)
+3. ✅ CSS global untuk mode kontras tinggi & reduced motion
 
 ### Store & offline (terintegrasi)
 
@@ -906,6 +911,7 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [x] Preferensi terjemahan & transliterasi persisten
 - [x] Surah Detail & Focus Mode ter-wire
 - [x] Section Terjemahan dihapus dari Settings
+- [x] Aksesibilitas Settings — persist & terapkan global (`AccessibilityProvider`)
 
 ### Phase 2 — Audio
 - [x] AudioController service selesai — class, integrasi UI, BroadcastChannel ✅

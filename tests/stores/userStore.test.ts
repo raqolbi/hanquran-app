@@ -91,3 +91,47 @@ describe('useUserStore — reciterId', () => {
     expect(useUserStore.getState().settings.fontSize).toBe(32);
   });
 });
+
+describe('useUserStore — aksesibilitas', () => {
+  beforeEach(async () => {
+    await db.delete();
+    await db.open();
+    useUserStore.setState({
+      favorites: [],
+      settings: {
+        id: 'default',
+        appLocale: 'id',
+        fontSize: DEFAULT_ARABIC_FONT_SIZE_PX,
+        translationVisible: false,
+        transliterationVisible: false,
+        contrastMode: 'default',
+        smoothAnimation: true,
+        reciterId: getDefaultReciterId(),
+        translationResourceId: 33,
+        updatedAt: 0,
+      },
+      lastViewed: null,
+      initialized: false,
+    });
+  });
+
+  it('menyimpan contrastMode ke Dexie', async () => {
+    await useUserStore.getState().init();
+    await useUserStore.getState().updateSettings({ contrastMode: 'high' });
+
+    expect(useUserStore.getState().settings.contrastMode).toBe('high');
+
+    const stored = await db.settings.get('default');
+    expect(stored?.contrastMode).toBe('high');
+  });
+
+  it('menyimpan smoothAnimation ke Dexie', async () => {
+    await useUserStore.getState().init();
+    await useUserStore.getState().updateSettings({ smoothAnimation: false });
+
+    expect(useUserStore.getState().settings.smoothAnimation).toBe(false);
+
+    const stored = await db.settings.get('default');
+    expect(stored?.smoothAnimation).toBe(false);
+  });
+});
