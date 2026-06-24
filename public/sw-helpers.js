@@ -9,12 +9,66 @@
   const AUDIO_PATH_PREFIX = '/data/';
 
   /**
+   * @param {Request} request
+   * @returns {boolean}
+   */
+  function isNavigationRequest(request) {
+    if (request.mode === 'navigate') return true;
+    const accept = request.headers.get('accept');
+    return Boolean(accept && accept.includes('text/html'));
+  }
+
+  /**
+   * Network-first untuk navigasi dokumen; fallback ke cache shell lalu offline.html.
+   *
+   * @param {Request} request
+   * @param {string} shellCacheName
+   * @param {string} offlinePath
+   */
+  async function networkFirstNavigation(request, shellCacheName, offlinePath) {
+    const cache = await caches.open(shellCacheName);
+    const offlineUrl = new URL(offlinePath, request.url).href;
+    const homeUrl = new URL('/', request.url).href;
+
+    try {
+      const response = await fetch(request);
+      if (response.ok && response.type === 'basic') {
+        await cache.put(request.url, response.clone());
+      }
+      return response;
+    } catch {
+      // Lanjut ke fallback cache di bawah.
+    }
+
+    const cached =
+      (await cache.match(request.url)) ||
+      (await cache.match(homeUrl)) ||
+      (await cache.match(offlineUrl));
+
+    if (cached) return cached;
+
+    return new Response('Offline', {
+      status: 503,
+      statusText: 'Offline',
+      headers: { 'Content-Type': 'text/html; charset=utf-8' },
+    });
+  }
+
+  /**
    * @param {URL} url
    * @param {string} appOrigin Origin aplikasi (`self.location.origin`)
    * @returns {'static' | 'data' | 'audio' | 'bypass'}
    */
   function getRequestCategory(url, appOrigin) {
     const sameOrigin = url.origin === appOrigin;
+
+    if (sameOrigin && url.pathname === '/offline.html') {
+      return 'static';
+    }
+
+    if (sameOrigin && url.pathname === '/manifest.json') {
+      return 'static';
+    }
 
     if (sameOrigin && url.pathname.startsWith('/data/')) {
       return 'data';
@@ -98,6 +152,8 @@
 
   global.SwHelpers = {
     AUDIO_CDN_HOST,
+    isNavigationRequest,
+    networkFirstNavigation,
     getRequestCategory,
     cacheFirst,
     staleWhileRevalidate,

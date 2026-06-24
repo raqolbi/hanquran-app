@@ -163,6 +163,14 @@
     "previewRange": "Ayat {from}-{to} • {count}",
     "previewSurah": "{surah} • {count}"
   },
+  "pwa": {
+    "installTitle": "Instal HanQuran",
+    "installDescription": "Akses lebih cepat dari layar utama — siap dipakai setelah unduhan audio.",
+    "installAction": "Instal aplikasi",
+    "installDismiss": "Tutup saran instal",
+    "installIOSHint": "Di Safari: ketuk Bagikan lalu pilih \"Tambahkan ke Layar Utama\".",
+    "installAriaLabel": "Saran instal aplikasi HanQuran"
+  },
   "nav": {
     "home": "Beranda",
     "settings": "Pengaturan"
