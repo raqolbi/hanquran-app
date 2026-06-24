@@ -200,3 +200,59 @@ describe('useUserStore — lastViewed', () => {
     expect(after?.updatedAt).toBe(before?.updatedAt);
   });
 });
+
+describe('useUserStore — favorites', () => {
+  beforeEach(async () => {
+    await db.delete();
+    await db.open();
+    useUserStore.setState({
+      favorites: [],
+      settings: {
+        id: 'default',
+        appLocale: 'id',
+        fontSize: DEFAULT_ARABIC_FONT_SIZE_PX,
+        translationVisible: false,
+        transliterationVisible: false,
+        contrastMode: 'default',
+        smoothAnimation: true,
+        reciterId: getDefaultReciterId(),
+        translationResourceId: 33,
+        updatedAt: 0,
+      },
+      lastViewed: null,
+      initialized: false,
+    });
+  });
+
+  it('menyimpan favorit ke Dexie', async () => {
+    await useUserStore.getState().init();
+    await useUserStore.getState().toggleFavorite(1);
+
+    expect(useUserStore.getState().favorites).toEqual([1]);
+    expect(useUserStore.getState().isFavorite(1)).toBe(true);
+
+    const stored = await db.favorites.get(1);
+    expect(stored?.surahId).toBe(1);
+  });
+
+  it('menghapus favorit dari Dexie', async () => {
+    await db.favorites.put({ surahId: 2, createdAt: 1 });
+    await useUserStore.getState().init();
+
+    await useUserStore.getState().toggleFavorite(2);
+
+    expect(useUserStore.getState().favorites).toEqual([]);
+    expect(await db.favorites.get(2)).toBeUndefined();
+  });
+
+  it('memuat favorit dari Dexie saat init', async () => {
+    await db.favorites.bulkPut([
+      { surahId: 1, createdAt: 1 },
+      { surahId: 36, createdAt: 2 },
+    ]);
+
+    await useUserStore.getState().init();
+
+    expect(useUserStore.getState().favorites).toEqual([1, 36]);
+  });
+});
