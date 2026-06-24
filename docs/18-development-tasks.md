@@ -4,7 +4,7 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 
 **Terakhir diperbarui:** 24 Juni 2026
 **Status:** 🚧 Sprint 2 — word-by-word ditunda Post-MVP (`docs/24`)
-**Total Development Tasks:** 86 (50 Selesai, 36 Belum Dimulai)
+**Total Development Tasks:** 86 (51 Selesai, 35 Belum Dimulai)
 **Arsitektur data:** `docs/23-static-dataset-architecture.md`
 
 ---
@@ -63,11 +63,11 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 2         | Audio Controller & State          | 11     | 6      | 3      | 2     | 8       | 🟡 P1 persist posisi   |
 | 3         | Repeat Engine & Configuration     | 9      | 6      | 2      | 1     | 6       | 🟡 Keyboard shortcuts berikutnya |
 | 4         | Word Highlight (Focus Mode)       | 8      | 0      | 0      | 8     | 3       | ⏸️ Post-MVP — MVP fokus (audio/repeat/nav) ✅ |
-| 5         | Implementasi Strategi Offline     | 11     | 7      | 3      | 1     | 8       | 🟡 Clear cache & E2E offline belum |
+| 5         | Implementasi Strategi Offline     | 11     | 7      | 3      | 1     | 9       | 🟡 E2E offline playback belum |
 | 6         | PWA & Packaging                   | 8      | 5      | 2      | 1     | 0       | ⏳ Belum Dimulai         |
 | 7         | Testing & Quality Assurance       | 9      | 6      | 2      | 1     | 2       | ⏳ Audio + repeat unit ✅ |
 | 8         | Release & Monitoring              | 11     | 6      | 3      | 2     | 0       | ⏳ Belum Dimulai         |
-| **TOTAL** |                                   | **86** | **53** | **27** | **6** | **50**  |                         |
+| **TOTAL** |                                   | **86** | **53** | **27** | **6** | **51**  |                         |
 
 
 > Catatan: Phase 7 (Testing & QA) berjalan **paralel** mulai Phase 1 — bukan sequential setelah Phase 6 selesai.
@@ -86,7 +86,6 @@ Codebase aktif berada di `hanquran-app/` (Next.js App Router). **Konten Quran** 
 - Persist posisi audio terakhir
 - Wire `lastRead` → kartu Lanjutkan Hafalan (Home masih mock)
 - Wire favorit ke `useUserStore` (Home masih state lokal)
-- Hapus cache (UI ada, logika belum)
 - Aksesibilitas Settings (`contrastMode`, `smoothAnimation`) belum persist
 - Word-by-word highlight (Post-MVP)
 - PWA manifest & install prompt (Phase 6)
@@ -157,7 +156,7 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 # ✅ 4. Completed Tasks
 
-**Total development task yang benar-benar selesai: 50**
+**Total development task yang benar-benar selesai: 51**
 
 Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **128 test passing**).
 
@@ -640,12 +639,12 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
   - Prioritas: P1
   - **Ringkasan:** MVP Opsi A — tombol **Simpan Offline** per surat di Surah Detail; manifest reciter-aware (`[surahId+reciterId]`)
 
-- [ ] [NEW] Tambah manajemen ukuran cache & pembersihan
+- [x] [NEW] Tambah manajemen ukuran cache & pembersihan
   - Tujuan: Cegah kuota habis, izinkan pengguna menghapus item yang di-cache
-  - File: `services/cache-manager.ts`, Settings UI
+  - File: `services/cache-manager.ts`, `services/audio-cache-stats.ts`, Settings UI
   - Ketergantungan: Infrastruktur offline siap
   - Prioritas: P1
-  - **Catatan:** Tampilan ukuran cache audio (MB) ✅ via `services/audio-cache-stats.ts`; tombol Hapus Cache masih stub
+  - **Ringkasan:** Tampilan ukuran cache audio (MB) + `clearOfflineAudioCache()` menghapus `hanquran-audio-v1` & `downloadManifest`; preferensi pengguna tidak disentuh
 
 - [x] [UPDATE] Tampilkan progres unduhan kepada pengguna
   - Tujuan: Umpan balik visual selama unduhan berlangsung

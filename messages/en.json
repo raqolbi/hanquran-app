@@ -117,7 +117,9 @@
       "quranData": "Quran data",
       "clearCache": "Clear Cache",
       "clearCacheTitle": "Clear cache?",
-      "clearCacheDescription": "Cached audio and Quran data will be removed. You'll need an internet connection to load them again."
+      "clearCacheDescription": "Cached audio will be removed. You'll need an internet connection to download it again.",
+      "clearCacheInProgress": "Clearing…",
+      "clearCacheFailed": "Failed to clear cache. Please try again."
     },
     "accessibility": {
       "title": "Accessibility",
