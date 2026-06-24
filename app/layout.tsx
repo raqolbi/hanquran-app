@@ -30,12 +30,9 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  colorScheme: 'light dark',
+  colorScheme: 'only light',
   viewportFit: 'cover',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#0F766E' },
-    { media: '(prefers-color-scheme: dark)', color: '#0F172A' },
-  ],
+  themeColor: '#0F766E',
 }
 
 const PWA_LAUNCH_SCRIPT = `(function(){try{var m=window.matchMedia("(display-mode: standalone)");var s=m&&m.matches;var n=window.navigator;var i=n&&n.standalone;if(s||i)document.documentElement.classList.add("pwa-launching")}catch(e){}})();`;
