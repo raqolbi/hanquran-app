@@ -1,0 +1,139 @@
+{
+  "id": 84,
+  "name_ar": "الإنشقاق",
+  "name_simple": "Al-Inshiqaaq",
+  "name_en": "The Splitting Open",
+  "meaning": "Terbelah",
+  "description": "Surat Al Insyiqaaq, terdiri atas 25 ayat, termasuk golongan surat-surat Makkiyah, diturunkan sesudah surat Al Infithaarr. Dinamai Al Insyiqaaq (terbelah), diambil dari perkataan Insyaqqat yang terdapat pada permulaan surat ini, yang pokok katanya ialah insyiqaaq.",
+  "revelation_place": "meccan",
+  "ayah_count": 25,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ إِذَا ٱلسَّمَآءُ ٱنشَقَّتْ",
+      "transliteration": "Iżas-samā'unsyaqqat."
+    },
+    {
+      "ayah": 2,
+      "text": "وَأَذِنَتْ لِرَبِّهَا وَحُقَّتْ",
+      "transliteration": "Wa ażinat lirabbihā wa ḥuqqat."
+    },
+    {
+      "ayah": 3,
+      "text": "وَإِذَا ٱلْأَرْضُ مُدَّتْ",
+      "transliteration": "Wa iẓal-arḍu muddat."
+    },
+    {
+      "ayah": 4,
+      "text": "وَأَلْقَتْ مَا فِيهَا وَتَخَلَّتْ",
+      "transliteration": "Wa alqat mā fīhā wa takhallat."
+    },
+    {
+      "ayah": 5,
+      "text": "وَأَذِنَتْ لِرَبِّهَا وَحُقَّتْ",
+      "transliteration": "Wa ażinat lirabbihā wa ḥuqqat."
+    },
+    {
+      "ayah": 6,
+      "text": "يَٰٓأَيُّهَا ٱلْإِنسَٰنُ إِنَّكَ كَادِحٌ إِلَىٰ رَبِّكَ كَدْحًا فَمُلَٰقِيهِ",
+      "transliteration": "Yā ayyuhal-insānu innaka kādiḥun ilā rabbika kadḥan fa mulāqīh(i)."
+    },
+    {
+      "ayah": 7,
+      "text": "فَأَمَّا مَنْ أُوتِىَ كِتَٰبَهُۥ بِيَمِينِهِۦ",
+      "transliteration": "Fa ammā man ūtiya kitābahū biyamīnih(ī)."
+    },
+    {
+      "ayah": 8,
+      "text": "فَسَوْفَ يُحَاسَبُ حِسَابًا يَسِيرًا",
+      "transliteration": "Fa saufa yuḥāsabu ḥisābay yasīrā(n)."
+    },
+    {
+      "ayah": 9,
+      "text": "وَيَنقَلِبُ إِلَىٰٓ أَهْلِهِۦ مَسْرُورًا",
+      "transliteration": "Wa yanqalibu ilā ahlihī masrūrā(n)."
+    },
+    {
+      "ayah": 10,
+      "text": "وَأَمَّا مَنْ أُوتِىَ كِتَٰبَهُۥ وَرَآءَ ظَهْرِهِۦ",
+      "transliteration": "Wa ammā man ūtiya kitābahū warā'a ẓahrih(ī)."
+    },
+    {
+      "ayah": 11,
+      "text": "فَسَوْفَ يَدْعُوا۟ ثُبُورًا",
+      "transliteration": "Fa saufa yad‘ū ṡubūrā(n)."
+    },
+    {
+      "ayah": 12,
+      "text": "وَيَصْلَىٰ سَعِيرًا",
+      "transliteration": "Wa yaṣlā sa‘īrā(n)."
+    },
+    {
+      "ayah": 13,
+      "text": "إِنَّهُۥ كَانَ فِىٓ أَهْلِهِۦ مَسْرُورًا",
+      "transliteration": "Innahū kāna fī ahlihī masrūrā(n)."
+    },
+    {
+      "ayah": 14,
+      "text": "إِنَّهُۥ ظَنَّ أَن لَّن يَحُورَ",
+      "transliteration": "Innahū ẓanna allay yaḥūr(a)."
+    },
+    {
+      "ayah": 15,
+      "text": "بَلَىٰٓ إِنَّ رَبَّهُۥ كَانَ بِهِۦ بَصِيرًا",
+      "transliteration": "Balā, inna rabbahū kāna bihī baṣīrā(n)."
+    },
+    {
+      "ayah": 16,
+      "text": "فَلَآ أُقْسِمُ بِٱلشَّفَقِ",
+      "transliteration": "Falā uqsimu bisy-syafaq(i)."
+    },
+    {
+      "ayah": 17,
+      "text": "وَٱلَّيْلِ وَمَا وَسَقَ",
+      "transliteration": "Wal-laili wa mā wasaq(a)."
+    },
+    {
+      "ayah": 18,
+      "text": "وَٱلْقَمَرِ إِذَا ٱتَّسَقَ",
+      "transliteration": "Wal-qamari iżattasaq(a)."
+    },
+    {
+      "ayah": 19,
+      "text": "لَتَرْكَبُنَّ طَبَقًا عَن طَبَقٍ",
+      "transliteration": "Latarkabunna ṭabaqan ‘an ṭabaq(in)."
+    },
+    {
+      "ayah": 20,
+      "text": "فَمَا لَهُمْ لَا يُؤْمِنُونَ",
+      "transliteration": "Famā lahum lā yu'minūn(a)."
+    },
+    {
+      "ayah": 21,
+      "text": "وَإِذَا قُرِئَ عَلَيْهِمُ ٱلْقُرْءَانُ لَا يَسْجُدُونَ ۩",
+      "transliteration": "Wa iżā quri'a ‘alaihimul-qur'ānu lā yasjudūn(a)."
+    },
+    {
+      "ayah": 22,
+      "text": "بَلِ ٱلَّذِينَ كَفَرُوا۟ يُكَذِّبُونَ",
+      "transliteration": "Balil-lażīna kafarū yukażżibūn(a)."
+    },
+    {
+      "ayah": 23,
+      "text": "وَٱللَّهُ أَعْلَمُ بِمَا يُوعُونَ",
+      "transliteration": "Wallāhu a‘lamu bimā yū‘ūn(a)."
+    },
+    {
+      "ayah": 24,
+      "text": "فَبَشِّرْهُم بِعَذَابٍ أَلِيمٍ",
+      "transliteration": "Fa basysyirhum bi‘ażābin alīm(in)."
+    },
+    {
+      "ayah": 25,
+      "text": "إِلَّا ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّٰلِحَٰتِ لَهُمْ أَجْرٌ غَيْرُ مَمْنُونٍۭ",
+      "transliteration": "Illal-lażīna āmanū wa ‘amiluṣ-ṣāliḥāti lahum ajrun gairu mamnūn(in)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

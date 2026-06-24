@@ -1,0 +1,49 @@
+{
+  "id": 1,
+  "name_ar": "الفاتحة",
+  "name_simple": "Al-Faatiha",
+  "name_en": "The Opening",
+  "meaning": "Pembukaan",
+  "description": "Surat Al Faatihah (Pembukaan) yang diturunkan di Mekah dan terdiri dari 7 ayat adalah surat yang pertama-tama diturunkan dengan lengkap diantara surat-surat yang ada dalam Al Quran dan termasuk golongan surat Makkiyyah. Surat ini disebut Al Faatihah (Pembukaan), karena dengan surat inilah dibuka dan dimulainya Al Quran. Dinamakan Ummul Quran (induk Al Quran) atau Ummul Kitaab (induk Al Kitaab) karena dia merupakan induk dari semua isi Al Quran, dan karena itu diwajibkan membacanya pada tiap-tiap sembahyang.\nDinamakan pula As Sab'ul matsaany (tujuh yang berulang-ulang) karena ayatnya tujuh dan dibaca berulang-ulang dalam sholat.",
+  "revelation_place": "meccan",
+  "ayah_count": 7,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+      "transliteration": "Bismillāhir-raḥmānir-raḥīm(i)."
+    },
+    {
+      "ayah": 2,
+      "text": "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ",
+      "transliteration": "Al-ḥamdu lillāhi rabbil-‘ālamīn(a)."
+    },
+    {
+      "ayah": 3,
+      "text": "ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+      "transliteration": "Ar-raḥmānir-raḥīm(i)."
+    },
+    {
+      "ayah": 4,
+      "text": "مَٰلِكِ يَوْمِ ٱلدِّينِ",
+      "transliteration": "Māliki yaumid-dīn(i)."
+    },
+    {
+      "ayah": 5,
+      "text": "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+      "transliteration": "Iyyāka na‘budu wa iyyāka nasta‘īn(u),"
+    },
+    {
+      "ayah": 6,
+      "text": "ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ",
+      "transliteration": "Ihdinaṣ-ṣirāṭal-mustaqīm(a)."
+    },
+    {
+      "ayah": 7,
+      "text": "صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ",
+      "transliteration": "Ṣirāṭal-lażīna an‘amta ‘alaihim, gairil-magḍūbi ‘alaihim wa laḍ-ḍāllīn(a)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

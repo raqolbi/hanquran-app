@@ -1,0 +1,274 @@
+{
+  "id": 69,
+  "name_ar": "الحاقة",
+  "name_simple": "Al-Haaqqa",
+  "name_en": "The Reality",
+  "meaning": "Hari Kiamat",
+  "description": "Surat ini terdiri atas 52 ayat,termasuk golongan surat-surat Makkiyah,diturunkan sesudah surat Al Mulk.\nNama Al Haaqqah diambil dari kata Al Haaqqah yang terdapat pada ayat pertama surat ini yang artinya hari kiamat",
+  "revelation_place": "meccan",
+  "ayah_count": 52,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ٱلْحَآقَّةُ",
+      "transliteration": "Al-ḥāqqah(tu)."
+    },
+    {
+      "ayah": 2,
+      "text": "مَا ٱلْحَآقَّةُ",
+      "transliteration": "Mal-ḥāqqah(tu)."
+    },
+    {
+      "ayah": 3,
+      "text": "وَمَآ أَدْرَىٰكَ مَا ٱلْحَآقَّةُ",
+      "transliteration": "Wa mā adrāka mal-ḥāqqah(tu)."
+    },
+    {
+      "ayah": 4,
+      "text": "كَذَّبَتْ ثَمُودُ وَعَادٌۢ بِٱلْقَارِعَةِ",
+      "transliteration": "Każżabat ṡamūdu wa ‘ādum bil-qāri‘ah(ti)."
+    },
+    {
+      "ayah": 5,
+      "text": "فَأَمَّا ثَمُودُ فَأُهْلِكُوا۟ بِٱلطَّاغِيَةِ",
+      "transliteration": "Fa'ammā ṡamūdu fa uhlikū biṭ-ṭāgiyah(ti)."
+    },
+    {
+      "ayah": 6,
+      "text": "وَأَمَّا عَادٌ فَأُهْلِكُوا۟ بِرِيحٍ صَرْصَرٍ عَاتِيَةٍ",
+      "transliteration": "Wa ammā ‘ādun fa'uhlikū birīḥin ṣarṣarin ‘ātiyah(tin)."
+    },
+    {
+      "ayah": 7,
+      "text": "سَخَّرَهَا عَلَيْهِمْ سَبْعَ لَيَالٍ وَثَمَٰنِيَةَ أَيَّامٍ حُسُومًا فَتَرَى ٱلْقَوْمَ فِيهَا صَرْعَىٰ كَأَنَّهُمْ أَعْجَازُ نَخْلٍ خَاوِيَةٍ",
+      "transliteration": "Sakhkharahā ‘alaihim sab‘a layāliw wa ṡamāniyata ayyām(in), ḥusūman fataral-qauma fīhā ṣar‘ā, ka'annahum a‘jāzu nakhlin khāwiyah(tin)."
+    },
+    {
+      "ayah": 8,
+      "text": "فَهَلْ تَرَىٰ لَهُم مِّنۢ بَاقِيَةٍ",
+      "transliteration": "Fahal tarā lahum mim bāqiyah(tin)."
+    },
+    {
+      "ayah": 9,
+      "text": "وَجَآءَ فِرْعَوْنُ وَمَن قَبْلَهُۥ وَٱلْمُؤْتَفِكَٰتُ بِٱلْخَاطِئَةِ",
+      "transliteration": "Wa jā'a fir‘aunu wa man qablahū wal-mu'tafikātu bil-khāṭi'ah(ti)."
+    },
+    {
+      "ayah": 10,
+      "text": "فَعَصَوْا۟ رَسُولَ رَبِّهِمْ فَأَخَذَهُمْ أَخْذَةً رَّابِيَةً",
+      "transliteration": "Fa ‘aṣau rasūla rabbihim fa akhażahum akhżatar rābiyah(tan)."
+    },
+    {
+      "ayah": 11,
+      "text": "إِنَّا لَمَّا طَغَا ٱلْمَآءُ حَمَلْنَٰكُمْ فِى ٱلْجَارِيَةِ",
+      "transliteration": "Innā lammā ṭagal-mā'u ḥamalnākum fil-jāriyah(ti)."
+    },
+    {
+      "ayah": 12,
+      "text": "لِنَجْعَلَهَا لَكُمْ تَذْكِرَةً وَتَعِيَهَآ أُذُنٌ وَٰعِيَةٌ",
+      "transliteration": "Linaj‘alahā lakum tażkirataw wa ta‘iyahā użunuw wā‘iyah(tun)."
+    },
+    {
+      "ayah": 13,
+      "text": "فَإِذَا نُفِخَ فِى ٱلصُّورِ نَفْخَةٌ وَٰحِدَةٌ",
+      "transliteration": "Fa iżā nufikha fiṣ-ṣūri nafkhatuw wāḥidah(tun)."
+    },
+    {
+      "ayah": 14,
+      "text": "وَحُمِلَتِ ٱلْأَرْضُ وَٱلْجِبَالُ فَدُكَّتَا دَكَّةً وَٰحِدَةً",
+      "transliteration": "Wa ḥumilatil-arḍu wal-jibālu fa dukkatā dakkataw wāḥidah(tan)."
+    },
+    {
+      "ayah": 15,
+      "text": "فَيَوْمَئِذٍ وَقَعَتِ ٱلْوَاقِعَةُ",
+      "transliteration": "Fayauma'iżiw waqa‘atil-wāqi‘ah(tu)."
+    },
+    {
+      "ayah": 16,
+      "text": "وَٱنشَقَّتِ ٱلسَّمَآءُ فَهِىَ يَوْمَئِذٍ وَاهِيَةٌ",
+      "transliteration": "Wansyaqqatis-samā'u fahiya yauma'iżiw wāhiyah(tun)."
+    },
+    {
+      "ayah": 17,
+      "text": "وَٱلْمَلَكُ عَلَىٰٓ أَرْجَآئِهَا ۚ وَيَحْمِلُ عَرْشَ رَبِّكَ فَوْقَهُمْ يَوْمَئِذٍ ثَمَٰنِيَةٌ",
+      "transliteration": "Wal-malaku ‘alā arjā'ihā, wa yaḥmilu ‘arsya rabbika fauqahum yauma'iżin ṡamāniyah(tun)."
+    },
+    {
+      "ayah": 18,
+      "text": "يَوْمَئِذٍ تُعْرَضُونَ لَا تَخْفَىٰ مِنكُمْ خَافِيَةٌ",
+      "transliteration": "Yauma'iżin tu‘raḍūna lā takhfā minkum khāfiyah(tun)."
+    },
+    {
+      "ayah": 19,
+      "text": "فَأَمَّا مَنْ أُوتِىَ كِتَٰبَهُۥ بِيَمِينِهِۦ فَيَقُولُ هَآؤُمُ ٱقْرَءُوا۟ كِتَٰبِيَهْ",
+      "transliteration": "Fa ammā man ūtiya kitābahū biyamīnihī fa yaqūlu hā'umuqra'ū kitābiyah."
+    },
+    {
+      "ayah": 20,
+      "text": "إِنِّى ظَنَنتُ أَنِّى مُلَٰقٍ حِسَابِيَهْ",
+      "transliteration": "Innī ẓanantu annī mulāqin ḥisābiyah."
+    },
+    {
+      "ayah": 21,
+      "text": "فَهُوَ فِى عِيشَةٍ رَّاضِيَةٍ",
+      "transliteration": "Fa huwa fī ‘īsyatir rāḍiyah(tin)."
+    },
+    {
+      "ayah": 22,
+      "text": "فِى جَنَّةٍ عَالِيَةٍ",
+      "transliteration": "Fī jannatin ‘āliyah(tin)."
+    },
+    {
+      "ayah": 23,
+      "text": "قُطُوفُهَا دَانِيَةٌ",
+      "transliteration": "Quṭūfuhā dāniyah(tun)."
+    },
+    {
+      "ayah": 24,
+      "text": "كُلُوا۟ وَٱشْرَبُوا۟ هَنِيٓـًٔۢا بِمَآ أَسْلَفْتُمْ فِى ٱلْأَيَّامِ ٱلْخَالِيَةِ",
+      "transliteration": "Kulū wasyrabū hanī'am bimā aslaftum fil-ayyāmil-khāliyah(ti)."
+    },
+    {
+      "ayah": 25,
+      "text": "وَأَمَّا مَنْ أُوتِىَ كِتَٰبَهُۥ بِشِمَالِهِۦ فَيَقُولُ يَٰلَيْتَنِى لَمْ أُوتَ كِتَٰبِيَهْ",
+      "transliteration": "Wa ammā man ūtiya kitābahū bisyimālih(ī), fa yaqūlu yā laitanī lam ūta kitābiyah."
+    },
+    {
+      "ayah": 26,
+      "text": "وَلَمْ أَدْرِ مَا حِسَابِيَهْ",
+      "transliteration": "Wa lam adri mā ḥisābiyah."
+    },
+    {
+      "ayah": 27,
+      "text": "يَٰلَيْتَهَا كَانَتِ ٱلْقَاضِيَةَ",
+      "transliteration": "Yā laitahā kānatil-qāḍiyah(ta)."
+    },
+    {
+      "ayah": 28,
+      "text": "مَآ أَغْنَىٰ عَنِّى مَالِيَهْ ۜ",
+      "transliteration": "Mā agnā ‘annī māliyah."
+    },
+    {
+      "ayah": 29,
+      "text": "هَلَكَ عَنِّى سُلْطَٰنِيَهْ",
+      "transliteration": "Halaka ‘annī sulṭāniyah."
+    },
+    {
+      "ayah": 30,
+      "text": "خُذُوهُ فَغُلُّوهُ",
+      "transliteration": "Khużūhu fagullūh(u)."
+    },
+    {
+      "ayah": 31,
+      "text": "ثُمَّ ٱلْجَحِيمَ صَلُّوهُ",
+      "transliteration": "Ṡummal-jaḥīma ṣallūh(u)."
+    },
+    {
+      "ayah": 32,
+      "text": "ثُمَّ فِى سِلْسِلَةٍ ذَرْعُهَا سَبْعُونَ ذِرَاعًا فَٱسْلُكُوهُ",
+      "transliteration": "Ṡumma fī silsilatin żar‘uhā sab‘ūna żirā‘an faslukūh(u)."
+    },
+    {
+      "ayah": 33,
+      "text": "إِنَّهُۥ كَانَ لَا يُؤْمِنُ بِٱللَّهِ ٱلْعَظِيمِ",
+      "transliteration": "Innahū kāna lā yu'minu billāhil-‘aẓīm(i)."
+    },
+    {
+      "ayah": 34,
+      "text": "وَلَا يَحُضُّ عَلَىٰ طَعَامِ ٱلْمِسْكِينِ",
+      "transliteration": "Wa lā yaḥuḍḍu ‘alā ṭa‘āmil-miskīn(i)."
+    },
+    {
+      "ayah": 35,
+      "text": "فَلَيْسَ لَهُ ٱلْيَوْمَ هَٰهُنَا حَمِيمٌ",
+      "transliteration": "Fa laisa lahul-yauma hāhunā ḥamīm(un)."
+    },
+    {
+      "ayah": 36,
+      "text": "وَلَا طَعَامٌ إِلَّا مِنْ غِسْلِينٍ",
+      "transliteration": "Wa lā ṭa‘āmun illā min gislīn(in)."
+    },
+    {
+      "ayah": 37,
+      "text": "لَّا يَأْكُلُهُۥٓ إِلَّا ٱلْخَٰطِـُٔونَ",
+      "transliteration": "Lā ya'kuluhū illal-khāṭi'ūn(a)."
+    },
+    {
+      "ayah": 38,
+      "text": "فَلَآ أُقْسِمُ بِمَا تُبْصِرُونَ",
+      "transliteration": "Falā uqsimu bimā tubṣirūn(a)."
+    },
+    {
+      "ayah": 39,
+      "text": "وَمَا لَا تُبْصِرُونَ",
+      "transliteration": "Wa mā lā tubṣirūn(a)."
+    },
+    {
+      "ayah": 40,
+      "text": "إِنَّهُۥ لَقَوْلُ رَسُولٍ كَرِيمٍ",
+      "transliteration": "Innahū laqaulu rasūlin karīm(in)."
+    },
+    {
+      "ayah": 41,
+      "text": "وَمَا هُوَ بِقَوْلِ شَاعِرٍ ۚ قَلِيلًا مَّا تُؤْمِنُونَ",
+      "transliteration": "Wa mā huwa biqauli syā‘ir(in), qalīlam mā tu'minūn(a)."
+    },
+    {
+      "ayah": 42,
+      "text": "وَلَا بِقَوْلِ كَاهِنٍ ۚ قَلِيلًا مَّا تَذَكَّرُونَ",
+      "transliteration": "Wa lā biqauli kāhin(in), qalīlam mā tażakkarūn(a)."
+    },
+    {
+      "ayah": 43,
+      "text": "تَنزِيلٌ مِّن رَّبِّ ٱلْعَٰلَمِينَ",
+      "transliteration": "Tanzīlum mir rabbil-‘ālamīn(a)."
+    },
+    {
+      "ayah": 44,
+      "text": "وَلَوْ تَقَوَّلَ عَلَيْنَا بَعْضَ ٱلْأَقَاوِيلِ",
+      "transliteration": "Wa lau taqawwala ‘alainā ba‘ḍal-aqāwīl(i)."
+    },
+    {
+      "ayah": 45,
+      "text": "لَأَخَذْنَا مِنْهُ بِٱلْيَمِينِ",
+      "transliteration": "La'akhażnā minhu bil-yamīn(i)."
+    },
+    {
+      "ayah": 46,
+      "text": "ثُمَّ لَقَطَعْنَا مِنْهُ ٱلْوَتِينَ",
+      "transliteration": "Ṡumma laqaṭa‘nā minhul-watīn(a)."
+    },
+    {
+      "ayah": 47,
+      "text": "فَمَا مِنكُم مِّنْ أَحَدٍ عَنْهُ حَٰجِزِينَ",
+      "transliteration": "Famā minkum min aḥadin ‘anhu ḥājizīn(a)."
+    },
+    {
+      "ayah": 48,
+      "text": "وَإِنَّهُۥ لَتَذْكِرَةٌ لِّلْمُتَّقِينَ",
+      "transliteration": "Wa innahū latażkiratul lil-muttaqīn(a)."
+    },
+    {
+      "ayah": 49,
+      "text": "وَإِنَّا لَنَعْلَمُ أَنَّ مِنكُم مُّكَذِّبِينَ",
+      "transliteration": "Wa innā lana‘lamu anna minkum mukażżibīn(a)."
+    },
+    {
+      "ayah": 50,
+      "text": "وَإِنَّهُۥ لَحَسْرَةٌ عَلَى ٱلْكَٰفِرِينَ",
+      "transliteration": "Wa innahū laḥasratun ‘alal-kāfirīn(a)."
+    },
+    {
+      "ayah": 51,
+      "text": "وَإِنَّهُۥ لَحَقُّ ٱلْيَقِينِ",
+      "transliteration": "Wa innahū laḥaqqul-yaqīn(i)."
+    },
+    {
+      "ayah": 52,
+      "text": "فَسَبِّحْ بِٱسْمِ رَبِّكَ ٱلْعَظِيمِ",
+      "transliteration": "Fa sabbiḥ bismi rabbikal-‘aẓīm(i)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

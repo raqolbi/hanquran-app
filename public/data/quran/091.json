@@ -1,0 +1,89 @@
+{
+  "id": 91,
+  "name_ar": "الشمس",
+  "name_simple": "Ash-Shams",
+  "name_en": "The Sun",
+  "meaning": "Matahari",
+  "description": "Surat Asy Syams terdiri atas 15 ayat, termasuk golongan surat-surat Makkiyyah, diturunkan sesudah surat Al Qadar. Dinamai Asy Syams (matahari) diambil dari perkataan Asy Syams yang terdapat pada ayat permulaan surat ini.",
+  "revelation_place": "meccan",
+  "ayah_count": 15,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وَٱلشَّمْسِ وَضُحَىٰهَا",
+      "transliteration": "Wasy-syamsi wa ḍuḥāhā."
+    },
+    {
+      "ayah": 2,
+      "text": "وَٱلْقَمَرِ إِذَا تَلَىٰهَا",
+      "transliteration": "Wal-qamari iżā talāhā."
+    },
+    {
+      "ayah": 3,
+      "text": "وَٱلنَّهَارِ إِذَا جَلَّىٰهَا",
+      "transliteration": "Wan-nahāri iżā jallāhā."
+    },
+    {
+      "ayah": 4,
+      "text": "وَٱلَّيْلِ إِذَا يَغْشَىٰهَا",
+      "transliteration": "Wal-laili iżā yagsyāhā."
+    },
+    {
+      "ayah": 5,
+      "text": "وَٱلسَّمَآءِ وَمَا بَنَىٰهَا",
+      "transliteration": "Was-samā'i wa mā banāhā."
+    },
+    {
+      "ayah": 6,
+      "text": "وَٱلْأَرْضِ وَمَا طَحَىٰهَا",
+      "transliteration": "Wal-arḍi wa mā ṭaḥāhā."
+    },
+    {
+      "ayah": 7,
+      "text": "وَنَفْسٍ وَمَا سَوَّىٰهَا",
+      "transliteration": "Wa nafsiw wa mā sawwāhā."
+    },
+    {
+      "ayah": 8,
+      "text": "فَأَلْهَمَهَا فُجُورَهَا وَتَقْوَىٰهَا",
+      "transliteration": "Fa alhamahā fujūrahā wa taqwāhā."
+    },
+    {
+      "ayah": 9,
+      "text": "قَدْ أَفْلَحَ مَن زَكَّىٰهَا",
+      "transliteration": "Qad aflaḥa man zakkāhā."
+    },
+    {
+      "ayah": 10,
+      "text": "وَقَدْ خَابَ مَن دَسَّىٰهَا",
+      "transliteration": "Wa qad khāba man dassāhā."
+    },
+    {
+      "ayah": 11,
+      "text": "كَذَّبَتْ ثَمُودُ بِطَغْوَىٰهَآ",
+      "transliteration": "Każżabat ṡamūdu biṭagwāhā."
+    },
+    {
+      "ayah": 12,
+      "text": "إِذِ ٱنۢبَعَثَ أَشْقَىٰهَا",
+      "transliteration": "Iżimba‘aṡa asyqāhā."
+    },
+    {
+      "ayah": 13,
+      "text": "فَقَالَ لَهُمْ رَسُولُ ٱللَّهِ نَاقَةَ ٱللَّهِ وَسُقْيَٰهَا",
+      "transliteration": "Fa qāla lahum rasūlullāhi nāqatallāhi wa suqyāhā."
+    },
+    {
+      "ayah": 14,
+      "text": "فَكَذَّبُوهُ فَعَقَرُوهَا فَدَمْدَمَ عَلَيْهِمْ رَبُّهُم بِذَنۢبِهِمْ فَسَوَّىٰهَا",
+      "transliteration": "Fa każżabūhu fa ‘aqarūhā fa damdama ‘alaihim rabbuhum biżambihim fa sawwāhā."
+    },
+    {
+      "ayah": 15,
+      "text": "وَلَا يَخَافُ عُقْبَٰهَا",
+      "transliteration": "Wa lā yakhāfu ‘uqbāhā."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

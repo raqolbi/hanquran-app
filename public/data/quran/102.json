@@ -1,0 +1,54 @@
+{
+  "id": 102,
+  "name_ar": "التكاثر",
+  "name_simple": "At-Takaathur",
+  "name_en": "Competition",
+  "meaning": "Bermegah-Megahan",
+  "description": "Surat At Takaatsur terdiri atas 8 ayat, termasuk golongan surat-surat Makkiyyah, diturunkan sesudah surat Al Kautsar. Dinamai At Takaatsur (bermegah-megahan) diambil dari perkataan At Takaatsur yang terdapat pada ayat pertama surat ini.",
+  "revelation_place": "meccan",
+  "ayah_count": 8,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ أَلْهَىٰكُمُ ٱلتَّكَاثُرُ",
+      "transliteration": "Alhākumut-takāṡur(u)."
+    },
+    {
+      "ayah": 2,
+      "text": "حَتَّىٰ زُرْتُمُ ٱلْمَقَابِرَ",
+      "transliteration": "Ḥattā zurtumul-maqābir(a)."
+    },
+    {
+      "ayah": 3,
+      "text": "كَلَّا سَوْفَ تَعْلَمُونَ",
+      "transliteration": "Kallā saufa ta‘lamūn(a)."
+    },
+    {
+      "ayah": 4,
+      "text": "ثُمَّ كَلَّا سَوْفَ تَعْلَمُونَ",
+      "transliteration": "Ṡumma kallā saufa ta‘lamūn(a)."
+    },
+    {
+      "ayah": 5,
+      "text": "كَلَّا لَوْ تَعْلَمُونَ عِلْمَ ٱلْيَقِينِ",
+      "transliteration": "Kallā lau ta‘lamūna ‘ilmal-yaqīn(i)."
+    },
+    {
+      "ayah": 6,
+      "text": "لَتَرَوُنَّ ٱلْجَحِيمَ",
+      "transliteration": "Latarawunnal-jaḥīm(a)."
+    },
+    {
+      "ayah": 7,
+      "text": "ثُمَّ لَتَرَوُنَّهَا عَيْنَ ٱلْيَقِينِ",
+      "transliteration": "Ṡumma latarawunnahā ‘ainal-yaqīn(i)."
+    },
+    {
+      "ayah": 8,
+      "text": "ثُمَّ لَتُسْـَٔلُنَّ يَوْمَئِذٍ عَنِ ٱلنَّعِيمِ",
+      "transliteration": "Ṡumma latus'alunna yauma'iżin ‘anin-na‘īm(i)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

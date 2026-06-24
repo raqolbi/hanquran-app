@@ -1,0 +1,59 @@
+{
+  "id": 104,
+  "name_ar": "الهمزة",
+  "name_simple": "Al-Humaza",
+  "name_en": "The Traducer",
+  "meaning": "Pengumpat",
+  "description": "Surat Al Humazah terdiri atas 9 ayat, termasuk golongan surat-surat Makkiyyah, diturunkan sesudah surat Al Qiyaamah. Dinamai Al Humazah (pengumpat) diambil dari perkataan Humazah yang terdapat pada ayat pertama surat ini.",
+  "revelation_place": "meccan",
+  "ayah_count": 9,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وَيْلٌ لِّكُلِّ هُمَزَةٍ لُّمَزَةٍ",
+      "transliteration": "Wailul likulli humazatil-lumazah(tin)."
+    },
+    {
+      "ayah": 2,
+      "text": "ٱلَّذِى جَمَعَ مَالًا وَعَدَّدَهُۥ",
+      "transliteration": "Allażī jama‘a mālaw wa ‘addadah(ū)."
+    },
+    {
+      "ayah": 3,
+      "text": "يَحْسَبُ أَنَّ مَالَهُۥٓ أَخْلَدَهُۥ",
+      "transliteration": "Yaḥsabu anna mālahū akhladah(ū)."
+    },
+    {
+      "ayah": 4,
+      "text": "كَلَّا ۖ لَيُنۢبَذَنَّ فِى ٱلْحُطَمَةِ",
+      "transliteration": "Kallā layumbażanna fil-ḥuṭamah(ti)."
+    },
+    {
+      "ayah": 5,
+      "text": "وَمَآ أَدْرَىٰكَ مَا ٱلْحُطَمَةُ",
+      "transliteration": "Wa mā adrāka mal-ḥuṭamah(tu)."
+    },
+    {
+      "ayah": 6,
+      "text": "نَارُ ٱللَّهِ ٱلْمُوقَدَةُ",
+      "transliteration": "Nārullāhil-mūqadah(tu)."
+    },
+    {
+      "ayah": 7,
+      "text": "ٱلَّتِى تَطَّلِعُ عَلَى ٱلْأَفْـِٔدَةِ",
+      "transliteration": "Allatī taṭṭali‘u ‘alal-af'idah(ti)."
+    },
+    {
+      "ayah": 8,
+      "text": "إِنَّهَا عَلَيْهِم مُّؤْصَدَةٌ",
+      "transliteration": "Innahā ‘alaihim mu'ṣadah(tun)."
+    },
+    {
+      "ayah": 9,
+      "text": "فِى عَمَدٍ مُّمَدَّدَةٍۭ",
+      "transliteration": "Fī ‘amadim mumaddadah(tin)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

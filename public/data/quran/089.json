@@ -1,0 +1,164 @@
+{
+  "id": 89,
+  "name_ar": "الفجر",
+  "name_simple": "Al-Fajr",
+  "name_en": "The Dawn",
+  "meaning": "Fajar",
+  "description": "Surat ini terdiri atas 30 ayat, termasuk golongan surat-surat Makkiyyah, diturunkan sesudah surat Al Lail. Nama Al Fajr diambil dari kata Al Fajr yang terdapat pada ayat pertama surat ini yang artinya fajar.",
+  "revelation_place": "meccan",
+  "ayah_count": 30,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وَٱلْفَجْرِ",
+      "transliteration": "Wal-fajr(i)."
+    },
+    {
+      "ayah": 2,
+      "text": "وَلَيَالٍ عَشْرٍ",
+      "transliteration": "Wa layālin ‘asyr(in)."
+    },
+    {
+      "ayah": 3,
+      "text": "وَٱلشَّفْعِ وَٱلْوَتْرِ",
+      "transliteration": "Wasy-syaf‘i wal-watr(i)."
+    },
+    {
+      "ayah": 4,
+      "text": "وَٱلَّيْلِ إِذَا يَسْرِ",
+      "transliteration": "Wal-laili iżā yasr(i)."
+    },
+    {
+      "ayah": 5,
+      "text": "هَلْ فِى ذَٰلِكَ قَسَمٌ لِّذِى حِجْرٍ",
+      "transliteration": "Hal fī żālika qasamul liżī ḥijr(in)."
+    },
+    {
+      "ayah": 6,
+      "text": "أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِعَادٍ",
+      "transliteration": "Alam tara kaifa fa‘ala rabbuka bi‘ād(in)."
+    },
+    {
+      "ayah": 7,
+      "text": "إِرَمَ ذَاتِ ٱلْعِمَادِ",
+      "transliteration": "Irama żātil-‘imād(i)."
+    },
+    {
+      "ayah": 8,
+      "text": "ٱلَّتِى لَمْ يُخْلَقْ مِثْلُهَا فِى ٱلْبِلَٰدِ",
+      "transliteration": "Allatī lam yukhlaq miṡluhā fil-bilād(i)."
+    },
+    {
+      "ayah": 9,
+      "text": "وَثَمُودَ ٱلَّذِينَ جَابُوا۟ ٱلصَّخْرَ بِٱلْوَادِ",
+      "transliteration": "Wa ṡamūdal-lażīna jābuṣ-ṣakhra bil-wād(i)."
+    },
+    {
+      "ayah": 10,
+      "text": "وَفِرْعَوْنَ ذِى ٱلْأَوْتَادِ",
+      "transliteration": "Wa fir‘auna żil-autād(i)."
+    },
+    {
+      "ayah": 11,
+      "text": "ٱلَّذِينَ طَغَوْا۟ فِى ٱلْبِلَٰدِ",
+      "transliteration": "Allażīna ṭagau fil-bilād(i)."
+    },
+    {
+      "ayah": 12,
+      "text": "فَأَكْثَرُوا۟ فِيهَا ٱلْفَسَادَ",
+      "transliteration": "Fa akṡarū fīhal-fasād(a)."
+    },
+    {
+      "ayah": 13,
+      "text": "فَصَبَّ عَلَيْهِمْ رَبُّكَ سَوْطَ عَذَابٍ",
+      "transliteration": "Fa ṣabba ‘alaihim rabbuka sauṭa ‘ażāb(in)."
+    },
+    {
+      "ayah": 14,
+      "text": "إِنَّ رَبَّكَ لَبِٱلْمِرْصَادِ",
+      "transliteration": "Inna rabbaka labil-mirṣād(i)."
+    },
+    {
+      "ayah": 15,
+      "text": "فَأَمَّا ٱلْإِنسَٰنُ إِذَا مَا ٱبْتَلَىٰهُ رَبُّهُۥ فَأَكْرَمَهُۥ وَنَعَّمَهُۥ فَيَقُولُ رَبِّىٓ أَكْرَمَنِ",
+      "transliteration": "Fa ammal-insānu iżā mabtalāhu rabbuhū fa akramahū wa na‘‘amah(ū), fa yaqūlu rabbī akraman(i)."
+    },
+    {
+      "ayah": 16,
+      "text": "وَأَمَّآ إِذَا مَا ٱبْتَلَىٰهُ فَقَدَرَ عَلَيْهِ رِزْقَهُۥ فَيَقُولُ رَبِّىٓ أَهَٰنَنِ",
+      "transliteration": "Wa ammā iżā mabtalāhu fa qadara ‘alaihi rizqah(ū), fa yaqūlu rabbī ahānan(i)."
+    },
+    {
+      "ayah": 17,
+      "text": "كَلَّا ۖ بَل لَّا تُكْرِمُونَ ٱلْيَتِيمَ",
+      "transliteration": "Kallā bal lā tukrimūnal-yatīm(a)."
+    },
+    {
+      "ayah": 18,
+      "text": "وَلَا تَحَٰٓضُّونَ عَلَىٰ طَعَامِ ٱلْمِسْكِينِ",
+      "transliteration": "Wa lā taḥāḍḍūna ‘alā ṭa‘āmil-miskīn(i)."
+    },
+    {
+      "ayah": 19,
+      "text": "وَتَأْكُلُونَ ٱلتُّرَاثَ أَكْلًا لَّمًّا",
+      "transliteration": "Wa ta'kulūnat-turāṡa aklal lammā(n)."
+    },
+    {
+      "ayah": 20,
+      "text": "وَتُحِبُّونَ ٱلْمَالَ حُبًّا جَمًّا",
+      "transliteration": "Wa tuḥibbūnal-māla ḥubban jammā(n)."
+    },
+    {
+      "ayah": 21,
+      "text": "كَلَّآ إِذَا دُكَّتِ ٱلْأَرْضُ دَكًّا دَكًّا",
+      "transliteration": "Kallā iżā dukkatil-arḍu dakkan dakkā(n)."
+    },
+    {
+      "ayah": 22,
+      "text": "وَجَآءَ رَبُّكَ وَٱلْمَلَكُ صَفًّا صَفًّا",
+      "transliteration": "Wa jā'a rabbuka wal-malaku ṣaffan ṣaffā(n)."
+    },
+    {
+      "ayah": 23,
+      "text": "وَجِا۟ىٓءَ يَوْمَئِذٍۭ بِجَهَنَّمَ ۚ يَوْمَئِذٍ يَتَذَكَّرُ ٱلْإِنسَٰنُ وَأَنَّىٰ لَهُ ٱلذِّكْرَىٰ",
+      "transliteration": "Wa jī'a yauma'iżim bijahannam(a), yauma'iżiy yatażakkarul-insānu wa annā lahuż-żikrā."
+    },
+    {
+      "ayah": 24,
+      "text": "يَقُولُ يَٰلَيْتَنِى قَدَّمْتُ لِحَيَاتِى",
+      "transliteration": "Yaqūlu yā laitanī qaddamtu liḥayātī."
+    },
+    {
+      "ayah": 25,
+      "text": "فَيَوْمَئِذٍ لَّا يُعَذِّبُ عَذَابَهُۥٓ أَحَدٌ",
+      "transliteration": "Fa yauma'iżil lā yu‘ażżibu ‘ażābahū aḥad(un)."
+    },
+    {
+      "ayah": 26,
+      "text": "وَلَا يُوثِقُ وَثَاقَهُۥٓ أَحَدٌ",
+      "transliteration": "Wa lā yūṡiqu waṡāqahū aḥad(un)."
+    },
+    {
+      "ayah": 27,
+      "text": "يَٰٓأَيَّتُهَا ٱلنَّفْسُ ٱلْمُطْمَئِنَّةُ",
+      "transliteration": "Yā ayyatuhan-nafsul-muṭma'innah(tu)."
+    },
+    {
+      "ayah": 28,
+      "text": "ٱرْجِعِىٓ إِلَىٰ رَبِّكِ رَاضِيَةً مَّرْضِيَّةً",
+      "transliteration": "Irji‘ī ilā rabbiki rāḍiyatam marḍiyyah(tan)."
+    },
+    {
+      "ayah": 29,
+      "text": "فَٱدْخُلِى فِى عِبَٰدِى",
+      "transliteration": "Fadkhuli fī ‘ibādī."
+    },
+    {
+      "ayah": 30,
+      "text": "وَٱدْخُلِى جَنَّتِى",
+      "transliteration": "Wadkhulī jannatī."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

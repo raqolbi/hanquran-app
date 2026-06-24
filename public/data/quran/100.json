@@ -1,0 +1,69 @@
+{
+  "id": 100,
+  "name_ar": "العاديات",
+  "name_simple": "Al-Aadiyaat",
+  "name_en": "The Chargers",
+  "meaning": "Kuda Yang Berlari Kencang",
+  "description": "Surat ini terdiri atas 11 ayat, termasuk golongan surat-surat Makkiyyah, diturunkan sesudah surat Al'Ashr. Nama Al 'Aadiyaat diambil dari kata Al 'Aadiyaat yang terdapat pada ayat pertama surat ini, artinya yang berlari kencang.",
+  "revelation_place": "meccan",
+  "ayah_count": 11,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وَٱلْعَٰدِيَٰتِ ضَبْحًا",
+      "transliteration": "Wal-‘ādiyāti ḍabḥā(n)."
+    },
+    {
+      "ayah": 2,
+      "text": "فَٱلْمُورِيَٰتِ قَدْحًا",
+      "transliteration": "Fal-mūriyāti qadḥā(n)."
+    },
+    {
+      "ayah": 3,
+      "text": "فَٱلْمُغِيرَٰتِ صُبْحًا",
+      "transliteration": "Fal-mugīrāti ṣubḥā(n)."
+    },
+    {
+      "ayah": 4,
+      "text": "فَأَثَرْنَ بِهِۦ نَقْعًا",
+      "transliteration": "Fa'aṡarna bihī naq‘ā(n)."
+    },
+    {
+      "ayah": 5,
+      "text": "فَوَسَطْنَ بِهِۦ جَمْعًا",
+      "transliteration": "Fawasaṭna bihī jam‘ā(n)."
+    },
+    {
+      "ayah": 6,
+      "text": "إِنَّ ٱلْإِنسَٰنَ لِرَبِّهِۦ لَكَنُودٌ",
+      "transliteration": "Innal-insāna lirabbihī lakanūd(un)."
+    },
+    {
+      "ayah": 7,
+      "text": "وَإِنَّهُۥ عَلَىٰ ذَٰلِكَ لَشَهِيدٌ",
+      "transliteration": "Wa innahū ‘alā żālika lasyahīd(un)."
+    },
+    {
+      "ayah": 8,
+      "text": "وَإِنَّهُۥ لِحُبِّ ٱلْخَيْرِ لَشَدِيدٌ",
+      "transliteration": "Wa innahū liḥubbil-khairi lasyadīd(un)."
+    },
+    {
+      "ayah": 9,
+      "text": "أَفَلَا يَعْلَمُ إِذَا بُعْثِرَ مَا فِى ٱلْقُبُورِ",
+      "transliteration": "Afalā ya‘lamu iżā bu‘ṡira mā fil-qubūr(i)."
+    },
+    {
+      "ayah": 10,
+      "text": "وَحُصِّلَ مَا فِى ٱلصُّدُورِ",
+      "transliteration": "Wa ḥuṣṣila mā fiṣ-ṣudūr(i)."
+    },
+    {
+      "ayah": 11,
+      "text": "إِنَّ رَبَّهُم بِهِمْ يَوْمَئِذٍ لَّخَبِيرٌۢ",
+      "transliteration": "Inna rabbahum bihim yauma'iżil lakhabīr(un)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

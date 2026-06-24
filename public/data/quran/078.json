@@ -1,0 +1,214 @@
+{
+  "id": 78,
+  "name_ar": "النبإ",
+  "name_simple": "An-Naba",
+  "name_en": "The Announcement",
+  "meaning": "Berita Besar",
+  "description": "Surat An NabaÂ´ terdiri atas 40 ayat, termasuk golongan surat-surat Makkiyah, diturunkan sesudah surat Al MaÂ´aarij.\nDinamai An NabaÂ´ (berita besar) diambil dari perkataan An NabaÂ´ yang terdapat pada ayat 2 surat ini. Dinamai juga Amma yatasaa aluun diambil dari perkataan Amma yatasaa aluun yang terdapat pada ayat 1 surat ini.",
+  "revelation_place": "meccan",
+  "ayah_count": 40,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ عَمَّ يَتَسَآءَلُونَ",
+      "transliteration": "‘Amma yatasā'alūn(a)."
+    },
+    {
+      "ayah": 2,
+      "text": "عَنِ ٱلنَّبَإِ ٱلْعَظِيمِ",
+      "transliteration": "‘Anin naba'il-‘aẓīm(i)."
+    },
+    {
+      "ayah": 3,
+      "text": "ٱلَّذِى هُمْ فِيهِ مُخْتَلِفُونَ",
+      "transliteration": "Allażī hum fīhi mukhtalifūn(a)."
+    },
+    {
+      "ayah": 4,
+      "text": "كَلَّا سَيَعْلَمُونَ",
+      "transliteration": "Kallā saya‘lamūn(a)."
+    },
+    {
+      "ayah": 5,
+      "text": "ثُمَّ كَلَّا سَيَعْلَمُونَ",
+      "transliteration": "Ṡumma kallā saya‘lamūn(a)."
+    },
+    {
+      "ayah": 6,
+      "text": "أَلَمْ نَجْعَلِ ٱلْأَرْضَ مِهَٰدًا",
+      "transliteration": "Alam naj‘alil-arḍa mihādā(n)."
+    },
+    {
+      "ayah": 7,
+      "text": "وَٱلْجِبَالَ أَوْتَادًا",
+      "transliteration": "Wal-jibāla autādā(n)."
+    },
+    {
+      "ayah": 8,
+      "text": "وَخَلَقْنَٰكُمْ أَزْوَٰجًا",
+      "transliteration": "Wa khalaqnākum azwājā(n)."
+    },
+    {
+      "ayah": 9,
+      "text": "وَجَعَلْنَا نَوْمَكُمْ سُبَاتًا",
+      "transliteration": "Wa ja‘alnā naumakum subātā(n)."
+    },
+    {
+      "ayah": 10,
+      "text": "وَجَعَلْنَا ٱلَّيْلَ لِبَاسًا",
+      "transliteration": "Wa ja‘alnal-laila libāsā(n)."
+    },
+    {
+      "ayah": 11,
+      "text": "وَجَعَلْنَا ٱلنَّهَارَ مَعَاشًا",
+      "transliteration": "Wa ja‘alnan-nahāra ma‘āsyā(n)."
+    },
+    {
+      "ayah": 12,
+      "text": "وَبَنَيْنَا فَوْقَكُمْ سَبْعًا شِدَادًا",
+      "transliteration": "Wa banainā fauqakum sab‘an syidādā(n)."
+    },
+    {
+      "ayah": 13,
+      "text": "وَجَعَلْنَا سِرَاجًا وَهَّاجًا",
+      "transliteration": "Wa ja‘alnā sirājaw wahhājā(n)."
+    },
+    {
+      "ayah": 14,
+      "text": "وَأَنزَلْنَا مِنَ ٱلْمُعْصِرَٰتِ مَآءً ثَجَّاجًا",
+      "transliteration": "Wa anzalnā minal-mu‘ṣirāti mā'an ṡajjājā(n)."
+    },
+    {
+      "ayah": 15,
+      "text": "لِّنُخْرِجَ بِهِۦ حَبًّا وَنَبَاتًا",
+      "transliteration": "Linukhrija bihī ḥabbaw wa nabātā(n)."
+    },
+    {
+      "ayah": 16,
+      "text": "وَجَنَّٰتٍ أَلْفَافًا",
+      "transliteration": "Wa jannātin alfāfā(n)."
+    },
+    {
+      "ayah": 17,
+      "text": "إِنَّ يَوْمَ ٱلْفَصْلِ كَانَ مِيقَٰتًا",
+      "transliteration": "Inna yaumal-faṣli kāna mīqātā(n)."
+    },
+    {
+      "ayah": 18,
+      "text": "يَوْمَ يُنفَخُ فِى ٱلصُّورِ فَتَأْتُونَ أَفْوَاجًا",
+      "transliteration": "Yauma yunfakhu fiṣ-ṣūri fa ta'tūna afwājā(n)."
+    },
+    {
+      "ayah": 19,
+      "text": "وَفُتِحَتِ ٱلسَّمَآءُ فَكَانَتْ أَبْوَٰبًا",
+      "transliteration": "Wa futiḥatis-samā'u fa kānat abwābā(n)."
+    },
+    {
+      "ayah": 20,
+      "text": "وَسُيِّرَتِ ٱلْجِبَالُ فَكَانَتْ سَرَابًا",
+      "transliteration": "Wa suyyiratil-jibālu fa kānat sarābā(n)."
+    },
+    {
+      "ayah": 21,
+      "text": "إِنَّ جَهَنَّمَ كَانَتْ مِرْصَادًا",
+      "transliteration": "Inna jahannama kānat mirṣādā(n)."
+    },
+    {
+      "ayah": 22,
+      "text": "لِّلطَّٰغِينَ مَـَٔابًا",
+      "transliteration": "Liṭ-ṭāgīna ma'ābā(n)."
+    },
+    {
+      "ayah": 23,
+      "text": "لَّٰبِثِينَ فِيهَآ أَحْقَابًا",
+      "transliteration": "Lābiṡīna fīhā aḥqābā(n)."
+    },
+    {
+      "ayah": 24,
+      "text": "لَّا يَذُوقُونَ فِيهَا بَرْدًا وَلَا شَرَابًا",
+      "transliteration": "Lā yażūqūna fīhā bardaw wa lā syarābā(n)."
+    },
+    {
+      "ayah": 25,
+      "text": "إِلَّا حَمِيمًا وَغَسَّاقًا",
+      "transliteration": "Illā ḥamīmaw wa gassāqā(n)."
+    },
+    {
+      "ayah": 26,
+      "text": "جَزَآءً وِفَاقًا",
+      "transliteration": "Jazā'aw wifāqā(n)."
+    },
+    {
+      "ayah": 27,
+      "text": "إِنَّهُمْ كَانُوا۟ لَا يَرْجُونَ حِسَابًا",
+      "transliteration": "Innahum kānū lā yarjūna ḥisābā(n)."
+    },
+    {
+      "ayah": 28,
+      "text": "وَكَذَّبُوا۟ بِـَٔايَٰتِنَا كِذَّابًا",
+      "transliteration": "Wa każżabū bi'āyātinā kiżżābā(n)."
+    },
+    {
+      "ayah": 29,
+      "text": "وَكُلَّ شَىْءٍ أَحْصَيْنَٰهُ كِتَٰبًا",
+      "transliteration": "Wa kulla syai'in aḥṣaināhu kitābā(n)."
+    },
+    {
+      "ayah": 30,
+      "text": "فَذُوقُوا۟ فَلَن نَّزِيدَكُمْ إِلَّا عَذَابًا",
+      "transliteration": "Fa żūqū falan nazīdakum illā ‘ażābā(n)"
+    },
+    {
+      "ayah": 31,
+      "text": "إِنَّ لِلْمُتَّقِينَ مَفَازًا",
+      "transliteration": "Inna lil-muttaqīna mafāzā(n)."
+    },
+    {
+      "ayah": 32,
+      "text": "حَدَآئِقَ وَأَعْنَٰبًا",
+      "transliteration": "Ḥadā'iqa wa a‘nābā(n)."
+    },
+    {
+      "ayah": 33,
+      "text": "وَكَوَاعِبَ أَتْرَابًا",
+      "transliteration": "Wa kawā‘iba atrābā(n)."
+    },
+    {
+      "ayah": 34,
+      "text": "وَكَأْسًا دِهَاقًا",
+      "transliteration": "Wa ka'san dihāqā(n)."
+    },
+    {
+      "ayah": 35,
+      "text": "لَّا يَسْمَعُونَ فِيهَا لَغْوًا وَلَا كِذَّٰبًا",
+      "transliteration": "Lā yasma‘ūna fīhā lagwaw wa lā kiżżābā(n)."
+    },
+    {
+      "ayah": 36,
+      "text": "جَزَآءً مِّن رَّبِّكَ عَطَآءً حِسَابًا",
+      "transliteration": "Jazā'am mir rabbika ‘aṭā'an ḥisābā(n)."
+    },
+    {
+      "ayah": 37,
+      "text": "رَّبِّ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ وَمَا بَيْنَهُمَا ٱلرَّحْمَٰنِ ۖ لَا يَمْلِكُونَ مِنْهُ خِطَابًا",
+      "transliteration": "Rabbis-samāwāti wal-arḍi wa mā bainahumar-raḥmāni lā yamlikūna minhu khiṭābā(n)."
+    },
+    {
+      "ayah": 38,
+      "text": "يَوْمَ يَقُومُ ٱلرُّوحُ وَٱلْمَلَٰٓئِكَةُ صَفًّا ۖ لَّا يَتَكَلَّمُونَ إِلَّا مَنْ أَذِنَ لَهُ ٱلرَّحْمَٰنُ وَقَالَ صَوَابًا",
+      "transliteration": "Yauma yaqūmur-rūḥu wal-malā'ikatu ṣaffā(n), lā yatakallamūna illā man ażina lahur-raḥmānu wa qāla ṣawābā(n)."
+    },
+    {
+      "ayah": 39,
+      "text": "ذَٰلِكَ ٱلْيَوْمُ ٱلْحَقُّ ۖ فَمَن شَآءَ ٱتَّخَذَ إِلَىٰ رَبِّهِۦ مَـَٔابًا",
+      "transliteration": "Żālikal-yaumul-ḥaqq(u), faman syā'attakhaża ilā rabbihī ma'ābā(n)."
+    },
+    {
+      "ayah": 40,
+      "text": "إِنَّآ أَنذَرْنَٰكُمْ عَذَابًا قَرِيبًا يَوْمَ يَنظُرُ ٱلْمَرْءُ مَا قَدَّمَتْ يَدَاهُ وَيَقُولُ ٱلْكَافِرُ يَٰلَيْتَنِى كُنتُ تُرَٰبًۢا",
+      "transliteration": "Innā anżarnākum ‘ażāban qarībā(n), yauma yanẓurul-mar'u mā qaddamat yadāhu wa yaqūlul-kāfiru yā laitanī kuntu turābā(n)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

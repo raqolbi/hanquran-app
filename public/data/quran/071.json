@@ -1,0 +1,154 @@
+{
+  "id": 71,
+  "name_ar": "نوح",
+  "name_simple": "Nooh",
+  "name_en": "Noah",
+  "meaning": "Nuh",
+  "description": "Surat ini terdiri atas 28 ayat, termasuk golongan surat-surat Makkiyah, diturunkan sesudah surat An Nahl.\nDinamakan dengan surat Nuh karena surat ini seluruhnya menjelaskan da'wah dan doa Nabi Nuh a.s.",
+  "revelation_place": "meccan",
+  "ayah_count": 28,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ إِنَّآ أَرْسَلْنَا نُوحًا إِلَىٰ قَوْمِهِۦٓ أَنْ أَنذِرْ قَوْمَكَ مِن قَبْلِ أَن يَأْتِيَهُمْ عَذَابٌ أَلِيمٌ",
+      "transliteration": "Innā arsalnā nūḥan ilā qaumihī an anżir qaumaka min qabli ay ya'tiyahum ‘ażābun alīm(un)."
+    },
+    {
+      "ayah": 2,
+      "text": "قَالَ يَٰقَوْمِ إِنِّى لَكُمْ نَذِيرٌ مُّبِينٌ",
+      "transliteration": "Qāla yā qaumi innī lakum nażīrum mubīn(un)."
+    },
+    {
+      "ayah": 3,
+      "text": "أَنِ ٱعْبُدُوا۟ ٱللَّهَ وَٱتَّقُوهُ وَأَطِيعُونِ",
+      "transliteration": "Ani‘budullāha wattaqūhu wa aṭī‘ūn(i)."
+    },
+    {
+      "ayah": 4,
+      "text": "يَغْفِرْ لَكُم مِّن ذُنُوبِكُمْ وَيُؤَخِّرْكُمْ إِلَىٰٓ أَجَلٍ مُّسَمًّى ۚ إِنَّ أَجَلَ ٱللَّهِ إِذَا جَآءَ لَا يُؤَخَّرُ ۖ لَوْ كُنتُمْ تَعْلَمُونَ",
+      "transliteration": "Yagfir lakum min żunūbikum wa yu'akhkhirkum ilā ajalim musammā(n), inna ajalallāhi iżā jā'a lā yu'akhkhar(u), lau kuntum ta‘lamūn(a)."
+    },
+    {
+      "ayah": 5,
+      "text": "قَالَ رَبِّ إِنِّى دَعَوْتُ قَوْمِى لَيْلًا وَنَهَارًا",
+      "transliteration": "Qāla rabbi innī da‘atu qaumī lailaw wa nahārā(n)."
+    },
+    {
+      "ayah": 6,
+      "text": "فَلَمْ يَزِدْهُمْ دُعَآءِىٓ إِلَّا فِرَارًا",
+      "transliteration": "Falam yazidhum du‘ā'ī illā firārā(n)."
+    },
+    {
+      "ayah": 7,
+      "text": "وَإِنِّى كُلَّمَا دَعَوْتُهُمْ لِتَغْفِرَ لَهُمْ جَعَلُوٓا۟ أَصَٰبِعَهُمْ فِىٓ ءَاذَانِهِمْ وَٱسْتَغْشَوْا۟ ثِيَابَهُمْ وَأَصَرُّوا۟ وَٱسْتَكْبَرُوا۟ ٱسْتِكْبَارًا",
+      "transliteration": "Wa innī kullamā da‘autuhum litagfira lahum ja‘alū aṣābi‘ahum fī āżānihim wastagsyau ṡiyābahum wa aṣarrū wastakbarustikbārā(n)."
+    },
+    {
+      "ayah": 8,
+      "text": "ثُمَّ إِنِّى دَعَوْتُهُمْ جِهَارًا",
+      "transliteration": "Ṡumma innī da‘autuhum jihārā(n)."
+    },
+    {
+      "ayah": 9,
+      "text": "ثُمَّ إِنِّىٓ أَعْلَنتُ لَهُمْ وَأَسْرَرْتُ لَهُمْ إِسْرَارًا",
+      "transliteration": "Ṡumma innī a‘lantu lahum wa asrartu lahum isrārā(n)."
+    },
+    {
+      "ayah": 10,
+      "text": "فَقُلْتُ ٱسْتَغْفِرُوا۟ رَبَّكُمْ إِنَّهُۥ كَانَ غَفَّارًا",
+      "transliteration": "Faqultustagfirū rabbakum innahū kāna gaffārā(n)."
+    },
+    {
+      "ayah": 11,
+      "text": "يُرْسِلِ ٱلسَّمَآءَ عَلَيْكُم مِّدْرَارًا",
+      "transliteration": "Yursilis-samā'a ‘alaikum midrārā(n)."
+    },
+    {
+      "ayah": 12,
+      "text": "وَيُمْدِدْكُم بِأَمْوَٰلٍ وَبَنِينَ وَيَجْعَل لَّكُمْ جَنَّٰتٍ وَيَجْعَل لَّكُمْ أَنْهَٰرًا",
+      "transliteration": "Wa yumdidkum bi'amwāliw wa banīna wa yaj‘al lakum jannātiw wa yaj‘al lakum anhārā(n)."
+    },
+    {
+      "ayah": 13,
+      "text": "مَّا لَكُمْ لَا تَرْجُونَ لِلَّهِ وَقَارًا",
+      "transliteration": "Mā lakum lā tarjūna lillāhi waqārā(n)."
+    },
+    {
+      "ayah": 14,
+      "text": "وَقَدْ خَلَقَكُمْ أَطْوَارًا",
+      "transliteration": "Wa qad khalaqakum aṭwārā(n)."
+    },
+    {
+      "ayah": 15,
+      "text": "أَلَمْ تَرَوْا۟ كَيْفَ خَلَقَ ٱللَّهُ سَبْعَ سَمَٰوَٰتٍ طِبَاقًا",
+      "transliteration": "Alam tara kaifa khalaqallāhu sab‘a samāwātin ṭibāqā(n)."
+    },
+    {
+      "ayah": 16,
+      "text": "وَجَعَلَ ٱلْقَمَرَ فِيهِنَّ نُورًا وَجَعَلَ ٱلشَّمْسَ سِرَاجًا",
+      "transliteration": "Wa ja‘alal-qamara fīhinna nūraw wa ja‘alasy-syamsa sirājā(n)."
+    },
+    {
+      "ayah": 17,
+      "text": "وَٱللَّهُ أَنۢبَتَكُم مِّنَ ٱلْأَرْضِ نَبَاتًا",
+      "transliteration": "Wallāhu ambatakum minal-arḍi nabātā(n)."
+    },
+    {
+      "ayah": 18,
+      "text": "ثُمَّ يُعِيدُكُمْ فِيهَا وَيُخْرِجُكُمْ إِخْرَاجًا",
+      "transliteration": "Ṡumma yu‘īdukum fīhā wa yukhrijukum ikhrājā(n)."
+    },
+    {
+      "ayah": 19,
+      "text": "وَٱللَّهُ جَعَلَ لَكُمُ ٱلْأَرْضَ بِسَاطًا",
+      "transliteration": "Wallāhu ja‘ala lakumul-arḍa bisāṭā(n)."
+    },
+    {
+      "ayah": 20,
+      "text": "لِّتَسْلُكُوا۟ مِنْهَا سُبُلًا فِجَاجًا",
+      "transliteration": "Litaslukū minhā subulan fijājā(n)."
+    },
+    {
+      "ayah": 21,
+      "text": "قَالَ نُوحٌ رَّبِّ إِنَّهُمْ عَصَوْنِى وَٱتَّبَعُوا۟ مَن لَّمْ يَزِدْهُ مَالُهُۥ وَوَلَدُهُۥٓ إِلَّا خَسَارًا",
+      "transliteration": "Qāla nūḥur rabbi innahum ‘aṣaunī wattaba‘ū mal lam yazidhu māluhū wa waladuhū illā khasārā(n)."
+    },
+    {
+      "ayah": 22,
+      "text": "وَمَكَرُوا۟ مَكْرًا كُبَّارًا",
+      "transliteration": "Wa makarū makran kubbārā(n)."
+    },
+    {
+      "ayah": 23,
+      "text": "وَقَالُوا۟ لَا تَذَرُنَّ ءَالِهَتَكُمْ وَلَا تَذَرُنَّ وَدًّا وَلَا سُوَاعًا وَلَا يَغُوثَ وَيَعُوقَ وَنَسْرًا",
+      "transliteration": "Wa qālū lā tażarunna ālihatakum wa lā tażarunna waddaw wa lā suwā‘ā(n), wa lā yagūṡa wa ya‘ūqa wa nasrā(n)."
+    },
+    {
+      "ayah": 24,
+      "text": "وَقَدْ أَضَلُّوا۟ كَثِيرًا ۖ وَلَا تَزِدِ ٱلظَّٰلِمِينَ إِلَّا ضَلَٰلًا",
+      "transliteration": "Wa qad aḍallū kaṡīrā(n), wa lā tazidiẓ-ẓālimīna illā ḍalālā(n)."
+    },
+    {
+      "ayah": 25,
+      "text": "مِّمَّا خَطِيٓـَٰٔتِهِمْ أُغْرِقُوا۟ فَأُدْخِلُوا۟ نَارًا فَلَمْ يَجِدُوا۟ لَهُم مِّن دُونِ ٱللَّهِ أَنصَارًا",
+      "transliteration": "Mimmā khaṭī'ātihim ugriqū fa'udkhilū nārā(n), falam yajidū lahum min dūnillāhi anṣārā(n)."
+    },
+    {
+      "ayah": 26,
+      "text": "وَقَالَ نُوحٌ رَّبِّ لَا تَذَرْ عَلَى ٱلْأَرْضِ مِنَ ٱلْكَٰفِرِينَ دَيَّارًا",
+      "transliteration": "Wa qāla nūḥur rabbi lā tażar ‘alal-arḍi minal-kāfirīna dayyārā(n)."
+    },
+    {
+      "ayah": 27,
+      "text": "إِنَّكَ إِن تَذَرْهُمْ يُضِلُّوا۟ عِبَادَكَ وَلَا يَلِدُوٓا۟ إِلَّا فَاجِرًا كَفَّارًا",
+      "transliteration": "Innaka in tażarhum yuḍillū ‘ibādaka wa lā yalidū illā fājiran kaffārā(n)."
+    },
+    {
+      "ayah": 28,
+      "text": "رَّبِّ ٱغْفِرْ لِى وَلِوَٰلِدَىَّ وَلِمَن دَخَلَ بَيْتِىَ مُؤْمِنًا وَلِلْمُؤْمِنِينَ وَٱلْمُؤْمِنَٰتِ وَلَا تَزِدِ ٱلظَّٰلِمِينَ إِلَّا تَبَارًۢا",
+      "transliteration": "Rabbigfir lī wa liwālidayya wa liman dakhala baitiya mu'minaw wa lil-mu'minīna wal-mu'mināt(i), wa lā tazidiẓ-ẓālimīna illā tabārā(n)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

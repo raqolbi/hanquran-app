@@ -1,0 +1,39 @@
+{
+  "id": 111,
+  "name_ar": "المسد",
+  "name_simple": "Al-Masad",
+  "name_en": "The Palm Fibre",
+  "meaning": "Api Yang Bergejolak",
+  "description": "Surat ini terdiri atas 5 ayat, termasuk golongan surat-surat Makkiyyah, diturunkan sesudah surat Al Fath. Nama Al Lahab diambil dari kata Al Lahab yang terdapat pada ayat ketiga surat ini yang artinya gejolak api. Surat ini juga dinamakan surat Al Masad.",
+  "revelation_place": "meccan",
+  "ayah_count": 5,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ تَبَّتْ يَدَآ أَبِى لَهَبٍ وَتَبَّ",
+      "transliteration": "Tabbat yadā abī lahabiw wa tabb(a)."
+    },
+    {
+      "ayah": 2,
+      "text": "مَآ أَغْنَىٰ عَنْهُ مَالُهُۥ وَمَا كَسَبَ",
+      "transliteration": "Mā agnā ‘anhu māluhū wa mā kasab(a)."
+    },
+    {
+      "ayah": 3,
+      "text": "سَيَصْلَىٰ نَارًا ذَاتَ لَهَبٍ",
+      "transliteration": "Sayaṣlā nāran żāta lahab(in)."
+    },
+    {
+      "ayah": 4,
+      "text": "وَٱمْرَأَتُهُۥ حَمَّالَةَ ٱلْحَطَبِ",
+      "transliteration": "Wamra'atuh(ū), ḥammālatal-ḥaṭab(i)."
+    },
+    {
+      "ayah": 5,
+      "text": "فِى جِيدِهَا حَبْلٌ مِّن مَّسَدٍۭ",
+      "transliteration": "Fī jīdihā ḥablum mim masad(in)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

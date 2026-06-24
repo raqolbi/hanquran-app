@@ -1,0 +1,39 @@
+{
+  "id": 113,
+  "name_ar": "الفلق",
+  "name_simple": "Al-Falaq",
+  "name_en": "The Dawn",
+  "meaning": "Subuh",
+  "description": "Surat ini terdiri atas 5 ayat, termasuk golongan surat-surat Makkiyah, diturunkan sesudah surat Al Fiil. Nama Al Falaq diambil dari kata Al Falaq yang terdapat pada ayat pertama surat ini yang artinya waktu subuh. Diriwayatkan oleh Abu Daud, At Tirmizi dan An Nasa-i dari 'Uqbah bin 'Aamir bahwa Rasulullah s.a.w. bersembahyang dengan membaca surat Al Falaq dan surat An Naas dalam perjalanan.",
+  "revelation_place": "meccan",
+  "ayah_count": 5,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ قُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ",
+      "transliteration": "Qul a‘ūżu birabbil-falaq(i)."
+    },
+    {
+      "ayah": 2,
+      "text": "مِن شَرِّ مَا خَلَقَ",
+      "transliteration": "Min syarri mā khalaq(a)."
+    },
+    {
+      "ayah": 3,
+      "text": "وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ",
+      "transliteration": "Wa min syarri gāsiqin iżā waqab(a)."
+    },
+    {
+      "ayah": 4,
+      "text": "وَمِن شَرِّ ٱلنَّفَّٰثَٰتِ فِى ٱلْعُقَدِ",
+      "transliteration": "Wa min syarrin-naffāṡāti fil-‘uqad(i)."
+    },
+    {
+      "ayah": 5,
+      "text": "وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ",
+      "transliteration": "Wa min syarri ḥāsidin iżā ḥasad(a)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

@@ -1,0 +1,124 @@
+{
+  "id": 85,
+  "name_ar": "البروج",
+  "name_simple": "Al-Burooj",
+  "name_en": "The Constellations",
+  "meaning": "Gugusan Bintang",
+  "description": "Surat Al Buruuj terdiri atas 22 ayat, termasuk golongan surat-surat Makkiyyah diturunkan sesudah surat Asy-Syams.\nDinamai Al Buruuj (gugusan bintang) diambil dari perkataan Al Buruuj yang terdapat pada ayat 1 surat ini.",
+  "revelation_place": "meccan",
+  "ayah_count": 22,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وَٱلسَّمَآءِ ذَاتِ ٱلْبُرُوجِ",
+      "transliteration": "Was-samā'i żātil-burūj(i)."
+    },
+    {
+      "ayah": 2,
+      "text": "وَٱلْيَوْمِ ٱلْمَوْعُودِ",
+      "transliteration": "Wal-yaumil-mau‘ūd(i)."
+    },
+    {
+      "ayah": 3,
+      "text": "وَشَاهِدٍ وَمَشْهُودٍ",
+      "transliteration": "Wa syāhidiw wa masyhūd(in)."
+    },
+    {
+      "ayah": 4,
+      "text": "قُتِلَ أَصْحَٰبُ ٱلْأُخْدُودِ",
+      "transliteration": "Qutila aṣḥābul-ukhdūd(i)."
+    },
+    {
+      "ayah": 5,
+      "text": "ٱلنَّارِ ذَاتِ ٱلْوَقُودِ",
+      "transliteration": "An-nāri żātil-waqūd(i)."
+    },
+    {
+      "ayah": 6,
+      "text": "إِذْ هُمْ عَلَيْهَا قُعُودٌ",
+      "transliteration": "Iż hum ‘alaihā qu‘ūd(un)."
+    },
+    {
+      "ayah": 7,
+      "text": "وَهُمْ عَلَىٰ مَا يَفْعَلُونَ بِٱلْمُؤْمِنِينَ شُهُودٌ",
+      "transliteration": "Wa hum ‘alā mā yaf‘alūna bil-mu'minīna syuhūd(un)."
+    },
+    {
+      "ayah": 8,
+      "text": "وَمَا نَقَمُوا۟ مِنْهُمْ إِلَّآ أَن يُؤْمِنُوا۟ بِٱللَّهِ ٱلْعَزِيزِ ٱلْحَمِيدِ",
+      "transliteration": "Wa mā naqamū minhum illā ay yu'minū billāhil-‘azīzil-ḥamīd(i)."
+    },
+    {
+      "ayah": 9,
+      "text": "ٱلَّذِى لَهُۥ مُلْكُ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ ۚ وَٱللَّهُ عَلَىٰ كُلِّ شَىْءٍ شَهِيدٌ",
+      "transliteration": "Allażī lahū mulkus-samāwāti wal-arḍ(i), wallāhu ‘alā kulli syai'in syahīd(un)."
+    },
+    {
+      "ayah": 10,
+      "text": "إِنَّ ٱلَّذِينَ فَتَنُوا۟ ٱلْمُؤْمِنِينَ وَٱلْمُؤْمِنَٰتِ ثُمَّ لَمْ يَتُوبُوا۟ فَلَهُمْ عَذَابُ جَهَنَّمَ وَلَهُمْ عَذَابُ ٱلْحَرِيقِ",
+      "transliteration": "Innal-lażīna fatanul-mu'minīna wal-mu'mināti ṡumma lam yatūbū fa lahum ‘ażābu jahannama wa lahum ‘ażābul-ḥarīq(i)."
+    },
+    {
+      "ayah": 11,
+      "text": "إِنَّ ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّٰلِحَٰتِ لَهُمْ جَنَّٰتٌ تَجْرِى مِن تَحْتِهَا ٱلْأَنْهَٰرُ ۚ ذَٰلِكَ ٱلْفَوْزُ ٱلْكَبِيرُ",
+      "transliteration": "Innal-lażīna āmanū wa ‘amiluṣ-ṣāliḥāti lahum jannātun tajrī min taḥtihal-anhār(u), żālikal-fauzul-kabīr(u)."
+    },
+    {
+      "ayah": 12,
+      "text": "إِنَّ بَطْشَ رَبِّكَ لَشَدِيدٌ",
+      "transliteration": "Inna baṭsya rabbika lasyadīd(un)."
+    },
+    {
+      "ayah": 13,
+      "text": "إِنَّهُۥ هُوَ يُبْدِئُ وَيُعِيدُ",
+      "transliteration": "Innahū huwa yubdi'u wa yu‘īd(u)."
+    },
+    {
+      "ayah": 14,
+      "text": "وَهُوَ ٱلْغَفُورُ ٱلْوَدُودُ",
+      "transliteration": "Wa huwal-gafūrul-wadūd(u)."
+    },
+    {
+      "ayah": 15,
+      "text": "ذُو ٱلْعَرْشِ ٱلْمَجِيدُ",
+      "transliteration": "Żul-‘arsyil-majīd(i)."
+    },
+    {
+      "ayah": 16,
+      "text": "فَعَّالٌ لِّمَا يُرِيدُ",
+      "transliteration": "Fa‘‘ālul limā yurīd(u)."
+    },
+    {
+      "ayah": 17,
+      "text": "هَلْ أَتَىٰكَ حَدِيثُ ٱلْجُنُودِ",
+      "transliteration": "Hal atāka ḥadīṡul-junūd(i)."
+    },
+    {
+      "ayah": 18,
+      "text": "فِرْعَوْنَ وَثَمُودَ",
+      "transliteration": "Fir‘auna wa ṡamūd(a)."
+    },
+    {
+      "ayah": 19,
+      "text": "بَلِ ٱلَّذِينَ كَفَرُوا۟ فِى تَكْذِيبٍ",
+      "transliteration": "Balil-lażīna kafarū fī takżīb(in)."
+    },
+    {
+      "ayah": 20,
+      "text": "وَٱللَّهُ مِن وَرَآئِهِم مُّحِيطٌۢ",
+      "transliteration": "Wallāhu miw warā'ihim muḥīṭ(un)."
+    },
+    {
+      "ayah": 21,
+      "text": "بَلْ هُوَ قُرْءَانٌ مَّجِيدٌ",
+      "transliteration": "Bal huwa qur'ānum majīd(un)."
+    },
+    {
+      "ayah": 22,
+      "text": "فِى لَوْحٍ مَّحْفُوظٍۭ",
+      "transliteration": "Fī lauḥim maḥfūẓ(in)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

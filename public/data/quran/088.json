@@ -1,0 +1,144 @@
+{
+  "id": 88,
+  "name_ar": "الغاشية",
+  "name_simple": "Al-Ghaashiya",
+  "name_en": "The Overwhelming",
+  "meaning": "Hari Kiamat",
+  "description": "Surat ini terdiri atas 26 ayat, termasuk surat-surat Makkiyah, diturunkan sesudah surat Adz Dzaariat. Nama Ghaasyiyah diambil dari kata Al Ghaasyiyah yang terdapat pada ayat pertama surat ini yang artinya peristiwa yang dahsyat, tapi yang dimaksud adalah hari kiamat. Surat ini adalah surat yang kerap kali dibaca Nabi pada rakaat kedua pada shalat hari-hari Raya dan shalat Jum'at",
+  "revelation_place": "meccan",
+  "ayah_count": 26,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ هَلْ أَتَىٰكَ حَدِيثُ ٱلْغَٰشِيَةِ",
+      "transliteration": "Hal atāka ḥadīṡul-gāsyiyah(ti)."
+    },
+    {
+      "ayah": 2,
+      "text": "وُجُوهٌ يَوْمَئِذٍ خَٰشِعَةٌ",
+      "transliteration": "Wujūhuy yauma'iżin khāsyi‘ah(tun)."
+    },
+    {
+      "ayah": 3,
+      "text": "عَامِلَةٌ نَّاصِبَةٌ",
+      "transliteration": "‘Amilatun nāṣibah(tun)."
+    },
+    {
+      "ayah": 4,
+      "text": "تَصْلَىٰ نَارًا حَامِيَةً",
+      "transliteration": "Taṣlā nāran ḥāmiyah(tan)."
+    },
+    {
+      "ayah": 5,
+      "text": "تُسْقَىٰ مِنْ عَيْنٍ ءَانِيَةٍ",
+      "transliteration": "Tusqā min ‘ainin āniyah(tin)."
+    },
+    {
+      "ayah": 6,
+      "text": "لَّيْسَ لَهُمْ طَعَامٌ إِلَّا مِن ضَرِيعٍ",
+      "transliteration": "Laisa lahum ṭa‘āmun illā min ḍarī‘(in)."
+    },
+    {
+      "ayah": 7,
+      "text": "لَّا يُسْمِنُ وَلَا يُغْنِى مِن جُوعٍ",
+      "transliteration": "Lā yusminu wa lā yugnī min jū‘(in)."
+    },
+    {
+      "ayah": 8,
+      "text": "وُجُوهٌ يَوْمَئِذٍ نَّاعِمَةٌ",
+      "transliteration": "Wujūhuy yauma'iżin nā‘imah(tun)."
+    },
+    {
+      "ayah": 9,
+      "text": "لِّسَعْيِهَا رَاضِيَةٌ",
+      "transliteration": "Lisa‘yihā rāḍiyah(tun)."
+    },
+    {
+      "ayah": 10,
+      "text": "فِى جَنَّةٍ عَالِيَةٍ",
+      "transliteration": "Fī jannatin ‘āliyah(tin)."
+    },
+    {
+      "ayah": 11,
+      "text": "لَّا تَسْمَعُ فِيهَا لَٰغِيَةً",
+      "transliteration": "Lā tasama‘u fīhā lāgiyah(tan)."
+    },
+    {
+      "ayah": 12,
+      "text": "فِيهَا عَيْنٌ جَارِيَةٌ",
+      "transliteration": "Fīhā ‘ainun jāriyah(tun)."
+    },
+    {
+      "ayah": 13,
+      "text": "فِيهَا سُرُرٌ مَّرْفُوعَةٌ",
+      "transliteration": "Fīhā sururum marfū‘ah(tun)."
+    },
+    {
+      "ayah": 14,
+      "text": "وَأَكْوَابٌ مَّوْضُوعَةٌ",
+      "transliteration": "Wa akwābum mauḍū‘ah(tun)."
+    },
+    {
+      "ayah": 15,
+      "text": "وَنَمَارِقُ مَصْفُوفَةٌ",
+      "transliteration": "Wa namāriqu maṣfūfah(tun)."
+    },
+    {
+      "ayah": 16,
+      "text": "وَزَرَابِىُّ مَبْثُوثَةٌ",
+      "transliteration": "Wa zarābiyyu mabṡūṡah(tun)."
+    },
+    {
+      "ayah": 17,
+      "text": "أَفَلَا يَنظُرُونَ إِلَى ٱلْإِبِلِ كَيْفَ خُلِقَتْ",
+      "transliteration": "Afalā yanẓurūna ilal-ibili kaifa khuliqat."
+    },
+    {
+      "ayah": 18,
+      "text": "وَإِلَى ٱلسَّمَآءِ كَيْفَ رُفِعَتْ",
+      "transliteration": "Wa ilas-samā'i kaifa rufi‘at."
+    },
+    {
+      "ayah": 19,
+      "text": "وَإِلَى ٱلْجِبَالِ كَيْفَ نُصِبَتْ",
+      "transliteration": "Wa ilal-jibāli kaifa nuṣibat."
+    },
+    {
+      "ayah": 20,
+      "text": "وَإِلَى ٱلْأَرْضِ كَيْفَ سُطِحَتْ",
+      "transliteration": "Wa ilal-arḍi kaifa suṭiḥat."
+    },
+    {
+      "ayah": 21,
+      "text": "فَذَكِّرْ إِنَّمَآ أَنتَ مُذَكِّرٌ",
+      "transliteration": "Fa żakkir, innamā anta mużakkir(un)."
+    },
+    {
+      "ayah": 22,
+      "text": "لَّسْتَ عَلَيْهِم بِمُصَيْطِرٍ",
+      "transliteration": "Lasta ‘alaihim bimusaiṭir(in)."
+    },
+    {
+      "ayah": 23,
+      "text": "إِلَّا مَن تَوَلَّىٰ وَكَفَرَ",
+      "transliteration": "Illā man tawallā wa kafar(a)."
+    },
+    {
+      "ayah": 24,
+      "text": "فَيُعَذِّبُهُ ٱللَّهُ ٱلْعَذَابَ ٱلْأَكْبَرَ",
+      "transliteration": "Fa yu‘ażżibuhullāhul-‘ażābal-akbar(a)."
+    },
+    {
+      "ayah": 25,
+      "text": "إِنَّ إِلَيْنَآ إِيَابَهُمْ",
+      "transliteration": "Inna ilainā iyābahum."
+    },
+    {
+      "ayah": 26,
+      "text": "ثُمَّ إِنَّ عَلَيْنَا حِسَابَهُم",
+      "transliteration": "Ṡumma inna ‘alainā ḥisābahum."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

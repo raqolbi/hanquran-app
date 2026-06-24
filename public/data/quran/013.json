@@ -1,0 +1,229 @@
+{
+  "id": 13,
+  "name_ar": "الرعد",
+  "name_simple": "Ar-Ra'd",
+  "name_en": "The Thunder",
+  "meaning": "Guruh",
+  "description": "Surat Ar Ra'd ini terdiri atas 43 ayat termasuk golongan surat-surat Makkiyyah. Surat ini dinamakan Ar Ra'd yang berarti guruh karena dalam ayat 13 Allah berfirman yang artinya Dan guruh itu bertasbih sambil memuji-Nya, menunjukkan sifat kesucian dan kesempurnaan Allah s.w.t. Dan lagi sesuai dengan sifat Al Quran yang mengandung ancaman dan harapan, maka demikian pulalah halnya bunyi guruh itu menimbulkan kecemasan dan harapan kepada manusia. Isi yang terpenting dari surat ini ialah bahwa bimbingan Allah kepada makhluk-Nya bertalian erat dengan hukum sebab dan akibat. Bagi Allah s.w.t. tidak ada pilih kasih dalam menetapkan hukuman. Balasan atau hukuman adalah akibat dan ketaatan atau keingkaran terhadap hukum Allah.",
+  "revelation_place": "medinan",
+  "ayah_count": 43,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ الٓمٓر ۚ تِلْكَ ءَايَٰتُ ٱلْكِتَٰبِ ۗ وَٱلَّذِىٓ أُنزِلَ إِلَيْكَ مِن رَّبِّكَ ٱلْحَقُّ وَلَٰكِنَّ أَكْثَرَ ٱلنَّاسِ لَا يُؤْمِنُونَ",
+      "transliteration": "Alif lām mīm rā, tilka āyātul-kitāb(i), wal-lażī unzila ilaika mir rabbikal-ḥaqqu wa lākinna akṡaran-nāsi lā yu'minūn(a)."
+    },
+    {
+      "ayah": 2,
+      "text": "ٱللَّهُ ٱلَّذِى رَفَعَ ٱلسَّمَٰوَٰتِ بِغَيْرِ عَمَدٍ تَرَوْنَهَا ۖ ثُمَّ ٱسْتَوَىٰ عَلَى ٱلْعَرْشِ ۖ وَسَخَّرَ ٱلشَّمْسَ وَٱلْقَمَرَ ۖ كُلٌّ يَجْرِى لِأَجَلٍ مُّسَمًّى ۚ يُدَبِّرُ ٱلْأَمْرَ يُفَصِّلُ ٱلْـَٔايَٰتِ لَعَلَّكُم بِلِقَآءِ رَبِّكُمْ تُوقِنُونَ",
+      "transliteration": "Allāhul-lażī rafa‘as-samāwāti bigairi ‘amadin taraunahā ṡummastawā ‘alal-‘arsyi wa sakhkharasy-syamsa wal-qamar(a), kulluy yajrī li'ajalim musammā(n), yudabbirul-amra yufaṣṣilul-āyāti la‘allakum biliqā'i rabbikum tūqinūn(a)."
+    },
+    {
+      "ayah": 3,
+      "text": "وَهُوَ ٱلَّذِى مَدَّ ٱلْأَرْضَ وَجَعَلَ فِيهَا رَوَٰسِىَ وَأَنْهَٰرًا ۖ وَمِن كُلِّ ٱلثَّمَرَٰتِ جَعَلَ فِيهَا زَوْجَيْنِ ٱثْنَيْنِ ۖ يُغْشِى ٱلَّيْلَ ٱلنَّهَارَ ۚ إِنَّ فِى ذَٰلِكَ لَـَٔايَٰتٍ لِّقَوْمٍ يَتَفَكَّرُونَ",
+      "transliteration": "Wa huwal-lażī maddal-arḍa wa ja‘ala fīhā rawāsiya wa anhārā(n), wa min kulliṡ-ṡamarāti ja‘ala fīhā zaujainiṡnaini yugsyil-lailan-nahār(a), inna fī żālika la'āyātil liqaumiy yatafakkarūn(a)."
+    },
+    {
+      "ayah": 4,
+      "text": "وَفِى ٱلْأَرْضِ قِطَعٌ مُّتَجَٰوِرَٰتٌ وَجَنَّٰتٌ مِّنْ أَعْنَٰبٍ وَزَرْعٌ وَنَخِيلٌ صِنْوَانٌ وَغَيْرُ صِنْوَانٍ يُسْقَىٰ بِمَآءٍ وَٰحِدٍ وَنُفَضِّلُ بَعْضَهَا عَلَىٰ بَعْضٍ فِى ٱلْأُكُلِ ۚ إِنَّ فِى ذَٰلِكَ لَـَٔايَٰتٍ لِّقَوْمٍ يَعْقِلُونَ",
+      "transliteration": "Wa fil-arḍi qiṭa‘um mutajāwirātuw wa jannātum min a‘nābiw wa zar‘uw wa nakhīlun ṣinwānuw wa gairu ṣinwāniy yusqā bimā'iw wāḥid(in), wa nufaḍḍilu ba‘ḍahā ‘alā ba‘ḍin fil-ukul(i), inna fī żālika la'āyātil liqaumiy ya‘qilūn(a)."
+    },
+    {
+      "ayah": 5,
+      "text": "وَإِن تَعْجَبْ فَعَجَبٌ قَوْلُهُمْ أَءِذَا كُنَّا تُرَٰبًا أَءِنَّا لَفِى خَلْقٍ جَدِيدٍ ۗ أُو۟لَٰٓئِكَ ٱلَّذِينَ كَفَرُوا۟ بِرَبِّهِمْ ۖ وَأُو۟لَٰٓئِكَ ٱلْأَغْلَٰلُ فِىٓ أَعْنَاقِهِمْ ۖ وَأُو۟لَٰٓئِكَ أَصْحَٰبُ ٱلنَّارِ ۖ هُمْ فِيهَا خَٰلِدُونَ",
+      "transliteration": "Wa in ta‘jab fa ‘ajabun qauluhum a'iżā kunnā turāban a'innā lafī khalqin jadīd(in), ulā'ikal-lażīna kafarū birabbihim, wa ulā'ikal-aglālu fī a‘nāqihim, wa ulā'ika aṣḥābun-nār(i), hum fīhā khālidūn(a)."
+    },
+    {
+      "ayah": 6,
+      "text": "وَيَسْتَعْجِلُونَكَ بِٱلسَّيِّئَةِ قَبْلَ ٱلْحَسَنَةِ وَقَدْ خَلَتْ مِن قَبْلِهِمُ ٱلْمَثُلَٰتُ ۗ وَإِنَّ رَبَّكَ لَذُو مَغْفِرَةٍ لِّلنَّاسِ عَلَىٰ ظُلْمِهِمْ ۖ وَإِنَّ رَبَّكَ لَشَدِيدُ ٱلْعِقَابِ",
+      "transliteration": "Wa yasta‘jilūnaka bis-sayyi'ati qablal-ḥasanati wa qad khalat min qablihimul-maṡulāt(u), wa inna rabbaka lażū magfiratil lin-nāsi ‘alā ẓulmihim, wa inna rabbaka lasyadīdul-‘iqāb(i)."
+    },
+    {
+      "ayah": 7,
+      "text": "وَيَقُولُ ٱلَّذِينَ كَفَرُوا۟ لَوْلَآ أُنزِلَ عَلَيْهِ ءَايَةٌ مِّن رَّبِّهِۦٓ ۗ إِنَّمَآ أَنتَ مُنذِرٌ ۖ وَلِكُلِّ قَوْمٍ هَادٍ",
+      "transliteration": "Wa yaqūlul-lażīna kafarū lau lā unzila ‘alaihi āyatum mir rabbih(ī), innamā anta munżiruw wa likulli qaumin hād(in)."
+    },
+    {
+      "ayah": 8,
+      "text": "ٱللَّهُ يَعْلَمُ مَا تَحْمِلُ كُلُّ أُنثَىٰ وَمَا تَغِيضُ ٱلْأَرْحَامُ وَمَا تَزْدَادُ ۖ وَكُلُّ شَىْءٍ عِندَهُۥ بِمِقْدَارٍ",
+      "transliteration": "Allāhu ya‘lamu mā taḥmilu kullu unṡā wa mā tagīḍul-arḥāmu wa mā tazdād(u), wa kullu syai'in ‘indahū bimiqdār(in)."
+    },
+    {
+      "ayah": 9,
+      "text": "عَٰلِمُ ٱلْغَيْبِ وَٱلشَّهَٰدَةِ ٱلْكَبِيرُ ٱلْمُتَعَالِ",
+      "transliteration": "‘Alimul-gaibi wasy-syahādatil-kabīrul-muta‘āl(i)."
+    },
+    {
+      "ayah": 10,
+      "text": "سَوَآءٌ مِّنكُم مَّنْ أَسَرَّ ٱلْقَوْلَ وَمَن جَهَرَ بِهِۦ وَمَنْ هُوَ مُسْتَخْفٍۭ بِٱلَّيْلِ وَسَارِبٌۢ بِٱلنَّهَارِ",
+      "transliteration": "Sawā'um minkum man asarral-qaula wa man jahara bihī wa man huwa mustakhfim bil-laili wa sāribum bin-nahār(i)."
+    },
+    {
+      "ayah": 11,
+      "text": "لَهُۥ مُعَقِّبَٰتٌ مِّنۢ بَيْنِ يَدَيْهِ وَمِنْ خَلْفِهِۦ يَحْفَظُونَهُۥ مِنْ أَمْرِ ٱللَّهِ ۗ إِنَّ ٱللَّهَ لَا يُغَيِّرُ مَا بِقَوْمٍ حَتَّىٰ يُغَيِّرُوا۟ مَا بِأَنفُسِهِمْ ۗ وَإِذَآ أَرَادَ ٱللَّهُ بِقَوْمٍ سُوٓءًا فَلَا مَرَدَّ لَهُۥ ۚ وَمَا لَهُم مِّن دُونِهِۦ مِن وَالٍ",
+      "transliteration": "Lahū mu‘aqqibātum mim baini yadaihi wa min khalfihī yaḥfaẓūnahū min amrillāh(i), innallāha lā yugayyiru mā biqaumin ḥattā yugayyirū mā bi'anfusihim, wa iżā arādallāhu biqaumin sū'an falā maradda lah(ū), wa mā lahum min dūnihī miw wāl(in)."
+    },
+    {
+      "ayah": 12,
+      "text": "هُوَ ٱلَّذِى يُرِيكُمُ ٱلْبَرْقَ خَوْفًا وَطَمَعًا وَيُنشِئُ ٱلسَّحَابَ ٱلثِّقَالَ",
+      "transliteration": "Huwal-lażī yurīkumul -barqa khaufaw wa ṭama‘aw wa yunsyi'us -saḥābaṡ-ṡiqāl(a)."
+    },
+    {
+      "ayah": 13,
+      "text": "وَيُسَبِّحُ ٱلرَّعْدُ بِحَمْدِهِۦ وَٱلْمَلَٰٓئِكَةُ مِنْ خِيفَتِهِۦ وَيُرْسِلُ ٱلصَّوَٰعِقَ فَيُصِيبُ بِهَا مَن يَشَآءُ وَهُمْ يُجَٰدِلُونَ فِى ٱللَّهِ وَهُوَ شَدِيدُ ٱلْمِحَالِ",
+      "transliteration": "Wa yusabbiḥur-ra‘du biḥamdihī wal-malā'ikatu min khīfatih(ī), wa yursiluṣ-ṣawā‘iqa fa yuṣību bihā may yasyā'u wa hum yujālidilūna fillāh(i), wa huwa syadīdul-miḥāl(i)."
+    },
+    {
+      "ayah": 14,
+      "text": "لَهُۥ دَعْوَةُ ٱلْحَقِّ ۖ وَٱلَّذِينَ يَدْعُونَ مِن دُونِهِۦ لَا يَسْتَجِيبُونَ لَهُم بِشَىْءٍ إِلَّا كَبَٰسِطِ كَفَّيْهِ إِلَى ٱلْمَآءِ لِيَبْلُغَ فَاهُ وَمَا هُوَ بِبَٰلِغِهِۦ ۚ وَمَا دُعَآءُ ٱلْكَٰفِرِينَ إِلَّا فِى ضَلَٰلٍ",
+      "transliteration": "Lahū da‘watul-ḥaqq(i), wal-lażīna yad‘ūna min dūnihī lā yastajībūna lahum bisyai'in illā kabāsiṭi kaffaihi ilal-mā'i liyabluga fāhu wa mā huwa bibāligih(ī), wa mā du‘ā'ul-kāfirīna illā fī ḍalāl(in)."
+    },
+    {
+      "ayah": 15,
+      "text": "وَلِلَّهِ يَسْجُدُ مَن فِى ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ طَوْعًا وَكَرْهًا وَظِلَٰلُهُم بِٱلْغُدُوِّ وَٱلْـَٔاصَالِ ۩",
+      "transliteration": "Wa lillāhi yasjudu man fis-samāwāti wal-arḍi ṭau‘aw wa karhaw wa ẓilāluhum bil-guduwwi wal-āṣāl(i)."
+    },
+    {
+      "ayah": 16,
+      "text": "قُلْ مَن رَّبُّ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ قُلِ ٱللَّهُ ۚ قُلْ أَفَٱتَّخَذْتُم مِّن دُونِهِۦٓ أَوْلِيَآءَ لَا يَمْلِكُونَ لِأَنفُسِهِمْ نَفْعًا وَلَا ضَرًّا ۚ قُلْ هَلْ يَسْتَوِى ٱلْأَعْمَىٰ وَٱلْبَصِيرُ أَمْ هَلْ تَسْتَوِى ٱلظُّلُمَٰتُ وَٱلنُّورُ ۗ أَمْ جَعَلُوا۟ لِلَّهِ شُرَكَآءَ خَلَقُوا۟ كَخَلْقِهِۦ فَتَشَٰبَهَ ٱلْخَلْقُ عَلَيْهِمْ ۚ قُلِ ٱللَّهُ خَٰلِقُ كُلِّ شَىْءٍ وَهُوَ ٱلْوَٰحِدُ ٱلْقَهَّٰرُ",
+      "transliteration": "Qul mar rabbus-samāwāti wal-arḍ(i), qulillāh(u), qul afattakhażtum min dūnihī auliyā'a lā yamlikūna li'anfusihim naf‘aw wa lā ḍarrā(n), qul hal yastawil-a‘mā wal-baṣīr(u), am hal tastawiẓ-ẓulumātu wan-nūr(u), am ja‘alū lillāhi syurakā'a khalaqū kakhalqihī fa tasyābahal-khalqu ‘alaihim, qulillāhu khāliqu kulli syai'iw wa huwal-wāḥidul-qahhār(u)."
+    },
+    {
+      "ayah": 17,
+      "text": "أَنزَلَ مِنَ ٱلسَّمَآءِ مَآءً فَسَالَتْ أَوْدِيَةٌۢ بِقَدَرِهَا فَٱحْتَمَلَ ٱلسَّيْلُ زَبَدًا رَّابِيًا ۚ وَمِمَّا يُوقِدُونَ عَلَيْهِ فِى ٱلنَّارِ ٱبْتِغَآءَ حِلْيَةٍ أَوْ مَتَٰعٍ زَبَدٌ مِّثْلُهُۥ ۚ كَذَٰلِكَ يَضْرِبُ ٱللَّهُ ٱلْحَقَّ وَٱلْبَٰطِلَ ۚ فَأَمَّا ٱلزَّبَدُ فَيَذْهَبُ جُفَآءً ۖ وَأَمَّا مَا يَنفَعُ ٱلنَّاسَ فَيَمْكُثُ فِى ٱلْأَرْضِ ۚ كَذَٰلِكَ يَضْرِبُ ٱللَّهُ ٱلْأَمْثَالَ",
+      "transliteration": "Anzala minas-samā'i mā'an fa sālat audiyatum biqadarihā faḥtamalas-sailu zabadar rābiyā(n), wa mimmā yūqidūna ‘alaihi fin-nāribtigā'a ḥilyatin au matā‘in zabadum miṡluh(ū), każālika yaḍribullāhul-ḥaqqa wal-bāṭil(a), fa ammaz-zabadu fa yażhabu jufā'ā(n), wa ammā mā yanfa‘un-nāsa fa yamkuṡu fil-arḍ(i), każālika yaḍribullāhul-amṡāl(a)."
+    },
+    {
+      "ayah": 18,
+      "text": "لِلَّذِينَ ٱسْتَجَابُوا۟ لِرَبِّهِمُ ٱلْحُسْنَىٰ ۚ وَٱلَّذِينَ لَمْ يَسْتَجِيبُوا۟ لَهُۥ لَوْ أَنَّ لَهُم مَّا فِى ٱلْأَرْضِ جَمِيعًا وَمِثْلَهُۥ مَعَهُۥ لَٱفْتَدَوْا۟ بِهِۦٓ ۚ أُو۟لَٰٓئِكَ لَهُمْ سُوٓءُ ٱلْحِسَابِ وَمَأْوَىٰهُمْ جَهَنَّمُ ۖ وَبِئْسَ ٱلْمِهَادُ",
+      "transliteration": "Lil-lażīnastajābū lirabbihimul-ḥusnā, wal-lażīna lam yastajībū lahū lau anna lahum mā fil-arḍi jamī‘aw wa miṡlahū ma‘ahū laftadau bih(ī), ulā'ika lahum sū'ul-ḥisāb(i), wa ma'wāhum jahannam(u), wa bi'sal-mihād(u)."
+    },
+    {
+      "ayah": 19,
+      "text": "أَفَمَن يَعْلَمُ أَنَّمَآ أُنزِلَ إِلَيْكَ مِن رَّبِّكَ ٱلْحَقُّ كَمَنْ هُوَ أَعْمَىٰٓ ۚ إِنَّمَا يَتَذَكَّرُ أُو۟لُوا۟ ٱلْأَلْبَٰبِ",
+      "transliteration": "Afamay ya‘lamu annamā unzila ilaika mir rabbikal-ḥaqqu kaman huwa a‘mā, innamā yatażakkaru ulul-albāb(i)."
+    },
+    {
+      "ayah": 20,
+      "text": "ٱلَّذِينَ يُوفُونَ بِعَهْدِ ٱللَّهِ وَلَا يَنقُضُونَ ٱلْمِيثَٰقَ",
+      "transliteration": "Al-lażīna yūfūna bi‘ahdillāhi wa lā yanquḍūnal-mīṡāq(a)."
+    },
+    {
+      "ayah": 21,
+      "text": "وَٱلَّذِينَ يَصِلُونَ مَآ أَمَرَ ٱللَّهُ بِهِۦٓ أَن يُوصَلَ وَيَخْشَوْنَ رَبَّهُمْ وَيَخَافُونَ سُوٓءَ ٱلْحِسَابِ",
+      "transliteration": "Wal-lażīna yaṣilūna mā amarallāhu bihī ay yūṣala wa yakhsyauna rabbahum wa yakhāfūna sū'al-ḥisāb(i)."
+    },
+    {
+      "ayah": 22,
+      "text": "وَٱلَّذِينَ صَبَرُوا۟ ٱبْتِغَآءَ وَجْهِ رَبِّهِمْ وَأَقَامُوا۟ ٱلصَّلَوٰةَ وَأَنفَقُوا۟ مِمَّا رَزَقْنَٰهُمْ سِرًّا وَعَلَانِيَةً وَيَدْرَءُونَ بِٱلْحَسَنَةِ ٱلسَّيِّئَةَ أُو۟لَٰٓئِكَ لَهُمْ عُقْبَى ٱلدَّارِ",
+      "transliteration": "Wal-lażīna ṣabarubtigā'a wajhi rabbihim wa aqāmuṣ-ṣalāta wa anfaqū mimmā razaqnāhum sirraw wa ‘alāniyataw wa yadra'ūna bil-ḥasanatis-sayyi'ata ulā'ika lahum ‘uqbad-dār(i)."
+    },
+    {
+      "ayah": 23,
+      "text": "جَنَّٰتُ عَدْنٍ يَدْخُلُونَهَا وَمَن صَلَحَ مِنْ ءَابَآئِهِمْ وَأَزْوَٰجِهِمْ وَذُرِّيَّٰتِهِمْ ۖ وَٱلْمَلَٰٓئِكَةُ يَدْخُلُونَ عَلَيْهِم مِّن كُلِّ بَابٍ",
+      "transliteration": "Jannātu ‘adniy yadkhulūnahā wa man ṣalaḥa min ābā'ihim wa azwājihim wa żurriyyātihim wal-malā'ikatu yadkhulūna ‘alaihim min kulli bāb(in)."
+    },
+    {
+      "ayah": 24,
+      "text": "سَلَٰمٌ عَلَيْكُم بِمَا صَبَرْتُمْ ۚ فَنِعْمَ عُقْبَى ٱلدَّارِ",
+      "transliteration": "Salāmun ‘alaikum bimā ṣabartum fa ni‘ma ‘uqbad-dār(i)."
+    },
+    {
+      "ayah": 25,
+      "text": "وَٱلَّذِينَ يَنقُضُونَ عَهْدَ ٱللَّهِ مِنۢ بَعْدِ مِيثَٰقِهِۦ وَيَقْطَعُونَ مَآ أَمَرَ ٱللَّهُ بِهِۦٓ أَن يُوصَلَ وَيُفْسِدُونَ فِى ٱلْأَرْضِ ۙ أُو۟لَٰٓئِكَ لَهُمُ ٱللَّعْنَةُ وَلَهُمْ سُوٓءُ ٱلدَّارِ",
+      "transliteration": "Wal-lażīna yanquḍūna ‘ahdallāhi mim ba‘di mīṡāqihī wa yaqṭa‘ūna mā amarallāhu bihī ay yūṣala wa yufsidūna fil-arḍ(i), ulā'ika lahumul-la‘natu wa lahum sū'ud-dār(i)."
+    },
+    {
+      "ayah": 26,
+      "text": "ٱللَّهُ يَبْسُطُ ٱلرِّزْقَ لِمَن يَشَآءُ وَيَقْدِرُ ۚ وَفَرِحُوا۟ بِٱلْحَيَوٰةِ ٱلدُّنْيَا وَمَا ٱلْحَيَوٰةُ ٱلدُّنْيَا فِى ٱلْـَٔاخِرَةِ إِلَّا مَتَٰعٌ",
+      "transliteration": "Allāhu yabsuṭur-rizqa limay yasyā'u wa yaqdir(u), wa fariḥū bil-ḥayātid-dun-yā, wa mal-ḥayātud-dun-yā fil-ākhirati illā matā‘(un)."
+    },
+    {
+      "ayah": 27,
+      "text": "وَيَقُولُ ٱلَّذِينَ كَفَرُوا۟ لَوْلَآ أُنزِلَ عَلَيْهِ ءَايَةٌ مِّن رَّبِّهِۦ ۗ قُلْ إِنَّ ٱللَّهَ يُضِلُّ مَن يَشَآءُ وَيَهْدِىٓ إِلَيْهِ مَنْ أَنَابَ",
+      "transliteration": "Wa yaqūlul-lażīna kafarū lau lā unzila ‘alaihi āyatum mir rabbih(ī), qul innallāha yuḍillu may yasyā'u wa yahdī ilaihi man anāb(a)."
+    },
+    {
+      "ayah": 28,
+      "text": "ٱلَّذِينَ ءَامَنُوا۟ وَتَطْمَئِنُّ قُلُوبُهُم بِذِكْرِ ٱللَّهِ ۗ أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ",
+      "transliteration": "Al-lażīna āmanū wa taṭma'innu qulūbuhum biżikrillāh(i), alā biżikrillāhi taṭma'innul-qulūb(u)."
+    },
+    {
+      "ayah": 29,
+      "text": "ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّٰلِحَٰتِ طُوبَىٰ لَهُمْ وَحُسْنُ مَـَٔابٍ",
+      "transliteration": "Allażīna āmanū wa ‘amiluṣ-ṣāliḥāti ṭūbā lahum wa ḥusnu ma'āb(in)."
+    },
+    {
+      "ayah": 30,
+      "text": "كَذَٰلِكَ أَرْسَلْنَٰكَ فِىٓ أُمَّةٍ قَدْ خَلَتْ مِن قَبْلِهَآ أُمَمٌ لِّتَتْلُوَا۟ عَلَيْهِمُ ٱلَّذِىٓ أَوْحَيْنَآ إِلَيْكَ وَهُمْ يَكْفُرُونَ بِٱلرَّحْمَٰنِ ۚ قُلْ هُوَ رَبِّى لَآ إِلَٰهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَإِلَيْهِ مَتَابِ",
+      "transliteration": "Każālika arsalnāka fī ummatin qad khalat min qablihā umamul litatluwa ‘alaihimul-lażī auḥainā ilaika wa hum yakfurūna bir-raḥmān(i), qul huwa rabbī lā ilāha illā huw(a), ‘alaihi tawakkaltu wa ilaihi matāb(i)."
+    },
+    {
+      "ayah": 31,
+      "text": "وَلَوْ أَنَّ قُرْءَانًا سُيِّرَتْ بِهِ ٱلْجِبَالُ أَوْ قُطِّعَتْ بِهِ ٱلْأَرْضُ أَوْ كُلِّمَ بِهِ ٱلْمَوْتَىٰ ۗ بَل لِّلَّهِ ٱلْأَمْرُ جَمِيعًا ۗ أَفَلَمْ يَا۟يْـَٔسِ ٱلَّذِينَ ءَامَنُوٓا۟ أَن لَّوْ يَشَآءُ ٱللَّهُ لَهَدَى ٱلنَّاسَ جَمِيعًا ۗ وَلَا يَزَالُ ٱلَّذِينَ كَفَرُوا۟ تُصِيبُهُم بِمَا صَنَعُوا۟ قَارِعَةٌ أَوْ تَحُلُّ قَرِيبًا مِّن دَارِهِمْ حَتَّىٰ يَأْتِىَ وَعْدُ ٱللَّهِ ۚ إِنَّ ٱللَّهَ لَا يُخْلِفُ ٱلْمِيعَادَ",
+      "transliteration": "Wa lau anna qur'ānan suyyirat bihil-jibālu au quṭṭi‘at bihil-arḍu au kullima bihil-mautā, bal lillāhil-amru jamī‘ā(n), afalam yai'asil-lażīna āmanū allau yasyā'ullāhu lahadan-nāsa jamī‘ā(n), wa lā yazālul-lażīna kafarū tuṣībuhum bimā ṣana‘ū qāri‘atun au taḥullu qarībam min dārihim ḥattā ya'tiya wa‘dullāh(i), innallāha lā yukhliful-mī‘ād(a)."
+    },
+    {
+      "ayah": 32,
+      "text": "وَلَقَدِ ٱسْتُهْزِئَ بِرُسُلٍ مِّن قَبْلِكَ فَأَمْلَيْتُ لِلَّذِينَ كَفَرُوا۟ ثُمَّ أَخَذْتُهُمْ ۖ فَكَيْفَ كَانَ عِقَابِ",
+      "transliteration": "Wa laqadistuhzi'a birusulim min qablika fa amlaitu lil-lażīna kafarū ṡumma akhażtuhum fa kaifa kāna ‘iqāb(i)."
+    },
+    {
+      "ayah": 33,
+      "text": "أَفَمَنْ هُوَ قَآئِمٌ عَلَىٰ كُلِّ نَفْسٍۭ بِمَا كَسَبَتْ ۗ وَجَعَلُوا۟ لِلَّهِ شُرَكَآءَ قُلْ سَمُّوهُمْ ۚ أَمْ تُنَبِّـُٔونَهُۥ بِمَا لَا يَعْلَمُ فِى ٱلْأَرْضِ أَم بِظَٰهِرٍ مِّنَ ٱلْقَوْلِ ۗ بَلْ زُيِّنَ لِلَّذِينَ كَفَرُوا۟ مَكْرُهُمْ وَصُدُّوا۟ عَنِ ٱلسَّبِيلِ ۗ وَمَن يُضْلِلِ ٱللَّهُ فَمَا لَهُۥ مِنْ هَادٍ",
+      "transliteration": "Afaman huwa qā'imun ‘alā kulli nafsim bimā kasabat, wa ja‘alū lillāhi syurakā'(a), qul sammūhum, am tunabbi'ūnahū bimā lā ya‘lamu fil-arḍi am biẓāhirim minal-qaul(i), bal zuyyina lil-lażīna kafarū makruhum wa ṣuddū ‘anis-sabīl(i), wa may yuḍlilillāhu famā lahū min hād(in)."
+    },
+    {
+      "ayah": 34,
+      "text": "لَّهُمْ عَذَابٌ فِى ٱلْحَيَوٰةِ ٱلدُّنْيَا ۖ وَلَعَذَابُ ٱلْـَٔاخِرَةِ أَشَقُّ ۖ وَمَا لَهُم مِّنَ ٱللَّهِ مِن وَاقٍ",
+      "transliteration": "Lahum ‘ażābun fil-ḥayātid-dun-yā wa la‘ażābul-ākhirati asyaqq(u), wa mā lahum minallāhi miw wāq(in)."
+    },
+    {
+      "ayah": 35,
+      "text": "مَّثَلُ ٱلْجَنَّةِ ٱلَّتِى وُعِدَ ٱلْمُتَّقُونَ ۖ تَجْرِى مِن تَحْتِهَا ٱلْأَنْهَٰرُ ۖ أُكُلُهَا دَآئِمٌ وَظِلُّهَا ۚ تِلْكَ عُقْبَى ٱلَّذِينَ ٱتَّقَوا۟ ۖ وَّعُقْبَى ٱلْكَٰفِرِينَ ٱلنَّارُ",
+      "transliteration": "Maṡalul-jannatil-latī wu‘idal-muttaqūn(a), tajrī min taḥtihal-anhār(u), ukuluhā dā'imuw wa ẓilluhā, tilka ‘uqbal-lażīnattaqau, wa ‘uqbal-kāfirīnan-nār(u)."
+    },
+    {
+      "ayah": 36,
+      "text": "وَٱلَّذِينَ ءَاتَيْنَٰهُمُ ٱلْكِتَٰبَ يَفْرَحُونَ بِمَآ أُنزِلَ إِلَيْكَ ۖ وَمِنَ ٱلْأَحْزَابِ مَن يُنكِرُ بَعْضَهُۥ ۚ قُلْ إِنَّمَآ أُمِرْتُ أَنْ أَعْبُدَ ٱللَّهَ وَلَآ أُشْرِكَ بِهِۦٓ ۚ إِلَيْهِ أَدْعُوا۟ وَإِلَيْهِ مَـَٔابِ",
+      "transliteration": "Wal-lażīna ātaināhumul-kitāba yafraḥūna bimā unzila ilaika wa minal-aḥzābi may yunkiru ba‘ḍah(ū), qul innamā umirtu an a‘budallāha wa lā usyrika bih(ī), ilaihi ad‘ū wa ilaihi ma'āb(i)."
+    },
+    {
+      "ayah": 37,
+      "text": "وَكَذَٰلِكَ أَنزَلْنَٰهُ حُكْمًا عَرَبِيًّا ۚ وَلَئِنِ ٱتَّبَعْتَ أَهْوَآءَهُم بَعْدَ مَا جَآءَكَ مِنَ ٱلْعِلْمِ مَا لَكَ مِنَ ٱللَّهِ مِن وَلِىٍّ وَلَا وَاقٍ",
+      "transliteration": "Wa każālika anzalnāhu ḥukman ‘arabiyyā(n), wa la'inittaba‘ta ahwā'ahum ba‘da mā jā'aka minal-‘ilm(i), mā laka minallāhi miw waliyyiw wa lā wāq(in)."
+    },
+    {
+      "ayah": 38,
+      "text": "وَلَقَدْ أَرْسَلْنَا رُسُلًا مِّن قَبْلِكَ وَجَعَلْنَا لَهُمْ أَزْوَٰجًا وَذُرِّيَّةً ۚ وَمَا كَانَ لِرَسُولٍ أَن يَأْتِىَ بِـَٔايَةٍ إِلَّا بِإِذْنِ ٱللَّهِ ۗ لِكُلِّ أَجَلٍ كِتَابٌ",
+      "transliteration": "Wa laqad arsalnā rusulam min qablika wa ja‘alnā lahum azwājaw wa żurriyyah(tan), wa mā kāna lirasūlin ay ya'tiya bi'āyatin illā bi'iżnillāh(i), likulli ajalin kitāb(un)."
+    },
+    {
+      "ayah": 39,
+      "text": "يَمْحُوا۟ ٱللَّهُ مَا يَشَآءُ وَيُثْبِتُ ۖ وَعِندَهُۥٓ أُمُّ ٱلْكِتَٰبِ",
+      "transliteration": "Yamḥullāhu mā yasyā'u wa yuṡbit(u), wa ‘indahū ummul-kitāb(i)."
+    },
+    {
+      "ayah": 40,
+      "text": "وَإِن مَّا نُرِيَنَّكَ بَعْضَ ٱلَّذِى نَعِدُهُمْ أَوْ نَتَوَفَّيَنَّكَ فَإِنَّمَا عَلَيْكَ ٱلْبَلَٰغُ وَعَلَيْنَا ٱلْحِسَابُ",
+      "transliteration": "Wa immā nuriyannaka ba‘ḍal-lażī na‘iduhum au natawaffayannaka fa innamā ‘alaikal-balāgu wa ‘alainal-ḥisāb(u)."
+    },
+    {
+      "ayah": 41,
+      "text": "أَوَلَمْ يَرَوْا۟ أَنَّا نَأْتِى ٱلْأَرْضَ نَنقُصُهَا مِنْ أَطْرَافِهَا ۚ وَٱللَّهُ يَحْكُمُ لَا مُعَقِّبَ لِحُكْمِهِۦ ۚ وَهُوَ سَرِيعُ ٱلْحِسَابِ",
+      "transliteration": "Awa lam yarau annā na'til-arḍa nanquṣuhā min aṭrāfihā, wallāhu yaḥkumu lā mu‘aqqiba liḥukmih(ī), wa huwa sarī‘ul-ḥisāb(i)."
+    },
+    {
+      "ayah": 42,
+      "text": "وَقَدْ مَكَرَ ٱلَّذِينَ مِن قَبْلِهِمْ فَلِلَّهِ ٱلْمَكْرُ جَمِيعًا ۖ يَعْلَمُ مَا تَكْسِبُ كُلُّ نَفْسٍ ۗ وَسَيَعْلَمُ ٱلْكُفَّٰرُ لِمَنْ عُقْبَى ٱلدَّارِ",
+      "transliteration": "Wa qad makaral-lażīna min qablihim fa lillāhil-makru jamī‘ā(n), ya‘lamu mā taksibu kullu nafs(in), wa saya‘lamul-kuffāru liman ‘uqbad-dār(i)."
+    },
+    {
+      "ayah": 43,
+      "text": "وَيَقُولُ ٱلَّذِينَ كَفَرُوا۟ لَسْتَ مُرْسَلًا ۚ قُلْ كَفَىٰ بِٱللَّهِ شَهِيدًۢا بَيْنِى وَبَيْنَكُمْ وَمَنْ عِندَهُۥ عِلْمُ ٱلْكِتَٰبِ",
+      "transliteration": "Wa yaqūlul-lażīna kafarū lasta mursalā(n), qul kafā billāhi syahīdam bainī wa bainakum, wa man ‘indahū ‘ilmul-kitāb(i)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

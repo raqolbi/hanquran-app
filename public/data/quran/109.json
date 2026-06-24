@@ -1,0 +1,44 @@
+{
+  "id": 109,
+  "name_ar": "الكافرون",
+  "name_simple": "Al-Kaafiroon",
+  "name_en": "The Disbelievers",
+  "meaning": "Orang-Orang kafir",
+  "description": "Surat Al Kaafiruun terdiri atas 6 ayat, termasuk golongan surat-surat Makkiyyah, diturunkan sesudah surat Al Maa'uun. Dinamai Al Kaafiruun (orang-orang kafir), diambil dari perkataan Al Kaafiruun yang terdapat pada ayat pertama surat ini.",
+  "revelation_place": "meccan",
+  "ayah_count": 6,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ قُلْ يَٰٓأَيُّهَا ٱلْكَٰفِرُونَ",
+      "transliteration": "Qul yā ayyuhal-kāfirūn(a)."
+    },
+    {
+      "ayah": 2,
+      "text": "لَآ أَعْبُدُ مَا تَعْبُدُونَ",
+      "transliteration": "Lā a‘budu mā ta‘budūn(a)."
+    },
+    {
+      "ayah": 3,
+      "text": "وَلَآ أَنتُمْ عَٰبِدُونَ مَآ أَعْبُدُ",
+      "transliteration": "Wa lā antum ‘ābidūna mā a‘bud(u)."
+    },
+    {
+      "ayah": 4,
+      "text": "وَلَآ أَنَا۠ عَابِدٌ مَّا عَبَدتُّمْ",
+      "transliteration": "Wa lā ana ‘ābidum mā ‘abattum."
+    },
+    {
+      "ayah": 5,
+      "text": "وَلَآ أَنتُمْ عَٰبِدُونَ مَآ أَعْبُدُ",
+      "transliteration": "Wa lā antum ‘ābidūna mā a‘bud(u)."
+    },
+    {
+      "ayah": 6,
+      "text": "لَكُمْ دِينُكُمْ وَلِىَ دِينِ",
+      "transliteration": "Lakum dīnukum wa liya dīn(i)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

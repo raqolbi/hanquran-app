@@ -1,0 +1,69 @@
+{
+  "id": 93,
+  "name_ar": "الضحى",
+  "name_simple": "Ad-Dhuhaa",
+  "name_en": "The Morning Hours",
+  "meaning": "Duha",
+  "description": "Surat ini terdiri atas 11 ayat, termasuk golongan surat Makiyyah dan diturunkan sesudah surat Al Fajr. Nama Adh Dhuhaa diambil dari kata yang terdapat pada ayat pertama, artinya : waktu matahari sepenggalahan naik.",
+  "revelation_place": "meccan",
+  "ayah_count": 11,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وَٱلضُّحَىٰ",
+      "transliteration": "Waḍ-ḍuḥā."
+    },
+    {
+      "ayah": 2,
+      "text": "وَٱلَّيْلِ إِذَا سَجَىٰ",
+      "transliteration": "Wal-laili iżā sajā."
+    },
+    {
+      "ayah": 3,
+      "text": "مَا وَدَّعَكَ رَبُّكَ وَمَا قَلَىٰ",
+      "transliteration": "Mā wadda‘aka rabbuka wa mā qalā."
+    },
+    {
+      "ayah": 4,
+      "text": "وَلَلْـَٔاخِرَةُ خَيْرٌ لَّكَ مِنَ ٱلْأُولَىٰ",
+      "transliteration": "Wa lal-ākhiratu khairul laka minal-ūlā."
+    },
+    {
+      "ayah": 5,
+      "text": "وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَىٰٓ",
+      "transliteration": "Wa lasaufa yu‘ṭīka rabbuka fa tarḍā."
+    },
+    {
+      "ayah": 6,
+      "text": "أَلَمْ يَجِدْكَ يَتِيمًا فَـَٔاوَىٰ",
+      "transliteration": "Alam yajidka yatīman fa āwā."
+    },
+    {
+      "ayah": 7,
+      "text": "وَوَجَدَكَ ضَآلًّا فَهَدَىٰ",
+      "transliteration": "Wa wajadaka ḍāllan fa hadā."
+    },
+    {
+      "ayah": 8,
+      "text": "وَوَجَدَكَ عَآئِلًا فَأَغْنَىٰ",
+      "transliteration": "Wa wajadaka ‘ā'ilan fa agnā."
+    },
+    {
+      "ayah": 9,
+      "text": "فَأَمَّا ٱلْيَتِيمَ فَلَا تَقْهَرْ",
+      "transliteration": "Fa ammal-yatīma falā taqhar."
+    },
+    {
+      "ayah": 10,
+      "text": "وَأَمَّا ٱلسَّآئِلَ فَلَا تَنْهَرْ",
+      "transliteration": "Wa ammas-sā'ila falā tanhar."
+    },
+    {
+      "ayah": 11,
+      "text": "وَأَمَّا بِنِعْمَةِ رَبِّكَ فَحَدِّثْ",
+      "transliteration": "Wa ammā bini‘mati rabbika fa ḥaddiṡ."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

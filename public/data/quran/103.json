@@ -1,0 +1,29 @@
+{
+  "id": 103,
+  "name_ar": "العصر",
+  "name_simple": "Al-Asr",
+  "name_en": "The Declining Day, Epoch",
+  "meaning": "Masa",
+  "description": "Surat Al 'Ashr terdiri atas 3 ayat, termasuk golongan surat-surat Makkiyyah, diturunkan sesudah surat Alam Nasyrah. Dinamai Al 'Ashr (masa) diambil dari perkataan Al 'Ashr yang terdapat pada ayat pertama surat ini.",
+  "revelation_place": "meccan",
+  "ayah_count": 3,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وَٱلْعَصْرِ",
+      "transliteration": "Wal-‘aṣr(i)."
+    },
+    {
+      "ayah": 2,
+      "text": "إِنَّ ٱلْإِنسَٰنَ لَفِى خُسْرٍ",
+      "transliteration": "Innal-insāna lafī khusr(in)."
+    },
+    {
+      "ayah": 3,
+      "text": "إِلَّا ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّٰلِحَٰتِ وَتَوَاصَوْا۟ بِٱلْحَقِّ وَتَوَاصَوْا۟ بِٱلصَّبْرِ",
+      "transliteration": "Illal-lażīna āmanū wa ‘amiluṣ-ṣāliḥāti wa tawāṣau bil-ḥaqq(i), wa tawāṣau biṣ-ṣabr(i)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

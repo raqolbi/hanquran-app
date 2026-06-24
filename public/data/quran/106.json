@@ -1,0 +1,34 @@
+{
+  "id": 106,
+  "name_ar": "قريش",
+  "name_simple": "Quraish",
+  "name_en": "Quraysh",
+  "meaning": "Quraisy",
+  "description": "Surat ini terdiri atas 4 ayat, termasuk golongan surat-surat Makkiyyah dan diturunkan sesudah surat At Tiin. Nama Quraisy diambil dari kata Quraisy yang terdapat pada ayat pertama, artinya suku Quraisy. Suku Quraisy adalah suku yang mendapat kehormatan untuk memelihara Ka'bah.",
+  "revelation_place": "meccan",
+  "ayah_count": 4,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ لِإِيلَٰفِ قُرَيْشٍ",
+      "transliteration": "Li'īlāfi quraisy(in)."
+    },
+    {
+      "ayah": 2,
+      "text": "إِۦلَٰفِهِمْ رِحْلَةَ ٱلشِّتَآءِ وَٱلصَّيْفِ",
+      "transliteration": "´lāfihim riḥlatasy-syitā'i waṣ-ṣaif(i)."
+    },
+    {
+      "ayah": 3,
+      "text": "فَلْيَعْبُدُوا۟ رَبَّ هَٰذَا ٱلْبَيْتِ",
+      "transliteration": "Falya‘budū rabba hāżal-bait(i)."
+    },
+    {
+      "ayah": 4,
+      "text": "ٱلَّذِىٓ أَطْعَمَهُم مِّن جُوعٍ وَءَامَنَهُم مِّنْ خَوْفٍۭ",
+      "transliteration": "Allażī aṭ‘amahum min jū‘(in), wa āmanahum min khauf(in)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

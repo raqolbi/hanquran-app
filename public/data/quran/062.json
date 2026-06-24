@@ -1,0 +1,69 @@
+{
+  "id": 62,
+  "name_ar": "الجمعة",
+  "name_simple": "Al-Jumu'a",
+  "name_en": "Friday",
+  "meaning": "Jumat",
+  "description": "Surat Al Jumu'ah ini terdiri atas 11 ayat, termasuk golongan-golongan surat-surat Madaniyyah dan diturunkan sesudah surat Ash Shaf. Nama surat Al Jumu'ah diambil dari kata Al Jumu'ah yang terdapat pada ayat 9 surat ini yang artinya: hari Jum'at.",
+  "revelation_place": "medinan",
+  "ayah_count": 11,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ يُسَبِّحُ لِلَّهِ مَا فِى ٱلسَّمَٰوَٰتِ وَمَا فِى ٱلْأَرْضِ ٱلْمَلِكِ ٱلْقُدُّوسِ ٱلْعَزِيزِ ٱلْحَكِيمِ",
+      "transliteration": "Yusabbiḥu lillāhi mā fis-samāwāti wa mā fil-arḍil-malikil-quddūsil-‘azīzil-ḥakīm(i)."
+    },
+    {
+      "ayah": 2,
+      "text": "هُوَ ٱلَّذِى بَعَثَ فِى ٱلْأُمِّيِّـۧنَ رَسُولًا مِّنْهُمْ يَتْلُوا۟ عَلَيْهِمْ ءَايَٰتِهِۦ وَيُزَكِّيهِمْ وَيُعَلِّمُهُمُ ٱلْكِتَٰبَ وَٱلْحِكْمَةَ وَإِن كَانُوا۟ مِن قَبْلُ لَفِى ضَلَٰلٍ مُّبِينٍ",
+      "transliteration": "Huwal-lażī ba‘aṡa fil-ummiyyīna rasūlam minhum yatlū ‘alaihim āyātihī wa yuzakkīhim wa yu‘allimuhumul-kitāba wal-ḥikmata wa in kānū min qablu lafī ḍalālim mubīn(in)."
+    },
+    {
+      "ayah": 3,
+      "text": "وَءَاخَرِينَ مِنْهُمْ لَمَّا يَلْحَقُوا۟ بِهِمْ ۚ وَهُوَ ٱلْعَزِيزُ ٱلْحَكِيمُ",
+      "transliteration": "Wa ākharīna minhum lammā yalḥaqū bihim, wa huwal-‘azīzul-ḥakīm(u)."
+    },
+    {
+      "ayah": 4,
+      "text": "ذَٰلِكَ فَضْلُ ٱللَّهِ يُؤْتِيهِ مَن يَشَآءُ ۚ وَٱللَّهُ ذُو ٱلْفَضْلِ ٱلْعَظِيمِ",
+      "transliteration": "Żālika faḍlullāhi yu'tīhi may yasyā'(u), wallāhu żul-faḍlil-‘aẓīm(i)."
+    },
+    {
+      "ayah": 5,
+      "text": "مَثَلُ ٱلَّذِينَ حُمِّلُوا۟ ٱلتَّوْرَىٰةَ ثُمَّ لَمْ يَحْمِلُوهَا كَمَثَلِ ٱلْحِمَارِ يَحْمِلُ أَسْفَارًۢا ۚ بِئْسَ مَثَلُ ٱلْقَوْمِ ٱلَّذِينَ كَذَّبُوا۟ بِـَٔايَٰتِ ٱللَّهِ ۚ وَٱللَّهُ لَا يَهْدِى ٱلْقَوْمَ ٱلظَّٰلِمِينَ",
+      "transliteration": "Maṡalul-lażīna ḥummilut-taurāta ṡumma lam yaḥmilūhā kamaṡalil-ḥimāri yaḥmilu asfārā(n), bi'sa maṡalul-qaumil-lażīna każżabū bi'āyātillāh(i), wallāhu lā yahdil-qaumaẓ-ẓālimīn(a)."
+    },
+    {
+      "ayah": 6,
+      "text": "قُلْ يَٰٓأَيُّهَا ٱلَّذِينَ هَادُوٓا۟ إِن زَعَمْتُمْ أَنَّكُمْ أَوْلِيَآءُ لِلَّهِ مِن دُونِ ٱلنَّاسِ فَتَمَنَّوُا۟ ٱلْمَوْتَ إِن كُنتُمْ صَٰدِقِينَ",
+      "transliteration": "Qul yā ayyuhal-lażīna hādū in za‘amtum annakum auliyā'u lillāhi min dūnin-nāsi fa tamannawul-mauta in kuntum ṣādiqīn(a)."
+    },
+    {
+      "ayah": 7,
+      "text": "وَلَا يَتَمَنَّوْنَهُۥٓ أَبَدًۢا بِمَا قَدَّمَتْ أَيْدِيهِمْ ۚ وَٱللَّهُ عَلِيمٌۢ بِٱلظَّٰلِمِينَ",
+      "transliteration": "Wa lā yatamannaunahū abadam bimā qaddamat aidīhim, wallāhu ‘alīmum biẓ-ẓālimīn(a)."
+    },
+    {
+      "ayah": 8,
+      "text": "قُلْ إِنَّ ٱلْمَوْتَ ٱلَّذِى تَفِرُّونَ مِنْهُ فَإِنَّهُۥ مُلَٰقِيكُمْ ۖ ثُمَّ تُرَدُّونَ إِلَىٰ عَٰلِمِ ٱلْغَيْبِ وَٱلشَّهَٰدَةِ فَيُنَبِّئُكُم بِمَا كُنتُمْ تَعْمَلُونَ",
+      "transliteration": "Qul innal-mautal-lażī tafirrūna minhu fa innahū mulāqīkum ṡumma turaddūna ilā ‘ālimil-gaibi wasy-syahādati fa yunabbi'ukum bimā kuntum ta‘malūn(a)."
+    },
+    {
+      "ayah": 9,
+      "text": "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ إِذَا نُودِىَ لِلصَّلَوٰةِ مِن يَوْمِ ٱلْجُمُعَةِ فَٱسْعَوْا۟ إِلَىٰ ذِكْرِ ٱللَّهِ وَذَرُوا۟ ٱلْبَيْعَ ۚ ذَٰلِكُمْ خَيْرٌ لَّكُمْ إِن كُنتُمْ تَعْلَمُونَ",
+      "transliteration": "Yā ayyuhal-lażīna āmanū iżā nūdiya liṣ-ṣalāti miy yaumil-jumu‘ati fas‘au ilā żikrillāhi wa żarul-bai‘(a), żālikum khairul lakum in kuntum ta‘lamūn(a)."
+    },
+    {
+      "ayah": 10,
+      "text": "فَإِذَا قُضِيَتِ ٱلصَّلَوٰةُ فَٱنتَشِرُوا۟ فِى ٱلْأَرْضِ وَٱبْتَغُوا۟ مِن فَضْلِ ٱللَّهِ وَٱذْكُرُوا۟ ٱللَّهَ كَثِيرًا لَّعَلَّكُمْ تُفْلِحُونَ",
+      "transliteration": "Fa iżā quḍiyatiṣ-ṣalātu fantasyirū fil-arḍi wabtagū min faḍlillāhi ważkurullāha kaṡīral la‘allakum tufliḥūn(a)."
+    },
+    {
+      "ayah": 11,
+      "text": "وَإِذَا رَأَوْا۟ تِجَٰرَةً أَوْ لَهْوًا ٱنفَضُّوٓا۟ إِلَيْهَا وَتَرَكُوكَ قَآئِمًا ۚ قُلْ مَا عِندَ ٱللَّهِ خَيْرٌ مِّنَ ٱللَّهْوِ وَمِنَ ٱلتِّجَٰرَةِ ۚ وَٱللَّهُ خَيْرُ ٱلرَّٰزِقِينَ",
+      "transliteration": "Wa iżā ra'au tijāratan au lahwaninfaḍḍū ilaihā wa tarakūka qā'imā(n), qul mā ‘indallāhi khairum minal-lahwi wa minat-tijārah(ti), wallāhu khairur-rāziqīn(a)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

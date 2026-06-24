@@ -1,0 +1,54 @@
+{
+  "id": 99,
+  "name_ar": "الزلزلة",
+  "name_simple": "Az-Zalzala",
+  "name_en": "The Earthquake",
+  "meaning": "Guncangan",
+  "description": "Surat ini terdiri atas 8 ayat, termasuk golongan surat-surat Madaniyyah diturunkan sesudah surat An Nisaa'. Nama Al Zalzalah diambil dari kata: Zilzaal yang terdapat pada ayat pertama surat ini yang berarti goncangan.",
+  "revelation_place": "medinan",
+  "ayah_count": 8,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ إِذَا زُلْزِلَتِ ٱلْأَرْضُ زِلْزَالَهَا",
+      "transliteration": "Iżā zulzilatil-arḍu zilzālahā."
+    },
+    {
+      "ayah": 2,
+      "text": "وَأَخْرَجَتِ ٱلْأَرْضُ أَثْقَالَهَا",
+      "transliteration": "Wa akhrajatil-arḍu aṡqālahā."
+    },
+    {
+      "ayah": 3,
+      "text": "وَقَالَ ٱلْإِنسَٰنُ مَا لَهَا",
+      "transliteration": "Wa qālal-insānu mā lahā."
+    },
+    {
+      "ayah": 4,
+      "text": "يَوْمَئِذٍ تُحَدِّثُ أَخْبَارَهَا",
+      "transliteration": "Yauma'iżin tuḥaddiṡu akhbārahā."
+    },
+    {
+      "ayah": 5,
+      "text": "بِأَنَّ رَبَّكَ أَوْحَىٰ لَهَا",
+      "transliteration": "Bi'anna rabbaka auḥā lahā."
+    },
+    {
+      "ayah": 6,
+      "text": "يَوْمَئِذٍ يَصْدُرُ ٱلنَّاسُ أَشْتَاتًا لِّيُرَوْا۟ أَعْمَٰلَهُمْ",
+      "transliteration": "Yauma'iżiy yaṣdurun-nāsu asytātā(n), liyurau a‘mālahum."
+    },
+    {
+      "ayah": 7,
+      "text": "فَمَن يَعْمَلْ مِثْقَالَ ذَرَّةٍ خَيْرًا يَرَهُۥ",
+      "transliteration": "Famay ya‘mal miṡqāla żarratin khairay yarah(ū)."
+    },
+    {
+      "ayah": 8,
+      "text": "وَمَن يَعْمَلْ مِثْقَالَ ذَرَّةٍ شَرًّا يَرَهُۥ",
+      "transliteration": "Wa may ya‘mal miṡqāla żarratin syarray yarah(ū)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}

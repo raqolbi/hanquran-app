@@ -1,0 +1,29 @@
+{
+  "id": 108,
+  "name_ar": "الكوثر",
+  "name_simple": "Al-Kawthar",
+  "name_en": "Abundance",
+  "meaning": "Pemberian Yang Banyak",
+  "description": "Surat Al Kautsar terdiri atas 3 ayat, termasuk golongan surat-surat Makkiyyah diturunkan sesudah surat Al 'Aadiyaat. Dinamai Al Kautsar (nikmat yang banyak) diambil dari perkataan Al Kautsar yang terdapat pada ayat pertama surat ini.\nSurat ini sebagai penghibur hati Nabi Muhammad s.a.w.",
+  "revelation_place": "meccan",
+  "ayah_count": 3,
+  "verses": [
+    {
+      "ayah": 1,
+      "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ إِنَّآ أَعْطَيْنَٰكَ ٱلْكَوْثَرَ",
+      "transliteration": "Innā a‘ṭainākal-kauṡar(a)."
+    },
+    {
+      "ayah": 2,
+      "text": "فَصَلِّ لِرَبِّكَ وَٱنْحَرْ",
+      "transliteration": "Faṣalli lirabbika wanḥar."
+    },
+    {
+      "ayah": 3,
+      "text": "إِنَّ شَانِئَكَ هُوَ ٱلْأَبْتَرُ",
+      "transliteration": "Inna syāni'aka huwal-abtar(u)."
+    }
+  ],
+  "word_by_word": {},
+  "tafsir": {}
+}
