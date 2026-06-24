@@ -70,6 +70,8 @@
     "exitAriaLabel": "Exit Focus Mode",
     "ayahCounter": "Verse {current} / {total}",
     "openRepeatSettings": "Open repeat settings",
+    "repeatSurahDetailHint": "Automatic repeat is available on the Surah page.",
+    "repeatAutoSurahDetailHint": "Automatic repeat is available on the Surah page. Audio can be played here.",
     "previousAyah": "Previous Verse",
     "nextAyah": "Next Verse"
   },

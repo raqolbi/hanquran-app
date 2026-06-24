@@ -762,17 +762,18 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │                                      │
 │ ───────────●───────────             │
 │                                      │
-│           ▶      ❚❚                 │
+│      ⏮        ▶/⏸        ⏭          │
+│   (ikon sama dengan AudioPlayer)     │
 │                                      │
 │ Repeat                              │
 │ [🐥 5x ▼]                            │
 │                                      │
 │ 🟢 Ayat Aktif                        │
 │ Ayat 1 • 4x tersisa                 │
-│                                      │
-│ [← Ayat Sebelum] [Ayat Berikut →]   │
 └──────────────────────────────────────┘
 ```
+
+> **Navigasi ayat:** `⏮` / `⏭` berada di baris kontrol audio (`FocusModePlayer`), **bukan** tombol teks terpisah — selaras `AudioPlayer` di Surah Detail (`docs/12-component-spec.md` §16).
 
 ### Repeat Range Ayat
 
@@ -788,7 +789,8 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │                                      │
 │ ───────────●───────────             │
 │                                      │
-│           ▶      ❚❚                 │
+│      ⏮        ▶/⏸        ⏭          │
+│   (ikon sama dengan AudioPlayer)     │
 │                                      │
 │ Repeat                              │
 │ [🐥 5x ▼]                            │
@@ -796,8 +798,6 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │ 🟢 Range Ayat 1-5                    │
 │ Siklus 2 / 5                         │
 │ Sedang di Ayat 3                     │
-│                                      │
-│ [← Ayat Sebelum] [Ayat Berikut →]   │
 └──────────────────────────────────────┘
 ```
 
@@ -815,7 +815,8 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │                                      │
 │ ───────────●───────────             │
 │                                      │
-│           ▶      ❚❚                 │
+│      ⏮        ▶/⏸        ⏭          │
+│   (ikon sama dengan AudioPlayer)     │
 │                                      │
 │ Repeat                              │
 │ [🐥 5x ▼]                            │
@@ -823,8 +824,6 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │ 🟢 Surat Al-Ikhlas                   │
 │ Siklus 2 / 5                         │
 │ Sedang di Ayat 3 dari 4              │
-│                                      │
-│ [← Ayat Sebelum] [Ayat Berikut →]   │
 └──────────────────────────────────────┘
 ```
 
@@ -845,15 +844,13 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │                                                                  │
 │                ━━━━━━━━━●━━━━━━━━━                               │
 │                                                                  │
-│                      ▶       ❚❚                                 │
+│                   ⏮      ▶/⏸      ⏭                             │
 │                                                                  │
 │        Repeat                                                    │
 │        [🐥 5x ▼]                                                 │
 │                                                                  │
 │        🟢 Ayat Aktif                                             │
 │        Ayat 1 • 4x tersisa                                       │
-│                                                                  │
-│        [← Ayat Sebelum]      [Ayat Berikut →]                    │
 │                                                                  │
 └──────────────────────────────────────────────────────────────────┘
 ```
@@ -873,7 +870,7 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │                                                                  │
 │                ━━━━━━━━━●━━━━━━━━━                               │
 │                                                                  │
-│                      ▶       ❚❚                                 │
+│                   ⏮      ▶/⏸      ⏭                             │
 │                                                                  │
 │        Repeat                                                    │
 │        [🐥 5x ▼]                                                 │
@@ -881,8 +878,6 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │        🟢 Range Ayat 1-5                                          │
 │        Siklus 2 / 5                                              │
 │        Sedang di Ayat 3                                          │
-│                                                                  │
-│        [← Ayat Sebelum]      [Ayat Berikut →]                    │
 │                                                                  │
 └──────────────────────────────────────────────────────────────────┘
 ```
@@ -902,7 +897,7 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │                                                                  │
 │                ━━━━━━━━━●━━━━━━━━━                               │
 │                                                                  │
-│                      ▶       ❚❚                                 │
+│                   ⏮      ▶/⏸      ⏭                             │
 │                                                                  │
 │        Repeat                                                    │
 │        [🐥 5x ▼]                                                 │
@@ -910,8 +905,6 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │        🟢 Surat Al-Ikhlas                                         │
 │        Siklus 2 / 5                                              │
 │        Sedang di Ayat 3 dari 4                                   │
-│                                                                  │
-│        [← Ayat Sebelum]      [Ayat Berikut →]                    │
 │                                                                  │
 └──────────────────────────────────────────────────────────────────┘
 ```

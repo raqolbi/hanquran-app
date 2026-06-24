@@ -1388,20 +1388,19 @@ Top Bar (Keluar + Ayat N / Total)
 
 Quran Text (48px / 56px)
 
-Word Highlight
-
 Progress
 
 FocusModePlayer
+  ├── Previous Ayah (ikon ⏮, sama AudioPlayer)
+  ├── Play / Pause
+  └── Next Ayah (ikon ⏭, sama AudioPlayer)
 
 RepeatSelector
 
 RepeatStatus
-
-Tombol Ayat Sebelum
-
-Tombol Ayat Berikut
 ```
+
+> Navigasi ayat **tidak** memakai tombol teks penuh terpisah di bawah footer — ikon prev/next digabung dalam `FocusModePlayer`.
 
 ---
 
@@ -1448,9 +1447,7 @@ saat teks Arab terlihat.
 
 ## Purpose
 
-Player khusus Focus Mode.
-
-Versi lebih ringkas dari AudioPlayer.
+Player khusus Focus Mode — **baris kontrol audio selaras `AudioPlayer`** (progress + ⏮ play/pause ⏭), tanpa chrome sticky bawah.
 
 ---
 
@@ -1459,14 +1456,11 @@ Versi lebih ringkas dari AudioPlayer.
 ```ts
 interface FocusModePlayerProps {
   isPlaying: boolean
-  currentTime: number
-  duration: number
+  progress: number
 
   onPlayPause: () => void
-  onPreviousAyah: () => void
-  onNextAyah: () => void
-
-  onSeek: (time: number) => void
+  onPrevious?: () => void
+  onNext?: () => void
 }
 ```
 
@@ -1475,10 +1469,13 @@ interface FocusModePlayerProps {
 ## Controls
 
 ```text
-Previous Ayah
-Play / Pause
-Next Ayah
+Baris tunggal (gap 24px, sama AudioPlayer §9):
+  SkipBack (⏮) — aria-label dari namespace `surah.previousAyah`
+  Play / Pause — tombol bulat primary
+  SkipForward (⏭) — aria-label dari namespace `surah.nextAyah`
 ```
+
+Ikon: `lucide-react` `SkipBack` / `SkipForward`, ukuran 20px. Tombol samping: `rounded-lg p-2 hover:bg-secondary`.
 
 ---
 
