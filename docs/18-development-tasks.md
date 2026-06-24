@@ -85,7 +85,6 @@ Codebase aktif berada di `hanquran-app/` (Next.js App Router). **Konten Quran** 
 
 - Persist posisi audio terakhir
 - Word-by-word highlight (Post-MVP)
-- PWA manifest & install prompt (Phase 6)
 - E2E / verifikasi offline playback
 
 ---
@@ -125,9 +124,9 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 `services/quran/data-loader.ts` | `mappers.ts` | `quran-service.ts` | `audio-service.ts` | `audio-config.ts` | `paths.ts` | `app-types.ts` | `dataset-types.ts` | `index.ts`
 
-## Hooks (13 file)
+## Hooks (14 file)
 
-`hooks/use-media-query.ts` | `use-surah-list.ts` | `use-surah.ts` | `use-reciters.ts` | `use-ayah-audio.ts` | `use-reading-display.ts` | `use-surah-detail-bottom-inset.ts` | `use-surah-repeat-playback.ts` | `use-arabic-text-size.ts` | `use-preferred-reciter.ts` | `use-surah-offline-download.ts` | `use-persist-last-viewed.ts` | `use-is-client.ts`
+`hooks/use-media-query.ts` | `use-surah-list.ts` | `use-surah.ts` | `use-reciters.ts` | `use-ayah-audio.ts` | `use-reading-display.ts` | `use-surah-detail-bottom-inset.ts` | `use-surah-repeat-playback.ts` | `use-arabic-text-size.ts` | `use-preferred-reciter.ts` | `use-surah-offline-download.ts` | `use-persist-last-viewed.ts` | `use-is-client.ts` | `use-install-prompt.ts`
 
 ## i18n (2 file + messages)
 
@@ -137,13 +136,13 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 `stores/audioStore.ts` | `userStore.ts` | `repeatStore.ts` | `offlineStore.ts` | `index.ts`
 
-## Utilitas (6 file)
+## Utilitas (7 file)
 
-`lib/routes.ts` | `lib/repeat-options.ts` | `lib/surah-detail-chrome.ts` | `lib/utils.ts` | `lib/arabic-text-size.ts` | `lib/translation-language.ts` | `lib/format-bytes.ts`
+`lib/routes.ts` | `lib/repeat-options.ts` | `lib/surah-detail-chrome.ts` | `lib/utils.ts` | `lib/arabic-text-size.ts` | `lib/translation-language.ts` | `lib/format-bytes.ts` | `lib/install-prompt.ts`
 
-## Aset Branding (2 aset)
+## Aset Branding & PWA (5 aset)
 
-`public/branding/logo.png` | `public/branding/logo-with-text.png`
+`public/branding/logo.png` | `public/branding/logo-with-text.png` | `public/manifest.json` | `public/offline.html` | `public/icons/icon-192.png` | `public/icons/icon-512.png`
 
 **Total item inventaris: ~50+** (UI + service + hooks)
 
@@ -153,9 +152,9 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 # ✅ 4. Completed Tasks
 
-**Total development task yang benar-benar selesai: 54**
+**Total development task yang benar-benar selesai: 58**
 
-Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **141 test passing**).
+Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **156 test passing**).
 
 ### Phase 0 — selesai (7/7, 24 Juni 2026) ✅
 
@@ -209,6 +208,19 @@ Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **141 test passing**).
 
 1. ✅ Beranda — filter Favorit & toggle heart via `useUserStore.toggleFavorite` (Dexie `favorites`, key `surahId`)
 2. ✅ Surah Detail — tombol favorit di header ter-wire ke store yang sama
+
+### PWA Manifest (24 Juni 2026)
+
+1. ✅ `public/manifest.json` — metadata installable PWA (`standalone`, `theme_color`, ikon)
+2. ✅ Link manifest & `themeColor` di `app/layout.tsx` selaras design system (`#0F766E`)
+3. ✅ Ikon PWA sementara `public/icons/icon-192.png` & `icon-512.png` (derivasi logo branding)
+4. ✅ `useInstallPrompt` + `InstallBanner` — deteksi `beforeinstallprompt` & petunjuk iOS Safari
+
+### Offline Shell (24 Juni 2026)
+
+1. ✅ `public/offline.html` — halaman fallback statis (Bahasa Indonesia, branding, muat ulang)
+2. ✅ Cache `hanquran-shell-v1` — precache offline shell + strategi network-first navigasi di `sw.js`
+3. ✅ Prefetch `/offline.html` di `app/layout.tsx`
 
 ### Store & offline (terintegrasi)
 
@@ -718,29 +730,33 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
 
 ### Wajib (P0)
 
-- [ ] [NEW] Buat web app manifest (`manifest.json`)
+- [x] [NEW] Buat web app manifest (`manifest.json`)
   - Tujuan: Definisikan metadata aplikasi, ikon, start URL
   - File: `public/manifest.json`, `app/layout.tsx` (link manifest)
   - Ketergantungan: None
   - Prioritas: P0
+  - **Ringkasan:** `manifest.json` + `metadata.manifest`; `themeColor` `#0F766E` / `#0F172A`
 
-- [ ] [NEW] Buat & tambahkan ikon PWA (minimal 192×192 dan 512×512)
+- [x] [NEW] Buat & tambahkan ikon PWA (minimal 192×192 dan 512×512)
   - Tujuan: Tampilan install prompt & homescreen
   - File: `public/icons/`
   - Ketergantungan: Aset branding tersedia
   - Prioritas: P0
+  - **Ringkasan:** `icon-192.png` & `icon-512.png` dari `public/branding/logo.png` (derivasi sementara MVP)
 
-- [ ] [NEW] Tambah deteksi installability & UI install prompt
+- [x] [NEW] Tambah deteksi installability & UI install prompt
   - Tujuan: Sarankan pengguna untuk menginstal aplikasi
-  - File: `hooks/useInstallPrompt.ts`, `components/shared/install-banner.tsx`
+  - File: `hooks/use-install-prompt.ts`, `components/shared/install-banner.tsx`, `app/page.tsx`
   - Ketergantungan: Manifest siap
   - Prioritas: P0
+  - **Ringkasan:** `beforeinstallprompt` + banner Beranda; petunjuk manual Safari iOS; dismiss 7 hari via `localStorage`
 
-- [ ] [UPDATE] Pastikan offline shell dapat dimuat (basic HTML + fallback UI)
+- [x] [UPDATE] Pastikan offline shell dapat dimuat (basic HTML + fallback UI)
   - Tujuan: Aplikasi berjalan meski jaringan gagal saat pertama kali load
-  - File: `app/layout.tsx`, `public/sw.js`
+  - File: `app/layout.tsx`, `public/sw.js`, `public/offline.html`, `public/sw-helpers.js`
   - Ketergantungan: Service Worker siap
   - Prioritas: P0
+  - **Ringkasan:** `hanquran-shell-v1` precache `/offline.html`; navigasi network-first dengan fallback shell statis
 
 - [ ] [TEST] Uji PWA di mobile (iOS Safari, Android Chrome)
   - Tujuan: Verifikasi install & perilaku offline di perangkat nyata
@@ -761,7 +777,7 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
   - File: `app/layout.tsx` (meta tags)
   - Ketergantungan: Setup PWA
   - Prioritas: P1
-  - **Catatan:** `viewport.themeColor` sudah ada di `app/layout.tsx`; belum terhubung ke `manifest.json`
+  - **Catatan:** `viewport.themeColor` & `manifest.json` memakai `#0F766E` (light) / `#0F172A` (dark)
 
 ### Nice to Have (P2)
 
@@ -995,10 +1011,10 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [ ] Pemutaran offline berhasil diuji (E2E / manual)
 
 ### Phase 6 — PWA
-- [ ] manifest.json dibuat
-- [ ] Ikon PWA dibuat & ditambahkan
-- [ ] Install prompt berfungsi
-- [ ] Offline shell dapat dimuat
+- [x] manifest.json dibuat
+- [x] Ikon PWA dibuat & ditambahkan (`public/icons/`)
+- [x] Install prompt berfungsi (`InstallBanner` + `useInstallPrompt`)
+- [x] Offline shell dapat dimuat (`public/offline.html` + `hanquran-shell-v1`)
 - [ ] Mobile PWA testing selesai
 
 ### Phase 7 — Testing

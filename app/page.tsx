@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { Header } from '@/components/header';
 import { ContinueReadingSection } from '@/components/continue-reading';
+import { InstallBanner } from '@/components/shared/install-banner';
 import { SearchInput } from '@/components/search-input';
 import { FilterChips } from '@/components/filter-chips';
 import { SurahCard } from '@/components/surah-card';
@@ -55,6 +56,8 @@ export default function Home() {
       <main className="relative z-10 -mt-3 rounded-t-[1.75rem] bg-background pb-8 shadow-[0_-4px_24px_rgba(0,0,0,0.05)] sm:pb-12 sm:-mt-4 sm:rounded-t-[2rem]">
         <div className="max-w-3xl mx-auto space-y-6 px-4 pt-8 sm:px-6 sm:pt-10">
           <ContinueReadingSection />
+
+          <InstallBanner />
 
           <SearchInput onSearch={setSearchQuery} />
 

@@ -7,6 +7,12 @@ type RequestCategory = 'static' | 'data' | 'audio' | 'bypass';
 
 type SwHelpers = {
   AUDIO_CDN_HOST: string;
+  isNavigationRequest: (request: Request) => boolean;
+  networkFirstNavigation: (
+    request: Request,
+    shellCacheName: string,
+    offlinePath: string,
+  ) => Promise<Response>;
   getRequestCategory: (url: URL, appOrigin: string) => RequestCategory;
   cacheFirst: (request: Request, cacheName: string) => Promise<Response>;
   staleWhileRevalidate: (
@@ -93,6 +99,21 @@ describe('SwHelpers.getRequestCategory', () => {
     ).toBe('static');
   });
 
+  it('mengklasifikasi offline.html dan manifest sebagai static', () => {
+    expect(
+      helpers.getRequestCategory(
+        new URL(`${APP_ORIGIN}/offline.html`),
+        APP_ORIGIN,
+      ),
+    ).toBe('static');
+    expect(
+      helpers.getRequestCategory(
+        new URL(`${APP_ORIGIN}/manifest.json`),
+        APP_ORIGIN,
+      ),
+    ).toBe('static');
+  });
+
   it('mengabaikan navigasi HTML dan API', () => {
     expect(
       helpers.getRequestCategory(new URL(`${APP_ORIGIN}/surah/1`), APP_ORIGIN),
@@ -103,6 +124,87 @@ describe('SwHelpers.getRequestCategory', () => {
         APP_ORIGIN,
       ),
     ).toBe('bypass');
+  });
+});
+
+describe('SwHelpers.isNavigationRequest', () => {
+  it('mendeteksi mode navigate dan Accept text/html', () => {
+    const { helpers } = loadSwHelpers();
+    const navigate = {
+      mode: 'navigate',
+      headers: new Headers(),
+    } as Request;
+    const htmlAccept = new Request(`${APP_ORIGIN}/surah/1`, {
+      headers: { Accept: 'text/html,application/xhtml+xml' },
+    });
+    const api = new Request(`${APP_ORIGIN}/api/health`, {
+      headers: { Accept: 'application/json' },
+    });
+
+    expect(helpers.isNavigationRequest(navigate)).toBe(true);
+    expect(helpers.isNavigationRequest(htmlAccept)).toBe(true);
+    expect(helpers.isNavigationRequest(api)).toBe(false);
+  });
+});
+
+describe('SwHelpers.networkFirstNavigation', () => {
+  it('mengembalikan respons jaringan dan menyimpan shell saat online', async () => {
+    const network = new Response('<html>ok</html>', {
+      status: 200,
+      headers: { 'Content-Type': 'text/html' },
+    });
+    Object.defineProperty(network, 'type', { value: 'basic' });
+    const cacheStore = {
+      match: vi.fn(async () => undefined),
+      put: vi.fn(async () => undefined),
+    };
+    const fetchFn = vi.fn(async () => network);
+    const { helpers } = loadSwHelpers({
+      caches: { open: vi.fn(async () => cacheStore) },
+      fetch: fetchFn,
+    });
+
+    const request = new Request(`${APP_ORIGIN}/surah/1`, {
+      headers: { Accept: 'text/html' },
+    });
+    const response = await helpers.networkFirstNavigation(
+      request,
+      'hanquran-shell-v1',
+      '/offline.html',
+    );
+
+    expect(response).toBe(network);
+    expect(cacheStore.put).toHaveBeenCalled();
+  });
+
+  it('fallback ke cache shell lalu offline.html saat offline', async () => {
+    const offlinePage = new Response('<html>offline</html>', { status: 200 });
+    const cacheStore = {
+      match: vi.fn(async (key: RequestInfo) => {
+        const url = typeof key === 'string' ? key : key.url;
+        if (url.endsWith('/offline.html')) return offlinePage;
+        return undefined;
+      }),
+      put: vi.fn(),
+    };
+    const fetchFn = vi.fn(async () => {
+      throw new Error('offline');
+    });
+    const { helpers } = loadSwHelpers({
+      caches: { open: vi.fn(async () => cacheStore) },
+      fetch: fetchFn,
+    });
+
+    const request = new Request(`${APP_ORIGIN}/surah/1`, {
+      headers: { Accept: 'text/html' },
+    });
+    const response = await helpers.networkFirstNavigation(
+      request,
+      'hanquran-shell-v1',
+      '/offline.html',
+    );
+
+    expect(response).toBe(offlinePage);
   });
 });
 
