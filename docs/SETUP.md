@@ -6,10 +6,12 @@ Dokumen ini menjelaskan cara menyiapkan lingkungan pengembangan HanQuran untuk d
 
 ## 1. Prasyarat
 
-| Tool | Versi minimum |
-|------|---------------|
-| Node.js | 20 LTS |
-| npm | 10 (terpaket dengan Node) |
+
+| Tool    | Versi minimum             |
+| ------- | ------------------------- |
+| Node.js | 20 LTS                    |
+| npm     | 10 (terpaket dengan Node) |
+
 
 Codebase aplikasi berada di folder `hanquran-app/`. Seluruh perintah di bawah dijalankan dari dalam folder tersebut.
 
@@ -22,21 +24,23 @@ cd hanquran-app
 npm install
 ```
 
-> MVP tidak memerlukan kredensial API eksternal. Konten Quran disajikan dari dataset statis `public/data/*`, audio tilawah dari CDN eksternal (`AYAH_AUDIO_BASE_URL`), dan daftar qari dari `data/reciters.json`. Detail arsitektur data: [`docs/07-api-integration.md`](./07-api-integration.md).
+> MVP tidak memerlukan kredensial API eksternal. Konten Quran disajikan dari dataset statis `public/data/*`, audio tilawah dari CDN eksternal (`AYAH_AUDIO_BASE_URL`), dan daftar qari dari `data/reciters.json`. Detail arsitektur data: `[docs/07-api-integration.md](./07-api-integration.md)`.
 
 ---
 
 ## 3. Perintah yang Tersedia
 
-| Perintah | Fungsi |
-|----------|--------|
-| `npm run dev` | Menjalankan dev server di http://localhost:3000 |
-| `npm run build` | Build produksi (Next.js + Turbopack) |
-| `npm run start` | Menjalankan hasil build produksi |
-| `npm run lint` | Linting dengan ESLint |
-| `npm run typecheck` | Pemeriksaan tipe TypeScript (`tsc --noEmit`) |
-| `npm run test` | Menjalankan unit & integration test (Vitest) |
-| `npm run test:watch` | Menjalankan test dalam mode watch |
+
+| Perintah             | Fungsi                                                                   |
+| -------------------- | ------------------------------------------------------------------------ |
+| `npm run dev`        | Menjalankan dev server di [http://localhost:3000](http://localhost:3000) |
+| `npm run build`      | Build produksi (Next.js + Turbopack)                                     |
+| `npm run start`      | Menjalankan hasil build produksi                                         |
+| `npm run lint`       | Linting dengan ESLint                                                    |
+| `npm run typecheck`  | Pemeriksaan tipe TypeScript (`tsc --noEmit`)                             |
+| `npm run test`       | Menjalankan unit & integration test (Vitest)                             |
+| `npm run test:watch` | Menjalankan test dalam mode watch                                        |
+
 
 ---
 
@@ -44,17 +48,19 @@ npm install
 
 Lihat `docs/20-mvp-freeze.md` Bagian 7. Ringkasan:
 
-| Lapisan | Teknologi |
-|---------|-----------|
-| Framework | Next.js App Router |
-| Bahasa | TypeScript |
-| Styling | Tailwind CSS + shadcn/ui (`@base-ui/react`) |
-| Runtime State | Zustand |
-| Persistent State | Dexie (IndexedDB) |
-| Audio Cache | Cache Storage API (via Service Worker) |
-| Data Source | Dataset statis `public/data/*` + CDN audio tilawah |
-| Testing | Vitest + jsdom + fake-indexeddb |
-| UI i18n | next-intl (`id`, `en`) — lihat `docs/21-i18n-and-locale.md` |
+
+| Lapisan          | Teknologi                                                   |
+| ---------------- | ----------------------------------------------------------- |
+| Framework        | Next.js App Router                                          |
+| Bahasa           | TypeScript                                                  |
+| Styling          | Tailwind CSS + shadcn/ui (`@base-ui/react`)                 |
+| Runtime State    | Zustand                                                     |
+| Persistent State | Dexie (IndexedDB)                                           |
+| Audio Cache      | Cache Storage API (via Service Worker)                      |
+| Data Source      | Dataset statis `public/data/*` + CDN audio tilawah          |
+| Testing          | Vitest + jsdom + fake-indexeddb                             |
+| UI i18n          | next-intl (`id`, `en`) — lihat `docs/21-i18n-and-locale.md` |
+
 
 ---
 
@@ -89,7 +95,7 @@ hanquran-app/
 
 ## 6. Arsitektur Akses Data (Wajib)
 
-**Konten Quran:** Static Dataset — `public/data/*` → `services/quran/` → hooks → UI. Lihat `docs/23-static-dataset-architecture.md`.
+**Konten Quran:** Static Dataset — `public/data/`* → `services/quran/` → hooks → UI. Lihat `docs/23-static-dataset-architecture.md`.
 
 **Data pengguna:** UI → Store (Zustand) → Dexie. Komponen tidak mengakses Dexie secara langsung.
 
@@ -101,7 +107,7 @@ Data pengguna:
   UI → Store (Zustand) → Dexie (services/db/)
 ```
 
-Audio tilawah di-stream dari **CDN audio** (`services/quran/audio-config.ts` → `AYAH_AUDIO_BASE_URL`); metadata qari dari **`data/reciters.json`**.
+Audio tilawah di-stream dari **CDN audio** (`services/quran/audio-config.ts` → `AYAH_AUDIO_BASE_URL`); metadata qari dari `**data/reciters.json`**.
 
 ### Store & Persistensi
 
@@ -149,6 +155,30 @@ Ikuti `CLAUDE.md`:
 - Seluruh dokumentasi & label UI dalam Bahasa Indonesia.
 - Nama file/folder/route/komponen/interface/library tetap bahasa asli.
 - File/folder: `kebab-case`. Komponen React: `PascalCase`. Hooks: `useCamelCase`.
+
+---
+
+## 10. Deploy ke Vercel (staging & production)
+
+HanQuran direncanakan di-host di **Vercel**. Panduan lengkap — branch strategy, preview vs production, checklist QA, rollback:
+
+**[`docs/25-deployment-vercel.md`](./25-deployment-vercel.md)**
+
+Ringkasan cepat:
+
+
+| Lingkungan               | Cara                                                                       |
+| ------------------------ | -------------------------------------------------------------------------- |
+| Preview                  | Otomatis per PR / push branch — uji build production di URL `*.vercel.app` |
+| Production               | Branch `main` — deploy otomatis setelah merge                              |
+| Staging tetap (opsional) | Branch `staging` + subdomain custom                                        |
+
+
+**PWA & offline hanya dapat diuji di deployment production build** (Vercel atau `npm run build && npm start`), bukan `npm run dev`.
+
+Catatan rilis per versi: [`RELEASE.md`](../RELEASE.md) di root proyek.
+
+Analytics custom events: [`docs/analytics.md`](./analytics.md).
 
 ---
 

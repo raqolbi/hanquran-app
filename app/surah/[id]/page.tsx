@@ -19,6 +19,7 @@ import { useReadingDisplay } from '@/hooks/use-reading-display';
 import { useSurahDetailBottomInset } from '@/hooks/use-surah-detail-bottom-inset';
 import { useSurahRepeatPlayback } from '@/hooks/use-surah-repeat-playback';
 import { usePersistLastViewed } from '@/hooks/use-persist-last-viewed';
+import { useTrackSurahOpened } from '@/hooks/use-track-surah-opened';
 import { usePreferredReciterId } from '@/hooks/use-preferred-reciter';
 import { downloadManifestKey } from '@/services/download-manifest-key';
 import { useOfflineStore } from '@/stores/offlineStore';
@@ -55,6 +56,7 @@ function SurahDetailLoaded({
   const toggleFavorite = useUserStore((s) => s.toggleFavorite);
 
   usePersistLastViewed(surah.number, activeAyah);
+  useTrackSurahOpened(surah);
 
   const reciterId = usePreferredReciterId();
   const isOfflineReady =
@@ -105,7 +107,9 @@ function SurahDetailLoaded({
           type={surah.type}
           isFavorited={isFavorited}
           isOfflineReady={isOfflineReady}
-          onToggleFavorite={() => void toggleFavorite(surah.number)}
+          onToggleFavorite={() =>
+            void toggleFavorite(surah.number, { ayahNumber: activeAyah })
+          }
         />
 
         <div className="max-w-3xl mx-auto px-4 pb-4">

@@ -6,6 +6,7 @@ import { initStores } from '@/stores';
 import { AccessibilityProvider } from '@/components/providers/accessibility-provider';
 import { IntlProvider } from '@/components/providers/intl-provider';
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
+import { PwaSplashDismisser } from '@/components/shared/pwa-splash-dismisser';
 import { registerServiceWorker } from '@/lib/register-service-worker';
 
 interface AppProvidersProps {
@@ -21,7 +22,10 @@ export function AppProviders({ children }: AppProvidersProps) {
   return (
     <ErrorBoundary>
       <IntlProvider>
-        <AccessibilityProvider>{children}</AccessibilityProvider>
+        <AccessibilityProvider>
+          <PwaSplashDismisser />
+          {children}
+        </AccessibilityProvider>
       </IntlProvider>
     </ErrorBoundary>
   );
