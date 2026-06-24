@@ -63,7 +63,7 @@ Preferensi pengguna dan data yang harus bertahan antar sesi atau saat offline. D
 * Pengaturan ukuran teks Arab — tabel `settings`.
 * Toggle terjemahan — tabel `settings` (`translationVisible`); kontrol UI di `VerseDisplayControls`.
 * Toggle transliterasi — tabel `settings` (`transliterationVisible`); kontrol UI di `VerseDisplayControls`.
-* Aksesibilitas (`highContrast`, `smoothAnimation`) — tabel `settings`.
+* Aksesibilitas (`contrastMode`, `smoothAnimation`) — tabel `settings`; diterapkan via `AccessibilityProvider`.
 * Konfigurasi repeat (`count`, `target`, `range`) — tabel `settings`.
 * Penanda Lanjutkan Hafalan (`lastViewed`) — tabel `lastRead`.
 * Manifest cache audio — tabel `downloadManifest`.

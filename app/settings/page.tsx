@@ -48,6 +48,7 @@ import {
 } from '@/components/settings-section';
 
 import { useReciters } from '@/hooks/use-reciters';
+import { useIsClient } from '@/hooks/use-is-client';
 
 const LOCALE_OPTIONS: ReadonlyArray<SegmentedOption<AppLocale>> = [
   { value: 'id', label: 'Bahasa Indonesia' },
@@ -64,8 +65,8 @@ export default function SettingsPage() {
   const textSize = fontSizeToTextSize(fontSize);
 
   const { reciters } = useReciters();
-  const [highContrast, setHighContrast] = useState(false);
-  const [smoothAnimation, setSmoothAnimation] = useState(true);
+  const contrastMode = useUserStore((s) => s.settings.contrastMode);
+  const smoothAnimation = useUserStore((s) => s.settings.smoothAnimation);
 
   const badgeStatus = useOfflineStore(selectBadgeVariant);
   const totalSizeBytes = useOfflineStore((s) => s.manifestSummary.totalSizeBytes);
@@ -76,6 +77,8 @@ export default function SettingsPage() {
   const [isClearingCache, setIsClearingCache] = useState(false);
   const [clearCacheError, setClearCacheError] = useState<string | null>(null);
   const [offlineUiReady, setOfflineUiReady] = useState(false);
+  const isClient = useIsClient();
+  const offlineReady = isClient && offlineUiReady;
 
   useEffect(() => {
     let cancelled = false;
@@ -94,11 +97,12 @@ export default function SettingsPage() {
     };
   }, []);
 
-  const displayBadgeStatus = offlineUiReady ? badgeStatus : 'online';
-  const displayAudioCacheMb = offlineUiReady
+  const displayBadgeStatus = offlineReady ? badgeStatus : 'online';
+  const displayAudioCacheMb = offlineReady
     ? audioCacheMb
     : formatMegabytes(0);
-  const clearCacheDisabled = !offlineUiReady || totalSizeBytes === 0;
+  const clearCacheDisabled =
+    !offlineReady || totalSizeBytes === 0 || isClearingCache;
 
   const textSizeOptions: ReadonlyArray<SegmentedOption<ArabicTextSize>> = [
     { value: 'small', label: t('textSize.small') },
@@ -141,6 +145,14 @@ export default function SettingsPage() {
 
   const handleTextSizeChange = (size: ArabicTextSize) => {
     void updateSettings({ fontSize: textSizeToFontSize(size) });
+  };
+
+  const handleHighContrastChange = (enabled: boolean) => {
+    void updateSettings({ contrastMode: enabled ? 'high' : 'default' });
+  };
+
+  const handleSmoothAnimationChange = (enabled: boolean) => {
+    void updateSettings({ smoothAnimation: enabled });
   };
 
   return (
@@ -252,8 +264,8 @@ export default function SettingsPage() {
                 description={t('accessibility.highContrastDescription')}
                 control={
                   <Switch
-                    checked={highContrast}
-                    onCheckedChange={setHighContrast}
+                    checked={contrastMode === 'high'}
+                    onCheckedChange={handleHighContrastChange}
                     aria-label={t('accessibility.highContrastAriaLabel')}
                   />
                 }
@@ -266,7 +278,7 @@ export default function SettingsPage() {
                 control={
                   <Switch
                     checked={smoothAnimation}
-                    onCheckedChange={setSmoothAnimation}
+                    onCheckedChange={handleSmoothAnimationChange}
                     aria-label={t('accessibility.smoothAnimationAriaLabel')}
                   />
                 }

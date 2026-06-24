@@ -207,7 +207,7 @@ Counter menampilkan target aktif dan jumlah tersisa. Repeat berjalan otomatis ta
 - Toggle transliterasi global (Verse Display Controls) ✅
 - Hapus cache ✅ — `services/cache-manager.ts`, konfirmasi di Settings
 - Status offline ✅
-- Aksesibilitas dasar — UI switch ada; `contrastMode` / `smoothAnimation` belum persist
+- Aksesibilitas dasar — kontras tinggi & animasi halus persisten (`contrastMode`, `smoothAnimation`); diterapkan global via `AccessibilityProvider` ✅
 
 ## 4.14 Lighthouse & Aksesibilitas (PB-012, PB-014) — P2
 
