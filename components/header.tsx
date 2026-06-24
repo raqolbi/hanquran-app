@@ -27,22 +27,22 @@ export function Header() {
         background: 'linear-gradient(135deg, #C4844A 0%, #2D9B8C 100%)',
       }}
     >
-      <div className="max-w-3xl mx-auto px-4 py-6 sm:px-6">
-        <div className="flex items-center justify-between">
-          <div className="flex-1 flex items-center gap-3">
+      <div className="max-w-3xl mx-auto px-4 py-5 sm:px-6 sm:py-5">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex min-w-0 flex-1 items-center gap-3">
             <Logo size={40} priority />
-            <div>
+            <div className="min-w-0">
               <h1 className="text-3xl font-bold text-white tracking-tight">HanQuran</h1>
               <ConnectionIndicator
                 status={connectionStatus}
                 variant="header"
-                className="mt-2"
+                className="mt-1.5"
               />
             </div>
           </div>
           <Link
             href={routes.settings()}
-            className="p-2.5 hover:bg-white/15 rounded-full transition-colors text-white inline-flex items-center justify-center"
+            className="shrink-0 p-2.5 hover:bg-white/15 rounded-full transition-colors text-white inline-flex items-center justify-center"
             aria-label={tSettings('title')}
           >
             <Settings size={24} strokeWidth={1.5} />

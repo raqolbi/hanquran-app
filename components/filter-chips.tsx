@@ -27,7 +27,7 @@ export function FilterChips({ onFilterChange }: FilterChipsProps) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className="max-w-3xl mx-auto px-4 sm:px-6 mb-8"
+      className="w-full"
     >
       <div className="flex gap-2">
         {filterOptions.map((option) => (

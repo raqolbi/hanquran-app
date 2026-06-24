@@ -5,7 +5,7 @@ import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
 
 import { Header } from '@/components/header';
-import { ContinueReading } from '@/components/continue-reading';
+import { ContinueReadingSection } from '@/components/continue-reading';
 import { SearchInput } from '@/components/search-input';
 import { FilterChips } from '@/components/filter-chips';
 import { SurahCard } from '@/components/surah-card';
@@ -51,14 +51,15 @@ export default function Home() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="pb-8 sm:pb-12">
-        <ContinueReading surahId={2} surah="Al-Baqarah" ayah={142} totalAyahs={286} />
+      <main className="relative z-10 -mt-3 rounded-t-[1.75rem] bg-background pb-8 shadow-[0_-4px_24px_rgba(0,0,0,0.05)] sm:pb-12 sm:-mt-4 sm:rounded-t-[2rem]">
+        <div className="max-w-3xl mx-auto space-y-6 px-4 pt-8 sm:px-6 sm:pt-10">
+          <ContinueReadingSection />
 
-        <SearchInput onSearch={setSearchQuery} />
+          <SearchInput onSearch={setSearchQuery} />
 
-        <FilterChips onFilterChange={setSelectedFilter} />
+          <FilterChips onFilterChange={setSelectedFilter} />
 
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <div>
           {loading ? (
             <p className="py-12 text-center text-muted-foreground">{tLoading('surahList')}</p>
           ) : error ? (
@@ -120,6 +121,7 @@ export default function Home() {
               )}
             </motion.div>
           )}
+          </div>
         </div>
       </main>
     </div>

@@ -75,14 +75,13 @@ Bottom Navigation
 Tinggi:
 
 ```text
-80px
+~72px (mobile)
 ```
 
 Isi:
 
 ```text
 HanQuran
-Hafalan jadi lebih tenang
 Status koneksi
 ```
 
@@ -91,6 +90,7 @@ Visual:
 * Background gradient lembut
 * Tidak menggunakan card
 * Judul lebih dominan
+* **Tanpa** tagline/subjudul di bawah judul
 
 ---
 

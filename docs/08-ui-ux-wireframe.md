@@ -189,7 +189,6 @@ Elemen penting lain muncul di konteks layar:
 ```text
 ┌──────────────────────────────────────┐
 │ HanQuran                    ● Online │
-│ Hafalan jadi lebih tenang            │
 │                                      │
 │ ┌──────────────────────────────────┐ │
 │ │ Lanjutkan Bacaan Terakhir        │ │
@@ -222,7 +221,7 @@ Elemen penting lain muncul di konteks layar:
 ```text
 ┌──────────────────────────────────────────────────────────────────┐
 │ HanQuran                                     Home    Settings    │
-│ Hafalan jadi lebih tenang                                ●Online │
+│                                                          ● Online │
 ├──────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │ ┌──────────────────────────────┐  ┌────────────────────────────┐ │
