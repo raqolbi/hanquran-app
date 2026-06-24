@@ -90,10 +90,10 @@ Semua penjelasan ditulis dalam Bahasa Indonesia dan mengikuti implementasi saat 
   - Reusable: Tidak (halaman spesifik).
 
 - FocusMode (app/focus/[id]/page.tsx)
-  - Tujuan: Mode membaca fokus yang menyorot kata per kata dan mendukung pengulangan (repeat).
-  - Tanggung jawab: Menjalankan playback kata-per-kata (simulasi highlight), mengelola cycle repeat, menampilkan `FocusModePlayer` dan `RepeatSettingsDialog`.
-  - Dependensi utama: `AyahWordHighlight`, `FocusModePlayer`, `RepeatStatus`, `RepeatSettingsDialog`, `lib/repeat-options`, `lib/surahs-data`.
-  - Reusable: Tidak (mode khusus), namun beberapa subkomponen reusable.
+  - Tujuan: Layar baca fokus bebas distraksi — satu ayat nyata, tanpa word highlight MVP.
+  - Tanggung jawab: Menampilkan ayat aktif, audio play/pause, navigasi prev/next, preferensi baca, keluar ke Surah Detail.
+  - Dependensi utama: `FocusModePlayer`, `RepeatStatus`, `RepeatSettingsDialog`, `useSurah`, `useReadingDisplay`, `useAudio`.
+  - Reusable: Tidak (mode khusus).
 
 - Settings (app/settings/page.tsx)
   - Tujuan: Menyediakan konfigurasi aplikasi (bahasa UI, qari, ukuran teks, offline, dsb.).
@@ -269,15 +269,15 @@ Folder: `components/ui`
 
 ### Komponen inti hafalan (Memorization core)
 - `ContinueReading` — kartu entry untuk melanjutkan hafalan.
-- `FocusMode` page (`app/focus/[id]/page.tsx`) — mekanisme word-by-word highlight menggunakan `AyahWordHighlight` dan playback loop.
-- `AyahWordHighlight` — menyorot token kata saat playback; atomic dan reusable.
+- `FocusMode` page (`app/focus/[id]/page.tsx`) — layar baca fokus MVP (ayat utuh; word highlight Post-MVP).
+- `AyahWordHighlight` — komponen highlight kata; **belum dipakai** di MVP V1 (`docs/24-focus-mode-mvp-scope.md`).
 - `RepeatSettingsDialog`, `RepeatSelector`, `RepeatStatus`, `lib/repeat-options` — mengatur logika dan UI pengulangan hafalan.
 
 Catatan: logika pengulangan disimpan di `lib/repeat-options` (opsi dan helper) sementara state dan siklus dikelola di halaman Mode Fokus atau SurahDetail.
 
 ### Komponen audio
 - `AudioPlayer` — pemutar sticky di halaman surat; menerima callback untuk prev/next/putar.
-- `FocusModePlayer` — player minimal untuk Mode Fokus (progress + play/pause).
+- `FocusModePlayer` — player Mode Fokus; baris ⏮ play/pause ⏭ selaras `AudioPlayer`.
 - Dependensi: UI icons (lucide-react), util repeat untuk menampilkan status singkat.
 
 ### Komponen repeat
