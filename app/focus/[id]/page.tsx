@@ -24,6 +24,7 @@ import { useSurah } from '@/hooks/use-surah';
 import { useReadingDisplay } from '@/hooks/use-reading-display';
 import { useSurahRepeatPlayback } from '@/hooks/use-surah-repeat-playback';
 import { usePersistLastViewed } from '@/hooks/use-persist-last-viewed';
+import { useTrackSurahOpened } from '@/hooks/use-track-surah-opened';
 import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
 import type { SurahData } from '@/services/quran';
 
@@ -58,6 +59,7 @@ function FocusModeLoaded({
   const totalAyahs = surah.ayahs.length;
 
   usePersistLastViewed(surah.number, activeAyah);
+  useTrackSurahOpened(surah);
 
   const {
     isActiveAyahPlaying,

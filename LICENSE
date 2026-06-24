@@ -1,0 +1,139 @@
+HanQuran Community License v1.0
+
+Copyright (c) 2026 Ramadian (HanQuran)
+
+Permission is granted to any person obtaining a copy of this software and
+associated documentation files (the "Software"), subject to the terms and
+conditions below.
+
+================================================================================
+1. DEFINITIONS
+================================================================================
+
+"Software" means the HanQuran source code, documentation, and related materials
+made available in the official HanQuran repository(ies) and releases.
+
+"Copyright Holder" means Ramadian (HanQuran), the owner of the Software.
+
+"You" means an individual or legal entity exercising permissions granted by this
+license.
+
+"Non-Commercial Use" means use of the Software that is not primarily intended
+for or directed toward commercial advantage or monetary compensation.
+
+"Commercial Use" means any use of the Software that is intended for or directed
+toward commercial advantage or monetary compensation, including but not limited
+to the examples listed in Section 4.
+
+================================================================================
+2. PERMITTED USE (NON-COMMERCIAL)
+================================================================================
+
+Subject to the terms of this license, You may use the Software for Non-Commercial
+Use, including for:
+
+  (a) Personal use;
+  (b) Educational use;
+  (c) Research;
+  (d) Religious institutions;
+  (e) Mosques;
+  (f) Islamic schools; and
+  (g) Non-profit organizations.
+
+================================================================================
+3. ALLOWED ACTIONS
+================================================================================
+
+Subject to the terms of this license, You are permitted to:
+
+  (a) View the source code;
+  (b) Fork the repository;
+  (c) Modify the source code;
+  (d) Self-host the Software for Non-Commercial purposes;
+  (e) Submit pull requests and other contributions; and
+  (f) Contribute improvements to the project.
+
+Any distribution of modified versions must:
+
+  (i)  Retain this license and copyright notice;
+  (ii) Clearly indicate changes made to the Software; and
+  (iii) Comply with the Commercial Use restrictions in Section 4.
+
+Contributions submitted to the official HanQuran repository may be incorporated
+into the Software at the Copyright Holder's discretion, subject to separate
+contribution terms communicated in the repository (for example, in README or
+contribution guidelines).
+
+================================================================================
+4. COMMERCIAL USE RESTRICTION
+================================================================================
+
+Commercial Use of the Software is NOT permitted without prior written permission
+from the Copyright Holder.
+
+The following activities are examples of Commercial Use that require a separate
+written commercial license:
+
+  (a) Software-as-a-Service (SaaS) offerings;
+  (b) Subscription-based services;
+  (c) Paid applications or paid app store distribution;
+  (d) White-label solutions;
+  (e) Commercial hosting for fee-paying customers;
+  (f) Commercial redistribution of the Software or derivative works; and
+  (g) Selling products or services built on or incorporating the Software.
+
+For commercial licensing inquiries, see COMMERCIAL-LICENSE.md in this repository
+or contact the Copyright Holder through the official HanQuran GitHub repository:
+https://github.com/raqolbi/hanquran-app
+
+================================================================================
+5. COPYRIGHT
+================================================================================
+
+The Software and all associated intellectual property rights remain the property
+of the Copyright Holder, except for rights expressly granted under this license.
+
+This license does not grant You any rights to use the HanQuran name, logo, or
+branding for Commercial Use without separate written permission.
+
+================================================================================
+6. THIRD-PARTY COMPONENTS
+================================================================================
+
+The Software may include or depend on third-party libraries and services that
+are subject to their own licenses. Your use of those components is governed by
+the applicable third-party license terms, not by this license.
+
+================================================================================
+7. DISCLAIMER OF WARRANTY
+================================================================================
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY CLAIM,
+DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR
+OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+OR OTHER DEALINGS IN THE SOFTWARE.
+
+================================================================================
+8. TERMINATION
+================================================================================
+
+This license terminates automatically if You breach its terms. Upon
+termination, You must cease all use and distribution of the Software except
+as permitted by applicable law.
+
+Sections 5, 7, and 9 survive termination.
+
+================================================================================
+9. GOVERNING TERMS
+================================================================================
+
+This license constitutes the entire agreement regarding non-commercial use of
+the Software. The Copyright Holder may publish revised versions of this
+community license for future releases of the Software.
+
+HanQuran Community License v1.0 — effective as of the date of first publication
+in the official HanQuran repository.

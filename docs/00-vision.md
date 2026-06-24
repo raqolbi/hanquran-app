@@ -228,14 +228,16 @@ Deployment:
 
 ---
 
-# Open Source Principles
+# Lisensi & Prinsip Komunitas
 
-Lisensi yang cocok:
+HanQuran menggunakan **HanQuran Community License v1.0** (HCCL):
 
-- MIT License (paling fleksibel)
-- Apache License 2.0 (lebih kuat untuk kontribusi komunitas)
+- Source code tersedia publik di GitHub
+- Penggunaan non-komersial diperbolehkan (pribadi, pendidikan, masjid, sekolah Islam, nirlaba)
+- Kontribusi komunitas (fork, PR) didukung
+- Penggunaan komersial memerlukan lisensi terpisah — lihat `LICENSE` dan `COMMERCIAL-LICENSE.md` di repository
 
-Untuk proyek komunitas seperti HanQuran, saya cenderung memilih **Apache 2.0**, karena tetap permisif tetapi memberikan perlindungan paten yang lebih baik jika suatu saat proyek berkembang besar.
+HCCL **bukan** MIT, Apache 2.0, GPL, atau lisensi open source standar OSI lainnya.
 
 ---
 
