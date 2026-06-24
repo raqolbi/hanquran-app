@@ -2,18 +2,20 @@
 
 import { motion } from 'motion/react';
 import { useState } from 'react';
-
-const FILTER_OPTIONS = [
-  { id: 'all', label: 'Semua' },
-  { id: 'favorites', label: 'Favorit' },
-];
+import { useTranslations } from 'next-intl';
 
 interface FilterChipsProps {
   onFilterChange?: (filterId: string) => void;
 }
 
 export function FilterChips({ onFilterChange }: FilterChipsProps) {
+  const t = useTranslations('common');
   const [selected, setSelected] = useState('all');
+
+  const filterOptions = [
+    { id: 'all', label: t('all') },
+    { id: 'favorites', label: t('favorites') },
+  ];
 
   const handleSelect = (id: string) => {
     setSelected(id);
@@ -28,7 +30,7 @@ export function FilterChips({ onFilterChange }: FilterChipsProps) {
       className="max-w-3xl mx-auto px-4 sm:px-6 mb-8"
     >
       <div className="flex gap-2">
-        {FILTER_OPTIONS.map((option) => (
+        {filterOptions.map((option) => (
           <motion.button
             key={option.id}
             whileTap={{ scale: 0.95 }}

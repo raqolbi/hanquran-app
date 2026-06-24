@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import {
   ChevronDown,
   ChevronLeft,
@@ -26,6 +27,8 @@ import {
 } from '@/lib/repeat-options';
 import { routes } from '@/lib/routes';
 import { useSurah } from '@/hooks/use-surah';
+import { useReadingDisplay } from '@/hooks/use-reading-display';
+import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
 
 interface FocusModePageProps {
   params: Promise<{ id: string }>;
@@ -34,12 +37,18 @@ interface FocusModePageProps {
 const WORD_INTERVAL_MS = 700;
 
 export default function FocusModePage({ params }: FocusModePageProps) {
+  const t = useTranslations('errors');
+  const tLoading = useTranslations('loading');
+  const tFocus = useTranslations('focus');
+  const tRepeat = useTranslations('repeat');
+  const tCommon = useTranslations('common');
   const resolvedParams = React.use(params);
   const router = useRouter();
   const searchParams = useSearchParams();
   const startAyah = parseInt(searchParams.get('ayah') ?? '1', 10);
 
-  const { surah, loading, error } = useSurah(resolvedParams.id);
+  const { surah, loading, error, retry } = useSurah(resolvedParams.id);
+  const { showTranslation, showTransliteration } = useReadingDisplay();
   const totalAyahs = surah?.ayahs.length ?? 0;
 
   const [activeAyah, setActiveAyah] = useState(startAyah);
@@ -143,20 +152,30 @@ export default function FocusModePage({ params }: FocusModePageProps) {
   if (loading) {
     return (
       <div className="min-h-dvh bg-background flex items-center justify-center">
-        <p className="text-muted-foreground">Memuat Mode Fokus...</p>
+        <p className="text-muted-foreground">{tLoading('focusMode')}</p>
       </div>
     );
   }
 
-  if (error || !surah || !currentAyah) {
+  if (error) {
     return (
-      <div className="min-h-dvh bg-background flex items-center justify-center px-4">
-        <p className="text-destructive text-center">{error ?? 'Surat tidak ditemukan.'}</p>
-      </div>
+      <DataLoadErrorFallback message={error} onRetry={retry} variant="page" />
+    );
+  }
+
+  if (!surah || !currentAyah) {
+    return (
+      <DataLoadErrorFallback
+        message={t('surahNotFound')}
+        onRetry={retry}
+        variant="page"
+      />
     );
   }
 
   const repeatOption = getRepeatOption(repeatCount);
+  const repeatLabel =
+    repeatCount === INFINITE ? tRepeat('infinite') : repeatOption.label;
 
   const progressPercent =
     words.length > 1 ? (activeWordIndex / (words.length - 1)) * 100 : 0;
@@ -202,18 +221,18 @@ export default function FocusModePage({ params }: FocusModePageProps) {
           type="button"
           onClick={handleExit}
           className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-white/80 px-3 py-2 text-sm font-medium text-foreground shadow-sm backdrop-blur-sm transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          aria-label="Keluar dari Mode Fokus"
+          aria-label={tFocus('exitAriaLabel')}
         >
           <X size={16} />
-          <span>Keluar</span>
+          <span>{tFocus('exit')}</span>
         </button>
 
         <p className="text-sm font-semibold text-foreground">
-          Ayat {activeAyah} / {totalAyahs}
+          {tFocus('ayahCounter', { current: activeAyah, total: totalAyahs })}
         </p>
       </motion.header>
 
-      {/* Arabic Text - dominant area */}
+      {/* Ayat — Arab + transliterasi + terjemahan sesuai preferensi */}
       <main className="relative z-10 flex flex-1 items-center justify-center px-4 sm:px-8">
         <AnimatePresence mode="wait">
           <motion.div
@@ -222,7 +241,7 @@ export default function FocusModePage({ params }: FocusModePageProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="w-full max-w-3xl text-center"
+            className="w-full max-w-3xl text-center space-y-6"
           >
             <p
               dir="rtl"
@@ -240,6 +259,25 @@ export default function FocusModePage({ params }: FocusModePageProps) {
                 />
               ))}
             </p>
+
+            {showTransliteration && currentAyah.transliteration && (
+              <p className="text-base sm:text-lg italic text-muted-foreground leading-relaxed px-2">
+                {currentAyah.transliteration}
+              </p>
+            )}
+
+            {showTranslation && currentAyah.translation && (
+              <p
+                className={cn(
+                  'text-sm sm:text-base text-muted-foreground leading-relaxed px-2',
+                  showTransliteration &&
+                    currentAyah.transliteration &&
+                    'border-t border-border/60 pt-4',
+                )}
+              >
+                {currentAyah.translation}
+              </p>
+            )}
           </motion.div>
         </AnimatePresence>
       </main>
@@ -260,7 +298,7 @@ export default function FocusModePage({ params }: FocusModePageProps) {
 
         {/* Repeat Label + Chip */}
         <div className="mt-6 flex flex-col items-center gap-2">
-          <span className="text-sm font-medium text-foreground">Repeat</span>
+          <span className="text-sm font-medium text-foreground">{tCommon('repeat')}</span>
           <button
             type="button"
             onClick={() => setSettingsOpen(true)}
@@ -271,10 +309,10 @@ export default function FocusModePage({ params }: FocusModePageProps) {
                 ? 'border-transparent bg-primary text-white'
                 : 'border-border bg-white text-foreground hover:border-primary/40',
             )}
-            aria-label="Buka Pengaturan Repeat"
+            aria-label={tFocus('openRepeatSettings')}
           >
             <span className="text-base leading-none">{repeatOption.emoji}</span>
-            <span>{repeatOption.label}</span>
+            <span>{repeatLabel}</span>
             <ChevronDown size={16} className="opacity-70" />
           </button>
         </div>
@@ -302,7 +340,7 @@ export default function FocusModePage({ params }: FocusModePageProps) {
             className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-border bg-white px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <ChevronLeft size={16} />
-            Ayat Sebelum
+            {tFocus('previousAyah')}
           </button>
           <button
             type="button"
@@ -310,7 +348,7 @@ export default function FocusModePage({ params }: FocusModePageProps) {
             disabled={activeAyah >= totalAyahs}
             className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-border bg-white px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            Ayat Berikut
+            {tFocus('nextAyah')}
             <ChevronRight size={16} />
           </button>
         </div>

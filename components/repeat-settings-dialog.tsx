@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Check } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { cn } from '@/lib/utils';
 import { useMediaQuery } from '@/hooks/use-media-query';
@@ -22,6 +23,7 @@ import {
 } from '@/components/ui/drawer';
 import {
   REPEAT_OPTIONS,
+  INFINITE,
   formatRepeatCount,
   type RepeatCount,
   type RepeatTarget,
@@ -50,29 +52,8 @@ interface RepeatSettingsDialogProps {
   onApply: (config: RepeatSettingsConfig) => void;
 }
 
-const TARGET_OPTIONS: ReadonlyArray<{
-  value: RepeatTarget;
-  label: string;
-  hint: string;
-}> = [
-  {
-    value: 'current_ayah',
-    label: 'Ayat Aktif',
-    hint: 'Mengulang ayat yang sedang aktif.',
-  },
-  {
-    value: 'ayah_range',
-    label: 'Range Ayat',
-    hint: 'Mengulang range ayat tertentu.',
-  },
-  {
-    value: 'entire_surah',
-    label: 'Surat Ini',
-    hint: 'Mengulang seluruh surat dari awal sampai akhir.',
-  },
-];
-
 export function RepeatSettingsDialog(props: RepeatSettingsDialogProps) {
+  const t = useTranslations('repeat');
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
   if (isDesktop) {
@@ -80,10 +61,8 @@ export function RepeatSettingsDialog(props: RepeatSettingsDialogProps) {
       <Dialog open={props.open} onOpenChange={props.onOpenChange}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Pengaturan Repeat</DialogTitle>
-            <DialogDescription>
-              Pilih jumlah dan target pengulangan.
-            </DialogDescription>
+            <DialogTitle>{t('settingsTitle')}</DialogTitle>
+            <DialogDescription>{t('settingsDescription')}</DialogDescription>
           </DialogHeader>
           <RepeatSettingsForm {...props} />
         </DialogContent>
@@ -95,10 +74,8 @@ export function RepeatSettingsDialog(props: RepeatSettingsDialogProps) {
     <Drawer open={props.open} onOpenChange={props.onOpenChange}>
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle>Pengaturan Repeat</DrawerTitle>
-          <DrawerDescription>
-            Pilih jumlah dan target pengulangan.
-          </DrawerDescription>
+          <DrawerTitle>{t('settingsTitle')}</DrawerTitle>
+          <DrawerDescription>{t('settingsDescription')}</DrawerDescription>
         </DrawerHeader>
         <RepeatSettingsForm {...props} />
       </DrawerContent>
@@ -118,12 +95,45 @@ function RepeatSettingsForm({
   surahName,
   onApply,
 }: RepeatSettingsDialogProps) {
+  const t = useTranslations('repeat');
+  const tCommon = useTranslations('common');
+
+  const targetOptions = React.useMemo(
+    () =>
+      [
+        {
+          value: 'current_ayah' as const,
+          label: t('targetCurrentAyah'),
+          hint: t('targetCurrentAyahHint'),
+        },
+        {
+          value: 'ayah_range' as const,
+          label: t('targetRange'),
+          hint: t('targetRangeHint'),
+        },
+        {
+          value: 'entire_surah' as const,
+          label: t('targetEntireSurah'),
+          hint: t('targetEntireSurahHint'),
+        },
+      ],
+    [t],
+  );
+
+  const repeatOptions = React.useMemo(
+    () =>
+      REPEAT_OPTIONS.map((option) => ({
+        ...option,
+        label: option.value === INFINITE ? t('infinite') : option.label,
+      })),
+    [t],
+  );
+
   const [draftCount, setDraftCount] = React.useState<RepeatCount>(repeatCount);
   const [draftTarget, setDraftTarget] = React.useState<RepeatTarget>(targetType);
   const [draftFrom, setDraftFrom] = React.useState<number>(fromAyah ?? 1);
   const [draftTo, setDraftTo] = React.useState<number>(toAyah ?? totalAyahs);
 
-  // Reset drafts each time the dialog opens, so reopening shows current config.
   React.useEffect(() => {
     if (open) {
       setDraftCount(repeatCount);
@@ -139,7 +149,7 @@ function RepeatSettingsForm({
       draftTo <= totalAyahs &&
       draftFrom <= draftTo);
 
-  const preview = buildPreview({
+  const preview = buildPreview(t, {
     targetType: draftTarget,
     repeatCount: draftCount,
     currentAyah,
@@ -161,13 +171,12 @@ function RepeatSettingsForm({
 
   return (
     <div className="space-y-6">
-      {/* Jumlah Repeat */}
       <section className="space-y-3">
         <h3 className="text-sm font-semibold text-foreground">
-          Jumlah Repeat
+          {t('countTitle')}
         </h3>
-        <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Jumlah repeat">
-          {REPEAT_OPTIONS.map((option) => {
+        <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label={t('countAriaLabel')}>
+          {repeatOptions.map((option) => {
             const selected = draftCount === option.value;
             return (
               <button
@@ -192,11 +201,10 @@ function RepeatSettingsForm({
         </div>
       </section>
 
-      {/* Target */}
       <section className="space-y-3">
-        <h3 className="text-sm font-semibold text-foreground">Target</h3>
-        <div className="space-y-2" role="radiogroup" aria-label="Target repeat">
-          {TARGET_OPTIONS.map((option) => {
+        <h3 className="text-sm font-semibold text-foreground">{tCommon('target')}</h3>
+        <div className="space-y-2" role="radiogroup" aria-label={t('targetAriaLabel')}>
+          {targetOptions.map((option) => {
             const selected = draftTarget === option.value;
             return (
               <button
@@ -238,7 +246,6 @@ function RepeatSettingsForm({
         </div>
       </section>
 
-      {/* Range Inputs - only when ayah_range */}
       <AnimatePresence initial={false}>
         {draftTarget === 'ayah_range' && (
           <motion.section
@@ -251,18 +258,18 @@ function RepeatSettingsForm({
           >
             <div className="space-y-3 pt-1">
               <h3 className="text-sm font-semibold text-foreground">
-                Range Ayat
+                {t('rangeTitle')}
               </h3>
               <div className="grid grid-cols-2 gap-3">
                 <NumberField
-                  label="Dari Ayat"
+                  label={t('fromAyah')}
                   min={1}
                   max={totalAyahs}
                   value={draftFrom}
                   onChange={setDraftFrom}
                 />
                 <NumberField
-                  label="Sampai Ayat"
+                  label={t('toAyah')}
                   min={1}
                   max={totalAyahs}
                   value={draftTo}
@@ -271,7 +278,7 @@ function RepeatSettingsForm({
               </div>
               {!rangeValid && (
                 <p className="text-xs text-destructive">
-                  Range harus di antara 1 dan {totalAyahs}, serta Dari ≤ Sampai.
+                  {t('rangeInvalid', { max: totalAyahs })}
                 </p>
               )}
             </div>
@@ -279,10 +286,9 @@ function RepeatSettingsForm({
         )}
       </AnimatePresence>
 
-      {/* Live Preview */}
       <section className="rounded-xl border border-border bg-muted/40 px-4 py-3">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-          Preview
+          {tCommon('preview')}
         </p>
         <AnimatePresence mode="wait">
           <motion.p
@@ -298,14 +304,13 @@ function RepeatSettingsForm({
         </AnimatePresence>
       </section>
 
-      {/* Actions */}
       <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end sm:gap-3">
         <button
           type="button"
           onClick={() => onOpenChange(false)}
           className="inline-flex h-11 items-center justify-center rounded-lg border border-border bg-white px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
-          Batal
+          {tCommon('cancel')}
         </button>
         <button
           type="button"
@@ -313,7 +318,7 @@ function RepeatSettingsForm({
           disabled={!rangeValid}
           className="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-5 text-sm font-medium text-white transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
-          Terapkan
+          {tCommon('apply')}
         </button>
       </div>
     </div>
@@ -348,22 +353,27 @@ function NumberField({ label, min, max, value, onChange }: NumberFieldProps) {
   );
 }
 
-function buildPreview(args: {
-  targetType: RepeatTarget;
-  repeatCount: RepeatCount;
-  currentAyah: number;
-  fromAyah: number;
-  toAyah: number;
-  surahName: string;
-}): string {
+type TranslateFn = (key: string, values?: Record<string, string | number>) => string;
+
+function buildPreview(
+  t: TranslateFn,
+  args: {
+    targetType: RepeatTarget;
+    repeatCount: RepeatCount;
+    currentAyah: number;
+    fromAyah: number;
+    toAyah: number;
+    surahName: string;
+  },
+): string {
   const count = formatRepeatCount(args.repeatCount);
 
   switch (args.targetType) {
     case 'current_ayah':
-      return `Ayat ${args.currentAyah} • ${count}`;
+      return t('previewAyah', { ayah: args.currentAyah, count });
     case 'ayah_range':
-      return `Ayat ${args.fromAyah}-${args.toAyah} • ${count}`;
+      return t('previewRange', { from: args.fromAyah, to: args.toAyah, count });
     case 'entire_surah':
-      return `${args.surahName} • ${count}`;
+      return t('previewSurah', { surah: args.surahName, count });
   }
 }

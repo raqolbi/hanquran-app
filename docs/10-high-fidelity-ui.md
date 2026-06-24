@@ -213,7 +213,7 @@ Header
 ↓
 Meta Surah
 ↓
-Action Bar
+Verse Display Controls
 ↓
 Ayat List
 ↓
@@ -251,20 +251,24 @@ Center aligned
 
 ---
 
-### Action Bar
+### Action Bar → Verse Display Controls
 
 Komponen:
 
 ```text
 Terjemahan Toggle
-Mode Fokus Button
+Transliterasi Toggle
+Fokus Button
 ```
 
 Layout:
 
 ```text
-Horizontal
+Horizontal — satu baris di bawah header surat
+Equal visual hierarchy
 ```
+
+Spesifikasi: `docs/22-verse-display-controls.md`.
 
 ---
 
@@ -569,9 +573,9 @@ White
 ### Group Order
 
 ```text
-Ukuran Teks
+Bahasa Aplikasi
 ↓
-Terjemahan
+Ukuran Teks
 ↓
 Reciter
 ↓
@@ -579,6 +583,8 @@ Kontras
 ↓
 Offline & Cache
 ```
+
+> Terjemahan dan Transliterasi dikontrol di Verse Display Controls (Surah Detail), bukan di Pengaturan.
 
 ---
 

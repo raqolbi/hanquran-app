@@ -9,7 +9,7 @@ Prinsip arsitektur yang diikuti:
 1. Memorization First
 2. Mobile First
 3. Offline First
-4. Local First
+4. Static Dataset First (konten Quran dari `public/data/*`, bukan Dexie)
 
 ---
 
@@ -59,14 +59,17 @@ Preferensi pengguna dan data yang harus bertahan antar sesi atau saat offline. D
 
 * Daftar favorit — tabel `favorites`.
 * Pengaturan qari — tabel `settings`.
+* Bahasa UI aplikasi (`appLocale`: `id` | `en`) — tabel `settings`; framework `next-intl`.
 * Pengaturan ukuran teks Arab — tabel `settings`.
-* Toggle terjemahan — tabel `settings`.
+* Toggle terjemahan — tabel `settings` (`translationVisible`); kontrol UI di `VerseDisplayControls`.
+* Toggle transliterasi — tabel `settings` (`transliterationVisible`); kontrol UI di `VerseDisplayControls`.
 * Aksesibilitas (`highContrast`, `smoothAnimation`) — tabel `settings`.
 * Konfigurasi repeat (`count`, `target`, `range`) — tabel `settings`.
 * Penanda Lanjutkan Hafalan (`lastViewed`) — tabel `lastRead`.
 * Manifest cache audio — tabel `downloadManifest`.
-* Data Quran yang di-cache — tabel `surahs`, `ayahs`, `translations`, `wordTimings`, `reciters`.
 * Progress hafalan — tabel `memorization_progress` (Growth Phase).
+
+> **Konten Quran** (surat, ayat, terjemahan) **tidak** disimpan di Dexie — lihat `docs/23-static-dataset-architecture.md`.
 
 ## 2.3 Audio Files (Cache Storage)
 
@@ -120,7 +123,7 @@ Aturan kepemilikan:
 
 * Komponen presentational (mis. `AudioPlayer`, `RepeatStatus`) **tidak** memiliki state global — mereka menerima props atau membaca store via selector.
 * Setiap mutasi store wajib lewat action store. Komponen tidak boleh `set(...)` langsung dari luar.
-* Aksi yang berdampak pada platform (audio element, Cache Storage, Dexie) **wajib** melewati service layer (`audio-controller`, `download-manager`, Repository).
+* Aksi yang berdampak pada platform (audio element, Cache Storage) **wajib** melewati service layer (`audio-controller`, `download-manager`, `services/quran/`).
 
 ---
 
@@ -240,7 +243,8 @@ const useUserStore = create<UserState>()((set, get) => ({
 | `useUserStore`     | `settings`, `favorites`, `lastRead` |
 | `useRepeatStore`   | `settings` (field repeatConfig) |
 | `useOfflineStore`  | `downloadManifest`     |
-| Repository Layer   | `surahs`, `ayahs`, `translations`, `wordTimings`, `reciters` |
+
+> Tabel konten Quran (`surahs`, `ayahs`, dll.) **dihapus** dari schema Dexie v2.
 
 ## 6.4 Hapus Cache
 
@@ -305,17 +309,16 @@ flowchart TB
   Offline --> UI[OfflineStatusBadge]
 ```
 
-## 7.4 Alur State Local First (Data Quran)
+## 7.4 Alur Muat Konten Quran (Static Dataset)
 
 ```mermaid
 flowchart TD
-  App[App Start] --> Init[Store.init]
-  Init --> Dexie[Baca dari Dexie]
-  Dexie --> Ada{Data Ada?}
-  Ada -- Ya --> Render[Tampilkan ke UI]
-  Ada -- Tidak --> DS[Muat public/data/*]
-  API --> Simpan[Simpan ke Dexie]
-  Simpan --> Render
+  Page[Halaman / Hook] --> Svc[services/quran/]
+  Svc --> Cache{In-memory cache?}
+  Cache -- Ya --> Render[Tampilkan ke UI]
+  Cache -- Tidak --> Fetch[fetch public/data/*]
+  Fetch --> Map[Mapper]
+  Map --> Render
 ```
 
 ---
@@ -337,15 +340,17 @@ Tabel ini adalah daftar lengkap state pada MVP. Setiap penambahan state wajib me
 | Runtime repeat (`cycleIndex`)      | Zustand            | Tidak     | Zustand            |
 | Daftar favorit                     | IndexedDB          | Ya        | Dexie (`favorites`)|
 | Pengaturan qari                    | IndexedDB          | Ya        | Dexie (`settings`) |
+| Bahasa UI (`appLocale`)            | IndexedDB          | Ya        | Dexie (`settings`) |
 | Pengaturan ukuran teks Arab        | IndexedDB          | Ya        | Dexie (`settings`) |
-| Toggle terjemahan                  | IndexedDB          | Ya        | Dexie (`settings`) |
+| Toggle terjemahan                  | IndexedDB          | Ya        | Dexie (`settings.translationVisible`) |
+| Toggle transliterasi               | IndexedDB          | Ya        | Dexie (`settings.transliterationVisible`) |
 | Kontras tinggi                     | IndexedDB          | Ya        | Dexie (`settings`) |
 | Animasi halus                      | IndexedDB          | Ya        | Dexie (`settings`) |
 | Status koneksi                     | Zustand            | Tidak     | Zustand            |
 | Manifest cache audio               | IndexedDB          | Ya        | Dexie (`downloadManifest`) |
 | File audio biner                   | Cache Storage      | Ya        | Cache Storage      |
-| Data surahs ter-cache              | IndexedDB          | Ya        | Dexie (`surahs`)   |
-| Data ayahs ter-cache               | IndexedDB          | Ya        | Dexie (`ayahs`)    |
+| Konten Quran (surat, ayat, terjemahan) | `public/data/*` via `services/quran/` | Tidak (fetch + in-memory) | Static files + HTTP cache |
+| Word timings | Field di JSON surat | Tidak | Sama dengan konten Quran |
 | `activeWordIndex` Mode Fokus       | React Local State  | Tidak     | React Local State  |
 | Query pencarian Beranda            | React Local State  | Tidak     | React Local State  |
 | Filter chips Beranda               | React Local State  | Tidak     | React Local State  |
@@ -533,9 +538,9 @@ Tujuan: aplikasi dapat dipakai membaca, mendengarkan, dan menghafal tanpa koneks
 
    * Semua operasi pada `Cache Storage` melewati Service Worker. Main thread hanya membaca via `caches.match`.
 
-6. **Repository sebagai satu-satunya akses Dexie**
+6. **Store actions sebagai akses Dexie**
 
-   * Komponen tidak boleh mengakses Dexie secara langsung. Semua akses melalui Repository Layer (`services/api/`) atau Store actions.
+   * Komponen tidak boleh mengakses Dexie secara langsung. Data pengguna melalui Store actions. Konten Quran melalui hooks → `services/quran/`.
 
 7. **Hindari Temporary UI State menjadi global**
 
@@ -546,7 +551,8 @@ Tujuan: aplikasi dapat dipakai membaca, mendengarkan, dan menghafal tanpa koneks
 # 14. Hubungan dengan Dokumen Lain
 
 * `06-database-schema.md` — skema seluruh tabel Dexie (13 tabel, indexing strategy, migration strategy). Sumber kebenaran untuk struktur Dexie.
-* `07-api-integration.md` — Repository Pattern dan Local-First flow. Mendefinisikan bagaimana Dexie dan dataset statis `public/data/*` berinteraksi.
+* `07-api-integration.md` — Service layer & Static Dataset flow.
+* `23-static-dataset-architecture.md` — Keputusan MVP: konten Quran tidak di Dexie.
 * `12-component-spec.md` — spesifikasi komponen UI. Komponen yang ditulis di sana mengonsumsi state sesuai pemetaan di Bagian 8.
 * `13-component-tree.md` — struktur komponen. Service layer (`audio-controller`, `download-manager`) berada di `services/` sesuai `16-folder-structure.md`.
 * `14-routing-spec.md` — sumber kebenaran URL Parameter (surat aktif, ayat aktif).
@@ -565,7 +571,8 @@ Jika ada perbedaan antar dokumen tentang state, dokumen ini menjadi acuan final.
 * [ ] Implementasi `audio-controller` sebagai jembatan `HTMLAudioElement` ↔ `useAudioStore`.
 * [ ] Implementasi `download-manager` dan kanal `postMessage` ke Service Worker.
 * [ ] Daftarkan Service Worker, siapkan cache `hanquran-audio-v1` dan aset statis.
-* [ ] Tambah `BroadcastChannel('hanquran:audio')` dan `BroadcastChannel('hanquran:repeat')` untuk sinkronisasi lintas tab.
+* [x] Tambah `BroadcastChannel('hanquran:audio')` untuk sinkronisasi lintas tab audio (`services/audio-tab-sync.ts`).
+* [ ] Tambah `BroadcastChannel('hanquran:repeat')` untuk sinkronisasi lintas tab repeat.
 * [ ] Hubungkan komponen `AudioPlayer`, `RepeatStatus`, `OfflineStatusBadge` ke selector store.
 * [ ] Implementasi aksi **Hapus Cache** sesuai aturan Bagian 6.4.
 * [ ] Tulis unit test untuk action store dan integrasi `audio-controller` ↔ store.

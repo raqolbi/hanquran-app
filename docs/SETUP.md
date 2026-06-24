@@ -22,7 +22,7 @@ cd hanquran-app
 npm install
 ```
 
-> MVP tidak memerlukan kredensial API eksternal. Konten Quran disajikan dari dataset statis `public/data/*`, audio dari EveryAyah, dan daftar qari dari `data/reciters.json`. Detail arsitektur data: [`docs/07-api-integration.md`](./07-api-integration.md).
+> MVP tidak memerlukan kredensial API eksternal. Konten Quran disajikan dari dataset statis `public/data/*`, audio tilawah dari CDN eksternal (`AYAH_AUDIO_BASE_URL`), dan daftar qari dari `data/reciters.json`. Detail arsitektur data: [`docs/07-api-integration.md`](./07-api-integration.md).
 
 ---
 
@@ -52,8 +52,9 @@ Lihat `docs/20-mvp-freeze.md` Bagian 7. Ringkasan:
 | Runtime State | Zustand |
 | Persistent State | Dexie (IndexedDB) |
 | Audio Cache | Cache Storage API (via Service Worker) |
-| Data Source | Dataset statis `public/data/*` + EveryAyah (audio) |
+| Data Source | Dataset statis `public/data/*` + CDN audio tilawah |
 | Testing | Vitest + jsdom + fake-indexeddb |
+| UI i18n | next-intl (`id`, `en`) — lihat `docs/21-i18n-and-locale.md` |
 
 ---
 
@@ -88,39 +89,40 @@ hanquran-app/
 
 ## 6. Arsitektur Akses Data (Wajib)
 
-Pola Repository + Local First (`docs/15` & `docs/06`). **Komponen tidak boleh mengakses Dexie atau sumber data secara langsung.**
+**Konten Quran:** Static Dataset — `public/data/*` → `services/quran/` → hooks → UI. Lihat `docs/23-static-dataset-architecture.md`.
+
+**Data pengguna:** UI → Store (Zustand) → Dexie. Komponen tidak mengakses Dexie secara langsung.
 
 ```
-UI (komponen)
-  → Store (Zustand)
-    → Repository (services/api/)
-      → Dexie (services/db/)
-        → public/data/* (fallback)
+Konten Quran:
+  UI → hooks → services/quran/ → public/data/*
+
+Data pengguna:
+  UI → Store (Zustand) → Dexie (services/db/)
 ```
 
-Audio tilawah di-stream dari **EveryAyah**; metadata qari dari **`data/reciters.json`**.
+Audio tilawah di-stream dari **CDN audio** (`services/quran/audio-config.ts` → `AYAH_AUDIO_BASE_URL`); metadata qari dari **`data/reciters.json`**.
 
 ### Store & Persistensi
 
 - 4 store: `useAudioStore`, `useUserStore`, `useRepeatStore`, `useOfflineStore`.
 - Persistensi memakai Dexie **langsung dari action store** (bukan persist middleware).
-- Saat app start, `AppBootstrap` memanggil `initStores()` yang membaca data persisten dari Dexie.
+- Saat app start, `AppProviders` memanggil `initStores()` yang membaca data persisten dari Dexie.
 
 ### Database Dexie
 
-- Nama database: `hanquran-db`, versi schema: `1`.
-- 14 store/tabel (9 aktif MVP + 5 Growth Phase yang belum diisi di MVP).
-- Definisi schema: `services/db/migrations.ts` (`SCHEMA_V1`).
+- Nama database: `hanquran-db`, versi schema: **2** (v1 menyertakan tabel konten Quran — dihapus).
+- Tabel MVP: `settings`, `favorites`, `lastRead`, `downloadManifest` + Growth tables.
+- Definisi schema: `services/db/migrations.ts` (`SCHEMA_V2`).
 - Sumber kebenaran struktur: `docs/06-database-schema.md`.
-
-> Catatan: dokumen menyebut "13 tabel", namun definisi schema di `docs/06` §7 memuat 14 store name. Implementasi mengikuti definisi schema (14).
+- **Konten Quran tidak disimpan di Dexie.**
 
 ---
 
 ## 7. Service Worker
 
 - File: `public/sw.js` (skeleton Phase 0 — hanya lifecycle + kanal pesan).
-- Registrasi: `components/shared/AppBootstrap.tsx`.
+- Registrasi: `components/providers/app-providers.tsx` → `lib/register-service-worker.ts` (production only).
 - Strategi caching runtime & DownloadManager diimplementasikan di **Phase 5**.
 
 ---
