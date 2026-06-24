@@ -12,6 +12,7 @@ import {
 import {
   computeNextOnAyahEnd,
   getDisplayCycle,
+  shouldBeginRepeatSession,
   toRepeatConfig,
 } from '@/services/repeat-engine';
 import { getRepeatTabSync } from '@/services/repeat-tab-sync';
@@ -103,17 +104,29 @@ export function useSurahRepeatPlayback({
   useAudioOnEnded(handleAyahEnded);
 
   const togglePlayback = useCallback(async () => {
-    if (!isActiveAyahPlaying) {
+    const track = useAudioStore.getState().currentTrack;
+    const currentTrackMatchesAyah =
+      track?.surahId === surahId && track?.ayahNumber === activeAyah;
+    const { isActive: runtimeIsActive } = useRepeatStore.getState().runtime;
+
+    if (
+      shouldBeginRepeatSession({
+        isPlaying,
+        currentTrackMatchesAyah,
+        runtimeIsActive,
+      })
+    ) {
       beginSession();
     }
 
     await toggleAyah(playParams(activeAyah));
   }, [
-    isActiveAyahPlaying,
+    isPlaying,
+    surahId,
+    activeAyah,
     beginSession,
     toggleAyah,
     playParams,
-    activeAyah,
   ]);
 
   const navigateAyah = useCallback(

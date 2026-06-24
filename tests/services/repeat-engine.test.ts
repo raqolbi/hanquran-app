@@ -10,6 +10,7 @@ import {
   getRemainingFullCycles,
   isRepeatCountReached,
   resolveRepeatScope,
+  shouldBeginRepeatSession,
   toRepeatConfig,
 } from '@/services/repeat-engine';
 import type { RepeatConfig } from '@/types';
@@ -176,6 +177,46 @@ describe('repeat-engine', () => {
     it('getDisplayCycle 1-indexed', () => {
       expect(getDisplayCycle({ cycleIndex: 0, isActive: true, lastBoundary: null })).toBe(1);
       expect(getDisplayCycle({ cycleIndex: 2, isActive: true, lastBoundary: null })).toBe(3);
+    });
+
+    it('shouldBeginRepeatSession tidak mereset saat resume pause', () => {
+      expect(
+        shouldBeginRepeatSession({
+          isPlaying: false,
+          currentTrackMatchesAyah: true,
+          runtimeIsActive: true,
+        }),
+      ).toBe(false);
+    });
+
+    it('shouldBeginRepeatSession memulai sesi baru setelah repeat selesai', () => {
+      expect(
+        shouldBeginRepeatSession({
+          isPlaying: false,
+          currentTrackMatchesAyah: true,
+          runtimeIsActive: false,
+        }),
+      ).toBe(true);
+    });
+
+    it('shouldBeginRepeatSession memulai sesi baru saat play pertama', () => {
+      expect(
+        shouldBeginRepeatSession({
+          isPlaying: false,
+          currentTrackMatchesAyah: false,
+          runtimeIsActive: false,
+        }),
+      ).toBe(true);
+    });
+
+    it('shouldBeginRepeatSession tidak memulai sesi saat pause', () => {
+      expect(
+        shouldBeginRepeatSession({
+          isPlaying: true,
+          currentTrackMatchesAyah: true,
+          runtimeIsActive: true,
+        }),
+      ).toBe(false);
     });
 
     it('getRemainingAyahRepeats untuk current_ayah', () => {
