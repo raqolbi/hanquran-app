@@ -132,6 +132,71 @@
       "smoothAnimationAriaLabel": "Enable smooth animations"
     }
   },
+  "about": {
+    "title": "About HanQuran",
+    "navLink": "About HanQuran",
+    "navAriaLabel": "App information",
+    "app": {
+      "sectionTitle": "App Information",
+      "description": "Quran memorization platform — per-verse audio, repeat, focus mode, and offline support. No account required. Mobile-first.",
+      "version": "Version {version}"
+    },
+    "mission": {
+      "title": "About HanQuran",
+      "description": "Purpose, philosophy, and product focus.",
+      "purpose": "HanQuran helps you memorize and review the Quran through guided audio repetition, distraction-free reading mode, and learning that continues from your last position.",
+      "philosophyTitle": "Product philosophy",
+      "principles": {
+        "memorizationFirst": "Memorization First — every decision is evaluated: does this help memorization?",
+        "mobileFirst": "Mobile First — designed for small screens and touch.",
+        "offlineFirst": "Offline First — after download, the app does not depend on the internet.",
+        "simplicityFirst": "Simplicity First — no registration, no login, no complex setup."
+      },
+      "focusTitle": "App focus",
+      "focusItems": {
+        "repeat": "Repeat verse, range, or entire surah",
+        "audio": "Per-verse tilawah audio",
+        "focusMode": "Focus Mode — one verse, minimal distraction",
+        "continueReading": "Continue memorization from last position",
+        "preferences": "Local preferences (UI language, reciter, verse display, accessibility)"
+      }
+    },
+    "credits": {
+      "title": "Credits",
+      "description": "Data sources and core technologies used by the project.",
+      "opensInNewTab": "(opens in new tab)",
+      "dataSources": {
+        "title": "Data Sources",
+        "quranText": {
+          "label": "Quran Text",
+          "source": "Tanzil Project"
+        },
+        "quranDataset": {
+          "label": "Quran JSON Dataset",
+          "source": "HanQuran Data Generator"
+        },
+        "transliteration": {
+          "label": "Transliteration",
+          "source": "eQuran.id"
+        },
+        "audioMurottal": {
+          "label": "Recitation Audio",
+          "source": "The reciters and audio providers used by HanQuran"
+        }
+      },
+      "technology": {
+        "title": "Core technology",
+        "description": "Frameworks and core libraries.",
+        "stack": "Next.js, React, TypeScript, Tailwind CSS, Zustand, Dexie, next-intl"
+      }
+    },
+    "repository": {
+      "title": "Repository & License",
+      "github": "View repository on GitHub",
+      "license": "HanQuran Community License (HCCL)",
+      "commercialLicense": "Commercial license"
+    }
+  },
   "repeat": {
     "settingsTitle": "Repeat Settings",
     "settingsDescription": "Choose how many times and what to repeat.",

@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'motion/react';
-import { ArrowLeft, Trash2 } from 'lucide-react';
+import { ArrowLeft, ChevronRight, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import {
@@ -57,6 +58,7 @@ const LOCALE_OPTIONS: ReadonlyArray<SegmentedOption<AppLocale>> = [
 
 export default function SettingsPage() {
   const t = useTranslations('settings');
+  const tAbout = useTranslations('about');
   const tCommon = useTranslations('common');
   const appLocale = useUserStore((s) => s.settings.appLocale);
   const reciterId = useUserStore((s) => s.settings.reciterId);
@@ -286,6 +288,16 @@ export default function SettingsPage() {
             </div>
           </div>
         </SettingsSection>
+
+        <nav aria-label={tAbout('navAriaLabel')}>
+          <Link
+            href={routes.settingsAbout()}
+            className="flex h-14 w-full items-center justify-between rounded-2xl border border-border bg-white px-4 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <span>{tAbout('navLink')}</span>
+            <ChevronRight size={20} className="text-muted-foreground" aria-hidden />
+          </Link>
+        </nav>
       </main>
 
       <ClearCacheDialog
@@ -304,11 +316,7 @@ function SettingsHeader() {
   const tCommon = useTranslations('common');
 
   const handleBack = () => {
-    if (typeof window !== 'undefined' && window.history.length > 1) {
-      router.back();
-    } else {
-      router.push(routes.home());
-    }
+    router.push(routes.home());
   };
 
   return (
