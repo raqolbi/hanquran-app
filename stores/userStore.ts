@@ -9,6 +9,7 @@
 import { create } from 'zustand';
 import { db, defaultSettings } from '@/services/db/db';
 import { detectAppLocale } from '@/i18n/detection';
+import { trackBookmarkCreated, trackLastReadUpdated } from '@/lib/analytics';
 import { normalizeArabicFontSize } from '@/lib/arabic-text-size';
 import { normalizeReciterId } from '@/lib/reciter-preference';
 import type { SettingsRecord, LastReadRecord } from '@/types';
@@ -23,7 +24,7 @@ interface UserState {
 interface UserActions {
   /** Baca seluruh data persisten dari Dexie saat app start. */
   init: () => Promise<void>;
-  toggleFavorite: (surahId: number) => Promise<void>;
+  toggleFavorite: (surahId: number, options?: { ayahNumber?: number }) => Promise<void>;
   isFavorite: (surahId: number) => boolean;
   updateSettings: (patch: Partial<Omit<SettingsRecord, 'id'>>) => Promise<void>;
   setLastViewed: (surahId: number, ayahNumber: number) => Promise<void>;
@@ -108,7 +109,7 @@ export const useUserStore = create<UserState & UserActions>()((set, get) => ({
     });
   },
 
-  toggleFavorite: async (surahId) => {
+  toggleFavorite: async (surahId, options) => {
     const favorites = get().favorites;
     if (favorites.includes(surahId)) {
       // Optimistic update + recovery (docs/15 Bagian 13.4).
@@ -123,6 +124,10 @@ export const useUserStore = create<UserState & UserActions>()((set, get) => ({
       set({ favorites: [...favorites, surahId] });
       try {
         await db.favorites.put({ surahId, createdAt: Date.now() });
+        trackBookmarkCreated({
+          surahId,
+          ayahNumber: options?.ayahNumber ?? 1,
+        });
       } catch (err) {
         set({ favorites });
         throw err;
@@ -167,5 +172,6 @@ export const useUserStore = create<UserState & UserActions>()((set, get) => ({
     };
     await db.lastRead.put(record);
     set({ lastViewed: { surahId, ayahNumber } });
+    trackLastReadUpdated({ surahId, ayahNumber });
   },
 }));

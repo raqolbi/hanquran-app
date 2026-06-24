@@ -187,4 +187,41 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+
+  .pwa-splash {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    padding: max(24px, env(safe-area-inset-top)) 24px
+      max(24px, env(safe-area-inset-bottom));
+    background-color: #fafaf8;
+    opacity: 1;
+    transition: opacity 220ms ease-out;
+  }
+
+  .pwa-splash__logo {
+    height: auto;
+    width: min(240px, 72vw);
+    max-height: 28vh;
+    object-fit: contain;
+    user-select: none;
+  }
+
+  html.pwa-launching .pwa-splash {
+    display: flex;
+  }
+
+  html.pwa-launching.pwa-splash-dismissed .pwa-splash {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .pwa-splash {
+      background-color: #0f172a;
+    }
+  }
 }

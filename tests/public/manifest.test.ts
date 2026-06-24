@@ -29,4 +29,10 @@ describe('public/manifest.json', () => {
     expect(sizes).toContain('192x192');
     expect(sizes).toContain('512x512');
   });
+
+  it('memiliki warna splash selaras design system', () => {
+    expect(manifest.background_color).toBe('#FAFAF8');
+    expect(manifest.theme_color).toBe('#0F766E');
+    expect(manifest.display).toBe('standalone');
+  });
 });
