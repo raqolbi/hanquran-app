@@ -166,4 +166,25 @@
   html {
     @apply font-sans;
   }
+
+  html[data-contrast='high'] {
+    --foreground: oklch(0.08 0 0);
+    --background: oklch(1 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.08 0 0);
+    --muted-foreground: oklch(0.28 0 0);
+    --border: oklch(0.45 0 0);
+    --input: oklch(0.45 0 0);
+    --primary: oklch(0.32 0.14 170);
+    --ring: oklch(0.2 0 0);
+  }
+
+  html[data-motion='reduced'] *,
+  html[data-motion='reduced'] *::before,
+  html[data-motion='reduced'] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

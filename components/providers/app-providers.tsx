@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 
 import { initStores } from '@/stores';
+import { AccessibilityProvider } from '@/components/providers/accessibility-provider';
 import { IntlProvider } from '@/components/providers/intl-provider';
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 import { registerServiceWorker } from '@/lib/register-service-worker';
@@ -19,7 +20,9 @@ export function AppProviders({ children }: AppProvidersProps) {
 
   return (
     <ErrorBoundary>
-      <IntlProvider>{children}</IntlProvider>
+      <IntlProvider>
+        <AccessibilityProvider>{children}</AccessibilityProvider>
+      </IntlProvider>
     </ErrorBoundary>
   );
 }
