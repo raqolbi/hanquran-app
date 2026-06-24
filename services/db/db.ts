@@ -1,23 +1,18 @@
 /**
- * Setup Dexie (IndexedDB) — fondasi seluruh persistensi HanQuran V1.
+ * Setup Dexie (IndexedDB) — persistensi data pengguna HanQuran.
  *
- * Sumber kebenaran schema: `docs/06-database-schema.md` (Bagian 7).
- * Schema v1 mendefinisikan 13 tabel: 9 tabel aktif MVP + 5 tabel Growth Phase
- * (tabel Growth sudah didefinisikan sejak v1 agar migrasi V2 bersih, tetapi
- * belum diisi data pada MVP).
+ * Konten Quran TIDAK disimpan di Dexie. Sumber kebenaran konten:
+ * `public/data/*` via `services/quran/` — lihat `docs/23-static-dataset-architecture.md`.
+ *
+ * Schema: `docs/06-database-schema.md` (v2 — data pengguna saja).
  *
  * Aturan akses (lihat `docs/15-state-management.md`):
- *   UI → Store (Zustand) → Repository → Dexie (file ini) → public/data/*
+ *   UI → Store (Zustand) → Dexie (file ini)
  * Komponen TIDAK boleh mengimpor file ini secara langsung.
  */
 
 import Dexie, { type Table } from 'dexie';
 import type {
-  SurahRecord,
-  AyahRecord,
-  TranslationRecord,
-  WordTimingRecord,
-  ReciterRecord,
   FavoriteRecord,
   LastReadRecord,
   SettingsRecord,
@@ -28,23 +23,18 @@ import type {
   StatisticsRecord,
   NoteRecord,
 } from '@/types';
+import { getDefaultReciterId } from '@/services/quran';
 import { applyMigrations } from './migrations';
 
 export const DB_NAME = 'hanquran-db';
 
 export class HanQuranDB extends Dexie {
-  // --- Tabel aktif MVP ---
-  surahs!: Table<SurahRecord, number>;
-  ayahs!: Table<AyahRecord, string>;
-  translations!: Table<TranslationRecord, string>;
-  wordTimings!: Table<WordTimingRecord, string>;
-  reciters!: Table<ReciterRecord, number>;
   favorites!: Table<FavoriteRecord, number>;
   lastRead!: Table<LastReadRecord, string>;
   settings!: Table<SettingsRecord, string>;
   downloadManifest!: Table<DownloadManifestRecord, number>;
 
-  // --- Tabel Growth Phase (schema tersedia, belum diisi di MVP) ---
+  // Growth Phase (schema tersedia, belum diisi di MVP)
   bookmarks!: Table<BookmarkRecord, string>;
   memorization_progress!: Table<MemorizationProgressRecord, number>;
   murajaah_sessions!: Table<MurajaahSessionRecord, string>;
@@ -57,17 +47,19 @@ export class HanQuranDB extends Dexie {
   }
 }
 
-/** Instance Dexie tunggal yang dipakai seluruh Repository & Store. */
+/** Instance Dexie tunggal — hanya diakses dari Zustand store actions. */
 export const db = new HanQuranDB();
 
 /** Nilai default record `settings` saat belum ada di Dexie. */
 export const defaultSettings: SettingsRecord = {
   id: 'default',
+  appLocale: 'id',
   fontSize: 28,
   translationVisible: false,
+  transliterationVisible: false,
   contrastMode: 'default',
   smoothAnimation: true,
-  qariId: 7, // Mishary Rashid Alafasy (default, lihat data/reciters.json)
+  reciterId: getDefaultReciterId(),
   translationResourceId: 33, // Terjemahan Kemenag (Indonesia)
   updatedAt: 0,
 };

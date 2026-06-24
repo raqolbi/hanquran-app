@@ -6,7 +6,7 @@
 
 # 1. Overview
 
-HanQuran V1 menggunakan **dataset statis** untuk konten Al-Qur'an dan **EveryAyah** untuk audio tilawah.
+HanQuran V1 menggunakan **dataset statis** untuk konten Al-Qur'an dan **CDN audio tilawah** untuk playback per ayat.
 
 Dokumen ini mendefinisikan:
 
@@ -18,10 +18,12 @@ Dokumen ini mendefinisikan:
 
 HanQuran V1 tidak menggunakan backend sendiri dan **tidak memerlukan autentikasi OAuth**.
 
+> **Bahasa UI vs terjemahan ayat:** `public/data/translations/{lang}/*` = konten terjemahan ayat. Bahasa **antarmuka aplikasi** dikelola terpisah via **`next-intl`** + `settings.appLocale` — lihat `docs/21-i18n-and-locale.md`.
+
 Integrasi berjalan langsung dari browser melalui:
 
 - Dataset statis (`public/data/*`)
-- EveryAyah CDN (audio)
+- CDN audio tilawah (eksternal)
 - `data/reciters.json` (metadata qari)
 - IndexedDB (Dexie)
 - Cache Storage
@@ -31,7 +33,7 @@ Integrasi berjalan langsung dari browser melalui:
 
 # 2. Integration Principles
 
-## Static Dataset First
+## Static Dataset First (Keputusan MVP)
 
 V1 menggunakan dataset yang dihasilkan sebelumnya dan disajikan sebagai aset statis:
 
@@ -39,71 +41,82 @@ V1 menggunakan dataset yang dihasilkan sebelumnya dan disajikan sebagai aset sta
 public/data/*
 ```
 
-Ini menjaga implementasi tetap sederhana, offline-friendly, dan tanpa ketergantungan API eksternal untuk konten Quran.
-
----
-
-## Local First
-
-HanQuran menggunakan prinsip **Local First**, bukan Network First.
-
-Setelah data tersimpan secara lokal di Dexie:
+Ini adalah **satu-satunya** sumber kebenaran konten Quran untuk MVP. Lihat **`docs/23-static-dataset-architecture.md`**.
 
 ```text
-Baca dari Dexie terlebih dahulu
-↓
-Hanya muat dari public/data/* jika data TIDAK ditemukan di lokal
+public/data/*
+        ↓
+services/quran/*
+        ↓
+Memory Cache (opsional)
+        ↓
+React Hooks
+        ↓
+UI
 ```
-
-Aplikasi **tidak boleh** memuat ulang seluruh dataset setiap kali dibuka.
 
 ---
 
-## Repository First
+## Service Layer First
 
-Feature layer tidak boleh memanggil `fetch()` langsung ke sumber data.
+Feature layer tidak memanggil `fetch()` langsung ke path dataset.
 
-Semua akses data harus melalui Repository Layer:
+Semua akses konten Quran melalui **`services/quran/`**:
 
 ```text
 UI
 ↓
-Store (Zustand)
+React Hooks (useSurahList, useSurah, …)
 ↓
-Repository
+services/quran/*
 ↓
-Dexie (IndexedDB)
-↓
-public/data/* (fallback)
+public/data/*
 ```
 
-Komponen tidak boleh mengakses Dexie atau sumber data secara langsung.
+Komponen tidak boleh mengakses `public/data/` atau Dexie secara langsung.
 
 ---
 
-## Cache First
+## Dexie — Hanya Data Pengguna
 
-Untuk data Quran yang stabil:
+Dexie (IndexedDB) **tidak** menyimpan konten Quran (surat, ayat, terjemahan, word timings, qari).
+
+Dexie dipakai untuk:
+
+- `settings` — preferensi pengguna
+- `favorites`, `lastRead`, `bookmarks`, `notes`
+- `downloadManifest` — metadata audio offline
 
 ```text
-Dexie First
-+ Fallback ke public/data/*
+UI → Zustand Store → Dexie
 ```
 
-Untuk audio:
+---
+
+## Cache In-Memory (Sesi)
+
+`services/quran/data-loader.ts` memakai `Map` in-memory agar fetch ulang dalam satu sesi tidak terjadi.
+
+Browser juga meng-cache aset statis `public/data/*` via HTTP cache.
+
+**Tidak** diperlukan seed atau hydrate Dexie untuk konten Quran.
+
+---
+
+## Audio — CDN tilawah + Cache Storage
 
 ```text
-Cache Storage First
-+ Stream dari EveryAyah jika belum ada
+Cache Storage First (Phase 5)
++ Stream dari CDN audio jika belum ada
 ```
+
+Metadata qari dari `data/reciters.json` — bukan Dexie.
 
 ---
 
 ## Offline Friendly
 
-Jika data sudah pernah diambil sebelumnya, aplikasi harus tetap dapat bekerja tanpa koneksi internet.
-
-Dexie memastikan data Quran tersedia offline setelah pertama kali dimuat.
+Konten Quran tersedia offline setelah Service Worker (Phase 5) meng-cache aset `public/data/*`, atau setelah browser HTTP cache terisi. **Bukan** via IndexedDB content tables.
 
 ---
 
@@ -139,15 +152,17 @@ Dataset disajikan sebagai aset statis dari origin aplikasi.
 
 ---
 
-## 3.2 Audio — EveryAyah
+## 3.2 Audio — CDN tilawah per ayat
 
 ### Provider
 
 ```text
-EveryAyah CDN
+CDN audio tilawah (konfigurasi: AYAH_AUDIO_BASE_URL)
 ```
 
-Audio tilawah per ayat di-stream dari EveryAyah. URL dibangun berdasarkan ID qari dari `data/reciters.json` dan kunci ayat (`surahId:ayahNumber`).
+Audio tilawah per ayat di-stream dari CDN eksternal. URL dibangun via `buildAyahAudioUrl()` berdasarkan ID qari dari `data/reciters.json` dan kunci ayat (`surahId:ayahNumber`).
+
+> **Nilai MVP:** `AYAH_AUDIO_BASE_URL` = `https://everyayah.com/data` di `services/quran/audio-config.ts`. Dapat diganti tanpa mengubah pemanggil.
 
 ### Autentikasi
 
@@ -165,7 +180,7 @@ Tidak diperlukan
 data/reciters.json
 ```
 
-Berisi daftar qari yang didukung: `id` (slug EveryAyah), `name` (nama tampilan).
+Berisi daftar qari yang didukung: `id` (slug pada CDN audio), `name` (nama tampilan).
 
 Contoh:
 
@@ -221,11 +236,12 @@ atau metadata agregat dari file surat individual.
 ### Used By
 
 - `US-001`
-- `QuranRepository.getSurahList()`
+- `getSurahList()` — `services/quran/quran-service.ts`
 
 ### Cached In
 
-- IndexedDB table `surahs`
+- In-memory (`quran-service.ts`, `data-loader.ts`)
+- Browser HTTP cache (aset statis)
 
 ---
 
@@ -240,11 +256,11 @@ public/data/quran/{id}.json
 ### Used By
 
 - `US-002`
-- `QuranRepository.getSurahDetail(id)`
+- `getSurah()` — `services/quran/quran-service.ts`
 
 ### Cached In
 
-- IndexedDB table `surahs`
+- In-memory per sesi
 
 ---
 
@@ -264,7 +280,7 @@ public/data/quran/{id}.json
 
 ### Cached In
 
-- IndexedDB table `ayahs`
+- In-memory per sesi (`data-loader.ts`)
 
 ---
 
@@ -283,7 +299,7 @@ public/data/quran/{id}.json (field word timings, bila tersedia)
 
 ### Cached In
 
-- IndexedDB table `wordTimings`
+- In-memory; data embedded di file surat JSON
 
 ---
 
@@ -301,7 +317,7 @@ public/data/translations/{lang}/{id}.json
 
 ### Cached In
 
-- IndexedDB table `translations`
+- In-memory per sesi
 
 ### Notes
 
@@ -320,12 +336,12 @@ data/reciters.json
 
 ### Used By
 
-- Audio repository bootstrap
+- `audio-service.ts` — `getReciters()`
 - Pemilihan qari di settings
 
 ### Cached In
 
-- IndexedDB table `reciters`
+- Modul in-memory (`audio-service.ts` import JSON)
 
 ---
 
@@ -334,7 +350,7 @@ data/reciters.json
 ### Sumber
 
 ```text
-EveryAyah CDN (URL dibangun dari reciter id + ayah key)
+CDN audio tilawah (URL via `buildAyahAudioUrl`, reciter id + ayah key)
 ```
 
 ### Used By
@@ -349,64 +365,65 @@ EveryAyah CDN (URL dibangun dari reciter id + ayah key)
 
 ---
 
-# 6. Repository Contracts
+# 6. Service Layer Contracts
 
-## 6.1 QuranRepository
+> **Catatan:** `QuranRepository` / `AudioRepository` Dexie-first **dibatalkan** untuk MVP.
+> Implementasi aktif ada di `services/quran/`. Lihat `docs/23-static-dataset-architecture.md`.
+
+## 6.1 Quran Service (`services/quran/quran-service.ts`)
 
 ### Responsibilities
 
-- Mengambil daftar surat
-- Mengambil detail surat
-- Mengambil ayat per surat
-- Mengambil data kata per kata
-- Mengambil terjemahan
-- Melakukan mapping response dataset ke shape domain lokal
-- Menyimpan hasil ke IndexedDB
+- Mengambil daftar surat dari `public/data/quran/*.json`
+- Mengambil detail surat + terjemahan
+- Mapping response dataset ke shape domain (`app-types.ts`)
+- Cache in-memory per sesi
 
-### Suggested Methods
+### Methods (implementasi aktual)
 
 ```ts
-interface QuranRepository {
-  getSurahList(): Promise<SurahRecord[]>;
-  getSurahDetail(id: number): Promise<SurahRecord>;
-  getSurahAyahs(id: number): Promise<AyahRecord[]>;
-  getWordTimings(id: number): Promise<WordTimingRecord[]>;
-  getTranslations(lang: string, surahId: number): Promise<TranslationRecord[]>;
-}
+getManifest(): Promise<DatasetManifest>
+getSurahList(): Promise<SurahSummary[]>
+getSurah(id: string, language?: string): Promise<SurahData>
+getSurahSummary(id: string): Promise<SurahSummary>
+```
+
+### Loaders (`services/quran/data-loader.ts`)
+
+```ts
+loadManifest()
+loadSurahFile(surahNumber)
+loadTranslationFile(surahNumber, language)
 ```
 
 ---
 
-## 6.2 AudioRepository
+## 6.2 Audio Service (`services/quran/audio-service.ts`)
 
 ### Responsibilities
 
 - Memuat daftar qari dari `data/reciters.json`
-- Membangun URL audio EveryAyah per ayat
-- Mengembalikan source audio yang siap diputar
-- Menyimpan audio ke Cache Storage
+- Membangun URL audio tilawah per ayat (`buildAyahAudioUrl`)
 
-### Suggested Methods
+### Methods (implementasi aktual)
 
 ```ts
-interface AudioRepository {
-  getAvailableReciters(): Promise<ReciterSummary[]>;
-  getAyahAudio(reciterId: string, ayahKey: string): Promise<AudioSource>;
-  warmAyahAudio(reciterId: string, ayahKey: string): Promise<void>;
-}
+getReciters(): Reciter[]
+getDefaultReciterId(): string
+getReciterById(id: string): Reciter | undefined
+buildAyahAudioUrl(reciterId, surahNumber, ayahNumber): string
 ```
 
 ### Notes
 
-- `ayahKey` dapat berbentuk `2:255`
-- `reciterId` mengacu pada slug EveryAyah (mis. `Alafasy_128kbps`)
-- `warmAyahAudio()` berguna untuk preload ringan ayat berikutnya
+- `reciterId` = slug qari pada CDN (mis. `Alafasy_128kbps`)
+- Preload / Cache Storage ditangani Phase 5 (Service Worker)
 
 ---
 
 # 7. Integration Flow
 
-## 7.1 Surah List Flow (Local First)
+## 7.1 Surah List Flow
 
 ```text
 App Start
@@ -415,27 +432,22 @@ App Start
 useSurahList()
       │
       ▼
-QuranRepository.getSurahList()
+getSurahList()  [services/quran/quran-service.ts]
       │
-      ▼
-Dexie.surahs.count() > 0 ?
+      ├── Cache in-memory hit? → return
       │
-      ├── Ya  → return dari Dexie (tanpa fetch)
-      │
-      └── Tidak → fetch public/data/quran/*.json
-                      │
-                      ▼
-                  Simpan ke Dexie.surahs
-                      │
-                      ▼
-                  return data
+      └── fetch public/data/manifest.json + public/data/quran/{n}.json
+              │
+              ▼
+          map + cache in-memory
+              │
+              ▼
+          return data
 ```
-
-Setelah tersimpan, Home Screen berjalan **tanpa fetch ulang** pada kunjungan berikutnya.
 
 ---
 
-## 7.2 Surah Page Flow (Local First)
+## 7.2 Surah Page Flow
 
 ```text
 User opens /surah/[id]
@@ -444,20 +456,11 @@ User opens /surah/[id]
 useSurah(id)
       │
       ▼
-QuranRepository.getSurahAyahs(id)
+getSurah(id, language)
       │
-      ▼
-Dexie.ayahs.where('surahId').equals(id).count() > 0 ?
-      │
-      ├── Ya  → render dari Dexie (tanpa fetch)
-      │
-      └── Tidak → fetch public/data/quran/{id}.json
-                      │
-                      ▼
-                  Simpan ke Dexie.ayahs
-                      │
-                      ▼
-                  render data
+      ├── loadSurahFile(id)     → public/data/quran/{id}.json
+      ├── loadTranslationFile → public/data/translations/{lang}/{id}.json
+      └── mapSurahToDetail → render
 ```
 
 ---
@@ -468,14 +471,9 @@ Dexie.ayahs.where('surahId').equals(id).count() > 0 ?
 User plays ayah
       │
       ▼
-useHighlight(surahId, ayahNumber)
+Word timings dari field `words` di public/data/quran/{id}.json
       │
-      ▼
-QuranRepository.getWordTimings(surahId)
-      │
-      ├── Check IndexedDB.wordTimings
-      ├── Load from public/data if missing
-      └── Return normalized timing segments
+      └── Normalisasi di mapper / Focus Mode (Phase 4)
 ```
 
 ---
@@ -483,17 +481,12 @@ QuranRepository.getWordTimings(surahId)
 ## 7.4 Translation Flow
 
 ```text
-Translation toggle ON
+Translation toggle ON (Verse Display Controls)
       │
       ▼
-useTranslations(surahId)
+getSurah(id, language) — terjemahan sudah di-merge di mapper
       │
-      ▼
-QuranRepository.getTranslations(lang, surahId)
-      │
-      ├── Check IndexedDB.translations
-      ├── Load from public/data/translations/{lang}/{id}.json if missing
-      └── Return translation data
+      └── Render jika settings.translationVisible === true
 ```
 
 ---
@@ -504,16 +497,13 @@ QuranRepository.getTranslations(lang, surahId)
 User taps play
       │
       ▼
-useAudio()
+buildAyahAudioUrl(reciterId, surahNumber, ayahNumber)
       │
-      ▼
-AudioRepository.getAyahAudio(reciterId, ayahKey)
+      ├── Phase 5: Check Cache Storage (SW)
+      │     ├── Found → return cached source
+      │     └── Missing → stream CDN audio
       │
-      ├── Check Cache Storage
-      │     ├── Found -> return cached source
-      │     └── Missing -> stream from EveryAyah CDN
-      │
-      └── Save to Cache Storage
+      └── MVP: stream langsung dari `AYAH_AUDIO_BASE_URL`
 ```
 
 ---
@@ -532,14 +522,15 @@ Resource:
 Strategy:
 
 ```text
-Dexie First
-Fallback public/data/*
+In-memory cache (sesi)
++ Browser HTTP cache (aset statis)
++ Service Worker cache (Phase 5)
 ```
 
 Stored in:
 
 ```text
-IndexedDB
+Tidak di IndexedDB — lihat docs/23-static-dataset-architecture.md
 ```
 
 ---
@@ -554,7 +545,7 @@ Strategy:
 
 ```text
 Cache Storage First
-Stream EveryAyah if missing
+Stream CDN audio if missing
 ```
 
 Stored in:
@@ -694,8 +685,8 @@ Error teknis dapat dicatat untuk debugging internal, tetapi:
 
 ## Principles
 
-- Hindari fetch berulang untuk data yang stabil
-- Gunakan IndexedDB sebagai read source utama setelah data tersedia
+- Hindari fetch berulang dalam satu sesi (in-memory cache)
+- Andalkan browser HTTP cache + Service Worker untuk aset statis
 - Gunakan preload ringan hanya untuk ayat berikutnya bila perlu
 - Jangan download audio massal secara default di V1
 
@@ -703,11 +694,11 @@ Error teknis dapat dicatat untuk debugging internal, tetapi:
 
 ## Recommended Behaviors
 
-- Home page muat daftar surat sekali lalu cache di Dexie
+- Home page muat daftar surat via `getSurahList()` — cache in-memory
 - Surah page muat ayat per surat saat dibuka
-- Translation hanya diambil saat dibutuhkan
-- Word timing hanya diambil saat diperlukan untuk playback/highlight
-- Audio hanya di-stream saat user play atau saat preload ringan
+- Translation hanya di-render saat toggle aktif
+- Word timing dari field `words` di JSON surat
+- Audio di-stream dari URL `buildAyahAudioUrl()`
 
 ---
 
@@ -743,7 +734,7 @@ V2+ kemungkinan dapat menambahkan:
 - Background sync
 - Bulk audio download manager
 
-Repository abstraction pada V1 disiapkan agar ekspansi tersebut tidak memaksa perubahan besar di feature layer.
+Repository abstraction pada V1 **tidak** digunakan untuk konten Quran — service layer `services/quran/` cukup untuk MVP.
 
 ---
 
@@ -751,16 +742,15 @@ Repository abstraction pada V1 disiapkan agar ekspansi tersebut tidak memaksa pe
 
 ```text
 services/
-├── api/
-│   ├── QuranRepository.ts
-│   ├── AudioRepository.ts
-│   ├── dataLoader.ts
-│   └── mappers/
-│       ├── surahMapper.ts
-│       ├── ayahMapper.ts
-│       └── translationMapper.ts
+├── quran/
+│   ├── quran-service.ts
+│   ├── data-loader.ts
+│   ├── mappers.ts
+│   ├── audio-service.ts
+│   ├── app-types.ts
+│   └── dataset-types.ts
 ├── db/
-│   └── ...
+│   └── db.ts          # hanya data pengguna
 data/
 └── reciters.json
 public/
@@ -768,6 +758,11 @@ public/
     ├── manifest.json
     ├── quran/
     └── translations/
+hooks/
+├── use-surah-list.ts
+├── use-surah.ts
+├── use-ayah-audio.ts
+└── use-reciters.ts
 ```
 
 ---
@@ -776,8 +771,9 @@ public/
 
 - [x] Dataset statis `public/data/*` tersedia
 - [x] `data/reciters.json` tersedia
-- [ ] Implementasi Repository Layer (Local First)
-- [ ] Integrasi EveryAyah untuk audio playback
+- [x] Service layer `services/quran/` — loader, mapper, quran-service, audio-service
+- [x] Hooks React (`useSurahList`, `useSurah`, `useAyahAudioUrl`, `useReciters`)
+- [x] Integrasi CDN audio tilawah untuk playback (`buildAyahAudioUrl`, `AYAH_AUDIO_BASE_URL`)
 - [ ] Error boundary & fallback UI untuk kegagalan load data
 - [ ] Service Worker caching untuk dataset & audio (Phase 5)
 

@@ -181,9 +181,8 @@ Components:
 - Ayah Card
 - Audio Player
 - Repeat Selector
-- Translation Toggle
+- Verse Display Controls (Terjemahan, Transliterasi, Fokus)
 - Offline Badge
-- Bottom Sheet
 
 ---
 

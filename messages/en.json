@@ -1,0 +1,162 @@
+{
+  "common": {
+    "back": "Back",
+    "cancel": "Cancel",
+    "apply": "Apply",
+    "settings": "Settings",
+    "preview": "Preview",
+    "online": "Online",
+    "offline": "Offline",
+    "offlineReady": "Offline Ready",
+    "offlineReadyLong": "Ready for Offline Use",
+    "downloading": "Downloading",
+    "downloadFailed": "Download Failed",
+    "ayah": "Verse",
+    "ayahs": "verses",
+    "meccan": "Meccan",
+    "medinan": "Medinan",
+    "all": "All",
+    "favorites": "Favorites",
+    "addFavorite": "Add to favorites",
+    "removeFavorite": "Remove from favorites",
+    "backToSurahList": "Back to surah list",
+    "done": "Done",
+    "repeat": "Repeat",
+    "target": "Target",
+    "play": "Play",
+    "pause": "Pause",
+    "cached": "Cached",
+    "notCached": "Not cached"
+  },
+  "loading": {
+    "default": "Loading",
+    "surahList": "Loading surahs...",
+    "surah": "Loading surah...",
+    "focusMode": "Loading Focus Mode..."
+  },
+  "errors": {
+    "loadSurahListFailed": "Failed to load surah list.",
+    "loadSurahFailed": "Failed to load surah.",
+    "surahNotFound": "Surah not found.",
+    "noSearchResults": "No surahs found. Try a different search.",
+    "dataLoadTitle": "Failed to load data",
+    "dataLoadHint": "Check your internet connection and try again.",
+    "retryLoad": "Try again",
+    "backToHome": "Back to home"
+  },
+  "home": {
+    "searchPlaceholder": "Search surahs...",
+    "searchAriaLabel": "Search surahs",
+    "continueMemorization": "Continue Memorizing",
+    "ayahProgress": "Verse {ayah} • {percent}% complete",
+    "memorizedProgress": "{current} of {total} verses memorized",
+    "encouragement": "Keep going — you're doing great!",
+    "continueReadingAria": "Continue {surah} at verse {ayah}",
+    "myFavorites": "My Favorites",
+    "favoritesEmpty": "Mark surahs as favorites to see them here"
+  },
+  "surah": {
+    "translation": "Translation",
+    "transliteration": "Transliteration",
+    "focus": "Focus",
+    "ayahLabel": "Verse {number}",
+    "previousAyah": "Previous verse",
+    "nextAyah": "Next verse",
+    "audioProgress": "Audio progress",
+    "ayahRemaining": "Verse {ayah} • {count} remaining"
+  },
+  "focus": {
+    "exit": "Exit",
+    "exitAriaLabel": "Exit Focus Mode",
+    "ayahCounter": "Verse {current} / {total}",
+    "openRepeatSettings": "Open repeat settings",
+    "previousAyah": "Previous Verse",
+    "nextAyah": "Next Verse"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": {
+      "title": "App Language",
+      "description": "Choose the language for menus, buttons, and app messages.",
+      "id": "Bahasa Indonesia",
+      "en": "English",
+      "ariaLabel": "App language"
+    },
+    "qari": {
+      "title": "Reciter",
+      "description": "Choose your preferred reciter for audio playback.",
+      "selectPlaceholder": "Select reciter",
+      "selectAriaLabel": "Select reciter"
+    },
+    "translation": {
+      "title": "Translation",
+      "description": "Set the default translation display for verses.",
+      "show": "Show translation",
+      "hide": "Hide translation",
+      "scope": "Applies to all surahs.",
+      "toggleAriaLabel": "Show translation"
+    },
+    "textSize": {
+      "title": "Text Size",
+      "description": "Arabic text size on the reading screen and Focus Mode.",
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large",
+      "ariaLabel": "Arabic text size"
+    },
+    "offline": {
+      "title": "Offline & Cache",
+      "description": "Status of saved data for use without internet.",
+      "audioCached": "Cached audio",
+      "quranData": "Quran data",
+      "clearCache": "Clear Cache",
+      "clearCacheTitle": "Clear cache?",
+      "clearCacheDescription": "Cached audio and Quran data will be removed. You'll need an internet connection to load them again."
+    },
+    "accessibility": {
+      "title": "Accessibility",
+      "description": "Adjust the display for a more comfortable experience.",
+      "highContrast": "High contrast",
+      "highContrastDescription": "Increase text and background contrast.",
+      "highContrastAriaLabel": "Enable high contrast",
+      "smoothAnimation": "Smooth animations",
+      "smoothAnimationDescription": "Turn off to reduce motion on screen.",
+      "smoothAnimationAriaLabel": "Enable smooth animations"
+    }
+  },
+  "repeat": {
+    "settingsTitle": "Repeat Settings",
+    "settingsDescription": "Choose how many times and what to repeat.",
+    "settingsAriaLabel": "Repeat settings",
+    "countTitle": "Repeat Count",
+    "countAriaLabel": "Repeat count",
+    "targetAriaLabel": "Repeat target",
+    "infinite": "Infinite",
+    "targetCurrentAyah": "Active Verse",
+    "targetCurrentAyahHint": "Repeats the currently active verse.",
+    "targetRange": "Verse Range",
+    "targetRangeHint": "Repeats a specific range of verses.",
+    "targetEntireSurah": "This Surah",
+    "targetEntireSurahHint": "Repeats the entire surah from start to finish.",
+    "rangeTitle": "Verse Range",
+    "fromAyah": "From Verse",
+    "toAyah": "To Verse",
+    "rangeInvalid": "Range must be between 1 and {max}, and From ≤ To.",
+    "statusActiveAyah": "Active Verse",
+    "statusAyahDetail": "Verse {ayah} • {remaining}",
+    "statusRange": "Verse Range {from}-{to}",
+    "statusSurah": "Surah {name}",
+    "remainingInfinite": "∞ remaining",
+    "remainingCount": "{count}x remaining",
+    "cycleProgress": "Cycle {current} / {total}",
+    "atAyah": "Currently on Verse {ayah}",
+    "atAyahOfTotal": "Currently on Verse {current} of {total}",
+    "previewAyah": "Verse {ayah} • {count}",
+    "previewRange": "Verses {from}-{to} • {count}",
+    "previewSurah": "{surah} • {count}"
+  },
+  "nav": {
+    "home": "Home",
+    "settings": "Settings"
+  }
+}

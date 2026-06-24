@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { Select as SelectPrimitive } from '@base-ui/react/select';
+import type { Padding, Side } from '@base-ui/react/utils/useAnchorPositioning';
 import { Check, ChevronDown } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
@@ -33,29 +34,53 @@ const SelectTrigger = React.forwardRef<
 ));
 SelectTrigger.displayName = 'SelectTrigger';
 
-const SelectContent = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Popup>
->(({ className, children, ...props }, ref) => (
-  <SelectPrimitive.Portal>
-    <SelectPrimitive.Positioner sideOffset={6} alignItemWithTrigger={false}>
-      <SelectPrimitive.Popup
-        ref={ref}
-        className={cn(
-          'z-50 min-w-[var(--anchor-width)] overflow-hidden rounded-lg border border-border bg-white p-1 shadow-lg',
-          'transition-all duration-200 ease-out',
-          'data-[starting-style]:opacity-0 data-[starting-style]:translate-y-1',
-          'data-[ending-style]:opacity-0 data-[ending-style]:translate-y-1',
-          'focus-visible:outline-none',
-          className,
-        )}
-        {...props}
+export interface SelectContentProps
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Popup> {
+  side?: Side;
+  sideOffset?: number;
+  alignItemWithTrigger?: boolean;
+  collisionPadding?: Padding;
+}
+
+const SelectContent = React.forwardRef<HTMLDivElement, SelectContentProps>(
+  (
+    {
+      className,
+      side = 'bottom',
+      sideOffset = 6,
+      alignItemWithTrigger = false,
+      collisionPadding,
+      children,
+      ...props
+    },
+    ref,
+  ) => (
+    <SelectPrimitive.Portal>
+      <SelectPrimitive.Positioner
+        side={side}
+        sideOffset={sideOffset}
+        alignItemWithTrigger={alignItemWithTrigger}
+        collisionPadding={collisionPadding}
+        className="z-[60]"
       >
-        {children}
-      </SelectPrimitive.Popup>
-    </SelectPrimitive.Positioner>
-  </SelectPrimitive.Portal>
-));
+        <SelectPrimitive.Popup
+          ref={ref}
+          className={cn(
+            'z-[60] min-w-[var(--anchor-width)] overflow-hidden rounded-lg border border-border bg-white p-1 shadow-lg',
+            'transition-all duration-200 ease-out',
+            'data-[starting-style]:opacity-0 data-[starting-style]:translate-y-1',
+            'data-[ending-style]:opacity-0 data-[ending-style]:translate-y-1',
+            'focus-visible:outline-none',
+            className,
+          )}
+          {...props}
+        >
+          {children}
+        </SelectPrimitive.Popup>
+      </SelectPrimitive.Positioner>
+    </SelectPrimitive.Portal>
+  ),
+);
 SelectContent.displayName = 'SelectContent';
 
 const SelectItem = React.forwardRef<
@@ -90,4 +115,5 @@ export {
   SelectTrigger,
   SelectContent,
   SelectItem,
+  type SelectContentProps,
 };

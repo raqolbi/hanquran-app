@@ -83,14 +83,40 @@ P0 — Must Have
 ### Acceptance Criteria
 
 1. Terjemahan default tersembunyi
-2. Tombol toggle untuk menampilkan/menyembunyikan terjemahan
+2. Toggle Terjemahan di **Verse Display Controls** (baris horizontal di bawah header surat) — selalu terlihat
 3. Terjemahan dalam Bahasa Indonesia
 4. Toggle bersifat global (berlaku untuk semua ayat)
 5. State toggle tersimpan secara lokal di perangkat dan tetap sesuai pilihan terakhir
+6. Urutan render saat aktif: Arab → Transliterasi (jika ON) → Terjemahan
 
 ### Linked PB
 
 PB-003
+
+### Priority
+
+P1 — Should Have
+
+---
+
+## US-003b: Menampilkan Transliterasi
+
+**Sebagai** semua pengguna
+**Saya ingin** melihat transliterasi ayat
+**Sehingga** saya dapat membantu pengucapan saat menghafal.
+
+### Acceptance Criteria
+
+1. Transliterasi default tersembunyi
+2. Toggle Transliterasi di **Verse Display Controls** — selalu terlihat, satu baris dengan Terjemahan dan Fokus
+3. Independen dari toggle Terjemahan
+4. Toggle bersifat global
+5. State tersimpan di Dexie (`settings.transliterationVisible`)
+6. Urutan render: Arab → Transliterasi → Terjemahan (jika keduanya ON)
+
+### Linked PB
+
+PB-003b
 
 ### Priority
 
@@ -206,10 +232,12 @@ P0 — Must Have
 ### Acceptance Criteria
 
 1. Mode fullscreen
-2. Hanya menampilkan: ayat, audio, repeat, indikator progress hafalan minimal
+2. Hanya menampilkan: ayat (sesuai preferensi Terjemahan/Transliterasi), audio, repeat, indikator progress hafalan minimal
 3. Semua navigasi dan elemen non-esensial tersembunyi
-4. Toggle untuk masuk/keluar focus mode
+4. Tombol Fokus di Verse Display Controls untuk masuk; tombol Keluar untuk keluar
 5. Satu sentuhan untuk kembali ke tampilan normal
+6. **Mode Fokus mempertahankan** state Terjemahan dan Transliterasi — tidak mengubah preferensi konten
+7. Urutan konten ayat: Arab → Transliterasi (jika ON) → Terjemahan (jika ON)
 
 ### Linked PB
 
@@ -405,6 +433,32 @@ P0 — Must Have
 ### Linked PB
 
 PB-014
+
+### Priority
+
+P1 — Should Have
+
+---
+
+## US-015: Memilih Bahasa Aplikasi
+
+**Sebagai** semua pengguna
+**Saya ingin** memilih bahasa tampilan aplikasi (Bahasa Indonesia atau English)
+**Sehingga** saya dapat menggunakan HanQuran dalam bahasa yang paling nyaman bagi saya.
+
+### Acceptance Criteria
+
+1. Bahasa didukung: Bahasa Indonesia (`id`) dan English (`en`)
+2. Pada first launch, bahasa default ditentukan dari browser locale dan timezone (lihat `docs/21-i18n-and-locale.md`)
+3. Bagian **Bahasa Aplikasi** tersedia di Pengaturan dengan opsi **Bahasa Indonesia** dan **English**
+4. Preferensi disimpan lokal dan bertahan setelah restart
+5. Mengganti bahasa memperbarui menu, navigasi, dialog, label, tombol, empty state, dan notifikasi
+6. Teks Arab ayat, transliterasi, audio tilawah, dan nama qari tidak berubah
+7. Framework: **`next-intl`**
+
+### Linked PB
+
+PB-015
 
 ### Priority
 

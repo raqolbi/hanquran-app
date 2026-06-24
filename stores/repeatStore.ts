@@ -7,6 +7,7 @@
 
 import { create } from 'zustand';
 import { db, defaultSettings } from '@/services/db/db';
+import { createInitialRuntime } from '@/services/repeat-engine';
 import type { RepeatConfig, RepeatRuntime } from '@/types';
 
 const defaultConfig: RepeatConfig = {
@@ -15,11 +16,7 @@ const defaultConfig: RepeatConfig = {
   range: null,
 };
 
-const initialRuntime: RepeatRuntime = {
-  cycleIndex: 0,
-  isActive: false,
-  lastBoundary: null,
-};
+const initialRuntime: RepeatRuntime = createInitialRuntime(false);
 
 interface RepeatState {
   config: RepeatConfig;
@@ -32,10 +29,23 @@ interface RepeatActions {
   init: () => Promise<void>;
   /** Terapkan config baru: tulis ke Dexie lalu reset runtime. */
   applyConfig: (next: RepeatConfig) => Promise<void>;
+  /** Perbarui sebagian config (mis. count dari selector) dan persist. */
+  patchConfig: (patch: Partial<RepeatConfig>) => Promise<void>;
   resetRuntime: () => void;
-  /** Tandai satu siklus selesai; nonaktif bila mencapai count. */
-  tickCycle: () => void;
+  setRuntime: (runtime: RepeatRuntime) => void;
   setActive: (isActive: boolean) => void;
+  /** Mulai sesi repeat baru saat user menekan play. */
+  beginSession: () => void;
+}
+
+async function persistRepeatConfig(next: RepeatConfig): Promise<void> {
+  const current = (await db.settings.get('default')) ?? defaultSettings;
+  await db.settings.put({
+    ...current,
+    id: 'default',
+    repeatConfig: next,
+    updatedAt: Date.now(),
+  });
 }
 
 export const useRepeatStore = create<RepeatState & RepeatActions>()(
@@ -53,37 +63,31 @@ export const useRepeatStore = create<RepeatState & RepeatActions>()(
     },
 
     applyConfig: async (next) => {
-      const current = (await db.settings.get('default')) ?? defaultSettings;
-      await db.settings.put({
-        ...current,
-        id: 'default',
-        repeatConfig: next,
-        updatedAt: Date.now(),
-      });
-      // Runtime di-reset & diaktifkan setiap config baru diterapkan.
+      await persistRepeatConfig(next);
       set({
         config: next,
-        runtime: { ...initialRuntime, isActive: true },
+        runtime: createInitialRuntime(true),
       });
     },
 
-    resetRuntime: () => set({ runtime: initialRuntime }),
-
-    tickCycle: () => {
-      const { config, runtime } = get();
-      const nextIndex = runtime.cycleIndex + 1;
-      const finished =
-        Number.isFinite(config.count) && nextIndex >= config.count;
+    patchConfig: async (patch) => {
+      const next = { ...get().config, ...patch };
+      await persistRepeatConfig(next);
+      const keepActive = get().runtime.isActive;
       set({
-        runtime: {
-          ...runtime,
-          cycleIndex: nextIndex,
-          isActive: !finished,
-        },
+        config: next,
+        runtime: createInitialRuntime(keepActive),
       });
     },
+
+    resetRuntime: () => set({ runtime: createInitialRuntime(false) }),
+
+    setRuntime: (runtime) => set({ runtime }),
 
     setActive: (isActive) =>
       set((s) => ({ runtime: { ...s.runtime, isActive } })),
+
+    beginSession: () =>
+      set({ runtime: createInitialRuntime(true) }),
   }),
 );

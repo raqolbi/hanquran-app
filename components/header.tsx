@@ -4,11 +4,14 @@ import { motion } from 'motion/react';
 import { Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { Logo } from '@/components/shared/Logo';
 import { routes } from '@/lib/routes';
 
 export function Header() {
+  const t = useTranslations('common');
+  const tSettings = useTranslations('settings');
   const [status, setStatus] = useState<'online' | 'offline' | 'offline-ready'>('online');
 
   useEffect(() => {
@@ -24,7 +27,12 @@ export function Header() {
     };
   }, []);
 
-  const statusLabel = status === 'online' ? 'Online' : status === 'offline' ? 'Offline' : 'Siap Offline';
+  const statusLabel =
+    status === 'online'
+      ? t('online')
+      : status === 'offline'
+        ? t('offline')
+        : t('offlineReady');
   const statusColor = status === 'online' ? '#10B981' : status === 'offline' ? '#EF4444' : '#F59E0B';
 
   return (
@@ -55,7 +63,7 @@ export function Header() {
           <Link
             href={routes.settings()}
             className="p-2.5 hover:bg-white/15 rounded-full transition-colors text-white inline-flex items-center justify-center"
-            aria-label="Pengaturan"
+            aria-label={tSettings('title')}
           >
             <Settings size={24} strokeWidth={1.5} />
           </Link>

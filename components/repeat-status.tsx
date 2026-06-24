@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'motion/react';
+import { useTranslations } from 'next-intl';
 
 import { cn } from '@/lib/utils';
 import { INFINITE, type RepeatCount, type RepeatTarget } from '@/lib/repeat-options';
@@ -17,11 +18,6 @@ interface RepeatStatusProps {
   className?: string;
 }
 
-/**
- * Spec §14: Menampilkan status repeat yang sedang aktif.
- * Mendukung 3 varian target: current_ayah, ayah_range, entire_surah.
- * Prefix 🟢. Bahasa Indonesia.
- */
 export function RepeatStatus({
   targetType,
   repeatCount,
@@ -33,6 +29,8 @@ export function RepeatStatus({
   surahName,
   className,
 }: RepeatStatusProps) {
+  const t = useTranslations('repeat');
+
   const totalLabel = repeatCount === INFINITE ? '∞' : `${repeatCount}`;
   const isInfinite = repeatCount === INFINITE;
 
@@ -42,26 +40,28 @@ export function RepeatStatus({
   switch (targetType) {
     case 'current_ayah': {
       const remainingCount = Math.max(0, (repeatCount as number) - currentCycle + 1);
-      const remainingLabel = isInfinite ? '∞ tersisa' : `${remainingCount}x tersisa`;
-      title = 'Ayat Aktif';
-      details = [`Ayat ${activeAyah} • ${remainingLabel}`];
+      const remainingLabel = isInfinite
+        ? t('remainingInfinite')
+        : t('remainingCount', { count: remainingCount });
+      title = t('statusActiveAyah');
+      details = [t('statusAyahDetail', { ayah: activeAyah, remaining: remainingLabel })];
       break;
     }
     case 'ayah_range': {
       const from = rangeFrom ?? 1;
       const to = rangeTo ?? totalAyahs;
-      title = `Range Ayat ${from}-${to}`;
+      title = t('statusRange', { from, to });
       details = [
-        `Siklus ${currentCycle} / ${totalLabel}`,
-        `Sedang di Ayat ${activeAyah}`,
+        t('cycleProgress', { current: currentCycle, total: totalLabel }),
+        t('atAyah', { ayah: activeAyah }),
       ];
       break;
     }
     case 'entire_surah': {
-      title = `Surat ${surahName}`;
+      title = t('statusSurah', { name: surahName });
       details = [
-        `Siklus ${currentCycle} / ${totalLabel}`,
-        `Sedang di Ayat ${activeAyah} dari ${totalAyahs}`,
+        t('cycleProgress', { current: currentCycle, total: totalLabel }),
+        t('atAyahOfTotal', { current: activeAyah, total: totalAyahs }),
       ];
       break;
     }

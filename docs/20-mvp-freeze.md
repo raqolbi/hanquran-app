@@ -86,7 +86,7 @@ Berikut adalah seluruh fitur yang termasuk dalam MVP V1. Semua berasal dari Prod
 
 - Menampilkan 114 surat dengan nomor, nama Arab, nama Latin, arti, jumlah ayat, dan tempat turun
 - Dapat di-scroll dengan lancar
-- Data diambil via Local-First: Dexie terlebih dahulu, `public/data/*` sebagai fallback
+- Data diambil dari `public/data/*` via `services/quran/` (Static Dataset Architecture)
 
 ## 4.2 Membuka Surat / Surah Detail (PB-002) — P0
 
@@ -94,13 +94,21 @@ Berikut adalah seluruh fitur yang termasuk dalam MVP V1. Semua berasal dari Prod
 - Menampilkan seluruh ayat dengan font Uthmani
 - Navigasi next/previous surat
 - Header dengan nama surat aktif
-- Kontrol audio, repeat, dan aksi masuk Focus Mode
+- **Verse Display Controls:** `[Terjemahan] [Transliterasi] [Fokus]` — satu baris di bawah header
+- Kontrol audio, repeat, dan navigasi Focus Mode
 
 ## 4.3 Terjemahan (PB-003) — P1
 
-- Toggle terjemahan per ayat (Bahasa Indonesia)
+- Toggle terjemahan di Verse Display Controls (Bahasa Indonesia)
 - Default: tersembunyi
-- Toggle state tersimpan di Dexie (`settings`)
+- Toggle state tersimpan di Dexie (`settings.translationVisible`)
+
+## 4.3b Transliterasi (PB-003b) — P1
+
+- Toggle transliterasi di Verse Display Controls
+- Default: tersembunyi
+- Independen dari terjemahan; persisten di Dexie (`settings.transliterationVisible`)
+- Urutan render: Arab → Transliterasi → Terjemahan
 
 ## 4.4 Audio Player (PB-004) — P0
 
@@ -183,9 +191,11 @@ Counter menampilkan target aktif dan jumlah tersisa. Repeat berjalan otomatis ta
 
 ## 4.13 Pengaturan (Settings)
 
+- **Bahasa aplikasi** (Bahasa Indonesia / English) — `next-intl`, persisten di `settings.appLocale`
 - Pilih qari
 - Ukuran teks Arab
-- Toggle terjemahan global
+- Toggle terjemahan global (konten ayat — di Verse Display Controls, bukan Pengaturan)
+- Toggle transliterasi global (Verse Display Controls)
 - Hapus cache
 - Status offline
 - Aksesibilitas dasar
@@ -272,7 +282,7 @@ Navigasi MVP terdiri dari **empat halaman** berikut. Tidak ada route tambahan ya
 | `/` | Beranda (Home) | Daftar surat, pencarian, filter favorit, kartu "Lanjutkan Hafalan" |
 | `/surah/[id]` | Detail Surat | Tampilan ayat, audio player, repeat system, tombol Focus Mode |
 | `/focus/[id]` | Mode Fokus | Layar bebas distraksi dengan highlight kata-per-kata |
-| `/settings` | Pengaturan | Qari, ukuran teks, cache, aksesibilitas |
+| `/settings` | Pengaturan | Bahasa UI, qari, ukuran teks, cache, aksesibilitas |
 
 Query parameter yang diizinkan:
 - `/surah/[id]?ayah=[n]` — membuka halaman pada ayat tertentu
@@ -335,49 +345,44 @@ React Context tidak digunakan sebagai state management utama.
 
 | Teknologi | Digunakan untuk |
 |-----------|-----------------|
-| **Dexie (IndexedDB)** | Settings, Favorites, Last Read, Download Manifest, Cached Quran Data |
+| **Dexie (IndexedDB)** | Settings, Favorites, Last Read, Download Manifest — **bukan** konten Quran |
 | **Cache Storage API** | Audio MP3, Static Assets, Offline Assets |
 
 `localForage` dan `localStorage` **tidak digunakan** sebagai primary persistence.
 
-Dexie schema v1 mencakup 13 tabel:
+Dexie schema **v2** — hanya data pengguna (+ Growth tables):
 
 ```
-settings, surahs, ayahs, translations, wordTimings,
-reciters, favorites, lastRead, downloadManifest,
+settings, favorites, lastRead, downloadManifest,
 bookmarks*, memorization_progress*, murajaah_sessions*,
 statistics*, notes*
 ```
 
-> `*` — Tabel Growth Phase. Schema tersedia sejak v1 untuk migrasi bersih, tetapi tidak diisi dalam MVP.
+> Tabel konten Quran (`surahs`, `ayahs`, dll.) **dihapus** di v2. Lihat `docs/23-static-dataset-architecture.md`.
 
 ## 7.4 Data Source
 
 | Sumber | Peran |
 |--------|-------|
-| **Dataset statis (`public/data/*`)** | Source of truth konten Quran. Dimuat ke Dexie saat first launch atau on-demand |
-| **EveryAyah CDN** | Sumber audio tilawah per ayat |
+| **Dataset statis (`public/data/*`)** | **Satu-satunya** source of truth konten Quran |
+| **CDN audio tilawah** | Sumber audio per ayat (`AYAH_AUDIO_BASE_URL`) |
 | **`data/reciters.json`** | Metadata qari yang didukung |
 
 ## 7.5 Arsitektur
 
-**Prinsip Local First:** Baca dari Dexie terlebih dahulu. Jangan melakukan request API jika data sudah tersedia secara lokal.
-
-**Repository Pattern** — pola akses data yang wajib digunakan:
+**Static Dataset Architecture** — konten Quran:
 
 ```
-UI (komponen)
-  ↓
-Store (Zustand)
-  ↓
-Repository (services/api/)
-  ↓
-Dexie (services/db/)
-  ↓
-public/data/* (fallback)
+UI → hooks → services/quran/ → public/data/*
 ```
 
-Dilarang mengakses API atau Dexie langsung dari komponen UI.
+**Data pengguna:**
+
+```
+UI → Store (Zustand) → Dexie
+```
+
+Dilarang mengakses Dexie atau `public/data/` langsung dari komponen UI.
 
 ## 7.6 PWA
 
@@ -459,9 +464,10 @@ MVP HanQuran V1 dinyatakan **selesai** hanya jika seluruh kondisi berikut terpen
 
 ## 9.2 Data & State
 
-- [ ] Data surat dimuat via Local-First: Dexie jika sudah ada, `public/data/*` hanya jika belum
-- [ ] Home Screen tidak melakukan request API jika surahs sudah di-cache di Dexie
-- [ ] Preferensi pengguna (qari, ukuran teks, terjemahan, favorit, konfigurasi repeat) tersimpan di Dexie dan persisten antar sesi
+- [x] Data surat dimuat dari `public/data/*` via `services/quran/`
+- [x] Cache in-memory per sesi — tidak perlu Dexie untuk konten Quran
+- [ ] Preferensi pengguna (bahasa UI, qari, ukuran teks, terjemahan ayat, favorit, konfigurasi repeat) tersimpan di Dexie dan persisten antar sesi
+- [ ] Bahasa UI (`settings.appLocale`: `id` | `en`) dapat diubah di Pengaturan dan memperbarui seluruh label aplikasi via `next-intl`
 - [ ] Posisi terakhir (surat + ayat) tersimpan otomatis di Dexie `lastRead`
 
 ## 9.3 Offline & PWA
@@ -584,7 +590,8 @@ Tidak ada route lain yang termasuk MVP.
 | Runtime State | Zustand |
 | Persistent DB | Dexie (IndexedDB) |
 | Audio Cache | Cache Storage API |
-| Data Source | Dataset statis `public/data/*` + EveryAyah (audio) |
+| Data Source | Dataset statis `public/data/*` + CDN audio tilawah |
+| UI Locale | Bahasa Indonesia (`id`) & English (`en`) via **next-intl** |
 | Architecture | Local First + Repository Pattern |
 
 ---
@@ -608,7 +615,9 @@ Dokumentasi arsitektur yang menjadi acuan tunggal:
 |---------|-------|
 | `docs/04-system-architecture.md` | System architecture & component tree |
 | `docs/06-database-schema.md` | Dexie schema, 13 tabel, indexing, migration |
-| `docs/07-api-integration.md` | Repository Pattern, Local-First flow |
+| `docs/07-api-integration.md` | Service layer, Static Dataset flow |
+| `docs/23-static-dataset-architecture.md` | Keputusan arsitektur konten Quran MVP |
+| `docs/21-i18n-and-locale.md` | Lokalisasi UI (`next-intl`, id/en) |
 | `docs/14-routing-spec.md` | Route spec & navigasi |
 | `docs/15-state-management.md` | 5-layer state architecture |
 | `docs/16-folder-structure.md` | Struktur folder proyek |

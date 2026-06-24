@@ -8,6 +8,8 @@
 
 import { create } from 'zustand';
 import { db, defaultSettings } from '@/services/db/db';
+import { detectAppLocale } from '@/i18n/detection';
+import { normalizeReciterId } from '@/lib/reciter-preference';
 import type { SettingsRecord, LastReadRecord } from '@/types';
 
 interface UserState {
@@ -33,13 +35,60 @@ export const useUserStore = create<UserState & UserActions>()((set, get) => ({
   initialized: false,
 
   init: async () => {
-    const [settings, favorites, lastRead] = await Promise.all([
+    const [storedSettings, favorites, lastRead] = await Promise.all([
       db.settings.get('default'),
       db.favorites.orderBy('createdAt').toArray(),
       db.lastRead.get('last-read'),
     ]);
+
+    let settings = storedSettings ?? null;
+
+    if (!settings) {
+      settings = {
+        ...defaultSettings,
+        appLocale: detectAppLocale(),
+        updatedAt: Date.now(),
+      };
+      await db.settings.put(settings);
+    } else if (!settings.appLocale) {
+      settings = {
+        ...settings,
+        appLocale: 'id',
+        updatedAt: Date.now(),
+      };
+      await db.settings.put(settings);
+    } else if (settings.transliterationVisible === undefined) {
+      settings = {
+        ...settings,
+        transliterationVisible: false,
+        updatedAt: Date.now(),
+      };
+      await db.settings.put(settings);
+    }
+
+    const legacySettings = settings as SettingsRecord & { qariId?: number };
+    if (!settings.reciterId) {
+      settings = {
+        ...settings,
+        reciterId: normalizeReciterId(undefined),
+        updatedAt: Date.now(),
+      };
+      delete legacySettings.qariId;
+      await db.settings.put(settings);
+    } else {
+      const normalized = normalizeReciterId(settings.reciterId);
+      if (normalized !== settings.reciterId) {
+        settings = {
+          ...settings,
+          reciterId: normalized,
+          updatedAt: Date.now(),
+        };
+        await db.settings.put(settings);
+      }
+    }
+
     set({
-      settings: settings ?? defaultSettings,
+      settings,
       favorites: favorites.map((f) => f.surahId),
       lastViewed: lastRead
         ? { surahId: lastRead.surahId, ayahNumber: lastRead.ayahNumber }

@@ -1,0 +1,183 @@
+'use client';
+
+import { useCallback, useMemo } from 'react';
+
+import { useAudio, useAudioOnEnded } from '@/hooks/use-audio';
+import type { PlayAyahParams } from '@/hooks/use-audio';
+import type { RepeatSettingsConfig } from '@/components/repeat-settings-dialog';
+import {
+  REPEAT_OPTIONS,
+  type RepeatCount,
+} from '@/lib/repeat-options';
+import {
+  computeNextOnAyahEnd,
+  getDisplayCycle,
+  toRepeatConfig,
+} from '@/services/repeat-engine';
+import { useRepeatStore } from '@/stores/repeatStore';
+import type { RepeatStatusProps } from '@/components/repeat-status';
+
+function toRepeatCountValue(count: number): RepeatCount {
+  const match = REPEAT_OPTIONS.find((option) => option.value === count);
+  return (match?.value ?? 5) as RepeatCount;
+}
+
+export interface UseSurahRepeatPlaybackParams {
+  surahId: number;
+  activeAyah: number;
+  totalAyahs: number;
+  reciterId: string;
+  surahName: string;
+  setActiveAyah: (ayah: number) => void;
+}
+
+export function useSurahRepeatPlayback({
+  surahId,
+  activeAyah,
+  totalAyahs,
+  reciterId,
+  surahName,
+  setActiveAyah,
+}: UseSurahRepeatPlaybackParams) {
+  const config = useRepeatStore((s) => s.config);
+  const runtime = useRepeatStore((s) => s.runtime);
+  const applyConfig = useRepeatStore((s) => s.applyConfig);
+  const patchConfig = useRepeatStore((s) => s.patchConfig);
+  const setRuntime = useRepeatStore((s) => s.setRuntime);
+  const beginSession = useRepeatStore((s) => s.beginSession);
+
+  const { isPlaying, playAyah, pause, toggleAyah, isCurrentAyah, prefetchNextAyah } =
+    useAudio();
+
+  const playParams = useCallback(
+    (ayahNumber: number): PlayAyahParams => ({
+      surahId,
+      ayahNumber,
+      reciterId,
+      totalAyahs,
+    }),
+    [surahId, reciterId, totalAyahs],
+  );
+
+  const handleAyahEnded = useCallback(() => {
+    const state = useRepeatStore.getState();
+    const result = computeNextOnAyahEnd({
+      config: state.config,
+      runtime: state.runtime,
+      currentAyah: activeAyah,
+      totalAyahs,
+    });
+
+    setRuntime(result.runtime);
+
+    switch (result.action.type) {
+      case 'replay':
+        void playAyah(playParams(result.action.ayahNumber));
+        break;
+      case 'advance':
+        setActiveAyah(result.action.ayahNumber);
+        void playAyah(playParams(result.action.ayahNumber));
+        break;
+      case 'stop':
+        pause();
+        break;
+      default:
+        break;
+    }
+  }, [activeAyah, totalAyahs, setRuntime, playAyah, playParams, pause, setActiveAyah]);
+
+  useAudioOnEnded(handleAyahEnded);
+
+  const togglePlayback = useCallback(async () => {
+    const willStart =
+      !(isPlaying && isCurrentAyah(surahId, activeAyah));
+
+    if (willStart) {
+      beginSession();
+    }
+
+    await toggleAyah(playParams(activeAyah));
+  }, [
+    isPlaying,
+    isCurrentAyah,
+    surahId,
+    activeAyah,
+    beginSession,
+    toggleAyah,
+    playParams,
+  ]);
+
+  const navigateAyah = useCallback(
+    (nextAyah: number) => {
+      setActiveAyah(nextAyah);
+      if (isPlaying) {
+        void playAyah(playParams(nextAyah));
+      }
+    },
+    [isPlaying, playAyah, playParams, setActiveAyah],
+  );
+
+  const handleCountChange = useCallback(
+    (count: RepeatCount) => {
+      void patchConfig({ count });
+    },
+    [patchConfig],
+  );
+
+  const handleApplyRepeatSettings = useCallback(
+    (settings: RepeatSettingsConfig) => {
+      void applyConfig(
+        toRepeatConfig({
+          repeatCount: settings.repeatCount,
+          targetType: settings.targetType,
+          fromAyah: settings.fromAyah,
+          toAyah: settings.toAyah,
+        }),
+      );
+    },
+    [applyConfig],
+  );
+
+  const repeatStatusProps: RepeatStatusProps = useMemo(
+    () => ({
+      targetType: config.target,
+      repeatCount: toRepeatCountValue(config.count),
+      currentCycle: getDisplayCycle(runtime),
+      activeAyah,
+      totalAyahs,
+      rangeFrom: config.range?.from,
+      rangeTo: config.range?.to,
+      surahName,
+    }),
+    [config, runtime, activeAyah, totalAyahs, surahName],
+  );
+
+  const showRepeatStatus = runtime.isActive && isPlaying;
+
+  const prefetchCurrentNext = useCallback(
+    () =>
+      prefetchNextAyah({
+        surahId,
+        ayahNumber: activeAyah,
+        reciterId,
+        totalAyahs,
+      }),
+    [prefetchNextAyah, surahId, activeAyah, reciterId, totalAyahs],
+  );
+
+  return {
+    isPlaying,
+    togglePlayback,
+    navigateAyah,
+    prefetchNextAyah: prefetchCurrentNext,
+    pause,
+    repeatCount: toRepeatCountValue(config.count),
+    repeatTarget: config.target,
+    rangeFrom: config.range?.from,
+    rangeTo: config.range?.to,
+    repeatStatusProps,
+    showRepeatStatus,
+    handleCountChange,
+    handleApplyRepeatSettings,
+  };
+}
