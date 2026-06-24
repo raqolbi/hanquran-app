@@ -163,6 +163,14 @@
     "previewRange": "Verses {from}-{to} • {count}",
     "previewSurah": "{surah} • {count}"
   },
+  "pwa": {
+    "installTitle": "Install HanQuran",
+    "installDescription": "Open faster from your home screen — ready after downloading audio.",
+    "installAction": "Install app",
+    "installDismiss": "Dismiss install suggestion",
+    "installIOSHint": "In Safari: tap Share, then choose \"Add to Home Screen\".",
+    "installAriaLabel": "HanQuran install suggestion"
+  },
   "nav": {
     "home": "Home",
     "settings": "Settings"

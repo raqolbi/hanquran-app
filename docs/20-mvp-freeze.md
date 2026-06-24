@@ -187,10 +187,10 @@ Counter menampilkan target aktif dan jumlah tersisa. Repeat berjalan otomatis ta
 
 ## 4.11 PWA Setup (PB-011) — P0
 
-- `manifest.json` tersedia
-- Service Worker terdaftar
-- Dapat diinstal di perangkat (Add to Home Screen)
-- Ikon aplikasi, splash screen, dan tema warna
+- `manifest.json` tersedia — `public/manifest.json`, ter-link di `app/layout.tsx` ✅
+- Service Worker terdaftar ✅
+- Dapat diinstal di perangkat (Add to Home Screen) — `InstallBanner` + `useInstallPrompt` ✅
+- Ikon aplikasi (`public/icons/` 192 & 512) ✅; splash screen belum; tema warna `#0F766E` ✅
 
 ## 4.12 Mobile Responsive (PB-013) — P0
 
@@ -485,7 +485,7 @@ MVP HanQuran V1 dinyatakan **selesai** hanya jika seluruh kondisi berikut terpen
 
 - [ ] Minimal 1 surat dapat diunduh dan diputar saat perangkat offline — infrastruktur unduh ✅; verifikasi playback belum
 - [ ] Aplikasi dapat diinstal sebagai PWA di perangkat Android dan iOS
-- [ ] Offline shell dapat dimuat tanpa koneksi internet
+- [x] Offline shell dapat dimuat tanpa koneksi internet (`public/offline.html` + SW `hanquran-shell-v1`)
 - [x] Indikator status offline tersedia di UI
 
 ## 9.4 Kualitas
