@@ -205,7 +205,7 @@ Counter menampilkan target aktif dan jumlah tersisa. Repeat berjalan otomatis ta
 - Ukuran teks Arab ✅ (persisten `settings.fontSize`, diterapkan di Surah Detail & Focus)
 - Toggle terjemahan global (konten ayat — di Verse Display Controls, bukan Pengaturan) ✅
 - Toggle transliterasi global (Verse Display Controls) ✅
-- Hapus cache — UI + dialog ✅; logika pembersihan belum
+- Hapus cache ✅ — `services/cache-manager.ts`, konfirmasi di Settings
 - Status offline ✅
 - Aksesibilitas dasar — UI switch ada; `contrastMode` / `smoothAnimation` belum persist
 
