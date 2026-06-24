@@ -101,9 +101,10 @@ Berikut adalah seluruh fitur yang termasuk dalam MVP V1. Semua berasal dari Prod
 
 ## 4.3 Terjemahan (PB-003) — P1
 
-- Toggle terjemahan di Verse Display Controls (Bahasa Indonesia)
-- Default: tersembunyi
-- Toggle state tersimpan di Dexie (`settings.translationVisible`)
+- Toggle terjemahan di Verse Display Controls ✅
+- Default: tersembunyi ✅
+- Bahasa terjemahan mengikuti `appLocale` (`id` / `en`) ✅
+- Toggle state tersimpan di Dexie (`settings.translationVisible`) ✅
 
 ## 4.3b Transliterasi (PB-003b) — P1
 
@@ -152,34 +153,37 @@ Counter menampilkan target aktif dan jumlah tersisa. Repeat berjalan otomatis ta
 
 ## 4.7 Focus Mode (PB-007) — P1
 
-- Layar bebas distraksi: menampilkan satu ayat (Arab, transliterasi/terjemahan sesuai preferensi)
-- Sembunyikan daftar surat, navigasi utama, dan elemen non-esensial
-- Navigasi ayat sebelumnya/berikutnya dalam mode
-- **Audio per ayat** (play/pause, progress) via `FocusModePlayer`
+- Layar bebas distraksi: menampilkan satu ayat (Arab, transliterasi/terjemahan sesuai preferensi) ✅
+- Sembunyikan daftar surat, navigasi utama, dan elemen non-esensial ✅
+- Navigasi ayat sebelumnya/berikutnya dalam mode ✅
+- **Audio per ayat** (play/pause, progress) via `FocusModePlayer` ✅
+- **Repeat** — konfigurasi & otomasi sinkron dengan Surah Detail (`useSurahRepeatPlayback`) ✅
+- **Ukuran teks Arab** mengikuti `settings.fontSize` ✅
 - **Tanpa** word-by-word highlight pada MVP V1
-- Repeat otomatis penuh tetap di Surah Detail (`/surah/[id]`)
-- Route: `/focus/[id]?ayah=[n]`
+- Route: `/focus/[id]?ayah=[n]` ✅
 
 ## 4.8 Last Read / Lanjutkan Hafalan (PB-008) — P1
 
-- Posisi terakhir (surat + ayat) disimpan otomatis di Dexie `lastRead`
-- Tersedia tombol "Lanjutkan Hafalan" di Home saat aplikasi dibuka kembali
+- Posisi terakhir (surat + ayat) disimpan otomatis di Dexie `lastRead` — store ada; **belum dipanggil dari UI**
+- Tersedia tombol "Lanjutkan Hafalan" di Home — komponen ada; **data masih hardcoded**
 - Tidak memerlukan akun atau login
 
 ## 4.9 Favorit Surat (PB-009) — P2
 
-- Tombol favorit di setiap surat
-- Filter "Favorit" tersedia di Home
-- Disimpan di Dexie `favorites`
-- Persisten antar sesi
+- Tombol favorit di setiap surat — UI ada
+- Filter "Favorit" tersedia di Home ✅
+- Disimpan di Dexie `favorites` — `toggleFavorite` ada; **Home masih state lokal**
+- Persisten antar sesi — belum end-to-end
 
 ## 4.10 Offline Cache (PB-010) — P0
 
-- Ayat dan audio yang pernah diakses tersedia offline
-- Cache Storage untuk file audio
-- Service Worker untuk caching aset statis
-- Indikator status offline di UI
-- Download manifest di Dexie `downloadManifest`
+- Unduh audio per surat via **Simpan Offline** di Surah Detail ✅
+- Cache Storage untuk file audio ✅
+- Service Worker untuk caching aset statis & runtime ✅
+- Indikator status offline di UI ✅
+- Download manifest di Dexie `downloadManifest` (reciter-aware) ✅
+- Hapus cache — UI ada; logika belum
+- Verifikasi pemutaran offline end-to-end — belum
 
 ## 4.11 PWA Setup (PB-011) — P0
 
@@ -196,14 +200,14 @@ Counter menampilkan target aktif dan jumlah tersisa. Repeat berjalan otomatis ta
 
 ## 4.13 Pengaturan (Settings)
 
-- **Bahasa aplikasi** (Bahasa Indonesia / English) — `next-intl`, persisten di `settings.appLocale`
-- Pilih qari
-- Ukuran teks Arab
-- Toggle terjemahan global (konten ayat — di Verse Display Controls, bukan Pengaturan)
-- Toggle transliterasi global (Verse Display Controls)
-- Hapus cache
-- Status offline
-- Aksesibilitas dasar
+- **Bahasa aplikasi** (Bahasa Indonesia / English) — `next-intl`, persisten di `settings.appLocale` ✅
+- Pilih qari ✅
+- Ukuran teks Arab ✅ (persisten `settings.fontSize`, diterapkan di Surah Detail & Focus)
+- Toggle terjemahan global (konten ayat — di Verse Display Controls, bukan Pengaturan) ✅
+- Toggle transliterasi global (Verse Display Controls) ✅
+- Hapus cache — UI + dialog ✅; logika pembersihan belum
+- Status offline ✅
+- Aksesibilitas dasar — UI switch ada; `contrastMode` / `smoothAnimation` belum persist
 
 ## 4.14 Lighthouse & Aksesibilitas (PB-012, PB-014) — P2
 
@@ -459,33 +463,35 @@ MVP HanQuran V1 dinyatakan **selesai** hanya jika seluruh kondisi berikut terpen
 
 ## 9.1 Core Flows
 
-- [ ] Pengguna dapat membuka daftar 114 surat dan menavigasi ke surat manapun
-- [ ] Pengguna dapat memutar audio per ayat dengan play/pause/seek yang reliabel di mobile
-- [ ] Pengguna dapat mengaktifkan repeat (1×/5×/10×/25×/50×/∞) untuk ayat aktif, range ayat, atau seluruh surat
-- [ ] Repeat berjalan otomatis sesuai konfigurasi tanpa interaksi tambahan
-- [ ] Focus Mode menampilkan satu ayat dalam layout bebas distraksi dengan data nyata
-- [ ] Navigasi ayat di Focus Mode (`/focus/[id]`) berfungsi tanpa keluar dari mode
+- [x] Pengguna dapat membuka daftar 114 surat dan menavigasi ke surat manapun
+- [x] Pengguna dapat memutar audio per ayat dengan play/pause/seek yang reliabel di mobile
+- [x] Pengguna dapat mengaktifkan repeat (1×/5×/10×/25×/50×/∞) untuk ayat aktif, range ayat, atau seluruh surat
+- [x] Repeat berjalan otomatis sesuai konfigurasi tanpa interaksi tambahan
+- [x] Focus Mode menampilkan satu ayat dalam layout bebas distraksi dengan data nyata
+- [x] Navigasi ayat di Focus Mode (`/focus/[id]`) berfungsi tanpa keluar dari mode
 - [ ] "Lanjutkan Hafalan" tersedia di Home dan membuka posisi terakhir yang tersimpan
 
 ## 9.2 Data & State
 
 - [x] Data surat dimuat dari `public/data/*` via `services/quran/`
 - [x] Cache in-memory per sesi — tidak perlu Dexie untuk konten Quran
-- [ ] Preferensi pengguna (bahasa UI, qari, ukuran teks, terjemahan ayat, favorit, konfigurasi repeat) tersimpan di Dexie dan persisten antar sesi
-- [ ] Bahasa UI (`settings.appLocale`: `id` | `en`) dapat diubah di Pengaturan dan memperbarui seluruh label aplikasi via `next-intl`
+- [x] Preferensi pengguna (bahasa UI, qari, ukuran teks, terjemahan ayat, konfigurasi repeat) tersimpan di Dexie dan persisten antar sesi
+- [x] Bahasa UI (`settings.appLocale`: `id` | `en`) dapat diubah di Pengaturan dan memperbarui seluruh label aplikasi via `next-intl`
+- [x] Arti surat & terjemahan ayat mengikuti `appLocale` (`getSurahMeaning`, `lib/translation-language.ts`)
 - [ ] Posisi terakhir (surat + ayat) tersimpan otomatis di Dexie `lastRead`
+- [ ] Favorit surat persisten di Dexie — store ada; Home masih state lokal
 
 ## 9.3 Offline & PWA
 
-- [ ] Minimal 1 surat dapat diunduh dan diputar saat perangkat offline
+- [ ] Minimal 1 surat dapat diunduh dan diputar saat perangkat offline — infrastruktur unduh ✅; verifikasi playback belum
 - [ ] Aplikasi dapat diinstal sebagai PWA di perangkat Android dan iOS
 - [ ] Offline shell dapat dimuat tanpa koneksi internet
-- [ ] Indikator status offline tersedia di UI
+- [x] Indikator status offline tersedia di UI
 
 ## 9.4 Kualitas
 
 - [ ] Semua P0 tasks di Phase 0–6 (`docs/18`) sudah selesai
-- [ ] Unit tests untuk audio controller dan repeat engine passing
+- [x] Unit tests untuk audio controller dan repeat engine passing
 - [ ] Integration & E2E tests untuk core flows passing
 - [ ] Tidak ada P0 blocker yang tersisa
 - [ ] Skor Lighthouse ≥ 80 untuk Performance, Accessibility, Best Practices, PWA

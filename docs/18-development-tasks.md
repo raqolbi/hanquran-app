@@ -4,7 +4,7 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 
 **Terakhir diperbarui:** 24 Juni 2026
 **Status:** 🚧 Sprint 2 — word-by-word ditunda Post-MVP (`docs/24`)
-**Total Development Tasks:** 86 (39 Selesai, 47 Belum Dimulai)
+**Total Development Tasks:** 86 (50 Selesai, 36 Belum Dimulai)
 **Arsitektur data:** `docs/23-static-dataset-architecture.md`
 
 ---
@@ -58,16 +58,16 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | --------- | --------------------------------- | ------ | ------ | ------ | ----- | ------- | ----------------------- |
 | 0         | Persiapan & Setup Infrastructure  | 7      | 7      | 0      | 0     | 7       | ✅ Selesai               |
 | 1         | Static Dataset & Data Integration | 6      | 5      | 1      | 0     | 6       | ✅ Selesai               |
-| 1b        | Bahasa Aplikasi (`next-intl`)     | 6      | 0      | 5      | 1     | 5       | 🟡 Hampir selesai       |
+| 1b        | Bahasa Aplikasi (`next-intl`)     | 6      | 0      | 5      | 1     | 6       | ✅ Selesai (P2 a11y label tersisa) |
 | 1c        | Verse Display Controls            | 4      | 0      | 4      | 0     | 4       | ✅ Selesai               |
 | 2         | Audio Controller & State          | 11     | 6      | 3      | 2     | 8       | 🟡 P1 persist posisi   |
 | 3         | Repeat Engine & Configuration     | 9      | 6      | 2      | 1     | 6       | 🟡 Keyboard shortcuts berikutnya |
-| 4         | Word Highlight (Focus Mode)       | 8      | 0      | 0      | 8     | 0       | ⏸️ Post-MVP — lihat `docs/24` |
-| 5         | Implementasi Strategi Offline     | 11     | 7      | 3      | 1     | 6       | 🟡 OfflineStatusBadge ✅ |
+| 4         | Word Highlight (Focus Mode)       | 8      | 0      | 0      | 8     | 3       | ⏸️ Post-MVP — MVP fokus (audio/repeat/nav) ✅ |
+| 5         | Implementasi Strategi Offline     | 11     | 7      | 3      | 1     | 8       | 🟡 Clear cache & E2E offline belum |
 | 6         | PWA & Packaging                   | 8      | 5      | 2      | 1     | 0       | ⏳ Belum Dimulai         |
 | 7         | Testing & Quality Assurance       | 9      | 6      | 2      | 1     | 2       | ⏳ Audio + repeat unit ✅ |
 | 8         | Release & Monitoring              | 11     | 6      | 3      | 2     | 0       | ⏳ Belum Dimulai         |
-| **TOTAL** |                                   | **86** | **53** | **27** | **6** | **44**  |                         |
+| **TOTAL** |                                   | **86** | **53** | **27** | **6** | **50**  |                         |
 
 
 > Catatan: Phase 7 (Testing & QA) berjalan **paralel** mulai Phase 1 — bukan sequential setelah Phase 6 selesai.
@@ -84,7 +84,13 @@ Codebase aktif berada di `hanquran-app/` (Next.js App Router). **Konten Quran** 
 **Belum selesai:**
 
 - Persist posisi audio terakhir
+- Wire `lastRead` → kartu Lanjutkan Hafalan (Home masih mock)
+- Wire favorit ke `useUserStore` (Home masih state lokal)
+- Hapus cache (UI ada, logika belum)
+- Aksesibilitas Settings (`contrastMode`, `smoothAnimation`) belum persist
 - Word-by-word highlight (Post-MVP)
+- PWA manifest & install prompt (Phase 6)
+- E2E / verifikasi offline playback
 
 ---
 
@@ -100,7 +106,7 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 | `app/page.tsx`            | `/` (Beranda) | ✓ Data nyata — `useSurahList`                        |
 | `app/surah/[id]/page.tsx` | `/surah/[id]` | ✓ Data nyata + audio + RepeatEngine terintegrasi |
 | `app/focus/[id]/page.tsx` | `/focus/[id]` | ✓ Baca fokus — ayat nyata, tanpa word highlight (MVP) |
-| `app/settings/page.tsx`   | `/settings`   | ✓ Bahasa Aplikasi + pilihan qari (terhubung ke audio) |
+| `app/settings/page.tsx`   | `/settings`   | ✓ Bahasa, qari, ukuran teks Arab, status offline & cache |
 
 
 ## Komponen Layar (19 komponen)
@@ -123,9 +129,9 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 `services/quran/data-loader.ts` | `mappers.ts` | `quran-service.ts` | `audio-service.ts` | `audio-config.ts` | `paths.ts` | `app-types.ts` | `dataset-types.ts` | `index.ts`
 
-## Hooks (8 file)
+## Hooks (11 file)
 
-`hooks/use-media-query.ts` | `use-surah-list.ts` | `use-surah.ts` | `use-reciters.ts` | `use-ayah-audio.ts` | `use-reading-display.ts` | `use-surah-detail-bottom-inset.ts` | `use-surah-repeat-playback.ts`
+`hooks/use-media-query.ts` | `use-surah-list.ts` | `use-surah.ts` | `use-reciters.ts` | `use-ayah-audio.ts` | `use-reading-display.ts` | `use-surah-detail-bottom-inset.ts` | `use-surah-repeat-playback.ts` | `use-arabic-text-size.ts` | `use-preferred-reciter.ts` | `use-surah-offline-download.ts`
 
 ## i18n (2 file + messages)
 
@@ -135,9 +141,9 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 `stores/audioStore.ts` | `userStore.ts` | `repeatStore.ts` | `offlineStore.ts` | `index.ts`
 
-## Utilitas (3 file)
+## Utilitas (6 file)
 
-`lib/routes.ts` | `lib/repeat-options.ts` | `lib/surah-detail-chrome.ts` | `lib/utils.ts`
+`lib/routes.ts` | `lib/repeat-options.ts` | `lib/surah-detail-chrome.ts` | `lib/utils.ts` | `lib/arabic-text-size.ts` | `lib/translation-language.ts` | `lib/format-bytes.ts`
 
 ## Aset Branding (2 aset)
 
@@ -145,13 +151,15 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 **Total item inventaris: ~50+** (UI + service + hooks)
 
-> Audio & repeat di halaman surat masih memakai **state lokal** (`useState`), belum `useAudioStore` / `useRepeatStore`. `lib/surahs-data.ts` sudah dihapus.
+> Audio & repeat terintegrasi via `useAudio` / `useSurahRepeatPlayback` + Zustand stores. `lib/surahs-data.ts` sudah dihapus.
 
 ---
 
 # ✅ 4. Completed Tasks
 
-**Total development task yang benar-benar selesai: 36**
+**Total development task yang benar-benar selesai: 50**
+
+Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **128 test passing**).
 
 ### Phase 0 — selesai (7/7, 24 Juni 2026) ✅
 
@@ -163,9 +171,7 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 6. ✅ Error boundary — `components/shared/ErrorBoundary.tsx`, `ErrorFallback.tsx`
 7. ✅ Dokumentasi setup — `docs/SETUP.md` + `README.md`
 
-Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **108 test passing**).
-
-### Phase 1 — Static Dataset (5/6 P0 + P1, 24 Juni 2026) ✅
+### Phase 1 — Static Dataset (6/6, 24 Juni 2026) ✅
 
 1. ✅ Integrasi loader dataset statis `public/data/*`
 2. ✅ Integrasi CDN audio tilawah — `audio-service.ts`
@@ -176,13 +182,14 @@ Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **108 test passing**).
 
 **Dibatalkan (bukan MVP):** `QuranRepository` Dexie-first, seed/hydrate Dexie untuk konten Quran — lihat `docs/23-static-dataset-architecture.md`.
 
-### Phase 1b — i18n (5/6, 24 Juni 2026)
+### Phase 1b — i18n (6/6, 24 Juni 2026) ✅
 
 1. ✅ Setup `next-intl` — `i18n/config.ts`, `messages/id.json`, `messages/en.json`, `IntlProvider`
 2. ✅ Deteksi bahasa first launch — `i18n/detection.ts`
 3. ✅ Field `appLocale` di Dexie `settings`
 4. ✅ Bagian Bahasa Aplikasi di `/settings`
 5. ✅ Migrasi string UI — lihat `docs/i18n-migration-report.md`
+6. ✅ Arti surat & terjemahan ayat mengikuti `appLocale` — `getSurahMeaning()`, `lib/translation-language.ts`, `hooks/use-surah.ts`
 
 ### Phase 1c — Verse Display Controls (4/4, 24 Juni 2026)
 
@@ -191,13 +198,13 @@ Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **108 test passing**).
 3. ✅ Wire Surah Detail & Focus Mode — lihat `docs/verse-display-controls-implementation.md`
 4. ✅ Hapus section Terjemahan dari Settings
 
-### Skeleton store (bukan integrasi penuh)
+### Store & offline (terintegrasi)
 
 - `audioStore` — terintegrasi ke `AudioPlayer` via `useAudio`
-- `repeatStore` — terintegrasi ke halaman surat via `useSurahRepeatPlayback` + `RepeatEngine`
-- `offlineStore` — init manifest ada; dipanggil via `initStores()` di `AppProviders`
+- `repeatStore` — terintegrasi ke Surah Detail & Focus via `useSurahRepeatPlayback` + `RepeatEngine`
+- `offlineStore` — `DownloadManager`, manifest reciter-aware, badge; di-init via `initStores()` di `AppProviders`
 
-Verifikasi: `npm run build` dan `npm run test` (15 test) lulus.
+Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
 
 ---
 
@@ -532,14 +539,14 @@ Verifikasi: `npm run build` dan `npm run test` (15 test) lulus.
 - [ ] [UPDATE] Implementasi logika timing kata-per-kata di FocusMode (sinkron audio, bukan interval mock)
   - Prioritas: Post-MVP
 
-- [ ] [UPDATE] Integrasi FocusMode dengan repeat engine + audio
-  - Prioritas: Post-MVP
+- [x] [UPDATE] Integrasi FocusMode dengan repeat engine + audio
+  - Prioritas: MVP ✅ — `app/focus/[id]/page.tsx` + `useSurahRepeatPlayback`
 
-- [ ] [UPDATE] Play/pause & progress bar FocusMode terhubung audio nyata
-  - Prioritas: Post-MVP
+- [x] [UPDATE] Play/pause & progress bar FocusMode terhubung audio nyata
+  - Prioritas: MVP ✅ — `FocusModePlayer` + `useSurahRepeatPlayback`
 
-- [ ] [UPDATE] Navigasi prev/next ayat di FocusMode (sudah ada di MVP; polish opsional)
-  - Prioritas: Post-MVP
+- [x] [UPDATE] Navigasi prev/next ayat di FocusMode
+  - Prioritas: MVP ✅ — `navigateAyah` di `app/focus/[id]/page.tsx`
 
 ### Disarankan (P1) — Post-MVP
 
@@ -626,24 +633,26 @@ Verifikasi: `npm run build` dan `npm run test` (15 test) lulus.
 
 ### Disarankan (P1)
 
-- [ ] [NEW] Implementasi selective download: pengguna memilih surat yang ingin disimpan offline
+- [x] [NEW] Implementasi selective download: pengguna memilih surat yang ingin disimpan offline
   - Tujuan: Hemat bandwidth, beri pengguna kontrol atas penyimpanan
-  - File: Komponen UI baru atau enhancement halaman Settings
+  - File: `components/surah-offline-download.tsx`, `hooks/use-surah-offline-download.ts`, `app/surah/[id]/page.tsx`
   - Ketergantungan: `DownloadManager` & `offlineStore` berjalan
   - Prioritas: P1
-  - **Catatan:** MVP Opsi A ✅ — tombol **Simpan Offline** per surat di Surah Detail (`SurahOfflineDownload` → `downloadSurah()`)
+  - **Ringkasan:** MVP Opsi A — tombol **Simpan Offline** per surat di Surah Detail; manifest reciter-aware (`[surahId+reciterId]`)
 
 - [ ] [NEW] Tambah manajemen ukuran cache & pembersihan
   - Tujuan: Cegah kuota habis, izinkan pengguna menghapus item yang di-cache
   - File: `services/cache-manager.ts`, Settings UI
   - Ketergantungan: Infrastruktur offline siap
   - Prioritas: P1
+  - **Catatan:** Tampilan ukuran cache audio (MB) ✅ via `services/audio-cache-stats.ts`; tombol Hapus Cache masih stub
 
-- [ ] [UPDATE] Tampilkan progres unduhan (%) kepada pengguna
+- [x] [UPDATE] Tampilkan progres unduhan kepada pengguna
   - Tujuan: Umpan balik visual selama unduhan berlangsung
-  - File: Komponen UI, `offlineStore`
+  - File: `components/surah-offline-download.tsx`, `offlineStore`, `download-manager`
   - Ketergantungan: `DownloadManager` berjalan
   - Prioritas: P1
+  - **Ringkasan:** Label `completed/total` ayat saat unduhan (`offlineDownloadProgress`)
 
 ### Nice to Have (P2)
 
@@ -704,6 +713,7 @@ Verifikasi: `npm run build` dan `npm run test` (15 test) lulus.
   - File: `app/layout.tsx` (meta tags)
   - Ketergantungan: Setup PWA
   - Prioritas: P1
+  - **Catatan:** `viewport.themeColor` sudah ada di `app/layout.tsx`; belum terhubung ke `manifest.json`
 
 ### Nice to Have (P2)
 
@@ -884,12 +894,13 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [x] TypeScript interfaces (`services/quran/app-types.ts`)
 - [x] Error boundary untuk kegagalan load data (`DataLoadErrorFallback`)
 
-### Phase 1b — i18n 🟡
+### Phase 1b — i18n ✅
 - [x] `next-intl` + messages id/en
 - [x] Deteksi bahasa first launch
 - [x] `appLocale` di Dexie
 - [x] Bagian Bahasa Aplikasi di Settings
 - [x] Migrasi string UI
+- [x] Arti surat & terjemahan ayat mengikuti `appLocale`
 
 ### Phase 1c — Verse Display Controls ✅
 - [x] `VerseDisplayControls` (3 kontrol satu baris)
@@ -899,7 +910,7 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 
 ### Phase 2 — Audio
 - [x] AudioController service selesai — class, integrasi UI, BroadcastChannel ✅
-- [x] useAudioStore (Zustand) — skeleton siap, belum terintegrasi UI
+- [x] useAudioStore terintegrasi ke `AudioPlayer` via `useAudio` ✅
 - [x] useAudio hook tersedia (`hooks/use-audio.ts`)
 - [x] AudioPlayer UI terintegrasi dengan controller
 - [x] BroadcastChannel multi-tab logic diimplementasi (`services/audio-tab-sync.ts`)
@@ -913,21 +924,24 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [x] Unit tests repeat engine (14 test)
 - [x] Integrasi dengan audio & UI surat selesai (`useSurahRepeatPlayback`)
 - [x] Persistensi konfigurasi ke Dexie (`settings.repeatConfig`) end-to-end di UI
-- [x] Unit tests passing (108 test)
+- [x] Unit tests passing (128 test)
 
 ### Phase 4 — Focus Mode / Word Highlight (Post-MVP)
 - [x] Mode Fokus MVP — layar baca bebas distraksi, ayat nyata, navigasi ayat
 - [ ] Word-by-word highlight + sinkron audio
-- [ ] Integrasi FocusMode + RepeatEngine + audio
+- [x] Integrasi FocusMode + RepeatEngine + audio (`useSurahRepeatPlayback`)
 - [x] Navigasi antar ayat di `/focus/[id]` berfungsi
+- [x] Ukuran teks Arab diterapkan di Focus Mode (`useArabicTextSize`)
 
 ### Phase 5 — Offline
 - [x] DownloadManager service berjalan
 - [x] Runtime caching strategy di SW diimplementasi
-- [x] Dexie `downloadManifest` tracking berjalan
+- [x] Dexie `downloadManifest` tracking berjalan (reciter-aware, migrasi v5)
 - [x] useOfflineStore dibuat — di-init via `initStores()` di `AppProviders`
 - [x] SW ↔ Client messaging diimplementasi (`prefetch-surah` + progress events)
-- [ ] Pemutaran offline berhasil diuji
+- [x] Selective download per surat (Surah Detail)
+- [x] Progres unduhan ditampilkan (`completed/total`)
+- [ ] Pemutaran offline berhasil diuji (E2E / manual)
 
 ### Phase 6 — PWA
 - [ ] manifest.json dibuat
@@ -937,7 +951,7 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [ ] Mobile PWA testing selesai
 
 ### Phase 7 — Testing
-- [ ] Unit tests untuk repeat passing · repeat engine ✅ · audio controller ✅
+- [x] Unit tests untuk repeat passing · repeat engine ✅ · audio controller ✅
 - [ ] Integration & E2E tests passing
 - [ ] Accessibility scan passed
 - [ ] Performance metrics memenuhi target (Lighthouse >= 80)
@@ -982,27 +996,30 @@ MVP HanQuran dianggap **selesai** ketika seluruh kondisi berikut terpenuhi:
 ## Core Flows
 
 - [x] Pengguna dapat membuka daftar surat dan menavigasi ke surat manapun
-- [ ] Pengguna dapat memutar audio per ayat dengan play/pause/seek yang reliabel
-- [ ] Pengguna dapat mengaktifkan repeat (1×/3×/5×/∞) untuk ayat saat ini, range ayat, atau seluruh surat
-- [ ] Focus Mode menampilkan satu ayat dalam layout bebas distraksi (tanpa word highlight MVP)
-- [ ] Navigasi antar ayat di Focus Mode (`/focus/[id]`) berfungsi tanpa keluar dari mode
+- [x] Pengguna dapat memutar audio per ayat dengan play/pause/seek yang reliabel
+- [x] Pengguna dapat mengaktifkan repeat (1×/3×/5×/∞) untuk ayat saat ini, range ayat, atau seluruh surat
+- [x] Focus Mode menampilkan satu ayat dalam layout bebas distraksi (tanpa word highlight MVP)
+- [x] Navigasi antar ayat di Focus Mode (`/focus/[id]`) berfungsi tanpa keluar dari mode
 
 ## Data & State
 
 - [x] Data surat dimuat dari `public/data/`* via `services/quran/` (Static Dataset Architecture)
 - [x] Preferensi pengguna (locale, ukuran teks, terjemahan/transliterasi visible) tersimpan di Dexie
 - [ ] Surat/ayat terakhir dilihat tersimpan di Dexie `lastRead` — store ada, UI `ContinueReading` belum wire
+- [ ] Favorit surat persisten — `toggleFavorite` ada, Home masih state lokal
 
 ## Offline & PWA
 
-- [ ] Minimal 1 surat dapat diunduh dan diputar saat offline
+- [ ] Minimal 1 surat dapat diunduh dan diputar saat offline — unduh ✅; verifikasi playback offline belum
 - [ ] Aplikasi dapat di-install sebagai PWA di perangkat mobile
 - [ ] Offline shell dapat dimuat tanpa koneksi internet
+- [x] Indikator status offline tersedia di UI (`ConnectionIndicator`, `OfflineStatusBadge`)
 
 ## Kualitas
 
 - [ ] Semua P0 tasks di Phase 1–6 sudah selesai
-- [ ] Unit tests & integration tests untuk core flows passing
+- [x] Unit tests untuk audio controller & repeat engine passing (128 test)
+- [ ] Integration tests untuk core flows passing
 - [ ] Tidak ada critical regressions
 - [ ] Skor Lighthouse ≥ 80 (Performance, Accessibility, Best Practices, PWA)
 

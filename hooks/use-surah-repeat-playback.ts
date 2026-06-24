@@ -14,6 +14,7 @@ import {
   getDisplayCycle,
   toRepeatConfig,
 } from '@/services/repeat-engine';
+import { getRepeatTabSync } from '@/services/repeat-tab-sync';
 import { useAudioStore } from '@/stores/audioStore';
 import { useRepeatStore } from '@/stores/repeatStore';
 import type { RepeatStatusProps } from '@/components/repeat-status';
@@ -81,6 +82,7 @@ export function useSurahRepeatPlayback({
     });
 
     setRuntime(result.runtime);
+    getRepeatTabSync()?.notifyCycleTick(result.runtime);
 
     switch (result.action.type) {
       case 'replay':

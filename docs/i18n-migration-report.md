@@ -39,8 +39,8 @@ Seluruh teks UI yang teridentifikasi telah dimigrasikan ke `messages/id.json` (s
 | Konten | Alasan |
 |--------|--------|
 | Nama surat (Latin/Arab) | Proper noun / konten Quran |
-| Arti surat (`meaning`) | Data dataset |
-| Teks Arab & terjemahan ayat | Dikendalikan toggle terjemahan, bukan locale UI |
+| Arti surat (`meaning`) | Data dataset — **mengikuti `appLocale`** (`id` → `meaning`, `en` → `name_en`) |
+| Terjemahan ayat | Folder `translations/{appLocale}` — visibilitas via toggle terjemahan |
 | Nama qari | Proper noun (`data/reciters.json`) |
 | Brand `HanQuran` | Nama produk |
 | Label numerik repeat (`1x`, `5x`, …) | Notasi universal |
