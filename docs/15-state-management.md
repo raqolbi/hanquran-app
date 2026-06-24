@@ -421,9 +421,9 @@ Tujuan: hanya satu sumber kebenaran untuk pemutaran audio di satu sesi pengguna.
 
 ## 10.4 Sinkronisasi Posisi Terakhir
 
-* Saat trek berganti atau audio pause lebih dari 2 detik, `audio-controller` memanggil `useUserStore.setLastViewed({ surahId, ayahNumber })`.
+* Saat ayat aktif berubah di Surah Detail atau Focus Mode, hook `usePersistLastViewed` memanggil `useUserStore.setLastViewed(surahId, ayahNumber)`.
 * Action ini menulis ke Dexie tabel `lastRead` secara langsung.
-* Nilai ini menjadi sumber **Lanjutkan Hafalan** di Beranda.
+* Nilai ini menjadi sumber **Lanjutkan Hafalan** di Beranda (`ContinueReadingSection`).
 
 ---
 

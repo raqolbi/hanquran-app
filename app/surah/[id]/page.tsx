@@ -18,6 +18,7 @@ import { useSurah } from '@/hooks/use-surah';
 import { useReadingDisplay } from '@/hooks/use-reading-display';
 import { useSurahDetailBottomInset } from '@/hooks/use-surah-detail-bottom-inset';
 import { useSurahRepeatPlayback } from '@/hooks/use-surah-repeat-playback';
+import { usePersistLastViewed } from '@/hooks/use-persist-last-viewed';
 import { usePreferredReciterId } from '@/hooks/use-preferred-reciter';
 import { downloadManifestKey } from '@/services/download-manifest-key';
 import { useOfflineStore } from '@/stores/offlineStore';
@@ -50,6 +51,8 @@ function SurahDetailLoaded({
   const [isFavorited, setIsFavorited] = useState(false);
   const [completedAyahs, setCompletedAyahs] = useState<number[]>([]);
   const [repeatSettingsOpen, setRepeatSettingsOpen] = useState(false);
+
+  usePersistLastViewed(surah.number, activeAyah);
 
   const reciterId = usePreferredReciterId();
   const isOfflineReady =
