@@ -63,11 +63,11 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 2         | Audio Controller & State          | 11     | 6      | 3      | 2     | 8       | 🟡 P1 persist posisi   |
 | 3         | Repeat Engine & Configuration     | 9      | 6      | 2      | 1     | 6       | 🟡 Keyboard shortcuts berikutnya |
 | 4         | Word Highlight (Focus Mode)       | 8      | 0      | 0      | 8     | 0       | ⏸️ Post-MVP — lihat `docs/24` |
-| 5         | Implementasi Strategi Offline     | 11     | 7      | 3      | 1     | 1       | ⏳ Skeleton store saja   |
+| 5         | Implementasi Strategi Offline     | 11     | 7      | 3      | 1     | 6       | 🟡 OfflineStatusBadge ✅ |
 | 6         | PWA & Packaging                   | 8      | 5      | 2      | 1     | 0       | ⏳ Belum Dimulai         |
 | 7         | Testing & Quality Assurance       | 9      | 6      | 2      | 1     | 2       | ⏳ Audio + repeat unit ✅ |
 | 8         | Release & Monitoring              | 11     | 6      | 3      | 2     | 0       | ⏳ Belum Dimulai         |
-| **TOTAL** |                                   | **86** | **53** | **27** | **6** | **39**  |                         |
+| **TOTAL** |                                   | **86** | **53** | **27** | **6** | **44**  |                         |
 
 
 > Catatan: Phase 7 (Testing & QA) berjalan **paralel** mulai Phase 1 — bukan sequential setelah Phase 6 selesai.
@@ -163,7 +163,7 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 6. ✅ Error boundary — `components/shared/ErrorBoundary.tsx`, `ErrorFallback.tsx`
 7. ✅ Dokumentasi setup — `docs/SETUP.md` + `README.md`
 
-Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **80 test passing**).
+Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **108 test passing**).
 
 ### Phase 1 — Static Dataset (5/6 P0 + P1, 24 Juni 2026) ✅
 
@@ -575,23 +575,26 @@ Verifikasi: `npm run build` dan `npm run test` (15 test) lulus.
 
 ### Wajib (P0)
 
-- [ ] [NEW] Buat `DownloadManager` service untuk caching audio
+- [x] [NEW] Buat `DownloadManager` service untuk caching audio
   - Tujuan: Orkestrasi unduhan audio ke Cache Storage via Service Worker
-  - File: `services/download-manager.ts`
+  - File: `services/download-manager.ts`, `services/download-manager-types.ts`, `services/audio-cache-constants.ts`
   - Ketergantungan: Service Worker sudah terdaftar (Phase 0)
   - Prioritas: P0
+  - **Catatan:** `downloadSurah()` ✅; fallback client Cache API saat SW tidak aktif (dev); unit test ✅
 
-- [ ] [UPDATE] Implementasi runtime caching strategy di Service Worker
+- [x] [UPDATE] Implementasi runtime caching strategy di Service Worker
   - Tujuan: Cache respons API dan file audio — `stale-while-revalidate` untuk aset, `cache-first` untuk data Quran (`hanquran-data-v1`), dan runtime caching untuk audio (`hanquran-audio-v1`)
-  - File: `public/sw.js`
+  - File: `public/sw.js`, `public/sw-helpers.js`
   - Ketergantungan: SW skeleton dari Phase 0 sudah siap
   - Prioritas: P0
+  - **Catatan:** handler `fetch` ✅; lookup audio mengabaikan header Range; unit test `sw-helpers` ✅
 
-- [ ] [UPDATE] Implementasi manifest unduhan di Dexie tabel `downloadManifest`
+- [x] [UPDATE] Implementasi manifest unduhan di Dexie tabel `downloadManifest`
   - Tujuan: Mengetahui surat/ayat mana yang sudah tersedia offline via Dexie `downloadManifest`
-  - File: `services/api/AudioRepository.ts` (update manifest setelah download), `stores/offlineStore.ts` (baca manifest dari Dexie)
+  - File: `services/download-manager.ts` (tulis manifest), `stores/offlineStore.ts` (baca manifest dari Dexie)
   - Ketergantungan: Dexie setup selesai (Phase 0)
   - Prioritas: P0
+  - **Catatan:** status `downloading` / `ready` / `failed` diperbarui oleh DownloadManager; `offlineStore.refreshManifest()` sinkron
 
 - [x] [NEW] Setup Zustand `useOfflineStore`
   - Tujuan: Lacak status koneksi, progres unduhan, dan ringkasan manifest cache
@@ -599,19 +602,21 @@ Verifikasi: `npm run build` dan `npm run test` (15 test) lulus.
   - State: `connectionStatus`, `downloadStatuses`, `manifestSummary`
   - Ketergantungan: None
   - Prioritas: P0
-  - **Catatan:** store ✅; belum di-init di app start; belum ada `DownloadManager`
+  - **Catatan:** store ✅; di-init via `initStores()` di `AppProviders`; terhubung ke `DownloadManager`
 
-- [ ] [NEW] Implementasi messaging SW ↔ Client (`BroadcastChannel` / `postMessage`)
+- [x] [NEW] Implementasi messaging SW ↔ Client (`BroadcastChannel` / `postMessage`)
   - Tujuan: SW menginformasikan client tentang progres unduhan & completion
   - File: `public/sw.js`, `services/download-manager.ts`
   - Ketergantungan: SW terdaftar, `offlineStore` siap
   - Prioritas: P0
+  - **Catatan:** `prefetch-surah` → `download-progress` / `download-complete` / `download-failed` via `postMessage`; listener di-attach dari `initStores()`
 
-- [ ] [UPDATE] Tambah indikator offline (`OfflineStatusBadge`) di Header & Settings
+- [x] [UPDATE] Tambah indikator offline (`OfflineStatusBadge`) di Header & Settings
   - Tujuan: Tampilkan status koneksi kepada pengguna
-  - File: `components/offline-status-badge.tsx`, `components/header.tsx`
+  - File: `components/offline-status-badge.tsx`, `components/header.tsx`, `app/settings/page.tsx`
   - Ketergantungan: `offlineStore` berjalan
   - Prioritas: P0
+  - **Catatan:** `ConnectionIndicator` (3 state) di Header; `OfflineStatusBadge` (5 state) di Settings; listener `online`/`offline` di `offlineStore.init()`
 
 - [ ] [TEST] Uji pemutaran offline: unduh 1 surat, putuskan koneksi, putar audio
   - Tujuan: Verifikasi alur offline end-to-end
@@ -626,6 +631,7 @@ Verifikasi: `npm run build` dan `npm run test` (15 test) lulus.
   - File: Komponen UI baru atau enhancement halaman Settings
   - Ketergantungan: `DownloadManager` & `offlineStore` berjalan
   - Prioritas: P1
+  - **Catatan:** MVP Opsi A ✅ — tombol **Simpan Offline** per surat di Surah Detail (`SurahOfflineDownload` → `downloadSurah()`)
 
 - [ ] [NEW] Tambah manajemen ukuran cache & pembersihan
   - Tujuan: Cegah kuota habis, izinkan pengguna menghapus item yang di-cache
@@ -907,7 +913,7 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [x] Unit tests repeat engine (14 test)
 - [x] Integrasi dengan audio & UI surat selesai (`useSurahRepeatPlayback`)
 - [x] Persistensi konfigurasi ke Dexie (`settings.repeatConfig`) end-to-end di UI
-- [x] Unit tests passing (80 test)
+- [x] Unit tests passing (108 test)
 
 ### Phase 4 — Focus Mode / Word Highlight (Post-MVP)
 - [x] Mode Fokus MVP — layar baca bebas distraksi, ayat nyata, navigasi ayat
@@ -916,11 +922,11 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [x] Navigasi antar ayat di `/focus/[id]` berfungsi
 
 ### Phase 5 — Offline
-- [ ] DownloadManager service berjalan
-- [ ] Runtime caching strategy di SW diimplementasi
-- [ ] Dexie `downloadManifest` tracking berjalan
-- [x] useOfflineStore dibuat — skeleton siap, belum di-init di app start
-- [ ] SW ↔ Client messaging diimplementasi
+- [x] DownloadManager service berjalan
+- [x] Runtime caching strategy di SW diimplementasi
+- [x] Dexie `downloadManifest` tracking berjalan
+- [x] useOfflineStore dibuat — di-init via `initStores()` di `AppProviders`
+- [x] SW ↔ Client messaging diimplementasi (`prefetch-surah` + progress events)
 - [ ] Pemutaran offline berhasil diuji
 
 ### Phase 6 — PWA

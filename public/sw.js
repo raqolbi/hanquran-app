@@ -1,19 +1,16 @@
 /* eslint-disable no-restricted-globals */
 /**
- * HanQuran Service Worker — SKELETON (Phase 0).
+ * HanQuran Service Worker (Phase 5).
  *
- * Tujuan Phase 0: mendaftarkan SW agar browser mengenali aplikasi sebagai
- * PWA-ready dan menyiapkan kerangka lifecycle + kanal pesan.
+ * Strategi caching runtime:
+ *   - hanquran-static-v1 : stale-while-revalidate (JS/CSS/font/icon)
+ *   - hanquran-data-v1   : cache-first (`/data/*`)
+ *   - hanquran-audio-v1  : cache-first + runtime caching (CDN tilawah)
  *
- * Strategi caching runtime (stale-while-revalidate aset, cache-first data
- * Quran, runtime caching audio) serta DownloadManager DIIMPLEMENTASIKAN di
- * Phase 5 — JANGAN tambahkan logika fetch caching di sini sebelum Phase 5.
- *
- * Nama cache disepakati sejak awal agar konsisten (docs/06 Bagian 6):
- *   - hanquran-static-v1 : aset statis (JS/CSS/font/icon)
- *   - hanquran-data-v1   : dataset statis public/data (layer tambahan, opsional)
- *   - hanquran-audio-v1  : file audio MP3 per ayat
+ * Spesifikasi: `docs/07-api-integration.md` (§8), `docs/15-state-management.md` (§12.1).
  */
+
+importScripts('/sw-helpers.js');
 
 const SW_VERSION = 'v1';
 const CACHE_STATIC = 'hanquran-static-v1';
@@ -21,15 +18,15 @@ const CACHE_DATA = 'hanquran-data-v1';
 const CACHE_AUDIO = 'hanquran-audio-v1';
 const KNOWN_CACHES = [CACHE_STATIC, CACHE_DATA, CACHE_AUDIO];
 
+const { getRequestCategory, cacheFirst, staleWhileRevalidate } = self.SwHelpers;
+
 self.addEventListener('install', (event) => {
-  // Aktifkan SW baru segera tanpa menunggu tab lama tertutup.
   event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
-      // Bersihkan cache lama yang tidak dikenal versi ini.
       const names = await caches.keys();
       await Promise.all(
         names
@@ -41,13 +38,125 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Phase 0: belum ada strategi fetch. Biarkan request lewat ke jaringan.
-// Handler caching ditambahkan di Phase 5.
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  if (request.method !== 'GET') return;
 
-// Kanal pesan client ↔ SW (kerangka untuk DownloadManager di Phase 5).
+  const url = new URL(request.url);
+  const category = getRequestCategory(url, self.location.origin);
+  if (category === 'bypass') return;
+
+  event.respondWith(handleCachedFetch(event, request, category));
+});
+
+async function handleCachedFetch(event, request, category) {
+  try {
+    switch (category) {
+      case 'data':
+        return await cacheFirst(request, CACHE_DATA);
+      case 'audio':
+        return await cacheFirst(request, CACHE_AUDIO);
+      case 'static':
+        return await staleWhileRevalidate(request, CACHE_STATIC, {
+          waitUntil: (promise) => event.waitUntil(promise),
+        });
+      default:
+        return fetch(request);
+    }
+  } catch (error) {
+    const cached = await caches.match(request.url);
+    if (cached) return cached;
+    throw error;
+  }
+}
+
+// Kanal pesan client ↔ SW (DownloadManager).
 self.addEventListener('message', (event) => {
   const data = event.data || {};
   if (data.type === 'PING') {
     event.source?.postMessage({ type: 'PONG', version: SW_VERSION });
+    return;
+  }
+
+  if (data.type === 'prefetch-surah') {
+    const { requestId, surahId, urls } = data;
+    if (!requestId || !surahId || !Array.isArray(urls)) return;
+
+    void prefetchSurahAudio(event, { requestId, surahId, urls });
   }
 });
+
+const DOWNLOAD_CONCURRENCY = 3;
+
+function postDownloadMessage(event, payload) {
+  const target = event.source;
+  if (!target || typeof target.postMessage !== 'function') return;
+  target.postMessage(payload);
+}
+
+async function prefetchSurahAudio(event, { requestId, surahId, urls }) {
+  const total = urls.length;
+  let completed = 0;
+  let totalSize = 0;
+
+  const notifyProgress = () => {
+    postDownloadMessage(event, {
+      type: 'download-progress',
+      requestId,
+      surahId,
+      completed,
+      total,
+    });
+  };
+
+  try {
+    const cache = await caches.open(CACHE_AUDIO);
+
+    for (let offset = 0; offset < urls.length; offset += DOWNLOAD_CONCURRENCY) {
+      const batch = urls.slice(offset, offset + DOWNLOAD_CONCURRENCY);
+      await Promise.all(
+        batch.map(async (url) => {
+          const cached = await cache.match(url);
+          if (cached) {
+            const blob = await cached.clone().blob();
+            totalSize += blob.size;
+          } else {
+            const response = await fetch(url, { mode: 'cors' });
+            if (!response.ok) {
+              throw new Error(`Fetch gagal ${url} (${response.status})`);
+            }
+            await cache.put(url, response.clone());
+            const blob = await response.blob();
+            totalSize += blob.size;
+          }
+          completed += 1;
+          notifyProgress();
+        }),
+      );
+    }
+
+    postDownloadMessage(event, {
+      type: 'download-complete',
+      requestId,
+      surahId,
+      sizeBytes: totalSize,
+      ayahsCount: total,
+    });
+  } catch (error) {
+    const name = error && error.name ? String(error.name) : '';
+    const reason =
+      name === 'QuotaExceededError' || name === 'NS_ERROR_DOM_QUOTA_REACHED'
+        ? 'quota-exceeded'
+        : error instanceof TypeError
+          ? 'network'
+          : 'unknown';
+
+    postDownloadMessage(event, {
+      type: 'download-failed',
+      requestId,
+      surahId,
+      reason,
+      message: error && error.message ? String(error.message) : undefined,
+    });
+  }
+}

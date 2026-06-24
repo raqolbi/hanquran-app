@@ -4,17 +4,81 @@ import { AlertTriangle, Download, Wifi, WifiOff } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { cn } from '@/lib/utils';
+import type { ConnectionStatus } from '@/types';
 
-export type ConnectionStatus =
-  | 'online'
-  | 'offline_ready'
-  | 'downloading'
-  | 'download_failed'
-  | 'offline';
+export type { ConnectionStatus };
+
+type ConnectionIndicatorStatus = Extract<
+  ConnectionStatus,
+  'online' | 'offline_ready' | 'offline'
+>;
 
 interface OfflineStatusBadgeProps {
   status: ConnectionStatus;
   className?: string;
+}
+
+interface ConnectionIndicatorProps {
+  status: ConnectionIndicatorStatus;
+  className?: string;
+  /** Gaya ringkas di Header gradien (teks putih). */
+  variant?: 'default' | 'header';
+}
+
+const INDICATOR_COLORS: Record<ConnectionIndicatorStatus, string> = {
+  online: '#10B981',
+  offline_ready: '#10B981',
+  offline: '#9CA3AF',
+};
+
+/**
+ * Indikator koneksi ringkas untuk Header — hanya 3 state (docs/12 §22).
+ * State `downloading` / `download_failed` tidak ditampilkan di header.
+ */
+export function ConnectionIndicator({
+  status,
+  className,
+  variant = 'default',
+}: ConnectionIndicatorProps) {
+  const t = useTranslations('common');
+
+  const labels: Record<ConnectionIndicatorStatus, string> = {
+    online: t('online'),
+    offline_ready: t('offlineReady'),
+    offline: t('offline'),
+  };
+
+  if (variant === 'header') {
+    return (
+      <div
+        className={cn('flex items-center gap-1.5', className)}
+        role="status"
+        aria-live="polite"
+      >
+        <div
+          className="h-2 w-2 rounded-full"
+          style={{ backgroundColor: INDICATOR_COLORS[status] }}
+          aria-hidden
+        />
+        <p className="text-xs text-white/70">{labels[status]}</p>
+      </div>
+    );
+  }
+
+  return (
+    <span
+      className={cn('inline-flex items-center gap-1.5 text-xs font-medium', className)}
+      role="status"
+      aria-live="polite"
+    >
+      <span
+        className="inline-block h-2 w-2 rounded-full"
+        style={{ backgroundColor: INDICATOR_COLORS[status] }}
+        aria-hidden
+      />
+      {labels[status]}
+    </span>
+  );
 }
 
 export function OfflineStatusBadge({
@@ -64,6 +128,7 @@ export function OfflineStatusBadge({
         className,
       )}
       role="status"
+      aria-live="polite"
     >
       {variant.icon}
       {variant.label}

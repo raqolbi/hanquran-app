@@ -1,8 +1,7 @@
 const SW_URL = '/sw.js';
 
 /**
- * Daftarkan Service Worker skeleton (Phase 0).
- * Strategi caching runtime di Phase 5.
+ * Daftarkan Service Worker (Phase 5 — runtime caching + DownloadManager messaging).
  */
 export async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
   if (typeof window === 'undefined' || !('serviceWorker' in navigator)) {

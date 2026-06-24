@@ -63,7 +63,12 @@
     "previousAyah": "Previous verse",
     "nextAyah": "Next verse",
     "audioProgress": "Audio progress",
-    "ayahRemaining": "Verse {ayah} • {count} remaining"
+    "ayahRemaining": "Verse {ayah} • {count} remaining",
+    "saveOffline": "Save Offline",
+    "saveOfflineDownloading": "Downloading audio...",
+    "saveOfflineAriaLabel": "Save surah audio for offline use",
+    "saveOfflineUnavailable": "Offline storage requires a browser that supports cache.",
+    "offlineDownloadProgress": "{completed} of {total} verses downloaded"
   },
   "focus": {
     "exit": "Exit",

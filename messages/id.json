@@ -63,7 +63,12 @@
     "previousAyah": "Ayat sebelumnya",
     "nextAyah": "Ayat berikutnya",
     "audioProgress": "Progres audio",
-    "ayahRemaining": "Ayat {ayah} • {count} tersisa"
+    "ayahRemaining": "Ayat {ayah} • {count} tersisa",
+    "saveOffline": "Simpan Offline",
+    "saveOfflineDownloading": "Mengunduh audio...",
+    "saveOfflineAriaLabel": "Simpan audio surat untuk pemakaian offline",
+    "saveOfflineUnavailable": "Penyimpanan offline memerlukan browser yang mendukung cache.",
+    "offlineDownloadProgress": "{completed} dari {total} ayat diunduh"
   },
   "focus": {
     "exit": "Keluar",

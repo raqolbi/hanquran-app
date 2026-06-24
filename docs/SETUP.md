@@ -121,7 +121,7 @@ Audio tilawah di-stream dari **CDN audio** (`services/quran/audio-config.ts` →
 
 ## 7. Service Worker
 
-- File: `public/sw.js` (skeleton Phase 0 — hanya lifecycle + kanal pesan).
+- File: `public/sw.js` + `public/sw-helpers.js` (Phase 5 — runtime caching + DownloadManager messaging).
 - Registrasi: `components/providers/app-providers.tsx` → `lib/register-service-worker.ts` (production only).
 - Strategi caching runtime & DownloadManager diimplementasikan di **Phase 5**.
 

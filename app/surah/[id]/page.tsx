@@ -5,6 +5,7 @@ import { motion } from 'motion/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { SurahDetailHeader } from '@/components/surah-detail-header';
+import { SurahOfflineDownload } from '@/components/surah-offline-download';
 import { SurahDetailTopChrome } from '@/components/surah-detail-top-chrome';
 import { VerseDisplayControls } from '@/components/verse-display-controls';
 import { AyahCard } from '@/components/ayah-card';
@@ -18,6 +19,7 @@ import { useReadingDisplay } from '@/hooks/use-reading-display';
 import { useSurahDetailBottomInset } from '@/hooks/use-surah-detail-bottom-inset';
 import { useSurahRepeatPlayback } from '@/hooks/use-surah-repeat-playback';
 import { usePreferredReciterId } from '@/hooks/use-preferred-reciter';
+import { useOfflineStore } from '@/stores/offlineStore';
 import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
 import type { SurahData } from '@/services/quran';
 
@@ -49,6 +51,8 @@ function SurahDetailLoaded({
   const [repeatSettingsOpen, setRepeatSettingsOpen] = useState(false);
 
   const reciterId = usePreferredReciterId();
+  const isOfflineReady =
+    useOfflineStore((s) => s.downloadStatuses[surah.number]) === 'ready';
 
   const {
     isPlaying,
@@ -92,9 +96,17 @@ function SurahDetailLoaded({
           ayahCount={surah.ayahs.length}
           type={surah.type}
           isFavorited={isFavorited}
-          isOfflineReady={true}
+          isOfflineReady={isOfflineReady}
           onToggleFavorite={() => setIsFavorited(!isFavorited)}
         />
+
+        <div className="max-w-3xl mx-auto px-4 pb-4">
+          <SurahOfflineDownload
+            surahId={surah.number}
+            ayahCount={surah.ayahs.length}
+            reciterId={reciterId}
+          />
+        </div>
 
         <VerseDisplayControls
           sticky={false}

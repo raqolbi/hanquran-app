@@ -23,7 +23,7 @@ export function SurahDetailHeader({
   ayahCount,
   type,
   isFavorited = false,
-  isOfflineReady = true,
+  isOfflineReady = false,
   onToggleFavorite,
 }: SurahDetailHeaderProps) {
   const t = useTranslations('common');
