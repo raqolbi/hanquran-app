@@ -1,13 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'motion/react';
 import { ArrowLeft, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { routes } from '@/lib/routes';
+import { formatMegabytes } from '@/lib/format-bytes';
 import { useUserStore } from '@/stores/userStore';
+import { selectBadgeVariant, useOfflineStore } from '@/stores/offlineStore';
 import { normalizeReciterId } from '@/lib/reciter-preference';
 
 import { Logo } from '@/components/shared/Logo';
@@ -32,7 +34,6 @@ import {
 } from '@/components/ui/dialog';
 import {
   OfflineStatusBadge,
-  type ConnectionStatus,
 } from '@/components/offline-status-badge';
 import {
   SettingsRow,
@@ -66,11 +67,16 @@ export default function SettingsPage() {
   const [highContrast, setHighContrast] = useState(false);
   const [smoothAnimation, setSmoothAnimation] = useState(true);
 
-  const [connectionStatus] = useState<ConnectionStatus>('offline_ready');
-  const [audioCacheMb, setAudioCacheMb] = useState(24);
-  const [quranDataCached, setQuranDataCached] = useState(true);
+  const badgeStatus = useOfflineStore(selectBadgeVariant);
+  const totalSizeBytes = useOfflineStore((s) => s.manifestSummary.totalSizeBytes);
+  const audioCacheMb = formatMegabytes(totalSizeBytes);
+  const quranDataCached = true;
 
   const [confirmClearOpen, setConfirmClearOpen] = useState(false);
+
+  useEffect(() => {
+    void useOfflineStore.getState().refreshManifest();
+  }, []);
 
   const textSizeOptions: ReadonlyArray<SegmentedOption<TextSize>> = [
     { value: 'small', label: t('textSize.small') },
@@ -92,8 +98,6 @@ export default function SettingsPage() {
   };
 
   const handleClearCache = () => {
-    setAudioCacheMb(0);
-    setQuranDataCached(false);
     setConfirmClearOpen(false);
   };
 
@@ -161,7 +165,7 @@ export default function SettingsPage() {
           description={t('offline.description')}
         >
           <div className="space-y-4">
-            <OfflineStatusBadge status={connectionStatus} />
+            <OfflineStatusBadge status={badgeStatus} />
 
             <dl className="space-y-2 text-sm">
               <div className="flex items-center justify-between">
@@ -181,7 +185,7 @@ export default function SettingsPage() {
             <button
               type="button"
               onClick={() => setConfirmClearOpen(true)}
-              disabled={audioCacheMb === 0 && !quranDataCached}
+              disabled={totalSizeBytes === 0}
               className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-border bg-white px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <Trash2 size={16} />
