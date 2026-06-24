@@ -151,6 +151,14 @@ export const useUserStore = create<UserState & UserActions>()((set, get) => ({
   },
 
   setLastViewed: async (surahId, ayahNumber) => {
+    const current = get().lastViewed;
+    if (
+      current?.surahId === surahId &&
+      current?.ayahNumber === ayahNumber
+    ) {
+      return;
+    }
+
     const record: LastReadRecord = {
       id: 'last-read',
       surahId,

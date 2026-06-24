@@ -135,3 +135,68 @@ describe('useUserStore — aksesibilitas', () => {
     expect(stored?.smoothAnimation).toBe(false);
   });
 });
+
+describe('useUserStore — lastViewed', () => {
+  beforeEach(async () => {
+    await db.delete();
+    await db.open();
+    useUserStore.setState({
+      favorites: [],
+      settings: {
+        id: 'default',
+        appLocale: 'id',
+        fontSize: DEFAULT_ARABIC_FONT_SIZE_PX,
+        translationVisible: false,
+        transliterationVisible: false,
+        contrastMode: 'default',
+        smoothAnimation: true,
+        reciterId: getDefaultReciterId(),
+        translationResourceId: 33,
+        updatedAt: 0,
+      },
+      lastViewed: null,
+      initialized: false,
+    });
+  });
+
+  it('menyimpan lastViewed ke Dexie', async () => {
+    await useUserStore.getState().init();
+    await useUserStore.getState().setLastViewed(2, 142);
+
+    expect(useUserStore.getState().lastViewed).toEqual({
+      surahId: 2,
+      ayahNumber: 142,
+    });
+
+    const stored = await db.lastRead.get('last-read');
+    expect(stored?.surahId).toBe(2);
+    expect(stored?.ayahNumber).toBe(142);
+  });
+
+  it('memuat lastViewed dari Dexie saat init', async () => {
+    await db.lastRead.put({
+      id: 'last-read',
+      surahId: 18,
+      ayahNumber: 5,
+      updatedAt: 1,
+    });
+
+    await useUserStore.getState().init();
+
+    expect(useUserStore.getState().lastViewed).toEqual({
+      surahId: 18,
+      ayahNumber: 5,
+    });
+  });
+
+  it('tidak menulis ulang jika posisi sama', async () => {
+    await useUserStore.getState().init();
+    await useUserStore.getState().setLastViewed(2, 142);
+
+    const before = await db.lastRead.get('last-read');
+    await useUserStore.getState().setLastViewed(2, 142);
+    const after = await db.lastRead.get('last-read');
+
+    expect(after?.updatedAt).toBe(before?.updatedAt);
+  });
+});

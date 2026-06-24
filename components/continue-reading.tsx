@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 import { routes } from '@/lib/routes';
+import { useSurahList } from '@/hooks/use-surah-list';
+import { useUserStore } from '@/stores/userStore';
 
 interface ContinueReadingProps {
   surahId: number;
@@ -27,7 +29,7 @@ export function ContinueReading({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.2 }}
-      className="max-w-3xl mx-auto px-4 sm:px-6 mt-6 sm:mt-8 mb-4 sm:mb-6"
+      className="w-full"
     >
       <Link
         href={routes.surah(surahId, ayah)}
@@ -72,5 +74,30 @@ export function ContinueReading({
         </div>
       </Link>
     </motion.div>
+  );
+}
+
+/** Kartu Lanjutkan Hafalan — hanya tampil jika `lastRead` tersedia di Dexie. */
+export function ContinueReadingSection() {
+  const lastViewed = useUserStore((s) => s.lastViewed);
+  const initialized = useUserStore((s) => s.initialized);
+  const { surahs } = useSurahList();
+
+  if (!initialized || !lastViewed) {
+    return null;
+  }
+
+  const surah = surahs.find((item) => item.number === lastViewed.surahId);
+  if (!surah) {
+    return null;
+  }
+
+  return (
+    <ContinueReading
+      surahId={lastViewed.surahId}
+      surah={surah.englishName}
+      ayah={lastViewed.ayahNumber}
+      totalAyahs={surah.ayahCount}
+    />
   );
 }
