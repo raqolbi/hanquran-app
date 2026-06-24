@@ -564,18 +564,18 @@ Jika ada perbedaan antar dokumen tentang state, dokumen ini menjadi acuan final.
 
 # 15. Checklist Implementasi (urut prioritas)
 
-* [ ] Setup Dexie di `services/db/db.ts`: definisi schema v1, 13 tabel, migrasi dasar.
-* [ ] Setup empat store Zustand (`useAudioStore`, `useRepeatStore`, `useUserStore`, `useOfflineStore`) sesuai Bagian 3.
-* [ ] Implementasi `init()` action di `useUserStore` dan `useRepeatStore` untuk membaca dari Dexie saat app start.
-* [ ] Implementasi action yang menulis ke Dexie saat state persistent berubah.
-* [ ] Implementasi `audio-controller` sebagai jembatan `HTMLAudioElement` ↔ `useAudioStore`.
-* [ ] Implementasi `download-manager` dan kanal `postMessage` ke Service Worker.
-* [ ] Daftarkan Service Worker, siapkan cache `hanquran-audio-v1` dan aset statis.
+* [x] Setup Dexie di `services/db/db.ts`: schema data pengguna, migrasi (v5 reciter-aware manifest).
+* [x] Setup empat store Zustand (`useAudioStore`, `useRepeatStore`, `useUserStore`, `useOfflineStore`) sesuai Bagian 3.
+* [x] Implementasi `init()` action di `useUserStore` dan `useRepeatStore` untuk membaca dari Dexie saat app start.
+* [x] Implementasi action yang menulis ke Dexie saat state persistent berubah.
+* [x] Implementasi `audio-controller` sebagai jembatan `HTMLAudioElement` ↔ `useAudioStore`.
+* [x] Implementasi `download-manager` dan kanal `postMessage` ke Service Worker.
+* [x] Daftarkan Service Worker, siapkan cache `hanquran-audio-v1` dan aset statis.
 * [x] Tambah `BroadcastChannel('hanquran:audio')` untuk sinkronisasi lintas tab audio (`services/audio-tab-sync.ts`).
-* [ ] Tambah `BroadcastChannel('hanquran:repeat')` untuk sinkronisasi lintas tab repeat.
-* [ ] Hubungkan komponen `AudioPlayer`, `RepeatStatus`, `OfflineStatusBadge` ke selector store.
-* [ ] Implementasi aksi **Hapus Cache** sesuai aturan Bagian 6.4.
-* [ ] Tulis unit test untuk action store dan integrasi `audio-controller` ↔ store.
+* [x] Tambah `BroadcastChannel('hanquran:repeat')` untuk sinkronisasi lintas tab repeat.
+* [x] Hubungkan komponen `AudioPlayer`, `RepeatStatus`, `OfflineStatusBadge` ke selector store.
+* [ ] Implementasi aksi **Hapus Cache** sesuai aturan Bagian 6.4 — UI ada, logika belum.
+* [x] Tulis unit test untuk action store dan integrasi `audio-controller` ↔ store.
 
 ---
 

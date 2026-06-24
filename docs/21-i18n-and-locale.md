@@ -1,6 +1,6 @@
 # 21 — Internasionalisasi & Bahasa Aplikasi
 
-**Status:** 🆕 Spesifikasi produk & arsitektur (dokumentasi saja — belum diimplementasikan)  
+**Status:** ✅ Spesifikasi produk & arsitektur — implementasi MVP selesai (24 Juni 2026)  
 **Berlaku untuk:** MVP V1  
 **Framework:** `next-intl`
 
@@ -45,11 +45,11 @@ Konten Quran dan audio **tetap tidak berubah** karena pengaturan bahasa UI:
 |-------|--------|---------|
 | Teks Arab Uthmani | `public/data/quran/*` | Selalu Arab |
 | Transliterasi | Dataset surat | Tidak mengikuti locale UI |
-| Terjemahan ayat | `public/data/translations/*` | Dikendalikan oleh **toggle terjemahan** & resource terjemahan, bukan locale UI |
+| Terjemahan ayat | `public/data/translations/*` | Bahasa folder mengikuti `appLocale` (`id`/`en`); visibilitas via toggle terjemahan |
 | Audio tilawah | CDN audio (`AYAH_AUDIO_BASE_URL`) | Tidak terpengaruh locale UI |
 | Metadata qari | `data/reciters.json` | Nama qari proper noun |
 
-> **Pemisahan konsep:** `settings.appLocale` = bahasa **shell aplikasi**. `settings.translationVisible` + `settings.transliterationVisible` + `translationResourceId` = tampilan **konten ayat** — dikontrol dari **Verse Display Controls** di Surah Detail (`docs/22-verse-display-controls.md`), bukan dari locale UI.
+> **Pemisahan konsep:** `settings.appLocale` = bahasa **shell aplikasi** + pemilihan folder terjemahan ayat (`id`/`en`). `settings.translationVisible` + `settings.transliterationVisible` = **tampil/sembunyi** konten ayat — dikontrol dari **Verse Display Controls** di Surah Detail (`docs/22-verse-display-controls.md`).
 
 ---
 
@@ -206,15 +206,17 @@ Jika di masa depan diperlukan URL ber-prefix locale (`/id/surah/2`), itu masuk C
 
 ---
 
-# 8. Acceptance Criteria (dokumentasi selesai → siap implementasi)
+# 8. Acceptance Criteria
 
-- [ ] `next-intl` terpasang dan dikonfigurasi untuk App Router
-- [ ] `messages/id.json` dan `messages/en.json` mencakup string MVP
-- [ ] Deteksi first launch sesuai Bagian 3
-- [ ] Bagian **Bahasa Aplikasi** di `/settings` berfungsi
-- [ ] `appLocale` persisten di Dexie
-- [ ] Teks Arab ayat & audio tidak berubah saat ganti bahasa UI
-- [ ] Tidak ada referensi ke `i18next` / `react-i18next` di implementasi MVP
+- [x] `next-intl` terpasang dan dikonfigurasi untuk App Router
+- [x] `messages/id.json` dan `messages/en.json` mencakup string MVP
+- [x] Deteksi first launch sesuai Bagian 3
+- [x] Bagian **Bahasa Aplikasi** di `/settings` berfungsi
+- [x] `appLocale` persisten di Dexie
+- [x] Teks Arab ayat & audio tidak berubah saat ganti bahasa UI
+- [x] Arti surat (`meaning` / `name_en`) & terjemahan ayat mengikuti `appLocale`
+- [x] Tidak ada referensi ke `i18next` / `react-i18next` di implementasi MVP
+- [ ] Verifikasi aksesibilitas label per locale (P2)
 
 ---
 

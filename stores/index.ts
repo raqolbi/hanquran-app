@@ -9,6 +9,7 @@ import { useUserStore } from './userStore';
 import { useRepeatStore } from './repeatStore';
 import { useOfflineStore } from './offlineStore';
 import { getDownloadManager } from '@/services/download-manager';
+import { getRepeatTabSync } from '@/services/repeat-tab-sync';
 
 export { useAudioStore } from './audioStore';
 export { useUserStore } from './userStore';
@@ -18,6 +19,7 @@ export { useOfflineStore } from './offlineStore';
 /** Inisialisasi seluruh store persisten dari Dexie. Aman dipanggil sekali. */
 export async function initStores(): Promise<void> {
   getDownloadManager().attachServiceWorkerListener();
+  getRepeatTabSync();
 
   await Promise.all([
     useUserStore.getState().init(),

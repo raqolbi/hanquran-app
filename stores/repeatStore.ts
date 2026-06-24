@@ -8,6 +8,7 @@
 import { create } from 'zustand';
 import { db, defaultSettings } from '@/services/db/db';
 import { createInitialRuntime } from '@/services/repeat-engine';
+import { getRepeatTabSync } from '@/services/repeat-tab-sync';
 import type { RepeatConfig, RepeatRuntime } from '@/types';
 
 const defaultConfig: RepeatConfig = {
@@ -64,20 +65,24 @@ export const useRepeatStore = create<RepeatState & RepeatActions>()(
 
     applyConfig: async (next) => {
       await persistRepeatConfig(next);
+      const runtime = createInitialRuntime(true);
       set({
         config: next,
-        runtime: createInitialRuntime(true),
+        runtime,
       });
+      getRepeatTabSync()?.notifyConfigChanged(next, runtime);
     },
 
     patchConfig: async (patch) => {
       const next = { ...get().config, ...patch };
       await persistRepeatConfig(next);
       const keepActive = get().runtime.isActive;
+      const runtime = createInitialRuntime(keepActive);
       set({
         config: next,
-        runtime: createInitialRuntime(keepActive),
+        runtime,
       });
+      getRepeatTabSync()?.notifyConfigChanged(next, runtime);
     },
 
     resetRuntime: () => set({ runtime: createInitialRuntime(false) }),
