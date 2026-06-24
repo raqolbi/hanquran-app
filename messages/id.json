@@ -132,6 +132,71 @@
       "smoothAnimationAriaLabel": "Aktifkan animasi halus"
     }
   },
+  "about": {
+    "title": "Tentang HanQuran",
+    "navLink": "Tentang HanQuran",
+    "navAriaLabel": "Informasi aplikasi",
+    "app": {
+      "sectionTitle": "Informasi Aplikasi",
+      "description": "Platform hafalan Al-Qur'an — audio per ayat, repeat, mode fokus, dan dukungan offline. Tanpa akun. Mobile-first.",
+      "version": "Versi {version}"
+    },
+    "mission": {
+      "title": "Tentang HanQuran",
+      "description": "Tujuan, filosofi, dan fokus produk.",
+      "purpose": "HanQuran membantu menghafal dan murojaah Al-Qur'an melalui pengulangan terpandu audio, mode baca bebas distraksi, dan pembelajaran yang dapat dilanjutkan dari posisi terakhir.",
+      "philosophyTitle": "Filosofi produk",
+      "principles": {
+        "memorizationFirst": "Memorization First — setiap keputusan dievaluasi: apakah ini membantu menghafal?",
+        "mobileFirst": "Mobile First — dirancang untuk layar kecil dan sentuhan.",
+        "offlineFirst": "Offline First — setelah unduhan, aplikasi tidak bergantung pada internet.",
+        "simplicityFirst": "Simplicity First — tanpa registrasi, tanpa login, tanpa konfigurasi rumit."
+      },
+      "focusTitle": "Fokus aplikasi",
+      "focusItems": {
+        "repeat": "Repeat ayat, range, atau seluruh surat",
+        "audio": "Audio tilawah per ayat",
+        "focusMode": "Mode Fokus — satu ayat, minim distraksi",
+        "continueReading": "Lanjutkan Hafalan dari posisi terakhir",
+        "preferences": "Preferensi lokal (bahasa UI, qari, tampilan ayat, aksesibilitas)"
+      }
+    },
+    "credits": {
+      "title": "Credits",
+      "description": "Sumber data dan teknologi utama yang digunakan project.",
+      "opensInNewTab": "(buka di tab baru)",
+      "dataSources": {
+        "title": "Sumber Data",
+        "quranText": {
+          "label": "Teks Al-Qur'an",
+          "source": "Tanzil Project"
+        },
+        "quranDataset": {
+          "label": "Dataset JSON Al-Qur'an",
+          "source": "HanQuran Data Generator"
+        },
+        "transliteration": {
+          "label": "Transliterasi",
+          "source": "eQuran.id"
+        },
+        "audioMurottal": {
+          "label": "Audio Murottal",
+          "source": "Para qari dan penyedia audio yang digunakan oleh HanQuran"
+        }
+      },
+      "technology": {
+        "title": "Teknologi utama",
+        "description": "Framework dan library inti.",
+        "stack": "Next.js, React, TypeScript, Tailwind CSS, Zustand, Dexie, next-intl"
+      }
+    },
+    "repository": {
+      "title": "Repository & Lisensi",
+      "github": "Lihat repository di GitHub",
+      "license": "HanQuran Community License (HCCL)",
+      "commercialLicense": "Lisensi komersial"
+    }
+  },
   "repeat": {
     "settingsTitle": "Pengaturan Repeat",
     "settingsDescription": "Pilih jumlah dan target pengulangan.",

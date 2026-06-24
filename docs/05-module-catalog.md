@@ -253,12 +253,14 @@ Repeat / fokus hafalan
 - High contrast mode
 - Cache management trigger
 - Settings screen state
+- Navigasi ke layar Tentang HanQuran (`/settings/about`)
 
 > Toggle terjemahan dan transliterasi **bukan** bagian Settings module — dikelola di `VerseDisplayControls` (`docs/22-verse-display-controls.md`).
 
 ### Owns
 
 - `SettingsPage`
+- `AboutPage` (`app/settings/about/page.tsx`)
 - `FontSizeSetting`
 - `LanguageSetting`
 - `ContrastSetting`

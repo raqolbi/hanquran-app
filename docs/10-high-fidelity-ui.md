@@ -582,9 +582,15 @@ Reciter
 Kontras
 ↓
 Offline & Cache
+↓
+Aksesibilitas
+↓
+Tentang HanQuran  →  `/settings/about`
 ```
 
 > Terjemahan dan Transliterasi dikontrol di Verse Display Controls (Surah Detail), bukan di Pengaturan.
+
+Layar **Tentang HanQuran**: informasi aplikasi, filosofi, credits, repository & lisensi — `docs/26-about-screen-spec.md`.
 
 ---
 
