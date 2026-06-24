@@ -9,6 +9,7 @@
 import { create } from 'zustand';
 import { db, defaultSettings } from '@/services/db/db';
 import { detectAppLocale } from '@/i18n/detection';
+import { normalizeArabicFontSize } from '@/lib/arabic-text-size';
 import { normalizeReciterId } from '@/lib/reciter-preference';
 import type { SettingsRecord, LastReadRecord } from '@/types';
 
@@ -87,6 +88,16 @@ export const useUserStore = create<UserState & UserActions>()((set, get) => ({
       }
     }
 
+    const normalizedFontSize = normalizeArabicFontSize(settings.fontSize);
+    if (normalizedFontSize !== settings.fontSize) {
+      settings = {
+        ...settings,
+        fontSize: normalizedFontSize,
+        updatedAt: Date.now(),
+      };
+      await db.settings.put(settings);
+    }
+
     set({
       settings,
       favorites: favorites.map((f) => f.surahId),
@@ -122,9 +133,16 @@ export const useUserStore = create<UserState & UserActions>()((set, get) => ({
   isFavorite: (surahId) => get().favorites.includes(surahId),
 
   updateSettings: async (patch) => {
+    const normalizedPatch = { ...patch };
+    if (normalizedPatch.fontSize !== undefined) {
+      normalizedPatch.fontSize = normalizeArabicFontSize(
+        normalizedPatch.fontSize,
+      );
+    }
+
     const next: SettingsRecord = {
       ...get().settings,
-      ...patch,
+      ...normalizedPatch,
       id: 'default',
       updatedAt: Date.now(),
     };

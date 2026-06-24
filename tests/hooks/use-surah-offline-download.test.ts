@@ -33,6 +33,7 @@ describe('useSurahOfflineDownload', () => {
   it('menghidrasi status ready dari Dexie manifest', async () => {
     await db.downloadManifest.put({
       surahId: 1,
+      reciterId: 'Alafasy_128kbps',
       status: 'ready',
       sizeBytes: 1024,
       ayahsCount: 7,
@@ -49,7 +50,9 @@ describe('useSurahOfflineDownload', () => {
     );
 
     await waitFor(() => {
-      expect(useOfflineStore.getState().downloadStatuses[1]).toBe('ready');
+      expect(
+        useOfflineStore.getState().downloadStatuses['1:Alafasy_128kbps'],
+      ).toBe('ready');
     });
   });
 
@@ -81,5 +84,38 @@ describe('useSurahOfflineDownload', () => {
       expect.any(Function),
     );
     expect(result.current.isOfflineReady).toBe(false);
+  });
+
+  it('menghidrasi ulang saat qari berubah', async () => {
+    await db.downloadManifest.put({
+      surahId: 1,
+      reciterId: 'Alafasy_128kbps',
+      status: 'ready',
+      sizeBytes: 1024,
+      ayahsCount: 7,
+      cachedAt: Date.now(),
+      version: 'v1',
+    });
+
+    const { result, rerender } = renderHook(
+      ({ reciterId }) =>
+        useSurahOfflineDownload({
+          surahId: 1,
+          ayahCount: 7,
+          reciterId,
+        }),
+      { initialProps: { reciterId: 'Alafasy_128kbps' } },
+    );
+
+    await waitFor(() => {
+      expect(result.current.isOfflineReady).toBe(true);
+    });
+
+    rerender({ reciterId: 'Hudhaify_128kbps' });
+
+    await waitFor(() => {
+      expect(result.current.isOfflineReady).toBe(false);
+      expect(result.current.canSave).toBe(true);
+    });
   });
 });

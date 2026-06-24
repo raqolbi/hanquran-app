@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import type { SurahSummary } from '@/services/quran';
 import { getSurahList } from '@/services/quran';
+import { useUserStore } from '@/stores/userStore';
 
 interface UseSurahListResult {
   surahs: SurahSummary[];
@@ -16,6 +17,7 @@ interface UseSurahListResult {
 
 export function useSurahList(): UseSurahListResult {
   const t = useTranslations('errors');
+  const appLocale = useUserStore((s) => s.settings.appLocale);
   const [surahs, setSurahs] = useState<SurahSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,7 +32,7 @@ export function useSurahList(): UseSurahListResult {
   useEffect(() => {
     let cancelled = false;
 
-    getSurahList()
+    getSurahList(appLocale)
       .then((data) => {
         if (!cancelled) {
           setSurahs(data);
@@ -52,7 +54,7 @@ export function useSurahList(): UseSurahListResult {
     return () => {
       cancelled = true;
     };
-  }, [t, reloadToken]);
+  }, [appLocale, t, reloadToken]);
 
   return { surahs, loading, error, retry };
 }

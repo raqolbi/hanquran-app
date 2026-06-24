@@ -14,6 +14,7 @@ import {
   getDisplayCycle,
   toRepeatConfig,
 } from '@/services/repeat-engine';
+import { useAudioStore } from '@/stores/audioStore';
 import { useRepeatStore } from '@/stores/repeatStore';
 import type { RepeatStatusProps } from '@/components/repeat-status';
 
@@ -46,8 +47,19 @@ export function useSurahRepeatPlayback({
   const setRuntime = useRepeatStore((s) => s.setRuntime);
   const beginSession = useRepeatStore((s) => s.beginSession);
 
-  const { isPlaying, playAyah, pause, toggleAyah, isCurrentAyah, prefetchNextAyah } =
+  const { isPlaying, playAyah, pause, toggleAyah, prefetchNextAyah, progress } =
     useAudio();
+  const currentTrack = useAudioStore((s) => s.currentTrack);
+
+  const isActiveAyahPlaying = useMemo(
+    () =>
+      isPlaying &&
+      currentTrack?.surahId === surahId &&
+      currentTrack?.ayahNumber === activeAyah,
+    [isPlaying, currentTrack, surahId, activeAyah],
+  );
+
+  const audioProgress = isActiveAyahPlaying ? progress : 0;
 
   const playParams = useCallback(
     (ayahNumber: number): PlayAyahParams => ({
@@ -89,22 +101,17 @@ export function useSurahRepeatPlayback({
   useAudioOnEnded(handleAyahEnded);
 
   const togglePlayback = useCallback(async () => {
-    const willStart =
-      !(isPlaying && isCurrentAyah(surahId, activeAyah));
-
-    if (willStart) {
+    if (!isActiveAyahPlaying) {
       beginSession();
     }
 
     await toggleAyah(playParams(activeAyah));
   }, [
-    isPlaying,
-    isCurrentAyah,
-    surahId,
-    activeAyah,
+    isActiveAyahPlaying,
     beginSession,
     toggleAyah,
     playParams,
+    activeAyah,
   ]);
 
   const navigateAyah = useCallback(
@@ -167,6 +174,8 @@ export function useSurahRepeatPlayback({
 
   return {
     isPlaying,
+    isActiveAyahPlaying,
+    audioProgress,
     togglePlayback,
     navigateAyah,
     prefetchNextAyah: prefetchCurrentNext,

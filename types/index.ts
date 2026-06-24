@@ -35,6 +35,8 @@ export interface LastReadRecord {
 
 export interface DownloadManifestRecord {
   surahId: number;
+  /** Slug qari pada CDN — bagian dari primary key bersama `surahId`. */
+  reciterId: string;
   status: 'downloading' | 'ready' | 'failed';
   sizeBytes: number;
   ayahsCount: number;

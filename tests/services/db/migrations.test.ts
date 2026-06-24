@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { SCHEMA_V1, SCHEMA_V2 } from '@/services/db/migrations';
+import { SCHEMA_V1, SCHEMA_V2, SCHEMA_V3 } from '@/services/db/migrations';
 
 describe('services/db/migrations', () => {
   it('schema v2 tidak menyertakan tabel konten Quran', () => {
@@ -18,8 +18,8 @@ describe('services/db/migrations', () => {
     expect(SCHEMA_V2).toHaveProperty('downloadManifest');
   });
 
-  it('schema v1 historis masih menyertakan tabel konten Quran', () => {
-    expect(SCHEMA_V1).toHaveProperty('surahs');
-    expect(SCHEMA_V1).toHaveProperty('ayahs');
+  it('schema v5 memakai manifest per surat + qari', () => {
+    expect(SCHEMA_V3.downloadManifest).toContain('[surahId+reciterId]');
+    expect(SCHEMA_V3.downloadManifest).toContain('reciterId');
   });
 });

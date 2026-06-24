@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { getDownloadManager } from '@/services/download-manager';
+import { downloadManifestKey } from '@/services/download-manifest-key';
 import { db } from '@/services/db/db';
 import { useOfflineStore } from '@/stores/offlineStore';
 import type { ConnectionStatus, DownloadStatus } from '@/types';
@@ -40,7 +41,8 @@ export function useSurahOfflineDownload({
   ayahCount,
   reciterId,
 }: UseSurahOfflineDownloadInput) {
-  const downloadStatus = useOfflineStore((s) => s.downloadStatuses[surahId]);
+  const manifestKey = downloadManifestKey(surahId, reciterId);
+  const downloadStatus = useOfflineStore((s) => s.downloadStatuses[manifestKey]);
   const [progress, setProgress] = useState<DownloadProgress | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -49,17 +51,32 @@ export function useSurahOfflineDownload({
     let cancelled = false;
 
     void (async () => {
-      const record = await db.downloadManifest.get(surahId);
-      if (cancelled || !record) return;
+      const record = await db.downloadManifest.get([surahId, reciterId]);
+      if (cancelled) return;
+
+      if (!record) {
+        useOfflineStore.getState().setDownloadStatus(surahId, reciterId, 'idle');
+        return;
+      }
+
       useOfflineStore
         .getState()
-        .setDownloadStatus(surahId, mapManifestStatus(record.status));
+        .setDownloadStatus(
+          surahId,
+          reciterId,
+          mapManifestStatus(record.status),
+        );
     })();
 
     return () => {
       cancelled = true;
     };
-  }, [surahId]);
+  }, [surahId, reciterId]);
+
+  useEffect(() => {
+    setErrorMessage(null);
+    setProgress(null);
+  }, [reciterId, surahId]);
 
   const saveOffline = useCallback(async () => {
     if (downloadStatus === 'ready' || downloadStatus === 'downloading' || isSaving) {
