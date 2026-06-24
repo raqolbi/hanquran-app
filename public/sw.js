@@ -4,6 +4,7 @@
  *
  * Strategi caching runtime:
  *   - hanquran-static-v1 : stale-while-revalidate (JS/CSS/font/icon)
+ *   - hanquran-shell-v1  : network-first navigasi + precache offline.html
  *   - hanquran-data-v1   : cache-first (`/data/*`)
  *   - hanquran-audio-v1  : cache-first + runtime caching (CDN tilawah)
  *
@@ -14,14 +15,36 @@ importScripts('/sw-helpers.js');
 
 const SW_VERSION = 'v1';
 const CACHE_STATIC = 'hanquran-static-v1';
+const CACHE_SHELL = 'hanquran-shell-v1';
 const CACHE_DATA = 'hanquran-data-v1';
 const CACHE_AUDIO = 'hanquran-audio-v1';
-const KNOWN_CACHES = [CACHE_STATIC, CACHE_DATA, CACHE_AUDIO];
+const KNOWN_CACHES = [CACHE_STATIC, CACHE_SHELL, CACHE_DATA, CACHE_AUDIO];
+const SHELL_PRECACHE_URLS = ['/offline.html'];
 
-const { getRequestCategory, cacheFirst, staleWhileRevalidate } = self.SwHelpers;
+const {
+  getRequestCategory,
+  isNavigationRequest,
+  networkFirstNavigation,
+  cacheFirst,
+  staleWhileRevalidate,
+} = self.SwHelpers;
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(self.skipWaiting());
+  event.waitUntil(
+    (async () => {
+      const cache = await caches.open(CACHE_SHELL);
+      await Promise.all(
+        SHELL_PRECACHE_URLS.map(async (url) => {
+          try {
+            await cache.add(new Request(url, { cache: 'reload' }));
+          } catch (error) {
+            console.warn('[HanQuran SW] Precache gagal:', url, error);
+          }
+        }),
+      );
+      await self.skipWaiting();
+    })(),
+  );
 });
 
 self.addEventListener('activate', (event) => {
@@ -43,6 +66,13 @@ self.addEventListener('fetch', (event) => {
   if (request.method !== 'GET') return;
 
   const url = new URL(request.url);
+  if (isNavigationRequest(request) && url.origin === self.location.origin) {
+    event.respondWith(
+      networkFirstNavigation(request, CACHE_SHELL, '/offline.html'),
+    );
+    return;
+  }
+
   const category = getRequestCategory(url, self.location.origin);
   if (category === 'bypass') return;
 
