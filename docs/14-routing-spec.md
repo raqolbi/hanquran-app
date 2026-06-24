@@ -23,8 +23,8 @@ Semua penjelasan menggunakan Bahasa Indonesia dan mengikuti implementasi saat in
 2. URL: `/surah/[id]` (contoh: `/surah/2`)
    - Nama halaman: Surah Detail
    - Tujuan: Menampilkan seluruh ayat sebuah surat, kontrol audio, dan opsi repeat/fokus.
-   - Komponen utama: `SurahDetailHeader`, `ActionBar`, daftar `AyahCard`, `AudioPlayer`, `RepeatSelector`, `RepeatSettingsDialog`.
-   - Aksi pengguna: Pilih ayat aktif, putar / jeda audio, lompat ayat, buka Mode Fokus, buka pengaturan repeat, tandai favorit.
+   - Komponen utama: `SurahDetailHeader`, `VerseDisplayControls`, daftar `AyahCard`, `AudioPlayer`, `RepeatSelector`, `RepeatSettingsDialog`.
+   - Aksi pengguna: Pilih ayat aktif, putar / jeda audio, lompat ayat, toggle Terjemahan/Transliterasi, buka Mode Fokus, buka pengaturan repeat, tandai favorit.
    - Query opsional: `?ayah=<number>` untuk membuka halaman pada ayat tertentu.
 
 3. URL: `/focus/[id]` (contoh: `/focus/2`)
@@ -105,7 +105,7 @@ sequenceDiagram
 |---|---:|---|---|
 | `Home` | Klik Surah | `/surah/[id]` | default navigasi dari `SurahCard` menggunakan `routes.surah()` |
 | `Home` | Lanjutkan Hafalan | `/surah/[id]?ayah=` | Link dari `ContinueReading` |
-| `SurahDetail` | Mode Fokus | `/focus/[id]?ayah=` | `ActionBar` memicu `routes.focus()` |
+| `SurahDetail` | Mode Fokus | `/focus/[id]?ayah=` | `VerseDisplayControls` (tombol Fokus) memicu `routes.focus()` |
 | `SurahDetail` | Buka Repeat Settings | dialog lokal | `RepeatSettingsDialog` (Dialog/Drawer) |
 | `FocusMode` | Keluar | `/surah/[id]?ayah=` | router.push(routes.surah(...)) |
 | Global/Header | Pengaturan | `/settings` | Link dari `Header` (ikon) |
@@ -116,6 +116,7 @@ sequenceDiagram
 
 - App Router: rute diimplementasikan melalui folder `app/` — sesuai dengan App Router Next.js.
 - Helper: `lib/routes.ts` berisi pembangun route (`home`, `settings`, `surah`, `focus`) — gunakan helper ini untuk konsistensi.
+- **Locale UI:** MVP mempertahankan route tanpa prefix locale (`/settings`, bukan `/id/settings`). Bahasa UI dari `settings.appLocale` + `next-intl` — lihat `docs/21-i18n-and-locale.md`.
 - Wireframe / High-Fidelity / Component Spec:
   - Daftar rute di atas konsisten dengan halaman yang terdapat di `app/` dan komponen yang digunakan dalam wireframe/high-fidelity (mis. `Focus Mode`, `Surah Detail`, `Settings`).
   - Repeat UI dan audio player ditempatkan sesuai spes (RepeatControls pada SurahDetail + dialog, FocusMode memiliki player minimal).

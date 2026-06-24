@@ -13,10 +13,10 @@
 import type Dexie from 'dexie';
 
 /**
- * Schema v1: 13 store name (9 aktif MVP + 5 Growth Phase).
+ * Schema v1: termasuk tabel konten Quran (usang — tidak pernah dipakai runtime).
  *
- * Format string index Dexie: kolom pertama = primary key, sisanya = index.
- * `[a+b]` = compound index. `&` = unique, `*` = multi-entry (tidak dipakai v1).
+ * Schema v2: hanya data pengguna + manifest offline. Konten Quran dari
+ * `public/data/*` via `services/quran/` — lihat `docs/23-static-dataset-architecture.md`.
  */
 export const SCHEMA_V1 = {
   surahs: 'id, nameLatin, revelationPlace, cachedAt',
@@ -29,8 +29,19 @@ export const SCHEMA_V1 = {
   lastRead: 'id',
   settings: 'id',
   downloadManifest: 'surahId, status, cachedAt',
+  bookmarks: 'id, surahId, createdAt',
+  memorization_progress: 'surahId, percentComplete, lastSessionAt',
+  murajaah_sessions: 'id, surahId, completedAt',
+  statistics: 'date',
+  notes: 'id, surahId, updatedAt',
+} as const;
 
-  // Growth Phase (schema tersedia sejak v1 untuk migrasi bersih)
+/** Schema v2 — MVP: Dexie hanya untuk data pengguna, bukan konten Quran. */
+export const SCHEMA_V2 = {
+  favorites: 'surahId, createdAt',
+  lastRead: 'id',
+  settings: 'id',
+  downloadManifest: 'surahId, status, cachedAt',
   bookmarks: 'id, surahId, createdAt',
   memorization_progress: 'surahId, percentComplete, lastSessionAt',
   murajaah_sessions: 'id, surahId, completedAt',
@@ -44,7 +55,5 @@ export const SCHEMA_V1 = {
  */
 export function applyMigrations(db: Dexie): void {
   db.version(1).stores(SCHEMA_V1);
-
-  // Versi berikutnya ditambahkan di sini, contoh:
-  // db.version(2).stores({ ...SCHEMA_V1, /* perubahan */ }).upgrade(tx => { ... });
+  db.version(2).stores(SCHEMA_V2);
 }

@@ -68,7 +68,7 @@
 │                 INFRASTRUCTURE LAYER                          │
 │                                                               │
 │  Static Dataset (public/data/*)                               │
-│  EveryAyah CDN (audio)                                        │
+│  CDN audio tilawah (eksternal)                                │
 │  IndexedDB (Dexie)                                            │
 │  Cache Storage                                                │
 │  Service Worker                                               │
@@ -105,7 +105,7 @@
 │  public/data/quran/{id}.json                                  │
 │  public/data/translations/{lang}/{id}.json                      │
 │  data/reciters.json                                           │
-│  EveryAyah CDN (audio per ayat)                               │
+│  CDN audio tilawah (per ayat)                                 │
 │                                                               │
 └───────────────────────────────────────────────────────────────┘
 ```
@@ -125,8 +125,11 @@
 | Caching   | Workbox (Service Worker)     | PWA offline support       |
 | Font      | Uthmani (web font)           | Standar mushaf            |
 | Data      | Dataset statis `public/data/*` | Konten Quran & terjemahan |
-| Audio     | EveryAyah CDN                | Tilawah per ayat          |
+| Audio     | CDN audio tilawah            | Tilawah per ayat          |
 | Hosting   | Vercel / Cloudflare Pages    | Static export friendly    |
+| i18n (UI) | next-intl                    | Lokalisasi antarmuka id/en |
+
+> Spesifikasi bahasa aplikasi: `docs/21-i18n-and-locale.md`. Route MVP tetap tanpa prefix locale.
 
 ---
 
@@ -351,7 +354,7 @@ Menampilkan:
 - Daftar ayat
 - Audio player
 - Repeat control
-- Translation toggle
+- Verse Display Controls (Terjemahan, Transliterasi, Fokus)
 
 ---
 
@@ -391,11 +394,13 @@ Contoh:
 
 Mode khusus hafalan yang menampilkan:
 
-- Ayat ukuran besar
+- Ayat ukuran besar (Arab + transliterasi + terjemahan sesuai preferensi aktif)
 - Word-by-word highlight
 - Audio player minimalis
 - Repeat control
 - Progress hafalan
+
+> Mode Fokus mempertahankan state Terjemahan dan Transliterasi dari Surah Detail. Lihat `docs/22-verse-display-controls.md`.
 
 ---
 
@@ -408,10 +413,13 @@ Mode khusus hafalan yang menampilkan:
 Menampilkan:
 
 - Font size
-- Translation settings
+- Bahasa aplikasi (UI shell)
+- Reciter / qari
 - High contrast mode
 - Cache management
 - Offline settings
+
+> Toggle terjemahan dan transliterasi ada di **Verse Display Controls** pada Surah Detail, bukan di `/settings`.
 
 ---
 
@@ -551,11 +559,15 @@ Tanpa perubahan besar pada struktur aplikasi.
 │   │       │   ├── <SurahTitle />
 │   │       │   ├── <Bismillah />
 │   │       │   └── <SurahMeta />
-│   │       ├── <TranslationToggle />
+│   │       ├── <VerseDisplayControls>
+│   │       │   ├── <TranslationToggle />
+│   │       │   ├── <TransliterationToggle />
+│   │       │   └── <FocusModeButton />
 │   │       ├── <AyahList>
 │   │       │   └── <AyahItem /> (×n ayat)
 │   │       │       ├── <AyahText />
 │   │       │       │   └── <Word /> (×n kata)  ← highlight per kata
+│   │       │       ├── <AyahTransliteration /> ← toggle show/hide
 │   │       │       ├── <AyahTranslation />     ← toggle show/hide
 │   │       │       └── <PlayButton />
 │   │       └── <AudioBar>
@@ -566,7 +578,7 @@ Tanpa perubahan besar pada struktur aplikasi.
 │   │
 │   ├── [Halaman: /focus/[id]]
 │   │   └── <FocusPage>
-│   │       ├── <FocusAyah />       ← ayat besar, centered
+│   │       ├── <FocusAyah />       ← ayat besar; Arab + transliterasi + terjemahan sesuai settings
 │   │       ├── <FocusAudio />      ← kontrol audio minimal
 │   │       ├── <FocusRepeat />     ← repeat tetap ada
 │   │       └── <FocusProgress />   ← progress hafalan
@@ -574,7 +586,6 @@ Tanpa perubahan besar pada struktur aplikasi.
 │   └── [Halaman: /settings]
 │       └── <SettingsPage>
 │           ├── <FontSizeSetting />
-│           ├── <TranslationSetting />
 │           ├── <ContrastSetting />
 │           └── <CacheManagement />
 │
@@ -957,23 +968,31 @@ queue, currentTrack, playlistPosition
 
 ---
 
-## Repository Pattern
+## Service Layer (Konten Quran)
 
-Seluruh akses data mengikuti pola Repository:
+Akses konten Quran mengikuti Static Dataset Architecture (`docs/23-static-dataset-architecture.md`):
+
+```text
+UI
+↓
+React Hooks
+↓
+services/quran/
+↓
+public/data/*
+```
+
+## Dexie (Data Pengguna)
 
 ```text
 UI
 ↓
 Store (Zustand)
 ↓
-Repository
-↓
 Dexie
-↓
-public/data/* (fallback)
 ```
 
-Komponen tidak boleh mengakses API atau Dexie secara langsung.
+Komponen tidak boleh mengakses Dexie atau `public/data/` secara langsung.
 
 ---
 
@@ -1090,11 +1109,15 @@ interface SettingsRecord {
 
   translationVisible: boolean;
 
+  transliterationVisible: boolean;
+
   contrastMode: "default" | "high";
 
   updatedAt: number;
 }
 ```
+
+> `translationVisible` dan `transliterationVisible` dikontrol dari Verse Display Controls — lihat `docs/22-verse-display-controls.md`.
 
 ---
 
@@ -1110,7 +1133,7 @@ Tujuan utama:
 - Audio yang pernah diputar tetap tersedia
 - Pengalaman pengguna tetap konsisten pada jaringan lambat
 
-Service Worker berfungsi sebagai lapisan cache dan sinkronisasi antara aplikasi, Cache Storage, dan sumber data eksternal (EveryAyah untuk audio).
+Service Worker berfungsi sebagai lapisan cache dan sinkronisasi antara aplikasi, Cache Storage, dan sumber data eksternal (CDN audio tilawah).
 
 ---
 
@@ -1366,7 +1389,7 @@ Service Worker merupakan bagian dari Infrastructure Layer dan tidak memiliki bus
 
 ## Overview
 
-HanQuran menggunakan **dataset statis** (`public/data/*`) sebagai sumber konten Al-Qur'an dan **EveryAyah** untuk audio tilawah.
+HanQuran menggunakan **dataset statis** (`public/data/*`) sebagai sumber konten Al-Qur'an dan **CDN audio tilawah** (`AYAH_AUDIO_BASE_URL`) untuk playback.
 
 Data yang digunakan:
 
@@ -1388,13 +1411,13 @@ Integrasi dilakukan melalui Infrastructure Layer dan tidak diakses langsung oleh
 UI Components
       │
       ▼
-Feature Modules
+React Hooks
       │
       ▼
-Infrastructure API Layer
+services/quran/
       │
       ▼
-public/data/* + EveryAyah
+public/data/*
 ```
 
 Contoh:
@@ -1406,101 +1429,53 @@ SurahPage
 useSurah()
       │
       ▼
-QuranRepository
+quran-service.ts
       │
       ▼
 public/data/*
 ```
 
----
-
-## Data Layer
-
-Seluruh komunikasi dengan sumber data dipusatkan pada repository layer.
-
-```text
-infrastructure/
-└── api/
-    ├── QuranRepository
-    └── AudioRepository
-```
+> Keputusan MVP: **bukan** `QuranRepository` Dexie-first. Lihat `docs/23-static-dataset-architecture.md`.
 
 ---
 
-## QuranRepository
-
-Responsibilities:
+## Data Layer — Konten Quran
 
 ```text
-Get Surahs
-Get Surah Detail
-Get Ayahs
-Get Word Data
-Get Translation
-```
-
-Contoh:
-
-```ts
-getSurahs()
-
-getSurah(id)
-
-getAyahs(surahId)
-
-getTranslations(surahId)
+services/quran/
+├── quran-service.ts
+├── data-loader.ts
+├── mappers.ts
+└── audio-service.ts
 ```
 
 ---
 
-## AudioRepository
-
-Responsibilities:
+## Data Layer — Data Pengguna
 
 ```text
-Get Reciters
-Get Audio URLs
-Get Word Timings
-```
-
-Contoh:
-
-```ts
-getReciters()
-
-getAudio(surahId, ayahNumber)
-
-getWordTimings(surahId)
+stores/
+├── userStore.ts      → Dexie: settings, favorites, lastRead
+├── repeatStore.ts    → Dexie: settings.repeatConfig
+└── offlineStore.ts   → Dexie: downloadManifest
 ```
 
 ---
 
-## Data Retrieval Flow
+## Data Retrieval Flow (Konten Quran)
 
 ```text
-Feature Module
+Hook (useSurah, useSurahList)
       │
       ▼
-Repository
+services/quran/
       │
-      ▼
-IndexedDB Cache
+      ├── In-memory cache hit → return
       │
-      ├── Cache Hit
-      │       │
-      │       ▼
-      │   Return Data
-      │
-      └── Cache Miss
+      └── fetch public/data/*
               │
               ▼
-        public/data/*
-              │
-              ▼
-        Save To Cache
-              │
-              ▼
-         Return Data
+         Return data
 ```
 
 ---
@@ -1654,12 +1629,13 @@ hanquran-app/
 ├── services/
 │   ├── audio-controller.ts     ← jembatan HTMLAudioElement ↔ useAudioStore
 │   ├── download-manager.ts     ← unduh audio ke Cache Storage
-│   ├── db/                     ← Dexie setup & migrations
+│   ├── db/                     ← Dexie — data pengguna saja
 │   │   ├── db.ts
 │   │   └── migrations.ts
-│   ├── api/                    ← Repository layer (QuranRepository, AudioRepository)
-│   │   ├── QuranRepository.ts
-│   │   └── AudioRepository.ts
+│   ├── quran/                  ← Static Dataset service layer
+│   │   ├── quran-service.ts
+│   │   ├── data-loader.ts
+│   │   └── audio-service.ts
 │   └── sw/                     ← Service Worker (Workbox)
 │       └── service-worker.js
 │
@@ -1685,15 +1661,13 @@ hanquran-app/
 
 ## Architecture Rules
 
-### Repository Pattern
+### Static Dataset + Service Layer
 
-Seluruh akses data harus melalui Repository:
+Konten Quran: `UI → hooks → services/quran/ → public/data/*`
 
-```text
-UI → Store (Zustand) → Repository → Dexie → public/data/* (fallback)
-```
+Data pengguna: `UI → Store → Dexie`
 
-Komponen tidak boleh memanggil API atau Dexie secara langsung.
+Komponen tidak boleh memanggil `fetch('/data/...')` atau Dexie secara langsung.
 
 ---
 
@@ -1711,9 +1685,28 @@ Semua akses ke platform (audio, cache, database) melewati `services/`:
 services/audio-controller.ts    → HTMLAudioElement
 services/download-manager.ts   → Cache Storage via SW
 services/db/                   → Dexie (IndexedDB)
-services/api/                  → Repository (public/data/*, EveryAyah)
+services/api/                  → Repository (public/data/*, CDN audio)
 services/sw/                   → Service Worker
+i18n/ + messages/              → next-intl (UI locale id/en)
 ```
+
+### Internationalization Layer
+
+Lokalisasi **hanya untuk shell UI aplikasi** — bukan konten Quran.
+
+```text
+settings.appLocale (Dexie)
+        │
+        ▼
+next-intl provider (layout)
+        │
+        ▼
+useTranslations() di komponen
+```
+
+- First launch: `i18n/detection.ts` (browser locale + timezone)
+- Setelah itu: `settings.appLocale` adalah sumber kebenaran
+- Detail: `docs/21-i18n-and-locale.md`
 
 ---
 
@@ -1833,7 +1826,7 @@ HanQuran PWA
       └── Service Worker
       │
       ▼
-public/data/* + EveryAyah CDN
+public/data/* + CDN audio tilawah
 ```
 
 HanQuran tidak membutuhkan backend sendiri pada V1.
@@ -1857,7 +1850,7 @@ localhost:3000
 Data source:
 
 ```text
-public/data/* (konten) + EveryAyah (audio)
+public/data/* (konten) + CDN audio (tilawah)
 ```
 
 ---
@@ -1971,7 +1964,7 @@ Service Worker
 
 ## Environment Variables
 
-MVP tidak memerlukan environment variable untuk sumber data Quran. Konten disajikan dari `public/data/*`; audio dari EveryAyah; qari dari `data/reciters.json`.
+MVP tidak memerlukan environment variable untuk sumber data Quran. Konten disajikan dari `public/data/*`; audio dari CDN tilawah (`audio-config.ts`); qari dari `data/reciters.json`.
 
 Lihat `docs/07-api-integration.md` untuk detail arsitektur data.
 

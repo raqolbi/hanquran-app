@@ -29,7 +29,8 @@ Kriteria keberhasilan MVP (high-level):
 
 ## 3. Ruang Lingkup MVP
 Termasuk:
-- Integrasi dataset statis `public/data/*` dengan Local-First pattern (Dexie first, fallback ke dataset)
+- Integrasi dataset statis `public/data/*` via `services/quran/` (Static Dataset Architecture)
+- Setup **`next-intl`** untuk UI Bahasa Indonesia & English (`docs/21-i18n-and-locale.md`)
 - Audio Playback (UI + controller)
 - Repeat Engine (count, target, range)
 - Word Highlight (Focus Mode)
@@ -142,7 +143,7 @@ Rilis checklist:
 
 ## 9. Checklist MVP (deliverable per fitur)
 - [ ] Dexie setup (`services/db/db.ts`) dengan 13 tabel
-- [ ] QuranRepository dengan Local-First pattern (Dexie first, API fallback)
+- [x] Service layer `services/quran/` — loader, hooks, integrasi halaman
 - [ ] AudioController & useAudio hook
 - [ ] AudioPlayer UI integrated with controller
 - [ ] Repeat engine functional (count, range, target)
@@ -173,10 +174,8 @@ Rationale: audio + repeat + focus adalah inti hafalan; caching/PWA meningkatkan 
 ---
 
 ## Lampiran Teknis & Tugas Implementasi Cepat
-- Pakai `zustand` untuk runtime stores; **Dexie** untuk persistensi (akses langsung dari action store).
-- Setup Dexie di `services/db/db.ts` sebelum store diinisialisasi.
-- Implement `AudioController` sebagai service class yang menerima commands dan memancarkan events ke `zustand`.
-- Implement Repository Pattern: semua akses data melalui `services/api/` yang memanggil Dexie first, fallback ke `public/data/*`.
+- Konten Quran via `services/quran/` — fetch `public/data/*`, cache in-memory.
+- Data pengguna: `zustand` stores + **Dexie** (akses langsung dari action store).
 - Service Worker: implement minimal runtime caching & message channel to client.
 - Prefer incremental delivery: deliver audio play first with streaming, add prefetch/download next.
 

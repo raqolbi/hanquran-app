@@ -2,16 +2,20 @@
 
 import { useState, useMemo } from 'react';
 import { motion } from 'motion/react';
+import { useTranslations } from 'next-intl';
 
 import { Header } from '@/components/header';
 import { ContinueReading } from '@/components/continue-reading';
 import { SearchInput } from '@/components/search-input';
 import { FilterChips } from '@/components/filter-chips';
 import { SurahCard } from '@/components/surah-card';
+import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
 import { useSurahList } from '@/hooks/use-surah-list';
 
 export default function Home() {
-  const { surahs, loading, error } = useSurahList();
+  const t = useTranslations('errors');
+  const tLoading = useTranslations('loading');
+  const { surahs, loading, error, retry } = useSurahList();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [favorites, setFavorites] = useState<string[]>(['Al-Faatiha', 'Al-Baqarah']);
@@ -56,9 +60,14 @@ export default function Home() {
 
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           {loading ? (
-            <p className="py-12 text-center text-muted-foreground">Memuat daftar surat...</p>
+            <p className="py-12 text-center text-muted-foreground">{tLoading('surahList')}</p>
           ) : error ? (
-            <p className="py-12 text-center text-destructive">{error}</p>
+            <DataLoadErrorFallback
+              message={error}
+              onRetry={retry}
+              variant="inline"
+              showHomeButton={false}
+            />
           ) : (
             <motion.div
               initial={{ opacity: 0 }}
@@ -106,9 +115,7 @@ export default function Home() {
                       d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                     />
                   </svg>
-                  <p className="text-muted-foreground">
-                    Surat tidak ditemukan. Coba ubah kata pencarian.
-                  </p>
+                  <p className="text-muted-foreground">{t('noSearchResults')}</p>
                 </motion.div>
               )}
             </motion.div>

@@ -1,9 +1,8 @@
 /**
  * Barrel export & helper inisialisasi store.
  *
- * `initStores()` memanggil `init()` pada seluruh store yang membaca Dexie
- * saat aplikasi start. Dipanggil dari komponen client root (lihat
- * `components/shared/StoreInitializer.tsx`).
+ * `initStores()` memanggil `init()` pada store yang membaca Dexie (data
+ * pengguna). Dipanggil dari `components/providers/app-providers.tsx`.
  */
 
 import { useUserStore } from './userStore';

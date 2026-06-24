@@ -5,7 +5,7 @@ export function formatSurahId(surahNumber: number): string {
   return String(surahNumber).padStart(3, '0');
 }
 
-/** Format kode ayat EveryAyah, mis. surat 1 ayat 1 → `001001`. */
+/** Format kode file audio ayat, mis. surat 1 ayat 1 → `001001`. */
 export function formatAyahCode(surahNumber: number, ayahNumber: number): string {
   return `${formatSurahId(surahNumber)}${String(ayahNumber).padStart(3, '0')}`;
 }

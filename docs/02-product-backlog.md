@@ -92,7 +92,7 @@ User dapat menampilkan atau menyembunyikan terjemahan per ayat.
 
 - [x] Belum dikerjakan
 - [ ] Default: terjemahan tersembunyi
-- [ ] Toggle untuk menampilkan terjemahan
+- [ ] Toggle Terjemahan di Verse Display Controls (selalu terlihat di Surah Detail)
 - [ ] Terjemahan dalam bahasa Indonesia
 - [ ] Toggle bersifat global (berlaku untuk semua ayat)
 - [ ] Toggle state tersimpan secara lokal di perangkat
@@ -100,13 +100,43 @@ User dapat menampilkan atau menyembunyikan terjemahan per ayat.
 ### Subtasks
 
 - [ ] Muat translation dari dataset statis `public/data/translations/*`
-- [ ] Toggle button
+- [ ] `VerseDisplayControls` — tombol Terjemahan (✓/○)
 - [ ] Animate show/hide translation
-- [ ] Persist toggle state ke storage lokal
+- [ ] Persist `translationVisible` ke Dexie
 
 ### Related FR
 
 FR-009
+
+---
+
+## PB-003b: Transliterasi
+
+**Type:** Feature
+**Priority:** P1 — Should Have
+**Sprint:** 2
+
+### Description
+
+User dapat menampilkan atau menyembunyikan transliterasi ayat.
+
+### Acceptance Criteria
+
+- [ ] Default: transliterasi tersembunyi
+- [ ] Toggle Transliterasi di Verse Display Controls (satu baris dengan Terjemahan dan Fokus)
+- [ ] Independen dari toggle Terjemahan
+- [ ] Toggle global; persisten di Dexie (`transliterationVisible`)
+- [ ] Urutan render: Arab → Transliterasi → Terjemahan
+
+### Subtasks
+
+- [ ] Muat transliterasi dari dataset surat
+- [ ] `VerseDisplayControls` — tombol Transliterasi (✓/○)
+- [ ] Persist `transliterationVisible` ke Dexie
+
+### Related FR
+
+FR-009b
 
 ---
 
@@ -479,6 +509,44 @@ Mendukung pengguna dengan kebutuhan aksesibilitas berbeda.
 
 ---
 
+## PB-015: Bahasa Aplikasi (Application Language)
+
+**Type:** Feature
+**Priority:** P1 — Should Have
+**Sprint:** 1
+
+### Description
+
+Pengguna dapat memilih bahasa antarmuka aplikasi: Bahasa Indonesia atau English.
+
+### Acceptance Criteria
+
+- [ ] Bahasa didukung: `id` (Bahasa Indonesia) dan `en` (English)
+- [ ] Deteksi otomatis pada first launch (browser locale + timezone Indonesia)
+- [ ] Bagian **Bahasa Aplikasi** di halaman Pengaturan
+- [ ] Preferensi persisten di Dexie (`settings.appLocale`)
+- [ ] Seluruh label UI (menu, dialog, tombol, empty state) mengikuti locale aktif
+- [ ] Teks Arab ayat, transliterasi, audio, dan qari **tidak** berubah
+- [ ] Implementasi memakai **`next-intl`**
+
+### Subtasks
+
+- [ ] Setup `next-intl` + `messages/id.json` & `messages/en.json`
+- [ ] `i18n/detection.ts` — alur first launch
+- [ ] Field `appLocale` di `settings` (Dexie)
+- [ ] Komponen `LanguageSetting` di `/settings`
+- [ ] Migrasi string UI hardcoded ke katalog terjemahan
+
+### Related FR
+
+FR-011
+
+### Spesifikasi
+
+`docs/21-i18n-and-locale.md`
+
+---
+
 # Sprint Plan
 
 ## Sprint 1: Foundation
@@ -487,6 +555,7 @@ Mendukung pengguna dengan kebutuhan aksesibilitas berbeda.
 PB-001  Daftar Surat
 PB-002  Membuka Surat
 PB-011  PWA Setup
+PB-015  Bahasa Aplikasi
 ```
 
 Goal: User dapat melihat daftar surat dan membuka surat.

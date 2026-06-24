@@ -73,7 +73,7 @@ Repeat / fokus hafalan
 | Audio | Core | Playback audio ayat dan kontrol player |
 | Memorization | Core | Repeat, highlight, focus mode |
 | Reading Resume | Core | Last read dan continue reading |
-| Settings | Core | Font size, translation visibility, contrast, cache settings |
+| Settings | Core | Font size, translation visibility, contrast, cache settings, **application language** |
 | Offline | Core | Sinkronisasi cache, status offline, service worker integration |
 | Visual Foundation | Supporting | Polishing UI ringan tanpa mengganggu fitur inti |
 | Shared | Supporting | UI generik, constants, utils, common types |
@@ -91,7 +91,7 @@ Repeat / fokus hafalan
 - Mengambil detail surat dan ayat
 - Menampilkan teks Arab Uthmani
 - Menampilkan metadata surat
-- Menampilkan terjemahan sesuai setting global
+- Menampilkan terjemahan dan transliterasi sesuai `VerseDisplayControls` / settings global
 - Menyediakan filter `Semua` dan `Favorit` di home
 
 ### Owns
@@ -100,9 +100,12 @@ Repeat / fokus hafalan
 - `SurahPage`
 - `SurahCard`
 - `SurahHeader`
+- `VerseDisplayControls`
 - `AyahList`
 - `AyahItem`
 - `TranslationToggle`
+- `TransliterationToggle`
+- `FocusModeButton`
 - `FavoriteButton`
 
 ### Public Hooks
@@ -246,16 +249,18 @@ Repeat / fokus hafalan
 ### Responsibility
 
 - Font size
-- Translation visibility
+- Application language (`id` / `en` via `next-intl`)
 - High contrast mode
 - Cache management trigger
 - Settings screen state
+
+> Toggle terjemahan dan transliterasi **bukan** bagian Settings module — dikelola di `VerseDisplayControls` (`docs/22-verse-display-controls.md`).
 
 ### Owns
 
 - `SettingsPage`
 - `FontSizeSetting`
-- `TranslationSetting`
+- `LanguageSetting`
 - `ContrastSetting`
 - `CacheManagement`
 - `useSettings()`
@@ -376,7 +381,7 @@ Tidak boleh berisi business logic domain.
 ### Responsibility
 
 - Quran content dataset access (`public/data/*`)
-- EveryAyah audio access
+- Akses audio tilawah (CDN eksternal)
 - Dexie / IndexedDB access
 - Cache Storage access
 - Service worker registration

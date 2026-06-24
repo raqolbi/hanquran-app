@@ -2,8 +2,10 @@
 
 Dokumen ini adalah laporan audit komprehensif terhadap seluruh dokumentasi proyek HanQuran. Audit dilakukan untuk memastikan konsistensi, mengidentifikasi konflik, duplikasi, dan gap dalam dokumentasi sebelum Sprint 1 dimulai.
 
-**Terakhir diperbarui:** 15 Juni 2026
+**Terakhir diperbarui:** 15 Juni 2026  
 **Versi audit:** 3 (revisi setelah unifikasi arsitektur final: Zustand + Dexie + Local First)
+
+> **Pembaruan 24 Juni 2026:** Keputusan **Static Dataset Architecture** menggantikan Local-First / Dexie untuk konten Quran. Lihat `docs/23-static-dataset-architecture.md`. Beberapa temuan audit di bawah mengacu pada arsitektur lama.
 
 ---
 
@@ -13,9 +15,9 @@ Dokumen ini adalah laporan audit komprehensif terhadap seluruh dokumentasi proye
 
 **Skor Konsistensi Keseluruhan:** 9.5/10
 
-**Total Dokumen Diaudit:** 20 file
+**Total Dokumen Diaudit:** 21 file
 - `CLAUDE.md` (1)
-- `docs/00` — `docs/18` (19 file)
+- `docs/00` — `docs/21` (22 file)
 
 | Kategori | Sebelum Revisi | Sesudah Revisi |
 |----------|---------------|----------------|
@@ -29,7 +31,7 @@ Dokumen ini adalah laporan audit komprehensif terhadap seluruh dokumentasi proye
 **Total temuan audit v2:** 24 (8 RESOLVED, 9 PARTIALLY RESOLVED, 5 OPEN, 2 NO LONGER RELEVANT)
 **Total temuan audit v3 (sekarang):** 28 (17 RESOLVED, 9 PARTIALLY RESOLVED, 1 OPEN, 2 NO LONGER RELEVANT)
 
-**Perubahan utama v3:** Seluruh konflik kritis diselesaikan. Dokumentasi kini konsisten dengan arsitektur final: **Zustand + Dexie + Cache Storage + dataset statis `public/data/*` + EveryAyah + Local First**.
+**Perubahan utama v3:** Seluruh konflik kritis diselesaikan. Dokumentasi kini konsisten dengan arsitektur final: **Zustand + Dexie + Cache Storage + dataset statis `public/data/*` + CDN audio tilawah + Local First**.
 
 ---
 
@@ -75,7 +77,7 @@ Temuan-temuan berikut telah diselesaikan melalui revisi pada `docs/15`, `docs/16
 **Status:** ✅ RESOLVED
 
 **Resolusi:** `docs/18` Phase 1 kini secara eksplisit menyatakan:
-- Production = Dataset statis `public/data/*` + EveryAyah (audio)
+- Production = Dataset statis `public/data/*` + CDN audio tilawah
 - Development = Mock Data lokal (menggunakan `lib/surahs-data.ts` sebagai seed)
 - Task "Migrate `lib/surahs-data.ts` ke dynamic loader" sudah masuk backlog (P0)
 
@@ -190,7 +192,7 @@ Tidak ada lagi ambiguitas. Developer langsung mengerti bahwa 2 surah yang ada ad
 
 **Yang belum diselesaikan:**
 - Tidak ada contoh response JSON untuk endpoint utama (`/v4/chapters`, `/v4/verses/by_chapter/{id}?words=true`).
-- Format URL audio EveryAyah perlu didokumentasikan di `docs/07`.
+- [x] Format URL audio tilawah didokumentasikan di `docs/07` (`AYAH_AUDIO_BASE_URL`, `buildAyahAudioUrl`)
 
 **Tindakan yang diperlukan:** Tambahkan "Response Examples" di `docs/07`. Dapat dilakukan paralel dengan Phase 1 development.
 
@@ -557,7 +559,7 @@ Karena produk ini adalah **Memorization First** (bukan reading first), label "La
 **Kelemahan:**
 - Focus Mode tidak memiliki wireframe atau mockup spesifik di `docs/08`/`docs/10`.
 - Error states & empty states tidak terdesain.
-- Label UI Bahasa Indonesia belum diverifikasi per-komponen di `docs/12`.
+- Label UI (`id`/`en` via `next-intl`) belum diverifikasi per-komponen di `docs/12` — spesifikasi di `docs/21-i18n-and-locale.md`.
 
 ---
 
@@ -599,7 +601,7 @@ Karena produk ini adalah **Memorization First** (bukan reading first), label "La
 ### ✅ SIAP MASUK SPRINT 1
 
 **Alasan kesiapan:**
-1. Seluruh keputusan P0 sudah final: data source (dataset statis `public/data/*` + EveryAyah), state management (**Zustand + Dexie**), routing (`/focus/[id]`), folder structure, Repository Pattern, Local-First principle.
+1. Seluruh keputusan P0 sudah final: data source (dataset statis `public/data/*` + CDN audio), state management (**Zustand + Dexie**), routing (`/focus/[id]`), folder structure, Repository Pattern, Local-First principle.
 2. Semua konflik kritis (K-01 s.d. K-04) telah diselesaikan — dokumen-dokumen yang bermasalah diperbarui langsung.
 3. Development backlog siap: 81 tasks dengan prioritas jelas, label `[NEW]`/`[UPDATE]`/`[REFACTOR]`, dan MVP checklist.
 4. Existing components terdokumentasi: 36 item di codebase sebagai fondasi.
@@ -614,7 +616,8 @@ Karena produk ini adalah **Memorization First** (bukan reading first), label "La
 
 Gunakan sebelum MVP release:
 
-- [x] Data source (dataset statis `public/data/*` + EveryAyah) sudah final dan terdokumentasi
+- [x] Data source (dataset statis `public/data/*` + CDN audio tilawah) sudah final dan terdokumentasi
+- [x] Bahasa UI aplikasi (`id`/`en`, `next-intl`, deteksi first launch) terdokumentasi di `docs/21-i18n-and-locale.md`
 - [x] Storage strategy (**Dexie** + Cache Storage) final dan konsisten di docs/04, docs/06, docs/15, docs/16, docs/18
 - [x] Local-First principle terdokumentasi di docs/04, docs/07, docs/15
 - [x] Repository Pattern terdokumentasi di docs/04, docs/07, docs/15
@@ -626,7 +629,7 @@ Gunakan sebelum MVP release:
 - [x] Konflik K-01 s.d. K-04 resolved di docs/04 (v3)
 - [ ] Error & empty states didesain dan dispec
 - [ ] Focus Mode wireframe ditambahkan ke docs/10
-- [ ] Label UI Bahasa Indonesia diverifikasi per-komponen
+- [ ] Label UI (`messages/id.json`, `messages/en.json`) diverifikasi per-komponen setelah implementasi `next-intl`
 - [ ] Contoh response JSON ditambahkan ke docs/07
 - [ ] Terminologi "Lanjutkan Hafalan" distandarisasi
 - [ ] Docs diperbarui setiap fase development selesai

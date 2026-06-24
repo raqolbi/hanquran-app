@@ -2,6 +2,7 @@
 
 import { motion } from 'motion/react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { routes } from '@/lib/routes';
 
@@ -18,6 +19,7 @@ export function ContinueReading({
   ayah,
   totalAyahs,
 }: ContinueReadingProps) {
+  const t = useTranslations('home');
   const progress = (ayah / totalAyahs) * 100;
 
   return (
@@ -25,7 +27,7 @@ export function ContinueReading({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.2 }}
-      className="max-w-3xl mx-auto px-4 sm:px-6 mb-4 sm:mb-6"
+      className="max-w-3xl mx-auto px-4 sm:px-6 mt-6 sm:mt-8 mb-4 sm:mb-6"
     >
       <Link
         href={routes.surah(surahId, ayah)}
@@ -33,12 +35,16 @@ export function ContinueReading({
         style={{
           background: 'linear-gradient(135deg, #F5E6D3 0%, #E8D9C6 100%)',
         }}
-        aria-label={`Lanjutkan ${surah} ayat ${ayah}`}
+        aria-label={t('continueReadingAria', { surah, ayah })}
       >
         <div className="mb-8">
-          <p className="text-xs font-semibold text-[#2D9B8C] uppercase tracking-widest mb-3">Lanjutkan Hafalan</p>
+          <p className="text-xs font-semibold text-[#2D9B8C] uppercase tracking-widest mb-3">
+            {t('continueMemorization')}
+          </p>
           <h2 className="text-4xl sm:text-5xl font-bold text-[#1A1A1A] mb-2">{surah}</h2>
-          <p className="text-lg text-[#5A5A5A]">Ayat {ayah} • {Math.round(progress)}% selesai</p>
+          <p className="text-lg text-[#5A5A5A]">
+            {t('ayahProgress', { ayah, percent: Math.round(progress) })}
+          </p>
         </div>
 
         <div className="mb-6">
@@ -53,12 +59,14 @@ export function ContinueReading({
               }}
             />
           </div>
-          <p className="text-xs text-[#5A5A5A] mt-2">{ayah} dari {totalAyahs} ayat sudah dihafal</p>
+          <p className="text-xs text-[#5A5A5A] mt-2">
+            {t('memorizedProgress', { current: ayah, total: totalAyahs })}
+          </p>
         </div>
 
         <div className="flex items-center justify-between">
           <div className="text-sm font-medium text-[#2D9B8C]">
-            Terus semangat! Kamu hebat.
+            {t('encouragement')}
           </div>
           <div className="text-xl">→</div>
         </div>

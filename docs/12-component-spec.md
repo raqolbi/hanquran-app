@@ -82,8 +82,10 @@ Komponen di dokumen ini dipetakan ke modul pada `05-module-catalog.md`.
 | SurahCard             | Quran            | SurahCard                                                               |
 | FavoriteButton        | Quran            | FavoriteButton                                                          |
 | SurahMetaHeader       | Quran            | SurahHeader                                                             |
-| ActionBar             | Quran            | —                                                                       |
-| TranslationToggle     | Quran            | TranslationToggle                                                       |
+| VerseDisplayControls  | Quran            | ActionBar (legacy)                                                        |
+| TranslationToggle     | Quran            | TranslationToggle (child of VerseDisplayControls)                         |
+| TransliterationToggle | Quran            | —                                                                         |
+| FocusModeButton       | Quran            | —                                                                         |
 | AyahCard              | Quran            | AyahItem                                                                |
 | AyahWordHighlight     | Memorization     | HighlightEngine output                                                  |
 | AudioPlayer           | Audio            | AudioBar + AudioControls + AudioProgress                                |
@@ -92,7 +94,8 @@ Komponen di dokumen ini dipetakan ke modul pada `05-module-catalog.md`.
 | RepeatStatus          | Memorization     | —                                                                       |
 | FocusModeScreen       | Memorization     | FocusPage + FocusAyah                                                   |
 | FocusModePlayer       | Memorization     | FocusAudio + FocusRepeat                                                |
-| SettingsCard          | Settings         | FontSizeSetting / TranslationSetting / ContrastSetting / CacheManagement |
+| SettingsCard          | Settings         | FontSizeSetting / LanguageSetting / ContrastSetting / CacheManagement |
+| LanguageSetting       | Settings         | —                                                                       |
 | ReciterSelector       | Settings         | —                                                                       |
 | BottomNavigation      | Shared           | —                                                                       |
 | BottomSheet           | Shared           | —                                                                       |
@@ -490,20 +493,32 @@ Body S atau Caption.
 
 ---
 
-# 7. ActionBar
+# 7. VerseDisplayControls
+
+> **Alias legacy di kode:** `ActionBar`. Spesifikasi UX final: `docs/22-verse-display-controls.md`.
 
 ## Purpose
 
-Bar aksi cepat di Surah Detail.
+Baris kontrol tampilan ayat di Surah Detail — **selalu terlihat** langsung di bawah header surat.
+
+Tiga kontrol dalam satu baris horizontal dengan hierarki visual setara:
+
+```text
+[✓ Terjemahan] [○ Transliterasi] [🎯 Fokus]
+```
+
+Tidak disembunyikan di bottom sheet, overflow menu, dialog pengaturan, atau layar sekunder.
 
 ---
 
 ## Props
 
 ```ts
-interface ActionBarProps {
+interface VerseDisplayControlsProps {
   translationOn: boolean
+  transliterationOn: boolean
   onToggleTranslation: () => void
+  onToggleTransliteration: () => void
   onEnterFocusMode: () => void
 }
 ```
@@ -513,14 +528,18 @@ interface ActionBarProps {
 ## Layout
 
 ```text
-Horizontal
+Horizontal — satu baris
+Gap antar item : 12px
+Equal visual hierarchy
+Mobile-first; tablet/desktop susunan sama
 ```
 
-Konten:
+Konten (urutan kiri → kanan):
 
 ```text
 TranslationToggle
-Mode Fokus Button
+TransliterationToggle
+FocusModeButton
 ```
 
 ---
@@ -528,9 +547,23 @@ Mode Fokus Button
 ## Visual
 
 ```text
-Padding         : 12px
+Padding         : 12px horizontal, 8px vertical
 Background      : Transparent
 Gap antar item  : 12px
+Min tap target  : 44px
+```
+
+---
+
+## Important
+
+```text
+Toggle Terjemahan dan Transliterasi
+mengubah preferensi global (Dexie settings),
+bukan preferensi per-surat.
+
+Mode Fokus tidak mengubah state
+Terjemahan atau Transliterasi.
 ```
 
 ---
@@ -539,9 +572,11 @@ Gap antar item  : 12px
 
 ## Purpose
 
-Menampilkan atau menyembunyikan terjemahan.
+Menampilkan atau menyembunyikan terjemahan ayat.
 
-Bersifat global mengikuti settings.
+Bagian dari `VerseDisplayControls` — tidak berdiri sendiri di Pengaturan.
+
+Bersifat global mengikuti `settings.translationVisible`.
 
 ---
 
@@ -561,15 +596,14 @@ interface TranslationToggleProps {
 ### OFF
 
 ```text
-Label : "Terjemahan OFF"
-Track : Gray
+Label : "○ Terjemahan"
 ```
 
 ### ON
 
 ```text
-Label : "Terjemahan ON"
-Track : Emerald
+Label : "✓ Terjemahan"
+Accent: Emerald (aktif)
 ```
 
 ---
@@ -580,6 +614,99 @@ Track : Emerald
 Toggle di Surah Detail
 mengubah preferensi global,
 bukan preferensi per-surat.
+
+Urutan render saat ON:
+Arab → Transliterasi (jika ON) → Terjemahan
+```
+
+---
+
+# 8b. TransliterationToggle
+
+## Purpose
+
+Menampilkan atau menyembunyikan transliterasi ayat.
+
+Bagian dari `VerseDisplayControls`.
+
+Bersifat global mengikuti `settings.transliterationVisible`.
+
+---
+
+## Props
+
+```ts
+interface TransliterationToggleProps {
+  checked: boolean
+  onChange: (checked: boolean) => void
+}
+```
+
+---
+
+## States
+
+### OFF
+
+```text
+Label : "○ Transliterasi"
+```
+
+### ON
+
+```text
+Label : "✓ Transliterasi"
+Accent: Emerald (aktif)
+```
+
+---
+
+## Important
+
+```text
+Independen dari toggle Terjemahan.
+Saat OFF, teks Arab tetap terlihat.
+
+Urutan render saat ON (dengan terjemahan):
+Arab → Transliterasi → Terjemahan
+```
+
+---
+
+# 8c. FocusModeButton
+
+## Purpose
+
+Membuka Mode Fokus (`/focus/[id]?ayah=`).
+
+Bagian dari `VerseDisplayControls`.
+
+---
+
+## Props
+
+```ts
+interface FocusModeButtonProps {
+  onClick: () => void
+}
+```
+
+---
+
+## Visual
+
+```text
+Label : "🎯 Fokus"
+```
+
+---
+
+## Important
+
+```text
+Hanya mengubah layout baca (navigasi route).
+Tidak mengubah translationVisible
+atau transliterationVisible.
 ```
 
 ---
@@ -600,7 +727,11 @@ interface AyahCardProps {
 
   arabicText: string
 
+  transliteration?: string
+
   translation?: string
+
+  showTransliteration: boolean
 
   showTranslation: boolean
 
@@ -609,6 +740,20 @@ interface AyahCardProps {
   isCompleted: boolean
 }
 ```
+
+---
+
+## Content Order
+
+Saat beberapa layer aktif, urutan render **wajib**:
+
+```text
+1. Arabic
+2. Transliteration (jika showTransliteration)
+3. Translation (jika showTranslation)
+```
+
+Konsisten di Surah Detail dan Focus Mode. Lihat `docs/22-verse-display-controls.md`.
 
 ---
 
@@ -1207,12 +1352,32 @@ interface FocusModeScreenProps {
   currentAyah: number
   totalAyahs: number
 
+  arabicText: string
+  transliteration?: string
+  translation?: string
+  showTransliteration: boolean
+  showTranslation: boolean
+
   repeatTarget: RepeatTarget
   repeatCount: RepeatCount
 
   onExit: () => void
 }
 ```
+
+---
+
+## Content Order
+
+Mengikuti preferensi dari `VerseDisplayControls` / Dexie settings:
+
+```text
+Arabic
+↓ Transliteration (jika showTransliteration)
+↓ Translation (jika showTranslation)
+```
+
+> Mode Fokus mengubah **cara** ayat disajikan, bukan konten yang ditampilkan. Lihat `docs/22-verse-display-controls.md`.
 
 ---
 
@@ -1246,7 +1411,7 @@ Tombol Ayat Berikut
 Search
 Surah List
 Settings Groups
-ActionBar
+VerseDisplayControls
 BottomNavigation
 Sidebar / Widget
 Dekorasi besar
@@ -1268,6 +1433,10 @@ Alignment  : Center
 ```text
 Tombol Keluar harus selalu
 mudah ditemukan.
+
+State Terjemahan dan Transliterasi
+dipertahankan dari Surah Detail —
+tidak di-reset saat masuk/keluar Fokus.
 
 Tidak ada animasi besar
 saat teks Arab terlihat.
@@ -1359,27 +1528,35 @@ Padding    : 16px
 Mengikuti urutan wireframe:
 
 ```text
-1. Ukuran Teks Arab
-2. Terjemahan Default
+1. Bahasa Aplikasi
+2. Ukuran Teks Arab
 3. Reciter
 4. Kontras Tinggi
 5. Offline & Cache
 ```
 
+> **Catatan:** Toggle Terjemahan dan Transliterasi **tidak** ada di Pengaturan — hanya di `VerseDisplayControls` pada Surah Detail (`docs/22-verse-display-controls.md`).
+
 ---
 
 ## Sections
+
+### Bahasa Aplikasi
+
+```text
+SegmentedControl atau Select:
+  Bahasa Indonesia (id)
+  English (en)
+```
+
+- Label section & deskripsi dilokalisasi via `next-intl`
+- Nilai disimpan: `settings.appLocale`
+- Spesifikasi: `docs/21-i18n-and-locale.md`
 
 ### Ukuran Teks Arab
 
 ```text
 [Kecil] [Sedang] [Besar]
-```
-
-### Terjemahan Default
-
-```text
-[ON / OFF]
 ```
 
 ### Reciter
@@ -1877,8 +2054,10 @@ ContinueReadingCard
 SearchInput
 SurahCard
 SurahMetaHeader
-ActionBar
+VerseDisplayControls
 TranslationToggle
+TransliterationToggle
+FocusModeButton
 FavoriteButton
 FavoriteFilter
 SettingsCard

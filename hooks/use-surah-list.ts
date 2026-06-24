@@ -1,6 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+
+import { useTranslations } from 'next-intl';
 
 import type { SurahSummary } from '@/services/quran';
 import { getSurahList } from '@/services/quran';
@@ -9,12 +11,21 @@ interface UseSurahListResult {
   surahs: SurahSummary[];
   loading: boolean;
   error: string | null;
+  retry: () => void;
 }
 
 export function useSurahList(): UseSurahListResult {
+  const t = useTranslations('errors');
   const [surahs, setSurahs] = useState<SurahSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [reloadToken, setReloadToken] = useState(0);
+
+  const retry = useCallback(() => {
+    setError(null);
+    setLoading(true);
+    setReloadToken((token) => token + 1);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -26,9 +37,10 @@ export function useSurahList(): UseSurahListResult {
           setError(null);
         }
       })
-      .catch((err: unknown) => {
+      .catch(() => {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Gagal memuat daftar surat.');
+          setSurahs([]);
+          setError(t('loadSurahListFailed'));
         }
       })
       .finally(() => {
@@ -40,7 +52,7 @@ export function useSurahList(): UseSurahListResult {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [t, reloadToken]);
 
-  return { surahs, loading, error };
+  return { surahs, loading, error, retry };
 }

@@ -34,6 +34,16 @@ Jika terjadi konflik, selalu prioritaskan keterbacaan ayat.
 
 ---
 
+## Multilingual UI
+
+Antarmuka aplikasi (bukan teks Arab ayat) mendukung **Bahasa Indonesia** dan **English** melalui **`next-intl`**.
+
+- String UI didefinisikan di `messages/id.json` dan `messages/en.json`
+- Tipografi Arab untuk ayat tidak berubah saat ganti bahasa UI
+- Spesifikasi lengkap: `docs/21-i18n-and-locale.md`
+
+---
+
 ## Calm Interface
 
 UI harus terasa:
