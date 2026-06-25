@@ -11,7 +11,6 @@ import { useOfflineStore } from './offlineStore';
 import { getDownloadManager } from '@/services/download-manager';
 import { getRepeatTabSync } from '@/services/repeat-tab-sync';
 import { repairOfflineSurahCachesIfNeeded } from '@/services/offline-surah-precache';
-import { precacheAppForOffline } from '@/services/offline-app-precache';
 
 export { useAudioStore } from './audioStore';
 export { useUserStore } from './userStore';
@@ -30,5 +29,4 @@ export async function initStores(): Promise<void> {
   ]);
 
   void repairOfflineSurahCachesIfNeeded();
-  void precacheAppForOffline();
 }

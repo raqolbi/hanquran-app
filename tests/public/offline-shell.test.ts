@@ -25,8 +25,14 @@ describe('public/sw.js shell cache', () => {
   const sw = readFileSync(resolve(process.cwd(), 'public/sw.js'), 'utf8');
 
   it('mendefinisikan cache shell dan precache offline.html', () => {
-    expect(sw).toContain('hanquran-shell-v1');
+    expect(sw).toContain('hanquran-shell-v2');
     expect(sw).toContain('/offline.html');
-    expect(sw).toContain('networkFirstNavigation');
+    expect(sw).toContain('handleNavigation');
+  });
+
+  it('mem-precache manifest build + app-shell route dinamis', () => {
+    expect(sw).toContain('__SW_PRECACHE__');
+    expect(sw).toContain('precacheOnInstall');
+    expect(sw).toContain('appShellRouteFor');
   });
 });

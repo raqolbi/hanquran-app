@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { X } from 'lucide-react';
 
@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 import { AudioPlayer } from '@/components/audio-player';
 import { RepeatSelector } from '@/components/repeat-selector';
 import { RepeatSettingsDialog } from '@/components/repeat-settings-dialog';
-import { routes } from '@/lib/routes';
+import { parseSurahIdFromPathname, routes } from '@/lib/routes';
 import { useArabicTextSize } from '@/hooks/use-arabic-text-size';
 import { usePreferredReciterId } from '@/hooks/use-preferred-reciter';
 import { useSurah } from '@/hooks/use-surah';
@@ -227,11 +227,13 @@ function FocusModeLoaded({
 export default function FocusModePage({ params }: FocusModePageProps) {
   const t = useTranslations('errors');
   const tLoading = useTranslations('loading');
+  const pathname = usePathname();
   const resolvedParams = React.use(params);
+  const surahId = parseSurahIdFromPathname(pathname) || resolvedParams.id;
   const searchParams = useSearchParams();
   const startAyah = parseInt(searchParams.get('ayah') ?? '1', 10);
 
-  const { surah, loading, error, retry } = useSurah(resolvedParams.id);
+  const { surah, loading, error, retry } = useSurah(surahId);
 
   if (loading) {
     return (
@@ -260,7 +262,7 @@ export default function FocusModePage({ params }: FocusModePageProps) {
   return (
     <FocusModeLoaded
       surah={surah}
-      surahIdParam={resolvedParams.id}
+      surahIdParam={surahId}
       startAyah={startAyah}
     />
   );

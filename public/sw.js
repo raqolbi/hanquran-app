@@ -12,20 +12,27 @@
  */
 
 importScripts('/sw-helpers.js');
+importScripts('/sw-precache-manifest.js');
 
-const SW_VERSION = 'v1';
-const CACHE_STATIC = 'hanquran-static-v1';
-const CACHE_SHELL = 'hanquran-shell-v1';
-const CACHE_DATA = 'hanquran-data-v1';
+const SW_VERSION = 'v2';
+const CACHE_STATIC = 'hanquran-static-v2';
+const CACHE_SHELL = 'hanquran-shell-v2';
+const CACHE_DATA = 'hanquran-data-v2';
 const CACHE_AUDIO = 'hanquran-audio-v1';
 const KNOWN_CACHES = [CACHE_STATIC, CACHE_SHELL, CACHE_DATA, CACHE_AUDIO];
+
+// Route yang shell-nya di-precache saat install (lihat docs/30 §6.1–6.2).
 const SHELL_PRECACHE_URLS = ['/offline.html'];
+const STATIC_ROUTES = ['/', '/settings', '/settings/about'];
+// App-shell template untuk route dinamis: satu shell melayani semua id.
+const APP_SHELL_SURAH = '/surah/1';
+const APP_SHELL_FOCUS = '/focus/1';
+const APP_SHELL_ROUTES = [APP_SHELL_SURAH, APP_SHELL_FOCUS];
 
 const {
   getRequestCategory,
   isNavigationRequest,
   isAppRouterRequest,
-  networkFirstNavigation,
   cacheFirst,
   staleWhileRevalidate,
 } = self.SwHelpers;
@@ -33,20 +40,43 @@ const {
 self.addEventListener('install', (event) => {
   event.waitUntil(
     (async () => {
-      const cache = await caches.open(CACHE_SHELL);
-      await Promise.all(
-        SHELL_PRECACHE_URLS.map(async (url) => {
-          try {
-            await cache.add(new Request(url, { cache: 'reload' }));
-          } catch (error) {
-            console.warn('[HanQuran SW] Precache gagal:', url, error);
-          }
-        }),
-      );
+      await precacheOnInstall();
       await self.skipWaiting();
     })(),
   );
 });
+
+async function precacheOnInstall() {
+  const precache = self.__SW_PRECACHE__ || { static: [], data: [] };
+
+  const staticCache = await caches.open(CACHE_STATIC);
+  const dataCache = await caches.open(CACHE_DATA);
+  const shellCache = await caches.open(CACHE_SHELL);
+
+  const addAll = async (cache, urls) => {
+    await runWithConcurrency(urls, PRECACHE_CONCURRENCY, async (url) => {
+      try {
+        const request = new Request(url, { cache: 'reload' });
+        const response = await fetch(request);
+        if (response.ok || response.type === 'opaque') {
+          await cache.put(new Request(url), response.clone());
+        }
+      } catch (error) {
+        console.warn('[HanQuran SW] Precache install gagal:', url, error);
+      }
+    });
+  };
+
+  // 1) Aset boot aplikasi (JS/CSS/font/ikon) + dataset Qur'an penuh.
+  await addAll(staticCache, precache.static || []);
+  await addAll(dataCache, precache.data || []);
+
+  // 2) Offline fallback statis.
+  await addAll(shellCache, SHELL_PRECACHE_URLS);
+
+  // 3) Shell route (dokumen + RSC) untuk navigasi offline.
+  await cacheRouteShells([...STATIC_ROUTES, ...APP_SHELL_ROUTES]);
+}
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
@@ -67,20 +97,15 @@ self.addEventListener('fetch', (event) => {
   if (request.method !== 'GET') return;
 
   const url = new URL(request.url);
-  if (isNavigationRequest(request) && url.origin === self.location.origin) {
-    event.respondWith(
-      networkFirstNavigation(request, CACHE_SHELL, '/offline.html'),
-    );
+  const sameOrigin = url.origin === self.location.origin;
+
+  if (isNavigationRequest(request) && sameOrigin) {
+    event.respondWith(handleNavigation(request, url));
     return;
   }
 
-  if (isAppRouterRequest(request) && url.origin === self.location.origin) {
-    event.respondWith(
-      staleWhileRevalidate(request, CACHE_SHELL, {
-        ignoreSearch: true,
-        waitUntil: (promise) => event.waitUntil(promise),
-      }),
-    );
+  if (isAppRouterRequest(request) && sameOrigin) {
+    event.respondWith(handleAppRouter(event, request, url));
     return;
   }
 
@@ -89,6 +114,109 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(handleCachedFetch(event, request, category));
 });
+
+/** Tentukan app-shell template (dokumen/RSC) untuk route dinamis. */
+function appShellRouteFor(url) {
+  if (url.pathname.startsWith('/focus/')) return APP_SHELL_FOCUS;
+  if (url.pathname.startsWith('/surah/')) return APP_SHELL_SURAH;
+  return null;
+}
+
+async function handleNavigation(request, url) {
+  const cache = await caches.open(CACHE_SHELL);
+
+  try {
+    const response = await fetch(request);
+    if (response.ok && response.type === 'basic') {
+      await cache.put(request, response.clone());
+    }
+    return response;
+  } catch {
+    // Offline → cache cocok (abaikan query seperti ?ayah).
+  }
+
+  const cached =
+    (await cache.match(request)) ||
+    (await cache.match(request, { ignoreSearch: true }));
+  if (cached) return cached;
+
+  // Route dinamis: layani app-shell agar bisa render id apa pun offline.
+  const shellRoute = appShellRouteFor(url);
+  if (shellRoute) {
+    const shell = await matchShellDocument(cache, shellRoute);
+    if (shell) return shell;
+  }
+
+  const offline = await cache.match('/offline.html');
+  if (offline) return offline;
+
+  return new Response('Offline', {
+    status: 503,
+    statusText: 'Offline',
+    headers: { 'Content-Type': 'text/html; charset=utf-8' },
+  });
+}
+
+async function matchShellDocument(cache, route) {
+  const url = new URL(route, self.location.origin).href;
+  const docRequest = new Request(url, {
+    headers: { Accept: 'text/html,application/xhtml+xml' },
+  });
+  return (
+    (await cache.match(docRequest)) ||
+    (await cache.match(url)) ||
+    (await cache.match(url, { ignoreSearch: true }))
+  );
+}
+
+async function handleAppRouter(event, request, url) {
+  const cache = await caches.open(CACHE_SHELL);
+
+  const cached =
+    (await cache.match(request)) ||
+    (await cache.match(request, { ignoreSearch: true }));
+
+  if (cached) {
+    event.waitUntil(
+      fetch(request)
+        .then((response) => {
+          if (response.ok) return cache.put(request, response.clone());
+          return undefined;
+        })
+        .catch(() => undefined),
+    );
+    return cached;
+  }
+
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      await cache.put(request, response.clone());
+    }
+    return response;
+  } catch {
+    // Offline & id belum pernah dicache → pakai app-shell RSC.
+  }
+
+  const shellRoute = appShellRouteFor(url);
+  if (shellRoute) {
+    const shellRsc = await matchShellRsc(cache, shellRoute);
+    if (shellRsc) return shellRsc;
+  }
+
+  return new Response('', { status: 503, statusText: 'Offline' });
+}
+
+async function matchShellRsc(cache, route) {
+  const url = new URL(route, self.location.origin).href;
+  const rscRequest = new Request(url, {
+    headers: { RSC: '1', Accept: 'text/x-component' },
+  });
+  return (
+    (await cache.match(rscRequest)) ||
+    (await cache.match(rscRequest, { ignoreSearch: true }))
+  );
+}
 
 async function handleCachedFetch(event, request, category) {
   try {
@@ -167,7 +295,6 @@ function postDownloadMessage(event, payload) {
 
 async function cacheSurahOfflineContent({ dataUrls, routeUrls }) {
   const dataCache = await caches.open(CACHE_DATA);
-  const shellCache = await caches.open(CACHE_SHELL);
 
   await runWithConcurrency(dataUrls, PRECACHE_CONCURRENCY, async (path) => {
     try {
@@ -180,6 +307,13 @@ async function cacheSurahOfflineContent({ dataUrls, routeUrls }) {
       console.warn('[HanQuran SW] Precache data gagal:', path, error);
     }
   });
+
+  await cacheRouteShells(routeUrls);
+}
+
+/** Cache dokumen HTML + payload RSC untuk daftar route (App Router). */
+async function cacheRouteShells(routeUrls) {
+  const shellCache = await caches.open(CACHE_SHELL);
 
   await runWithConcurrency(routeUrls, PRECACHE_CONCURRENCY, async (path) => {
     try {

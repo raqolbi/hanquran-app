@@ -33,6 +33,19 @@
   }
 
   /**
+   * Route dinamis App Router yang dilayani via app-shell offline (docs/30 §6.2).
+   *
+   * @param {URL} url
+   * @returns {boolean}
+   */
+  function isDynamicAppRoute(url) {
+    return (
+      /^\/surah\/[^/]+/.test(url.pathname) ||
+      /^\/focus\/[^/]+/.test(url.pathname)
+    );
+  }
+
+  /**
    * Network-first untuk navigasi dokumen; fallback ke cache shell lalu offline.html.
    * Tidak fallback ke beranda — mencegah URL /surah/* menampilkan HTML salah.
    *
@@ -174,6 +187,7 @@
     AUDIO_CDN_HOST,
     isNavigationRequest,
     isAppRouterRequest,
+    isDynamicAppRoute,
     networkFirstNavigation,
     getRequestCategory,
     cacheFirst,

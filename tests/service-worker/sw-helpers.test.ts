@@ -9,6 +9,7 @@ type SwHelpers = {
   AUDIO_CDN_HOST: string;
   isNavigationRequest: (request: Request) => boolean;
   isAppRouterRequest: (request: Request) => boolean;
+  isDynamicAppRoute: (url: URL) => boolean;
   networkFirstNavigation: (
     request: Request,
     shellCacheName: string,
@@ -164,6 +165,17 @@ describe('SwHelpers.isAppRouterRequest', () => {
     expect(helpers.isAppRouterRequest(rsc)).toBe(true);
     expect(helpers.isAppRouterRequest(prefetch)).toBe(true);
     expect(helpers.isAppRouterRequest(html)).toBe(false);
+  });
+});
+
+describe('SwHelpers.isDynamicAppRoute', () => {
+  it('mendeteksi route dinamis surah & focus, bukan route statis', () => {
+    const { helpers } = loadSwHelpers();
+    expect(helpers.isDynamicAppRoute(new URL(`${APP_ORIGIN}/surah/5`))).toBe(true);
+    expect(helpers.isDynamicAppRoute(new URL(`${APP_ORIGIN}/focus/114`))).toBe(true);
+    expect(helpers.isDynamicAppRoute(new URL(`${APP_ORIGIN}/surah/5?ayah=3`))).toBe(true);
+    expect(helpers.isDynamicAppRoute(new URL(`${APP_ORIGIN}/`))).toBe(false);
+    expect(helpers.isDynamicAppRoute(new URL(`${APP_ORIGIN}/settings/about`))).toBe(false);
   });
 });
 
