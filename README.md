@@ -1,7 +1,10 @@
-# HanQuran
+<p align="center">
+  <img src="./branding/logo-wtext.png" alt="HanQuran — Read, Listen, Memorize." width="300" />
+</p>
 
 **Platform hafalan Al-Qur'an** — source code publik, lisensi komunitas. Audio per ayat, repeat, mode fokus, dan dukungan offline. Tanpa akun. Mobile-first.
 
+[![License: HCCL v1.0](https://img.shields.io/badge/License-HCCL%20v1.0-2ea44f)](./LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000?style=flat&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tests](https://img.shields.io/badge/tests-175%20passing-brightgreen)](./tests)
@@ -61,6 +64,7 @@ Buka aplikasi → Pilih surat → Putar audio → Aktifkan repeat → Mode fokus
 
 ## Daftar Isi
 
+- [Screenshot](#screenshot)
 - [Fitur](#fitur)
 - [Tech Stack](#tech-stack)
 - [Arsitektur](#arsitektur)
@@ -76,6 +80,20 @@ Buka aplikasi → Pilih surat → Putar audio → Aktifkan repeat → Mode fokus
 - [Credits](#credits)
 - [Maintainer](#maintainer)
 - [License](#license)
+
+---
+
+## Screenshot
+
+Pratinjau antarmuka HanQuran (mobile-first, UI Bahasa Indonesia).
+
+| Beranda — daftar surat | Detail surat |
+| :---: | :---: |
+| ![Beranda HanQuran — daftar 114 surat dengan filter dan favorit](./docs/images/Screenshot%202026-06-25%20at%2007.08.04.png) | ![Detail surat Al-Faatiha — ayat, audio player, dan opsi terjemahan](./docs/images/Screenshot%202026-06-25%20at%2007.08.23.png) |
+
+| Mode Fokus — repeat ayat | Pengaturan |
+| :---: | :---: |
+| ![Mode Fokus — satu ayat, kontrol repeat, dan pemutaran audio](./docs/images/Screenshot%202026-06-25%20at%2007.08.39.png) | ![Pengaturan — bahasa, qari, ukuran teks, dan status offline](./docs/images/Screenshot%202026-06-25%20at%2007.09.05.png) |
 
 ---
 
