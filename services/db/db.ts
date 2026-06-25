@@ -59,6 +59,7 @@ export const defaultSettings: SettingsRecord = {
   transliterationVisible: false,
   contrastMode: 'default',
   smoothAnimation: true,
+  autoFollowPlayback: true,
   reciterId: getDefaultReciterId(),
   translationResourceId: 33, // Terjemahan Kemenag (Indonesia)
   updatedAt: 0,

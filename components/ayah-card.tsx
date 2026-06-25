@@ -4,6 +4,11 @@ import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
 
 import { useArabicTextSize } from '@/hooks/use-arabic-text-size';
+import { getAyahElementId } from '@/lib/auto-follow-playback';
+import {
+  SURAH_DETAIL_MIN_SCROLL_INSET,
+  SURAH_DETAIL_READING_CONTROLS_HEIGHT,
+} from '@/lib/surah-detail-chrome';
 
 interface AyahCardProps {
   number: number;
@@ -33,10 +38,15 @@ export function AyahCard({
 
   return (
     <motion.div
+      id={getAyahElementId(number)}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
       onClick={onClick}
+      style={{
+        scrollMarginTop: SURAH_DETAIL_READING_CONTROLS_HEIGHT,
+        scrollMarginBottom: SURAH_DETAIL_MIN_SCROLL_INSET,
+      }}
       className={`p-6 rounded-2xl border-2 cursor-pointer transition-all duration-200 ${
         isActive
           ? 'border-primary bg-emerald-50'
