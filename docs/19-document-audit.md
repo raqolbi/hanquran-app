@@ -63,9 +63,9 @@ Dokumen ini adalah laporan audit komprehensif terhadap seluruh dokumentasi proye
 | `16-folder-structure.md` | **Revisi Terbaru (v3)** | ✅ Aktif — `services/media-session.ts` |
 | `17-implementation-roadmap.md` | **Revisi Terbaru (v3)** | ✅ Aktif — Growth Phase Media Session |
 | `18-development-tasks.md` | **Revisi Terbaru (v3)** | ✅ Aktif — 97 tasks, 70 selesai |
-| `27-media-session-api-spec.md` | **v1** | ✅ Diimplementasi — target rilis `0.2.0` |
+| `27-media-session-api-spec.md` | **v1** | ✅ Diimplementasi — dirilis `0.3.0` |
 | `28-playback-settings.md` | **v1** | ✅ Aktif — Auto Follow + Mode Murotal; §4.4 landscape HP |
-| `29-murotal-mode-spec.md` | **v1** | ✅ Diimplementasi — target rilis `0.3.0` |
+| `29-murotal-mode-spec.md` | **v1** | ✅ Diimplementasi — dirilis `0.3.0` |
 
 > **Pembaruan v3:** `docs/04-system-architecture.md` telah diperbarui langsung pada audit v3 ini. State Management, Route Focus Mode, Folder Structure, dan Dexie kini konsisten dengan seluruh dokumen terbaru. Tidak ada konflik aktif tersisa.
 

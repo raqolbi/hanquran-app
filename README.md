@@ -50,13 +50,13 @@ Buka aplikasi → Pilih surat → Putar audio → Aktifkan repeat → Mode fokus
 
 | Aspek | Keterangan |
 |-------|------------|
-| **Versi** | `0.1.0` (pre-release MVP) |
+| **Versi** | `0.3.0` |
 | **Scope** | MVP V1 dibekukan di [`docs/20-mvp-freeze.md`](./docs/20-mvp-freeze.md) |
-| **Implementasi** | Core flows utama sudah berjalan; **belum** dinyatakan rilis MVP |
+| **Implementasi** | Core MVP + Growth `0.2.0`/`0.3.0` — lihat [`RELEASE.md`](./RELEASE.md) |
 | **Pengujian** | 175 unit test (Vitest) |
 | **Deploy** | Direncanakan di [Vercel](./docs/25-deployment-vercel.md) |
 
-**Sudah diimplementasikan** (diverifikasi dari codebase): daftar 114 surat, detail surat, audio player, repeat engine, mode fokus, favorit surat, lanjutkan hafalan, i18n UI (`id` / `en`), unduh offline per surat, Service Worker, PWA (manifest, install prompt, offline shell, splash), Vercel Analytics.
+**Sudah diimplementasikan** (diverifikasi dari codebase): daftar 114 surat (lazy load kartu), detail surat, audio player, repeat engine + badge progress `x/y`, mode fokus, **Mode Murotal**, Media Session (lock screen), favorit surat, lanjutkan hafalan, auto follow playback, i18n UI (`id` / `en`), unduh offline per surat, Service Worker, PWA (manifest, install prompt, offline shell, splash), Vercel Analytics.
 
 **Belum selesai / di luar MVP V1** (dokumentasi resmi): word-by-word highlight, persist posisi audio, verifikasi E2E offline, error tracking produksi, seluruh kriteria rilis di [`docs/20-mvp-freeze.md`](./docs/20-mvp-freeze.md) §9.
 

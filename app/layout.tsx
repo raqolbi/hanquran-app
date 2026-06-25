@@ -14,7 +14,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'HanQuran',
-  description: 'Aplikasi hafalan Al-Qur’an dengan repeat & word highlight.',
+  description:
+    "Aplikasi hafalan Al-Qur'an — audio per ayat, repeat, Mode Murotal, mode fokus, dan dukungan offline. Tanpa akun.",
   applicationName: 'HanQuran',
   manifest: '/manifest.json',
   generator: 'v0.app',

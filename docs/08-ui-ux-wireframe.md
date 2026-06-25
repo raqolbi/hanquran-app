@@ -947,7 +947,7 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │                                      │
 │ ┌──────────────────────────────────┐ │
 │ │ HanQuran                         │ │
-│ │ Versi 0.1.0                      │ │
+│ │ Versi 0.3.0 (dari package.json)  │ │
 │ │ Deskripsi singkat aplikasi…      │ │
 │ └──────────────────────────────────┘ │
 │                                      │

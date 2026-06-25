@@ -22,7 +22,10 @@ export const ABOUT_FOCUS_ITEM_KEYS = [
   'repeat',
   'audio',
   'focusMode',
+  'murotal',
+  'mediaSession',
   'continueReading',
+  'offline',
   'preferences',
 ] as const;
 

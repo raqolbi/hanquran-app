@@ -10,10 +10,6 @@ export type AboutDataSourceCredit = {
   href?: string;
 };
 
-export type AboutTechnologyCredit = {
-  labelKey: string;
-};
-
 /** Sumber data konten Al-Qur'an — satu kelompok «Sumber Data». */
 export const ABOUT_DATA_SOURCE_CREDITS: readonly AboutDataSourceCredit[] = [
   {
@@ -39,8 +35,4 @@ export const ABOUT_DATA_SOURCE_CREDITS: readonly AboutDataSourceCredit[] = [
     labelKey: 'dataSources.audioMurottal.label',
     sourceKey: 'dataSources.audioMurottal.source',
   },
-] as const;
-
-export const ABOUT_TECHNOLOGY_CREDITS: readonly AboutTechnologyCredit[] = [
-  { labelKey: 'technology.stack' },
 ] as const;

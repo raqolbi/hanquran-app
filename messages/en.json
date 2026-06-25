@@ -149,7 +149,7 @@
     "navAriaLabel": "App information",
     "app": {
       "sectionTitle": "App Information",
-      "description": "Quran memorization platform — per-verse audio, repeat, focus mode, and offline support. No account required. Mobile-first.",
+      "description": "Quran memorization platform — per-verse audio, repeat, Murotal mode, lock screen controls, focus mode, and offline support. No account required. Mobile-first.",
       "version": "Version {version}"
     },
     "mission": {
@@ -168,13 +168,16 @@
         "repeat": "Repeat verse, range, or entire surah",
         "audio": "Per-verse tilawah audio",
         "focusMode": "Focus Mode — one verse, minimal distraction",
+        "murotal": "Murotal mode — continuous recitation across verses and surahs",
+        "mediaSession": "Lock screen audio controls (Media Session)",
         "continueReading": "Continue memorization from last position",
+        "offline": "Offline download per surah — audio and metadata stored locally",
         "preferences": "Local preferences (UI language, reciter, verse display, accessibility)"
       }
     },
     "credits": {
       "title": "Credits",
-      "description": "Data sources and core technologies used by the project.",
+      "description": "Quran content data sources used by the app.",
       "opensInNewTab": "(opens in new tab)",
       "dataSources": {
         "title": "Data Sources",
@@ -194,11 +197,6 @@
           "label": "Recitation Audio",
           "source": "The reciters and audio providers used by HanQuran"
         }
-      },
-      "technology": {
-        "title": "Core technology",
-        "description": "Frameworks and core libraries.",
-        "stack": "Next.js, React, TypeScript, Tailwind CSS, Zustand, Dexie, next-intl"
       }
     },
     "repository": {

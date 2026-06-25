@@ -328,7 +328,7 @@ Lihat `docs/analytics.md`.
 | `docs/18-development-tasks.md` | Task implementasi Phase |
 | `docs/17-implementation-roadmap.md` | Milestone 0.3.0 |
 | `docs/20-mvp-freeze.md` | Catatan post-MVP |
-| `RELEASE.md` | Rencana v0.3.0 |
+| `RELEASE.md` | Riwayat `0.3.0` |
 | `docs/analytics.md` | Event murotal |
 | `docs/05-module-catalog.md` | Modul Settings — playback |
 | `docs/14-routing-spec.md` | Aksi pengaturan di `/settings` |
@@ -341,6 +341,6 @@ Lihat `docs/analytics.md`.
 
 ## 14. Catatan Implementasi
 
-- Versi `package.json` **belum** dinaikkan — naik ke `0.3.0` saat fitur dirilis.
+- Versi `package.json` **0.3.0** — selaras `RELEASE.md` dan layar Tentang HanQuran.
 - Label UI wajib Bahasa Indonesia (kecuali proper noun); key i18n: `settings.playback.murotalEnabled`, `settings.playback.murotalEnabledDescription`.
 - Pengujian manual: Al-Fatihah → Al-Baqarah dengan murotal ON; kombinasi repeat 5× + murotal ON di tengah surat.
