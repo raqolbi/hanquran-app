@@ -85,7 +85,7 @@ Codebase aktif berada di `hanquran-app/` (Next.js App Router). **Konten Quran** 
 
 **Belum selesai:**
 
-- Verifikasi ulang navigasi surat offline setelah perbaikan SW/precache
+- Verifikasi manual di perangkat: precache penuh (baca semua surat offline), navigasi about/focus offline, batas Murotal offline (`docs/30` §8)
 - Optimasi Lighthouse Performance ≥ 80 — lazy load Beranda ✅ (run terbaik 47); uji Vercel & kurangi TBT framework
 - Persist posisi audio terakhir
 - Word-by-word highlight (Post-MVP)

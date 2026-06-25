@@ -77,6 +77,7 @@ self.addEventListener('fetch', (event) => {
   if (isAppRouterRequest(request) && url.origin === self.location.origin) {
     event.respondWith(
       staleWhileRevalidate(request, CACHE_SHELL, {
+        ignoreSearch: true,
         waitUntil: (promise) => event.waitUntil(promise),
       }),
     );
@@ -131,10 +132,32 @@ self.addEventListener('message', (event) => {
     if (!surahId || !Array.isArray(dataUrls) || !Array.isArray(routeUrls)) return;
 
     void cacheSurahOfflineContent({ dataUrls, routeUrls });
+    return;
+  }
+
+  if (data.type === 'cache-offline-batch') {
+    const { requestId, dataUrls, routeUrls } = data;
+    const data2 = Array.isArray(dataUrls) ? dataUrls : [];
+    const routes2 = Array.isArray(routeUrls) ? routeUrls : [];
+
+    void (async () => {
+      await cacheSurahOfflineContent({ dataUrls: data2, routeUrls: routes2 });
+      if (requestId) {
+        postDownloadMessage(event, { type: 'cache-offline-batch-done', requestId });
+      }
+    })();
   }
 });
 
 const DOWNLOAD_CONCURRENCY = 3;
+const PRECACHE_CONCURRENCY = 6;
+
+async function runWithConcurrency(items, limit, worker) {
+  for (let offset = 0; offset < items.length; offset += limit) {
+    const batch = items.slice(offset, offset + limit);
+    await Promise.all(batch.map((item) => worker(item)));
+  }
+}
 
 function postDownloadMessage(event, payload) {
   const target = event.source;
@@ -146,47 +169,43 @@ async function cacheSurahOfflineContent({ dataUrls, routeUrls }) {
   const dataCache = await caches.open(CACHE_DATA);
   const shellCache = await caches.open(CACHE_SHELL);
 
-  await Promise.all(
-    dataUrls.map(async (path) => {
-      try {
-        const url = new URL(path, self.location.origin).href;
-        const response = await fetch(url);
-        if (response.ok) {
-          await dataCache.put(new Request(url), response.clone());
-        }
-      } catch (error) {
-        console.warn('[HanQuran SW] Precache data gagal:', path, error);
+  await runWithConcurrency(dataUrls, PRECACHE_CONCURRENCY, async (path) => {
+    try {
+      const url = new URL(path, self.location.origin).href;
+      const response = await fetch(url);
+      if (response.ok) {
+        await dataCache.put(new Request(url), response.clone());
       }
-    }),
-  );
+    } catch (error) {
+      console.warn('[HanQuran SW] Precache data gagal:', path, error);
+    }
+  });
 
-  await Promise.all(
-    routeUrls.map(async (path) => {
-      try {
-        const url = new URL(path, self.location.origin).href;
-        const documentRequest = new Request(url, {
-          headers: { Accept: 'text/html,application/xhtml+xml' },
-        });
-        const documentResponse = await fetch(documentRequest);
-        if (documentResponse.ok) {
-          await shellCache.put(documentRequest, documentResponse.clone());
-        }
-
-        const rscRequest = new Request(url, {
-          headers: {
-            RSC: '1',
-            Accept: 'text/x-component',
-          },
-        });
-        const rscResponse = await fetch(rscRequest);
-        if (rscResponse.ok) {
-          await shellCache.put(rscRequest, rscResponse.clone());
-        }
-      } catch (error) {
-        console.warn('[HanQuran SW] Precache route gagal:', path, error);
+  await runWithConcurrency(routeUrls, PRECACHE_CONCURRENCY, async (path) => {
+    try {
+      const url = new URL(path, self.location.origin).href;
+      const documentRequest = new Request(url, {
+        headers: { Accept: 'text/html,application/xhtml+xml' },
+      });
+      const documentResponse = await fetch(documentRequest);
+      if (documentResponse.ok) {
+        await shellCache.put(documentRequest, documentResponse.clone());
       }
-    }),
-  );
+
+      const rscRequest = new Request(url, {
+        headers: {
+          RSC: '1',
+          Accept: 'text/x-component',
+        },
+      });
+      const rscResponse = await fetch(rscRequest);
+      if (rscResponse.ok) {
+        await shellCache.put(rscRequest, rscResponse.clone());
+      }
+    } catch (error) {
+      console.warn('[HanQuran SW] Precache route gagal:', path, error);
+    }
+  });
 }
 
 async function prefetchSurahAudio(event, { requestId, surahId, urls }) {
