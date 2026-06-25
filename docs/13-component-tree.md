@@ -99,9 +99,9 @@ Semua penjelasan ditulis dalam Bahasa Indonesia dan mengikuti implementasi saat 
   - Reusable: Tidak (mode khusus).
 
 - Settings (app/settings/page.tsx)
-  - Tujuan: Menyediakan konfigurasi aplikasi (bahasa UI, qari, ukuran teks, offline, dsb.).
-  - Tanggung jawab: Menyusun sections pengaturan termasuk **Bahasa Aplikasi**, menampilkan status offline dan kontrol UI untuk memilih opsi.
-  - Dependensi utama: `SettingsSection`, `SettingsRow`, `LanguageSetting`, `OfflineStatusBadge`, `next-intl`, `components/ui/*` primitives. Spesifikasi: `docs/21-i18n-and-locale.md`.
+  - Tujuan: Menyediakan konfigurasi aplikasi (bahasa UI, qari, ukuran teks, playback, offline, dsb.).
+  - Tanggung jawab: Menyusun sections pengaturan termasuk **Bahasa Aplikasi**, **Playback**, menampilkan status offline dan kontrol UI untuk memilih opsi.
+  - Dependensi utama: `SettingsSection`, `SettingsRow`, `LanguageSetting`, `OfflineStatusBadge`, `next-intl`, `components/ui/*` primitives. Spesifikasi: `docs/21-i18n-and-locale.md`, `docs/28-playback-settings.md`.
   - Reusable: Tidak (halaman konfigurasi), beberapa sub-komponen bersifat reusable.
 
 **Komponen Layar (Screen Components)**

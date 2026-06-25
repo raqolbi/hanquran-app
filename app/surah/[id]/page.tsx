@@ -18,6 +18,7 @@ import { useSurah } from '@/hooks/use-surah';
 import { useReadingDisplay } from '@/hooks/use-reading-display';
 import { useSurahDetailBottomInset } from '@/hooks/use-surah-detail-bottom-inset';
 import { useSurahRepeatPlayback } from '@/hooks/use-surah-repeat-playback';
+import { useAutoFollowPlayback } from '@/hooks/use-auto-follow-playback';
 import { usePersistLastViewed } from '@/hooks/use-persist-last-viewed';
 import { useTrackSurahOpened } from '@/hooks/use-track-surah-opened';
 import { usePreferredReciterId } from '@/hooks/use-preferred-reciter';
@@ -54,6 +55,8 @@ function SurahDetailLoaded({
   const [repeatSettingsOpen, setRepeatSettingsOpen] = useState(false);
   const isFavorited = useUserStore((s) => s.favorites.includes(surah.number));
   const toggleFavorite = useUserStore((s) => s.toggleFavorite);
+  const autoFollowPlayback = useUserStore((s) => s.settings.autoFollowPlayback);
+  const smoothAnimation = useUserStore((s) => s.settings.smoothAnimation);
 
   usePersistLastViewed(surah.number, activeAyah);
   useTrackSurahOpened(surah);
@@ -92,6 +95,14 @@ function SurahDetailLoaded({
       enabled: true,
       remeasureKey: `${isPlaying}-${showTranslation}-${showTransliteration}`,
     });
+
+  useAutoFollowPlayback({
+    activeAyah,
+    isPlaying,
+    enabled: autoFollowPlayback,
+    smoothAnimation,
+    bottomInset,
+  });
 
   useEffect(() => {
     prefetchNextAyah();

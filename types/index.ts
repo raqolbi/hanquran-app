@@ -13,6 +13,8 @@ export interface SettingsRecord {
   transliterationVisible: boolean;
   contrastMode: 'default' | 'high';
   smoothAnimation: boolean;
+  /** Auto scroll ayat aktif saat playback di Surah Detail. Default: true. */
+  autoFollowPlayback: boolean;
   /** Slug qari dari `data/reciters.json` (mis. `Alafasy_128kbps`). */
   reciterId: string;
   /** Konfigurasi repeat hafalan — persisten di Dexie. */

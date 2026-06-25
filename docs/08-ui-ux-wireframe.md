@@ -953,6 +953,14 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │ └──────────────────────────────────┘ │
 │                                      │
 │ ┌──────────────────────────────────┐ │
+│ │ Playback                         │ │
+│ │ Auto Follow Playback  [On/Off]   │ │
+│ │ Otomatis menggulir layar agar    │ │
+│ │ ayat yang sedang diputar tetap   │ │
+│ │ terlihat.                        │ │
+│ └──────────────────────────────────┘ │
+│                                      │
+│ ┌──────────────────────────────────┐ │
 │ │ Kontras Tinggi                   │ │
 │ │ [On / Off]                       │ │
 │ └──────────────────────────────────┘ │
@@ -983,8 +991,13 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │ └─────────────────────┘   └─────────────────────┘               │
 │                                                                  │
 │ ┌─────────────────────┐   ┌─────────────────────┐               │
-│ │ Reciter             │   │ Kontras Tinggi      │               │
-│ │ Misyari Alafasy ▼   │   │      ON / OFF       │               │
+│ │ Reciter             │   │ Playback            │               │
+│ │ Misyari Alafasy ▼   │   │ Auto Follow [ON/OFF]│               │
+│ └─────────────────────┘   └─────────────────────┘               │
+│                                                                  │
+│ ┌─────────────────────┐   ┌─────────────────────┐               │
+│ │ Kontras Tinggi      │   │                     │               │
+│ │      ON / OFF       │   │                     │               │
 │ └─────────────────────┘   └─────────────────────┘               │
 │                                                                  │
 │ ┌─────────────────────┐   ┌─────────────────────┐               │
@@ -1035,6 +1048,7 @@ Spesifikasi lengkap: `docs/26-about-screen-spec.md`.
 - `Clear cache` perlu konfirmasi
 - Bahasa setting harus ramah non-teknis
 - Label UI mengikuti `settings.appLocale` (`id` | `en`) via `next-intl` — lihat `docs/21-i18n-and-locale.md`
+- **Playback:** toggle Auto Follow Playback — spesifikasi perilaku: `docs/28-playback-settings.md`
 
 ---
 

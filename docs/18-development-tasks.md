@@ -102,7 +102,7 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 | `app/page.tsx`            | `/` (Beranda) | ✓ Data nyata — `useSurahList`, Lanjutkan Hafalan, favorit persisten (`useUserStore`) |
 | `app/surah/[id]/page.tsx` | `/surah/[id]` | ✓ Data nyata + audio + RepeatEngine terintegrasi |
 | `app/focus/[id]/page.tsx` | `/focus/[id]` | ✓ Baca fokus — ayat nyata, tanpa word highlight (MVP) |
-| `app/settings/page.tsx`   | `/settings`   | ✓ Bahasa, qari, ukuran teks Arab, aksesibilitas, status offline & cache |
+| `app/settings/page.tsx`   | `/settings`   | ✓ Bahasa, qari, ukuran teks Arab, playback, aksesibilitas, status offline & cache |
 
 
 ## Komponen Layar (19 komponen)
@@ -207,6 +207,15 @@ Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **175 test passing**).
 3. ✅ Metadata terpusat — `lib/app-about.ts`, credits — `data/about-credits.ts`
 4. ✅ i18n namespace `about` (`id` / `en`)
 5. ✅ Link navigasi di halaman Pengaturan
+
+### Playback Settings (25 Juni 2026)
+
+1. ✅ Spesifikasi — `docs/28-playback-settings.md`
+2. ✅ Field `autoFollowPlayback` di `SettingsRecord` + backfill saat `init` (default `true`)
+3. ✅ Section **Playback** di `/settings` dengan toggle Auto Follow Playback
+4. ✅ Hook auto scroll ayat aktif di Surah Detail (`useAutoFollowPlayback`)
+5. ✅ i18n namespace `settings.playback` (`id` / `en`)
+6. ✅ Unit test perilaku auto follow & suspend saat scroll manual
 
 ### Lanjutkan Hafalan (24 Juni 2026)
 

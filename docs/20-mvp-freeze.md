@@ -208,6 +208,7 @@ Counter menampilkan target aktif dan jumlah tersisa. Repeat berjalan otomatis ta
 - Hapus cache ✅ — `services/cache-manager.ts`, konfirmasi di Settings
 - Status offline ✅
 - Aksesibilitas dasar — kontras tinggi & animasi halus persisten (`contrastMode`, `smoothAnimation`); diterapkan global via `AccessibilityProvider` ✅
+- **Playback** — Auto Follow Playback (`settings.autoFollowPlayback`, default ON) ✅ — `docs/28-playback-settings.md`
 - **Tentang HanQuran** ✅ — `/settings/about`; informasi aplikasi, filosofi, credits, repository & lisensi (`docs/26-about-screen-spec.md`)
 
 ## 4.14 Lighthouse & Aksesibilitas (PB-012, PB-014) — P2
@@ -293,7 +294,7 @@ Navigasi MVP terdiri dari **empat halaman inti** berikut, ditambah **satu sub-ha
 | `/` | Beranda (Home) | Daftar surat, pencarian, filter favorit, kartu "Lanjutkan Hafalan" |
 | `/surah/[id]` | Detail Surat | Tampilan ayat, audio player, repeat system, tombol Focus Mode |
 | `/focus/[id]` | Mode Fokus | Layar baca bebas distraksi (satu ayat; tanpa word highlight MVP) |
-| `/settings` | Pengaturan | Bahasa UI, qari, ukuran teks, cache, aksesibilitas |
+| `/settings` | Pengaturan | Bahasa UI, qari, ukuran teks, playback, cache, aksesibilitas |
 | `/settings/about` | Tentang HanQuran | Informasi aplikasi, filosofi, credits, repository & lisensi (P1) |
 
 Query parameter yang diizinkan:
