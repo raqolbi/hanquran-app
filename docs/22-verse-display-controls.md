@@ -183,6 +183,8 @@ Kontrol berikut **tetap** di lokasi masing-masing dan **tidak** dipindah ke bari
 | Bahasa aplikasi (UI shell) | Pengaturan (`/settings`) |
 | Qari / reciter | Pengaturan (`/settings`) |
 | Auto Follow Playback | Pengaturan (`/settings`) → Playback — `docs/28-playback-settings.md` |
+| Mode Murotal | Pengaturan (`/settings`) → Playback — `docs/29-murotal-mode-spec.md` |
+| Progress repeat (x/y) | `RepeatProgressBadge` di `RepeatSelector` inline pada `AudioPlayer` |
 
 **Dihapus dari Pengaturan:** bagian "Terjemahan Default" — toggle terjemahan dan transliterasi hanya di Verse Display Controls pada Surah Detail.
 
@@ -204,7 +206,8 @@ Lihat `docs/15-state-management.md` dan `docs/06-database-schema.md`.
 | Dokumen | Isi |
 |---------|-----|
 | `docs/08-ui-ux-wireframe.md` | Wireframe Surah Detail & Focus Mode |
-| `docs/12-component-spec.md` | Props & visual `VerseDisplayControls` |
+| `docs/12-component-spec.md` | Props `VerseDisplayControls`, `RepeatProgressBadge`, `RepeatStatus` |
 | `docs/21-i18n-and-locale.md` | Label kontrol dilokalisasi; konten ayat tidak |
-| `docs/28-playback-settings.md` | Auto Follow Playback — pengaturan & perilaku scroll |
+| `docs/28-playback-settings.md` | Auto Follow + Mode Murotal |
+| `docs/29-murotal-mode-spec.md` | Mode Murotal |
 | `docs/03-user-stories.md` | US-003 (Terjemahan), US-003b (Transliterasi), US-007 (Fokus) |

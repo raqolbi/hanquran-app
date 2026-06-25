@@ -4,6 +4,9 @@ export {
   trackLastReadUpdated,
   trackRepeatEnabled,
   trackSurahOpened,
+  trackMurotalEnabled,
+  trackMurotalSurahComplete,
+  trackMurotalQuranComplete,
   isAnalyticsEnabled,
 } from '@/lib/analytics/analytics';
 
@@ -17,4 +20,7 @@ export {
   type RepeatEnabledMode,
   type RepeatEnabledPayload,
   type SurahOpenedPayload,
+  type MurotalEnabledPayload,
+  type MurotalSurahCompletePayload,
+  type MurotalQuranCompletePayload,
 } from '@/lib/analytics/events';

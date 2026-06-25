@@ -317,7 +317,7 @@ Urutan render ayat (jika semua ON): Arab → Transliterasi → Terjemahan.
 │══════════════════════════════════════│
 │ ━━━━━━━━━●━━━━━━━━━━━               │
 │                                      │
-│ [🐥 5x ▼][⚙]     ⏮   ▶/⏸   ⏭      │
+│ [🐥 5x ▼][2/5][⚙]     ⏮   ▶/⏸   ⏭      │
 │══════════════════════════════════════│
 └──────────────────────────────────────┘
 ```
@@ -325,10 +325,11 @@ Urutan render ayat (jika semua ON): Arab → Transliterasi → Terjemahan.
 ### Notes
 
 * Tap ayat untuk menjadikannya ayat aktif.
+* Tombol **⏮ / ⏭** mengikuti aturan transport — lihat `docs/29-murotal-mode-spec.md` §7.2 (dalam surat saja, atau lintas surat jika Mode Murotal ON).
 * Audio selalu dikontrol dari player bawah.
 * Ayat aktif diberi highlight lembut.
 * Audio bar sticky di bagian bawah layar.
-* **Repeat inline** — `RepeatSelector` (`variant="inline"`) + tombol pengaturan (⚙) berada di **baris yang sama** dengan kontrol transport, bukan kartu mengambang terpisah.
+* **Repeat inline** — `RepeatSelector` (`variant="inline"`) + badge progress **`x/y`** + tombol pengaturan (⚙) berada di **baris yang sama** dengan kontrol transport.
 * Padding scroll ayat terakhir mengikuti tinggi chrome audio terukur (`useSurahDetailBottomInset`); tidak ada panel repeat mengambang.
 
 ---
@@ -340,25 +341,25 @@ Urutan render ayat (jika semua ON): Arab → Transliterasi → Terjemahan.
 │══════════════════════════════════════│
 │ ━━━━━━━━━●━━━━━━━━━━━               │
 │                                      │
-│ [🐥 5x ▼][⚙]     ⏮   ▶/⏸   ⏭      │
+│ [🐥 5x ▼][2/5][⚙]     ⏮   ▶/⏸   ⏭      │
 │══════════════════════════════════════│
 └──────────────────────────────────────┘
 ```
 
 ## Repeat Status Variants
 
-> **Catatan:** `RepeatStatus` tidak lagi ditampilkan di chrome bawah. Status repeat aktif ditangani oleh `RepeatEngine`; konfigurasi dan preview ada di `RepeatSettingsDialog`.
+> **Catatan:** Fraksi progress **`x/y`** (`RepeatProgressBadge`) tampil di audio bar saat sesi repeat aktif. Kartu `RepeatStatus` penuh hanya di variant `panel` / preview dialog.
 
 ### Repeat Ayat Aktif
 
-Saat repeat berjalan, chrome bawah **tetap** layout inline yang sama; tidak ada kartu status tambahan.
+Saat repeat berjalan, badge **`[2/5]`** muncul di antara select jumlah dan tombol ⚙.
 
 ```text
 ┌──────────────────────────────────────┐
 │══════════════════════════════════════│
 │ ━━━━━━━━━●━━━━━━━━━━━               │
 │                                      │
-│ [🐥 5x ▼][⚙]     ⏮   ▶/⏸   ⏭      │
+│ [🐥 5x ▼][2/5][⚙]     ⏮   ▶/⏸   ⏭      │
 │══════════════════════════════════════│
 └──────────────────────────────────────┘
 ```
@@ -381,7 +382,7 @@ Tampilan player:
 │══════════════════════════════════════│
 │ ━━━━━━━━━●━━━━━━━━━━━               │
 │                                      │
-│ [🐥 5x ▼][⚙]     ⏮   ▶/⏸   ⏭      │
+│ [🐥 5x ▼][2/5][⚙]     ⏮   ▶/⏸   ⏭      │
 │══════════════════════════════════════│
 └──────────────────────────────────────┘
 ```
@@ -404,7 +405,7 @@ Tampilan player:
 │══════════════════════════════════════│
 │ ━━━━━━━━━●━━━━━━━━━━━               │
 │                                      │
-│ [🐥 5x ▼][⚙]     ⏮   ▶/⏸   ⏭      │
+│ [🐥 5x ▼][2/5][⚙]     ⏮   ▶/⏸   ⏭      │
 │══════════════════════════════════════│
 └──────────────────────────────────────┘
 ```
@@ -727,7 +728,7 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │                                      │
 │ ───────────●───────────             │
 │                                      │
-│ [🐥 5x ▼][⚙]     ⏮   ▶/⏸   ⏭      │
+│ [🐥 5x ▼][2/5][⚙]     ⏮   ▶/⏸   ⏭      │
 └──────────────────────────────────────┘
 ```
 
@@ -747,7 +748,7 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │                                      │
 │ ───────────●───────────             │
 │                                      │
-│ [🐥 5x ▼][⚙]     ⏮   ▶/⏸   ⏭      │
+│ [🐥 5x ▼][2/5][⚙]     ⏮   ▶/⏸   ⏭      │
 └──────────────────────────────────────┘
 ```
 
@@ -765,7 +766,7 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │                                      │
 │ ───────────●───────────             │
 │                                      │
-│ [🐥 5x ▼][⚙]     ⏮   ▶/⏸   ⏭      │
+│ [🐥 5x ▼][2/5][⚙]     ⏮   ▶/⏸   ⏭      │
 └──────────────────────────────────────┘
 ```
 
@@ -883,6 +884,9 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │ │ Otomatis menggulir layar agar    │ │
 │ │ ayat yang sedang diputar tetap   │ │
 │ │ terlihat.                        │ │
+│ │                                  │ │
+│ │ Mode Murotal          [On/Off]   │ │
+│ │ Putar tilawah berkelanjutan.     │ │
 │ └──────────────────────────────────┘ │
 │                                      │
 │ ┌──────────────────────────────────┐ │
@@ -918,6 +922,7 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │ ┌─────────────────────┐   ┌─────────────────────┐               │
 │ │ Reciter             │   │ Playback            │               │
 │ │ Misyari Alafasy ▼   │   │ Auto Follow [ON/OFF]│               │
+│ │                     │   │ Mode Murotal [OFF]  │               │
 │ └─────────────────────┘   └─────────────────────┘               │
 │                                                                  │
 │ ┌─────────────────────┐   ┌─────────────────────┐               │
@@ -973,7 +978,7 @@ Spesifikasi lengkap: `docs/26-about-screen-spec.md`.
 - `Clear cache` perlu konfirmasi
 - Bahasa setting harus ramah non-teknis
 - Label UI mengikuti `settings.appLocale` (`id` | `en`) via `next-intl` — lihat `docs/21-i18n-and-locale.md`
-- **Playback:** toggle Auto Follow Playback — spesifikasi perilaku: `docs/28-playback-settings.md`
+- **Playback:** toggle Auto Follow Playback & Mode Murotal — `docs/28-playback-settings.md`, `docs/29-murotal-mode-spec.md`
 
 ---
 
@@ -1333,7 +1338,7 @@ Player harus selalu sticky pada mobile (`fixed bottom`).
 
 ```text
 Baris 1 : Progress bar (full width)
-Baris 2 : [RepeatSelector inline][⚙]  ···  ⏮  ▶/⏸  ⏭
+Baris 2 : [RepeatSelector inline][x/y][⚙]  ···  ⏮  ▶/⏸  ⏭
 ```
 
 `RepeatSelector` tidak lagi berupa kartu mengambang di sisi kanan.

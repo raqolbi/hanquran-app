@@ -73,6 +73,13 @@ export const useUserStore = create<UserState & UserActions>()((set, get) => ({
         updatedAt: Date.now(),
       };
       await db.settings.put(settings);
+    } else if (settings.murotalEnabled === undefined) {
+      settings = {
+        ...settings,
+        murotalEnabled: false,
+        updatedAt: Date.now(),
+      };
+      await db.settings.put(settings);
     }
 
     const legacySettings = settings as SettingsRecord & { qariId?: number };

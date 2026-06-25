@@ -91,7 +91,8 @@ Komponen di dokumen ini dipetakan ke modul pada `05-module-catalog.md`.
 | AudioPlayer           | Audio            | AudioBar + repeat inline + transport                                    |
 | RepeatSelector        | Memorization     | `variant`: `inline` (produksi) \| `panel` (legacy)                      |
 | RepeatSettingsDialog  | Memorization     | RepeatOption; Drawer mobile / Dialog desktop (`DESKTOP_DIALOG_MEDIA`)   |
-| RepeatStatus          | Memorization     | Hanya di dialog / panel legacy — bukan chrome bawah                     |
+| RepeatProgressBadge   | Memorization     | Badge fraksi x/y di audio bar & RepeatStatus                            |
+| RepeatStatus          | Memorization     | Kartu status + badge x/y — panel/dialog (bukan chrome bawah)            |
 | FocusModeScreen       | Memorization     | FocusPage + FocusAyah + AudioPlayer                                     |
 | FocusModePlayer       | Memorization     | **Legacy** — digantikan `AudioPlayer`                                   |
 | SettingsCard          | Settings         | FontSizeSetting / LanguageSetting / ContrastSetting / CacheManagement |
@@ -974,7 +975,12 @@ Play / Pause:
 Lebih besar dibanding kontrol lain.
 ```
 
-Pada Focus Mode, `isPreviousDisabled` / `isNextDisabled` aktif di ayat pertama/terakhir (tidak wrap).
+Pada Focus Mode, `isPreviousDisabled` / `isNextDisabled` mengikuti `docs/29-murotal-mode-spec.md` §7.2 (tidak wrap).
+
+### Previous / Next
+
+- **Murotal OFF:** hanya dalam surat; disabled di ayat pertama (prev) atau terakhir (next).
+- **Murotal ON:** prev dari ayat 1 → surat sebelumnya ayat terakhir; next dari ayat terakhir → surat berikutnya ayat 1.
 
 ---
 
@@ -1003,10 +1009,13 @@ Konten `toolbarStart`:
 ```text
 RepeatSelector (variant="inline")
   ├── Select jumlah (🐣 1x … ♾️)
+  ├── RepeatProgressBadge (x/y) — saat sesi repeat aktif
   └── Settings Button (⚙) → RepeatSettingsDialog
 ```
 
-`RepeatStatus` **tidak** ditampilkan di chrome bawah; preview ada di dialog pengaturan.
+`RepeatProgressBadge` menampilkan fraksi **pengulangan ke berapa / target** (mis. `2/5`, `3/∞`). Tampil saat `runtime.isActive` dari `useSurahRepeatPlayback` (`showRepeatProgress`).
+
+`RepeatStatus` (panel/dialog) memakai badge yang sama; **tidak** ada kartu status terpisah di chrome bawah.
 
 Konstanta scroll: `lib/surah-detail-chrome.ts` (`SURAH_DETAIL_MIN_SCROLL_INSET` ≈ 136px, `READING_COMFORT_GAP` 16px). Pengukuran aktual via `useSurahDetailBottomInset`.
 
@@ -1091,8 +1100,16 @@ Settings (⚙)   : p-2, di samping select
 Format:
 
 ```text
-[ 🐥 5x ▼ ] [ ⚙ ]
+[ 🐥 5x ▼ ] [ 2/5 ] [ ⚙ ]
 ```
+
+| Elemen | Keterangan |
+|--------|------------|
+| Select | Target jumlah repeat (preset) |
+| Badge `x/y` | `RepeatProgressBadge` — hanya saat `isActive` + `statusProps` |
+| ⚙ | Buka `RepeatSettingsDialog` |
+
+**x** = siklus saat ini (`getDisplayCycle` dari `RepeatEngine`). **y** = target (`repeatCount`; `∞` jika infinite).
 
 ### Panel (legacy)
 
@@ -1271,9 +1288,9 @@ Urutan ini mengikuti
 
 ## Purpose
 
-Menampilkan status repeat yang sedang aktif.
+Menampilkan status repeat yang sedang aktif — konteks target (ayat/range/surat) dan **fraksi progress x/y**.
 
-Hanya muncul saat repeat aktif.
+Di chrome bawah (inline), fraksi ditampilkan oleh `RepeatProgressBadge` di dalam `RepeatSelector`. Komponen ini dipakai di variant `panel` dan preview dialog.
 
 ---
 
@@ -1282,16 +1299,14 @@ Hanya muncul saat repeat aktif.
 ```ts
 interface RepeatStatusProps {
   targetType: RepeatTarget
-
+  repeatCount: RepeatCount
   currentCycle: number
-  totalCycles: number
-
-  currentAyah?: number
-
-  fromAyah?: number
-  toAyah?: number
-
-  totalAyahsInSurah?: number
+  activeAyah: number
+  totalAyahs: number
+  rangeFrom?: number
+  rangeTo?: number
+  surahName: string
+  className?: string
 }
 ```
 
@@ -1301,6 +1316,8 @@ interface RepeatStatusProps {
 
 ```text
 Prefix : 🟢
+Badge  : RepeatProgressBadge (x/y) — kanan atas kartu
+Detail : ayat aktif / posisi dalam surat
 ```
 
 ---
@@ -1310,47 +1327,61 @@ Prefix : 🟢
 ### Current Ayah
 
 ```text
-🟢 Ayat Aktif
-Ayat 2 • 4x tersisa
+🟢 Ayat Aktif                    2/5
+Sedang di Ayat 3
 ```
-
----
 
 ### Range
 
 ```text
-🟢 Range Ayat 1-5
-Siklus 2 / 5
+🟢 Range Ayat 1-5                1/2
 Sedang di Ayat 3
 ```
-
----
 
 ### Entire Surah
 
 ```text
-🟢 Surat Al-Fatihah
-Siklus 2 / 5
-Sedang di Ayat 3 dari 7
+🟢 Surat Al-Ikhlas               2/3
+Sedang di Ayat 2 dari 4
 ```
 
 ---
 
-## Important
+# 15. RepeatProgressBadge
+
+## Purpose
+
+Label ringkas progress repeat **current / target** di audio bar dan `RepeatStatus`.
+
+## Props
+
+```ts
+interface RepeatProgressBadgeProps {
+  current: number
+  total: RepeatCount
+  className?: string
+}
+```
+
+## Visual
 
 ```text
-Saat target adalah Ayat Aktif:
-playback berhenti setelah jumlah
-repeat selesai.
-
-Saat target adalah Range / Surat:
-satu siklus harus selesai sebelum
-counter dikurangi.
+Background : emerald-100
+Text       : emerald-800, 11px, tabular-nums
+Format     : 2/5 | 3/∞
 ```
+
+## Helper
+
+`lib/repeat-progress.ts` — `formatRepeatProgressLabel(current, total)`
+
+## i18n
+
+`repeat.progressAriaLabel` — "{current} dari {total}" (screen reader)
 
 ---
 
-# 15. FocusModeScreen
+# 16. FocusModeScreen
 
 ## Purpose
 
@@ -1451,7 +1482,7 @@ saat teks Arab terlihat.
 
 ---
 
-# 16. FocusModePlayer
+# 17. FocusModePlayer
 
 > **Status: Legacy / tidak dipakai.** Focus Mode (`app/focus/[id]/page.tsx`) memakai `AudioPlayer` + `RepeatSelector variant="inline"` langsung. File `components/focus-mode-player.tsx` dapat dihapus di refactor berikutnya.
 
@@ -1491,7 +1522,7 @@ Padding bawah konten: `useSurahDetailBottomInset`.
 
 ---
 
-# 17. SettingsCard
+# 18. SettingsCard
 
 ## Purpose
 
@@ -1563,11 +1594,12 @@ ReciterSelector
 
 ```text
 Auto Follow Playback    [ON / OFF]
+Mode Murotal            [ON / OFF]
 ```
 
 - Label & deskripsi dilokalisasi via `next-intl`
-- Nilai disimpan: `settings.autoFollowPlayback` (default: `true`)
-- Spesifikasi perilaku: `docs/28-playback-settings.md`
+- Nilai disimpan: `settings.autoFollowPlayback` (default: `true`), `settings.murotalEnabled` (default: `false`)
+- Spesifikasi perilaku: `docs/28-playback-settings.md`, `docs/29-murotal-mode-spec.md`
 
 ### Kontras Tinggi
 
@@ -1599,7 +1631,7 @@ menghapus.
 
 ---
 
-# 18. ReciterSelector
+# 19. ReciterSelector
 
 ## Purpose
 
@@ -1639,7 +1671,7 @@ Radius   : 12px
 
 ---
 
-# 19. BottomNavigation
+# 20. BottomNavigation
 
 ## Purpose
 
@@ -1695,7 +1727,7 @@ Settings
 
 ---
 
-# 20. BottomSheet
+# 21. BottomSheet
 
 ## Purpose
 
@@ -1735,7 +1767,7 @@ swipe down atau tap backdrop.
 
 ---
 
-# 21. OfflineStatusBadge
+# 22. OfflineStatusBadge
 
 ## Purpose
 
@@ -1792,7 +1824,7 @@ Color : Gray
 
 ---
 
-# 22. ConnectionIndicator
+# 23. ConnectionIndicator
 
 ## Purpose
 
@@ -1839,7 +1871,7 @@ bukan di header.
 
 ---
 
-# 23. OfflineBanner
+# 24. OfflineBanner
 
 ## Purpose
 
@@ -1892,7 +1924,7 @@ atau menyalahkan user.
 
 ---
 
-# 24. EmptyState
+# 25. EmptyState
 
 ## Purpose
 
@@ -1954,7 +1986,7 @@ yang mengalihkan fokus.
 
 ---
 
-# 25. Logo / LogoWithText
+# 26. Logo / LogoWithText
 
 ## Purpose
 

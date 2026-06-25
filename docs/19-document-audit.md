@@ -9,6 +9,7 @@ Dokumen ini adalah laporan audit komprehensif terhadap seluruh dokumentasi proye
 
 > **Pembaruan 25 Juni 2026:** Spesifikasi **Playback Settings** (`docs/28-playback-settings.md`) — Auto Follow Playback di Pengaturan, pra-implementasi.
 > **Pembaruan 25 Juni 2026:** Spesifikasi **Media Session API** (`docs/27-media-session-api-spec.md`) — fitur Growth target rilis `0.2.0`.
+> **Pembaruan 25 Juni 2026:** Implementasi **Mode Murotal** (PB-017), **badge progress repeat x/y**, perbaikan **auto follow landscape** — pembaruan dokumen terkait.
 
 ---
 
@@ -63,7 +64,8 @@ Dokumen ini adalah laporan audit komprehensif terhadap seluruh dokumentasi proye
 | `17-implementation-roadmap.md` | **Revisi Terbaru (v3)** | ✅ Aktif — Growth Phase Media Session |
 | `18-development-tasks.md` | **Revisi Terbaru (v3)** | ✅ Aktif — 95 tasks, Phase 2b Media Session |
 | `27-media-session-api-spec.md` | **Baru (v1)** | ✅ Aktif — spesifikasi lock screen & background audio, target `0.2.0` |
-| `28-playback-settings.md` | **Baru (v1)** | 📋 Aktif — spesifikasi Auto Follow Playback di Pengaturan, pra-implementasi |
+| `28-playback-settings.md` | **v1** | ✅ Aktif — Auto Follow + Mode Murotal; §4.4 landscape HP |
+| `29-murotal-mode-spec.md` | **v1** | ✅ Diimplementasi — target rilis `0.3.0` |
 
 > **Pembaruan v3:** `docs/04-system-architecture.md` telah diperbarui langsung pada audit v3 ini. State Management, Route Focus Mode, Folder Structure, dan Dexie kini konsisten dengan seluruh dokumen terbaru. Tidak ada konflik aktif tersisa.
 

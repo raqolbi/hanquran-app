@@ -73,7 +73,7 @@ Repeat / fokus hafalan
 | Audio | Core | Playback audio ayat dan kontrol player |
 | Memorization | Core | Repeat, highlight, focus mode |
 | Reading Resume | Core | Last read dan continue reading |
-| Settings | Core | Font size, playback (auto follow), contrast, cache settings, **application language** |
+| Settings | Core | Font size, playback (auto follow, murotal), contrast, cache settings, **application language** |
 | Offline | Core | Sinkronisasi cache, status offline, service worker integration |
 | Visual Foundation | Supporting | Polishing UI ringan tanpa mengganggu fitur inti |
 | Shared | Supporting | UI generik, constants, utils, common types |
@@ -182,12 +182,13 @@ Repeat / fokus hafalan
 - Repeat per surat
 - Word-by-word highlight
 - Focus mode
-- Counter repeat
+- Counter repeat + badge progress **x/y** (`RepeatProgressBadge`)
 - Minimal UI untuk hafalan
 
 ### Owns
 
 - `RepeatSelector`
+- `RepeatProgressBadge`
 - `RepeatOption`
 - `FocusPage`
 - `FocusAyah`
@@ -259,7 +260,7 @@ Repeat / fokus hafalan
 - Navigasi ke layar Tentang HanQuran (`/settings/about`)
 
 > Toggle terjemahan dan transliterasi **bukan** bagian Settings module — dikelola di `VerseDisplayControls` (`docs/22-verse-display-controls.md`).  
-> Spesifikasi Playback: `docs/28-playback-settings.md`.
+> Spesifikasi Playback: `docs/28-playback-settings.md`, `docs/29-murotal-mode-spec.md`.
 
 ### Owns
 

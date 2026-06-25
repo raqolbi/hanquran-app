@@ -62,7 +62,20 @@ export function getReadableViewport(
 }
 
 /**
+ * Tinggi viewport untuk perhitungan zona baca — memakai Visual Viewport di mobile.
+ */
+export function getViewportHeight(): number {
+  if (typeof window === 'undefined') {
+    return 800;
+  }
+
+  return window.visualViewport?.height ?? window.innerHeight;
+}
+
+/**
  * Mengukur tinggi chrome atas (sticky header + kontrol baca) dari DOM.
+ * Di landscape HP chrome `static` dan dapat ter-scroll keluar layar —
+ * jangan hitung offset negatif sebagai obstruction.
  */
 export function measureSurahDetailTopInset(
   fallback = SURAH_DETAIL_READING_CONTROLS_HEIGHT,
@@ -76,7 +89,13 @@ export function measureSurahDetailTopInset(
     return fallback;
   }
 
-  return Math.ceil(chrome.getBoundingClientRect().bottom);
+  const { bottom } = chrome.getBoundingClientRect();
+
+  if (bottom <= AUTO_FOLLOW_READABLE_PADDING) {
+    return AUTO_FOLLOW_READABLE_PADDING;
+  }
+
+  return Math.ceil(bottom);
 }
 
 /**

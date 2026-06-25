@@ -128,6 +128,28 @@ describe('auto-follow-playback', () => {
 
       document.body.innerHTML = '';
     });
+
+    it('mengabaikan chrome static yang sudah ter-scroll keluar layar (landscape)', () => {
+      const chrome = document.createElement('div');
+      chrome.setAttribute('data-surah-detail-top-chrome', '');
+      chrome.getBoundingClientRect = () =>
+        ({
+          top: -220,
+          bottom: -40,
+          left: 0,
+          right: 0,
+          width: 0,
+          height: 180,
+          x: 0,
+          y: -220,
+          toJSON: () => ({}),
+        }) as DOMRect;
+      document.body.appendChild(chrome);
+
+      expect(measureSurahDetailTopInset(68)).toBe(8);
+
+      document.body.innerHTML = '';
+    });
   });
 
   describe('shouldAutoFollowScroll', () => {

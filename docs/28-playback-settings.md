@@ -10,11 +10,12 @@
 
 Bagian **Playback** pada halaman Pengaturan mengatur perilaku layar saat audio tilawah berjalan di **Surah Detail** (`/surah/[id]`).
 
-Pada MVP V1, bagian ini berisi satu pengaturan:
+Pada MVP V1, bagian ini berisi pengaturan playback. **Mode Murotal** tersedia sejak v0.3.0 — lihat `docs/29-murotal-mode-spec.md`.
 
-| Pengaturan | Default | Persistensi |
-|------------|---------|-------------|
-| Auto Follow Playback | ON (`true`) | `settings.autoFollowPlayback` |
+| Pengaturan | Default | Persistensi | Status |
+|------------|---------|-------------|--------|
+| Auto Follow Playback | ON (`true`) | `settings.autoFollowPlayback` | ✅ Diimplementasi |
+| Mode Murotal | OFF (`false`) | `settings.murotalEnabled` | ✅ Diimplementasi |
 
 > **Bukan bagian Playback Settings:** pengaturan repeat (`RepeatSettingsDialog`), play/pause, navigasi ayat — tetap di kontrol audio pada Surah Detail. Lihat `docs/22-verse-display-controls.md` (Bagian 6).
 
@@ -64,6 +65,23 @@ Otomatis menggulir layar agar ayat yang sedang diputar tetap terlihat.
 | Default | ON |
 | Kontrol | `Switch` |
 
+### 3.3 Mode Murotal
+
+> Spesifikasi lengkap: `docs/29-murotal-mode-spec.md`
+
+```text
+Mode Murotal                    [ON / OFF]
+Putar tilawah secara berkelanjutan: lanjut ke ayat
+berikutnya atau surat berikutnya hingga Anda berhenti.
+```
+
+| Field UI | Nilai |
+|----------|-------|
+| Nama | Mode Murotal |
+| Deskripsi | Putar tilawah berkelanjutan hingga dihentikan pengguna |
+| Default | **OFF** |
+| Kontrol | `Switch` |
+
 ---
 
 ## 4. Auto Follow Playback — Perilaku
@@ -91,13 +109,30 @@ Berlaku saat audio tilawah aktif di Surah Detail dan `settings.autoFollowPlaybac
 - Overlap sebagian saja **tidak** dianggap cukup — mencegah kartu tertutup audio bar tanpa scroll.
 - Perubahan pengaturan (ON/OFF) berlaku segera tanpa reload halaman.
 
-### 4.4 Cakupan layar
+### 4.4 Landscape HP (`short-landscape`)
+
+- Chrome atas **tidak sticky** — dapat ter-scroll keluar layar.
+- Pengukuran zona baca **mengabaikan** chrome yang sudah di atas viewport (offset negatif), agar pusat zona baca tidak bergeser terlalu ke atas dan auto scroll tidak melewati ayat aktif.
+- Tinggi viewport memakai `visualViewport` bila tersedia (lebih akurat di mobile).
+
+### 4.5 Cakupan layar
 
 | Layar | Auto Follow Playback |
 |-------|----------------------|
 | Surah Detail (`/surah/[id]`) | ✅ Berlaku |
 | Focus Mode (`/focus/[id]`) | ❌ Tidak berlaku — satu ayat per layar, tidak ada daftar scroll |
 | Beranda / Pengaturan | ❌ Tidak berlaku |
+
+### 4.6 Tombol Previous / Next (transport audio)
+
+Aturan lengkap — termasuk lintas surat saat **Mode Murotal** ON: `docs/29-murotal-mode-spec.md` §7.2.
+
+Ringkasan:
+
+- **Murotal OFF:** ⏮/⏭ hanya antar ayat dalam surat; nonaktif di ayat pertama (prev) atau terakhir (next).
+- **Murotal ON:** ⏮ dari ayat 1 (bukan surat 1) → surat sebelumnya ayat terakhir; ⏭ dari ayat terakhir (bukan surat 114) → surat berikutnya ayat 1.
+
+Berlaku di Surah Detail dan Focus Mode.
 
 ---
 
@@ -117,6 +152,7 @@ Jika pengguna mematikan Auto Follow Playback:
 | Field | Tipe | Default | Tabel Dexie | Kontrol UI |
 |-------|------|---------|-------------|------------|
 | `autoFollowPlayback` | `boolean` | `true` | `settings` | `/settings` → Playback |
+| `murotalEnabled` | `boolean` | `false` | `settings` | `/settings` → Playback |
 
 Pola persistensi sama dengan preferensi lain di `useUserStore.updateSettings()` — lihat `docs/15-state-management.md` (Bagian 6).
 
@@ -139,6 +175,9 @@ Runtime sementara (tidak dipersist):
 │ Otomatis menggulir layar agar    │
 │ ayat yang sedang diputar tetap   │
 │ terlihat.                        │
+│                                  │
+│ Mode Murotal             [ON/OFF]│
+│ Putar tilawah berkelanjutan.     │
 └──────────────────────────────────┘
 ```
 
@@ -155,3 +194,4 @@ Runtime sementara (tidak dipersist):
 | `docs/15-state-management.md` | Persistensi preferensi |
 | `docs/22-verse-display-controls.md` | Kontrol baca vs kontrol playback |
 | `docs/14-routing-spec.md` | Route Surah Detail & Pengaturan |
+| `docs/29-murotal-mode-spec.md` | Mode Murotal — pemutaran berkelanjutan |

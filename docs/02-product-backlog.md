@@ -580,6 +580,44 @@ FR-003 (perluasan pengalaman audio mobile)
 
 ---
 
+## PB-017: Mode Murotal (Pemutaran Berkelanjutan)
+
+**Type:** Feature  
+**Priority:** P1 — Should Have (Post-MVP / Growth)  
+**Sprint:** Post-MVP → target `0.3.0`  
+**Spesifikasi:** `docs/29-murotal-mode-spec.md`
+
+### Description
+
+Toggle **Mode Murotal** di Pengaturan → Playback (default OFF). Saat ON, tilawah audio berlanjut otomatis ayat demi ayat dan surat demi surat hingga pengguna menghentikannya. Berinteraksi dengan RepeatEngine: repeat didahulukan; setelah siklus repeat selesai (`stop`), murotal lanjut ke ayat atau surat berikutnya.
+
+### Acceptance Criteria
+
+- [x] Toggle Mode Murotal di `/settings` → Playback, default OFF
+- [x] Field `settings.murotalEnabled` persisten di Dexie
+- [x] Saat ON: setelah ayat selesai (tanpa repeat aktif), lanjut ke ayat berikutnya
+- [x] Saat ON: ayat terakhir surat → lanjut ke surat berikutnya (`/surah/[n+1]` atau `/focus/[n+1]`)
+- [x] Kombinasi repeat + murotal: repeat selesai dulu, baru murotal advance
+- [x] Infinite repeat (∞) tidak memicu advance murotal
+- [x] Akhir Al-Qur'an (An-Nas) → stop + feedback
+- [x] Berlaku di Surah Detail dan Focus Mode
+- [ ] Tidak ada regresi RepeatEngine, Auto Follow, Media Session (uji manual)
+
+### Subtasks
+
+- [x] Spesifikasi teknis (`docs/29`)
+- [x] Service `services/murotal-resolver.ts`
+- [x] Integrasi `use-surah-repeat-playback.ts`
+- [x] Toggle UI + i18n di Settings
+- [x] Migrasi Dexie `murotalEnabled`
+- [x] Unit test resolver + orkestrasi playback
+
+### Related FR
+
+FR-003 (perluasan pengalaman audio mobile)
+
+---
+
 # Sprint Plan
 
 ## Sprint 1: Foundation
@@ -647,7 +685,7 @@ Goal: Fitur pelengkap dan optimasi.
 | Priority | Count | Items |
 |----------|-------|-------|
 | P0 — Must Have | 7 | PB-001, PB-002, PB-004, PB-005, PB-006, PB-010, PB-011, PB-013 |
-| P1 — Should Have | 4 | PB-003, PB-007, PB-008, PB-014 |
+| P1 — Should Have | 6 | PB-003, PB-007, PB-008, PB-014, PB-016, PB-017 |
 | P2 — Nice to Have | 3 | PB-009, PB-012 |
 
 ---

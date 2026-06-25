@@ -303,6 +303,7 @@ interface SettingsRecord {
   contrastMode: 'default' | 'high';
   smoothAnimation: boolean;
   autoFollowPlayback: boolean;
+  murotalEnabled: boolean;
   qariId: number;
   translationResourceId: number;
   updatedAt: number;
@@ -319,6 +320,7 @@ interface SettingsRecord {
 - `appLocale`: bahasa UI aplikasi (`id` | `en`). Lihat `docs/21-i18n-and-locale.md`.
 - `translationVisible` / `transliterationVisible`: dikontrol dari **Verse Display Controls** pada Surah Detail — bukan dari Pengaturan. Lihat `docs/22-verse-display-controls.md`.
 - `autoFollowPlayback`: mengatur auto scroll ayat aktif saat playback di Surah Detail. Default `true`. Lihat `docs/28-playback-settings.md`.
+- `murotalEnabled`: mengaktifkan pemutaran tilawah berkelanjutan (ayat → ayat, surat → surat). Default `false`. Lihat `docs/29-murotal-mode-spec.md`.
 - Dapat diperluas via migration tanpa mengubah primary key
 - Phase: **MVP**
 

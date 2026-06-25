@@ -210,6 +210,8 @@ Counter menampilkan target aktif dan jumlah tersisa. Repeat berjalan otomatis ta
 - Status offline ✅
 - Aksesibilitas dasar — kontras tinggi & animasi halus persisten (`contrastMode`, `smoothAnimation`); diterapkan global via `AccessibilityProvider` ✅
 - **Playback** — Auto Follow Playback (`settings.autoFollowPlayback`, default ON) ✅ — `docs/28-playback-settings.md`
+- **Mode Murotal** — tilawah berkelanjutan (`settings.murotalEnabled`, default OFF) ✅ — `docs/29-murotal-mode-spec.md` (v0.3.0)
+- **Progress repeat** — badge `x/y` di audio bar saat sesi repeat aktif ✅
 - **Tentang HanQuran** ✅ — `/settings/about`; informasi aplikasi, filosofi, credits, repository & lisensi (`docs/26-about-screen-spec.md`)
 
 ## 4.14 Lighthouse & Aksesibilitas (PB-012, PB-014) — P2
@@ -268,6 +270,7 @@ Fitur-fitur berikut **tidak boleh dikerjakan** dalam MVP. Seluruh request terkai
 - Catatan hafalan (Notes)
 - Bookmark per ayat (bukan favorit surat)
 - **Media Session API** — metadata & kontrol lock screen (`docs/27`, target v0.2.0)
+- **Mode Murotal** — tilawah berkelanjutan (`docs/29`, target v0.3.0)
 
 ## 5.7 Konten Tambahan
 

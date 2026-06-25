@@ -374,7 +374,7 @@ Selalu terlihat.
 
 ```text
 Baris 1 : ━━━━━●━━━━━  (progress)
-Baris 2 : [🐥 5x ▼][⚙]     ⏮  ▶/⏸  ⏭
+Baris 2 : [🐥 5x ▼][2/5][⚙]     ⏮  ▶/⏸  ⏭
 ```
 
 Play button lebih besar dibanding kontrol lain.
@@ -577,7 +577,7 @@ Tentang HanQuran  →  `/settings/about`
 
 > Terjemahan dan Transliterasi dikontrol di Verse Display Controls (Surah Detail), bukan di Pengaturan.
 
-> **Playback:** Auto Follow Playback — `docs/28-playback-settings.md`.
+> **Playback:** Auto Follow Playback & Mode Murotal — `docs/28-playback-settings.md`, `docs/29-murotal-mode-spec.md`.
 
 Layar **Tentang HanQuran**: informasi aplikasi, filosofi, credits, repository & lisensi — `docs/26-about-screen-spec.md`.
 

@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { useAudio, useAudioOnEnded } from '@/hooks/use-audio';
 import type { PlayAyahParams } from '@/hooks/use-audio';
@@ -10,15 +11,31 @@ import {
   type RepeatCount,
 } from '@/lib/repeat-options';
 import {
+  consumePendingMurotalPlay,
+  setPendingMurotalPlay,
+} from '@/lib/murotal-pending-play';
+import { routes } from '@/lib/routes';
+import {
+  trackMurotalQuranComplete,
+  trackMurotalSurahComplete,
+} from '@/lib/analytics';
+import {
   computeNextOnAyahEnd,
   getDisplayCycle,
   shouldBeginRepeatSession,
   toRepeatConfig,
 } from '@/services/repeat-engine';
+import { resolveMurotalAfterAyahEnd } from '@/services/murotal-resolver';
+import {
+  isPlaybackTrackDisabled,
+  resolvePlaybackTrackStep,
+  type PlaybackTrackStep,
+} from '@/services/playback-track-navigation';
 import { getRepeatTabSync } from '@/services/repeat-tab-sync';
 import { setMediaSessionTrackNavigation } from '@/services/media-session';
 import { useAudioStore } from '@/stores/audioStore';
 import { useRepeatStore } from '@/stores/repeatStore';
+import { useUserStore } from '@/stores/userStore';
 import type { RepeatStatusProps } from '@/components/repeat-status';
 
 function toRepeatCountValue(count: number): RepeatCount {
@@ -26,33 +43,44 @@ function toRepeatCountValue(count: number): RepeatCount {
   return (match?.value ?? 5) as RepeatCount;
 }
 
+export type PlaybackRouteMode = 'surah' | 'focus';
+
 export interface UseSurahRepeatPlaybackParams {
   surahId: number;
+  routeMode: PlaybackRouteMode;
   activeAyah: number;
   totalAyahs: number;
   reciterId: string;
   surahName: string;
   setActiveAyah: (ayah: number) => void;
+  onQuranComplete?: () => void;
 }
 
 export function useSurahRepeatPlayback({
   surahId,
+  routeMode,
   activeAyah,
   totalAyahs,
   reciterId,
   surahName,
   setActiveAyah,
+  onQuranComplete,
 }: UseSurahRepeatPlaybackParams) {
+  const router = useRouter();
   const config = useRepeatStore((s) => s.config);
   const runtime = useRepeatStore((s) => s.runtime);
   const applyConfig = useRepeatStore((s) => s.applyConfig);
   const patchConfig = useRepeatStore((s) => s.patchConfig);
   const setRuntime = useRepeatStore((s) => s.setRuntime);
+  const resetRuntime = useRepeatStore((s) => s.resetRuntime);
   const beginSession = useRepeatStore((s) => s.beginSession);
 
   const { isPlaying, playAyah, pause, toggleAyah, prefetchNextAyah, progress } =
     useAudio();
   const currentTrack = useAudioStore((s) => s.currentTrack);
+  const murotalEnabled = useUserStore((s) => s.settings.murotalEnabled);
+
+  const pendingPlayConsumedRef = useRef<number | null>(null);
 
   const isActiveAyahPlaying = useMemo(
     () =>
@@ -75,8 +103,59 @@ export function useSurahRepeatPlayback({
     [surahId, reciterId, totalAyahs, surahName],
   );
 
+  const advanceMurotal = useCallback(
+    (murotal: ReturnType<typeof resolveMurotalAfterAyahEnd>) => {
+      resetRuntime();
+
+      switch (murotal.type) {
+        case 'advance_ayah':
+          setActiveAyah(murotal.ayahNumber);
+          void playAyah(playParams(murotal.ayahNumber));
+          break;
+        case 'advance_surah': {
+          trackMurotalSurahComplete({
+            surahId,
+            nextSurahId: murotal.surahId,
+          });
+          void useUserStore
+            .getState()
+            .setLastViewed(murotal.surahId, murotal.ayahNumber);
+          setPendingMurotalPlay(murotal.surahId, murotal.ayahNumber);
+          const href =
+            routeMode === 'surah'
+              ? routes.surah(murotal.surahId, murotal.ayahNumber)
+              : routes.focus(murotal.surahId, murotal.ayahNumber);
+          router.replace(href);
+          break;
+        }
+        case 'stop':
+          if (murotal.reason === 'quran_complete') {
+            trackMurotalQuranComplete({ surahId });
+            onQuranComplete?.();
+          }
+          pause();
+          break;
+        default:
+          break;
+      }
+    },
+    [
+      resetRuntime,
+      setActiveAyah,
+      playAyah,
+      playParams,
+      surahId,
+      routeMode,
+      router,
+      onQuranComplete,
+      pause,
+    ],
+  );
+
   const handleAyahEnded = useCallback(() => {
     const state = useRepeatStore.getState();
+    const murotalEnabled = useUserStore.getState().settings.murotalEnabled;
+
     const result = computeNextOnAyahEnd({
       config: state.config,
       runtime: state.runtime,
@@ -87,23 +166,63 @@ export function useSurahRepeatPlayback({
     setRuntime(result.runtime);
     getRepeatTabSync()?.notifyCycleTick(result.runtime);
 
-    switch (result.action.type) {
-      case 'replay':
-        void playAyah(playParams(result.action.ayahNumber));
-        break;
-      case 'advance':
-        setActiveAyah(result.action.ayahNumber);
-        void playAyah(playParams(result.action.ayahNumber));
-        break;
-      case 'stop':
-        pause();
-        break;
-      default:
-        break;
+    if (
+      result.action.type === 'replay' ||
+      result.action.type === 'advance'
+    ) {
+      switch (result.action.type) {
+        case 'replay':
+          void playAyah(playParams(result.action.ayahNumber));
+          break;
+        case 'advance':
+          setActiveAyah(result.action.ayahNumber);
+          void playAyah(playParams(result.action.ayahNumber));
+          break;
+        default:
+          break;
+      }
+      return;
     }
-  }, [activeAyah, totalAyahs, setRuntime, playAyah, playParams, pause, setActiveAyah]);
+
+    if (!murotalEnabled) {
+      pause();
+      return;
+    }
+
+    const murotal = resolveMurotalAfterAyahEnd({
+      surahId,
+      currentAyah: activeAyah,
+      totalAyahs,
+    });
+    advanceMurotal(murotal);
+  }, [
+    activeAyah,
+    totalAyahs,
+    surahId,
+    setRuntime,
+    playAyah,
+    playParams,
+    pause,
+    setActiveAyah,
+    advanceMurotal,
+  ]);
 
   useAudioOnEnded(handleAyahEnded);
+
+  useEffect(() => {
+    if (pendingPlayConsumedRef.current === surahId) {
+      return;
+    }
+
+    const pendingAyah = consumePendingMurotalPlay(surahId);
+    if (pendingAyah === null) {
+      return;
+    }
+
+    pendingPlayConsumedRef.current = surahId;
+    setActiveAyah(pendingAyah);
+    void playAyah(playParams(pendingAyah));
+  }, [surahId, setActiveAyah, playAyah, playParams]);
 
   const togglePlayback = useCallback(async () => {
     const track = useAudioStore.getState().currentTrack;
@@ -141,20 +260,70 @@ export function useSurahRepeatPlayback({
     [isPlaying, playAyah, playParams, setActiveAyah],
   );
 
+  const trackNavParams = useMemo(
+    () => ({
+      surahId,
+      currentAyah: activeAyah,
+      totalAyahs,
+      murotalEnabled,
+    }),
+    [surahId, activeAyah, totalAyahs, murotalEnabled],
+  );
+
+  const isPreviousDisabled = useMemo(
+    () => isPlaybackTrackDisabled('previous', trackNavParams),
+    [trackNavParams],
+  );
+
+  const isNextDisabled = useMemo(
+    () => isPlaybackTrackDisabled('next', trackNavParams),
+    [trackNavParams],
+  );
+
+  const applyPlaybackTrackStep = useCallback(
+    (step: PlaybackTrackStep) => {
+      if (step.type === 'none') {
+        return;
+      }
+
+      resetRuntime();
+
+      if (step.type === 'same_surah') {
+        navigateAyah(step.ayahNumber);
+        return;
+      }
+
+      void useUserStore
+        .getState()
+        .setLastViewed(step.surahId, step.ayahNumber);
+      if (isPlaying) {
+        setPendingMurotalPlay(step.surahId, step.ayahNumber);
+      }
+      const href =
+        routeMode === 'surah'
+          ? routes.surah(step.surahId, step.ayahNumber)
+          : routes.focus(step.surahId, step.ayahNumber);
+      router.replace(href);
+    },
+    [resetRuntime, navigateAyah, isPlaying, routeMode, router],
+  );
+
+  const goToPreviousTrack = useCallback(() => {
+    applyPlaybackTrackStep(
+      resolvePlaybackTrackStep('previous', trackNavParams),
+    );
+  }, [applyPlaybackTrackStep, trackNavParams]);
+
+  const goToNextTrack = useCallback(() => {
+    applyPlaybackTrackStep(resolvePlaybackTrackStep('next', trackNavParams));
+  }, [applyPlaybackTrackStep, trackNavParams]);
+
   useEffect(() => {
     return setMediaSessionTrackNavigation({
-      onPreviousTrack: () => {
-        if (activeAyah > 1) {
-          navigateAyah(activeAyah - 1);
-        }
-      },
-      onNextTrack: () => {
-        if (activeAyah < totalAyahs) {
-          navigateAyah(activeAyah + 1);
-        }
-      },
+      onPreviousTrack: goToPreviousTrack,
+      onNextTrack: goToNextTrack,
     });
-  }, [activeAyah, totalAyahs, navigateAyah]);
+  }, [goToPreviousTrack, goToNextTrack]);
 
   const handleCountChange = useCallback(
     (count: RepeatCount) => {
@@ -191,7 +360,7 @@ export function useSurahRepeatPlayback({
     [config, runtime, activeAyah, totalAyahs, surahName],
   );
 
-  const showRepeatStatus = runtime.isActive && isPlaying;
+  const showRepeatProgress = runtime.isActive;
 
   const prefetchCurrentNext = useCallback(
     () =>
@@ -210,6 +379,10 @@ export function useSurahRepeatPlayback({
     audioProgress,
     togglePlayback,
     navigateAyah,
+    goToPreviousTrack,
+    goToNextTrack,
+    isPreviousDisabled,
+    isNextDisabled,
     prefetchNextAyah: prefetchCurrentNext,
     pause,
     repeatCount: toRepeatCountValue(config.count),
@@ -217,7 +390,7 @@ export function useSurahRepeatPlayback({
     rangeFrom: config.range?.from,
     rangeTo: config.range?.to,
     repeatStatusProps,
-    showRepeatStatus,
+    showRepeatProgress,
     handleCountChange,
     handleApplyRepeatSettings,
   };
