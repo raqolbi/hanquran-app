@@ -62,6 +62,52 @@ Satu atau dua kalimat: apa yang berubah bagi pengguna.
 
 ## Riwayat
 
+### [0.4.0] — 2026-06-26
+
+#### Ringkasan
+
+Milestone **Offline First** — seluruh Al-Qur'an (teks, terjemahan, metadata) dan shell aplikasi tersimpan sebagai aset offline sejak Service Worker terpasang. PWA berfungsi penuh tanpa jaringan (termasuk cold start setelah dipasang); internet hanya untuk streaming atau menyimpan audio.
+
+#### Fitur baru
+
+- **Precache saat install** — Service Worker mem-precache app shell, seluruh `/_next/static/*`, dan dataset Qur'an penuh saat `install` (lihat `docs/30` §6.1)
+- **Baca seluruh surat offline tanpa unduh** — buka surat mana pun saat offline meski belum pernah dibuka
+- **App-shell route dinamis** — `/surah/[id]` & `/focus/[id]` membaca id dari URL; satu shell melayani semua id, Mode Fokus & surat baru tetap terbuka offline
+- **Manifest precache hasil build** — `scripts/generate-sw-precache.mjs` (dijalankan via `postbuild`) men-generate daftar aset ber-hash
+
+#### Perbaikan
+
+- Cold start PWA offline & Mode Fokus offline tidak lagi memunculkan «Anda sedang offline» / halaman error
+- Navigasi App Router (RSC) offline dicocokkan dengan `ignoreSearch`
+- Batas Murotal offline — pemutaran berhenti saat surat berikut/sebelumnya belum tersedia offline
+
+#### PWA & offline
+
+- **Service Worker cache dinaikkan ke `*-v2`** (`hanquran-shell/static/data-v2`); cache audio tetap `hanquran-audio-v1`
+- Hapus precache berbasis online lama (`offline-app-precache.ts`) — digantikan precache `install`
+
+#### Catatan penting
+
+- **Wajib buka aplikasi online sekali** agar Service Worker baru (v2) terpasang & precache berjalan, sebelum mode offline penuh aktif
+- Versi `package.json` **0.4.0** — tampil otomatis di layar Tentang HanQuran
+- Konten Tentang HanQuran diperbarui: prinsip "Offline First" kini mencerminkan baca offline sejak terpasang
+
+#### Masalah yang diketahui
+
+- Cache Storage memerlukan secure context (HTTPS / `localhost`) — uji LAN via tunnel HTTPS
+- Word-by-word highlight & persist posisi audio terakhir — Post-MVP
+
+#### Uji sebelum rilis
+
+- [x] Unit test SW helpers (`isDynamicAppRoute`), `parseSurahIdFromPathname`, generator manifest
+- [x] `npm run build` + 278 unit test hijau
+- [ ] Verifikasi manual perangkat: install online sekali → offline → cold start, Beranda/Tentang/Mode Fokus/surat-belum-unduh, batas Murotal (`docs/30` §8)
+- [ ] Preview / staging diuji
+- [ ] Production deploy
+- [ ] Checklist `docs/25-deployment-vercel.md` §5
+
+---
+
 ### [0.3.0] — 2026-06-25
 
 #### Ringkasan
@@ -147,4 +193,4 @@ Baseline MVP HanQuran — aplikasi hafalan Al-Qur'an dengan audio per ayat, repe
 
 ---
 
-<!-- Versi berikutnya: salin Template di atas ke sini, di atas entri 0.3.0 -->
+<!-- Versi berikutnya: salin Template di atas ke sini, di atas entri 0.4.0 -->

@@ -163,7 +163,7 @@
       "principles": {
         "memorizationFirst": "Memorization First — setiap keputusan dievaluasi: apakah ini membantu menghafal?",
         "mobileFirst": "Mobile First — dirancang untuk layar kecil dan sentuhan.",
-        "offlineFirst": "Offline First — setelah unduhan, aplikasi tidak bergantung pada internet.",
+        "offlineFirst": "Offline First — seluruh Al-Qur'an tersimpan sejak aplikasi terpasang; internet hanya untuk audio.",
         "simplicityFirst": "Simplicity First — tanpa registrasi, tanpa login, tanpa konfigurasi rumit."
       },
       "focusTitle": "Fokus aplikasi",
@@ -174,7 +174,7 @@
         "murotal": "Mode Murotal — tilawah berkelanjutan lintas ayat dan surat",
         "mediaSession": "Kontrol audio dari lock screen (Media Session)",
         "continueReading": "Lanjutkan Hafalan dari posisi terakhir",
-        "offline": "Unduh offline per surat — audio dan metadata tersimpan lokal",
+        "offline": "Baca seluruh Al-Qur'an offline sejak terpasang; unduh audio per surat untuk didengar tanpa internet",
         "preferences": "Preferensi lokal (bahasa UI, qari, tampilan ayat, aksesibilitas)"
       }
     },
