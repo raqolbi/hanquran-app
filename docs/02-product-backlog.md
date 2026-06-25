@@ -546,6 +546,40 @@ FR-011
 
 ---
 
+## PB-016: Media Session API (Lock Screen)
+
+**Type:** Feature
+**Priority:** P1 — Should Have (Post-MVP / Growth)
+**Sprint:** Post-MVP → target `0.2.0`
+**Spesifikasi:** `docs/27-media-session-api-spec.md`
+
+### Description
+
+Saat audio tilawah diputar, sistem operasi menampilkan metadata surat dan ayat serta kontrol Play/Pause di lock screen atau kontrol media OS — jika platform mendukung.
+
+### Acceptance Criteria
+
+- [ ] Metadata lock screen: nama surat + nomor ayat
+- [ ] Metadata artis: nama qari
+- [ ] Kontrol Play/Pause dari lock screen sinkron dengan aplikasi
+- [ ] Metadata diperbarui saat ganti ayat
+- [ ] Fallback graceful jika `navigator.mediaSession` tidak tersedia
+- [ ] Tidak ada regresi `AudioTabSync` dan RepeatEngine
+
+### Subtasks
+
+- [x] Spesifikasi teknis (`docs/27`)
+- [ ] Service `services/media-session.ts`
+- [ ] Integrasi `AudioController`
+- [ ] Unit test + uji manual Android & iOS
+- [ ] (P2) Action handlers next/previous ayat
+
+### Related FR
+
+FR-003 (perluasan pengalaman audio mobile)
+
+---
+
 # Sprint Plan
 
 ## Sprint 1: Foundation

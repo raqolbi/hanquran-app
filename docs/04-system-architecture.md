@@ -763,6 +763,24 @@ Responsibilities:
 - Seek
 - Playback Speed
 - Audio State
+- **Media Session** — metadata surat/ayat/qari & kontrol OS (`navigator.mediaSession`)
+
+---
+
+### MediaSessionBridge
+
+Bertanggung jawab atas integrasi Media Session API dengan pemutaran audio.
+
+Responsibilities:
+
+- Set `MediaMetadata` (title, artist, album, artwork)
+- Sinkron `playbackState` (`playing` / `paused` / `none`)
+- Daftarkan action handlers `play`, `pause` (opsional: `previoustrack`, `nexttrack`)
+- Fallback no-op jika API tidak tersedia
+
+Implementasi: `services/media-session.ts`, dipanggil dari `AudioController`.
+
+Spesifikasi: `docs/27-media-session-api-spec.md`
 
 ---
 
@@ -1628,6 +1646,7 @@ hanquran-app/
 │
 ├── services/
 │   ├── audio-controller.ts     ← jembatan HTMLAudioElement ↔ useAudioStore
+│   ├── media-session.ts        ← Media Session API (metadata lock screen)
 │   ├── download-manager.ts     ← unduh audio ke Cache Storage
 │   ├── db/                     ← Dexie — data pengguna saja
 │   │   ├── db.ts
@@ -1683,6 +1702,7 @@ Semua akses ke platform (audio, cache, database) melewati `services/`:
 
 ```text
 services/audio-controller.ts    → HTMLAudioElement
+services/media-session.ts       → navigator.mediaSession (lock screen)
 services/download-manager.ts   → Cache Storage via SW
 services/db/                   → Dexie (IndexedDB)
 services/api/                  → Repository (public/data/*, CDN audio)
