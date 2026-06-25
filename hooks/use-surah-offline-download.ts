@@ -1,9 +1,11 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { getDownloadManager } from '@/services/download-manager';
 import { downloadManifestKey } from '@/services/download-manifest-key';
+import { routes } from '@/lib/routes';
 import { db } from '@/services/db/db';
 import { useOfflineStore } from '@/stores/offlineStore';
 import type { ConnectionStatus, DownloadStatus } from '@/types';
@@ -41,8 +43,10 @@ export function useSurahOfflineDownload({
   ayahCount,
   reciterId,
 }: UseSurahOfflineDownloadInput) {
+  const router = useRouter();
   const manifestKey = downloadManifestKey(surahId, reciterId);
   const downloadStatus = useOfflineStore((s) => s.downloadStatuses[manifestKey]);
+  const connectionStatus = useOfflineStore((s) => s.connectionStatus);
   const [progress, setProgress] = useState<DownloadProgress | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -92,6 +96,8 @@ export function useSurahOfflineDownload({
         { surahId, reciterId, ayahCount },
         ({ completed, total }) => setProgress({ completed, total }),
       );
+      router.prefetch(routes.surah(surahId));
+      router.prefetch(routes.focus(surahId));
     } catch (error) {
       setErrorMessage(
         error instanceof Error ? error.message : 'Unduhan audio gagal',
@@ -100,13 +106,18 @@ export function useSurahOfflineDownload({
       setIsSaving(false);
       setProgress(null);
     }
-  }, [ayahCount, downloadStatus, isSaving, reciterId, surahId]);
+  }, [ayahCount, downloadStatus, isSaving, reciterId, router, surahId]);
 
   const isOfflineReady = downloadStatus === 'ready';
   const isDownloading = downloadStatus === 'downloading' || isSaving;
   const badgeStatus = toSurahBadgeStatus(downloadStatus);
+  const isOnline = connectionStatus === 'online';
   const canSave =
-    typeof caches !== 'undefined' && !isOfflineReady && !isDownloading;
+    isOnline &&
+    typeof caches !== 'undefined' &&
+    !isOfflineReady &&
+    !isDownloading;
+  const showDownloadUi = isOnline && !isOfflineReady;
 
   return {
     saveOffline,
@@ -114,6 +125,7 @@ export function useSurahOfflineDownload({
     isOfflineReady,
     isDownloading,
     canSave,
+    showDownloadUi,
     badgeStatus,
     progress,
     errorMessage,

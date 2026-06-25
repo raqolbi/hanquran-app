@@ -169,13 +169,15 @@ Cache: **in-memory** (`Map` di `data-loader.ts`, variabel modul di `quran-servic
 
 ## 7. Offline & Cache
 
-| Jenis data | Strategi MVP |
-|------------|--------------|
-| Konten Quran | Aset statis `public/data/*` — di-cache browser + in-memory sesi |
-| Audio | CDN tilawah + Cache Storage (Phase 5, Service Worker) |
-| Preferensi pengguna | Dexie |
+| Jenis data | Strategi MVP | Perilaku offline |
+|------------|--------------|------------------|
+| Konten Quran | `public/data/*` — SW `hanquran-data-v1` + in-memory sesi | **Baca surat** setelah cache terisi (kunjungan online pertama atau precache unduhan) |
+| Audio | CDN + SW `hanquran-audio-v1` + Dexie `downloadManifest` | **Putar** hanya setelah **Simpan Offline** surat+qari |
+| Preferensi pengguna | Dexie | Selalu lokal |
 
-Konten Quran **tidak** perlu di-seed ke IndexedDB agar offline berfungsi — Service Worker (Phase 5) dapat cache-aset `public/data/*` secara langsung.
+Konten Quran **tidak** di-seed ke IndexedDB. Yang diunduh eksplisit pengguna hanya **audio** — bukan teks ayat.
+
+Spesifikasi UI (Play disabled, toast, tombol unduh hanya online): **`docs/30-offline-behavior-spec.md`**.
 
 ---
 
@@ -211,4 +213,5 @@ UI → Store → Dexie (settings, favorites, lastRead, …)
 | `docs/07-api-integration.md` | Kontrak service layer & alur fetch |
 | `docs/06-database-schema.md` | Schema Dexie (hanya data pengguna) |
 | `docs/15-state-management.md` | Store vs service layer |
+| `docs/30-offline-behavior-spec.md` | Perilaku UI offline (baca vs audio) |
 | `docs/18-development-tasks.md` | Backlog — Phase 1 data integration selesai |

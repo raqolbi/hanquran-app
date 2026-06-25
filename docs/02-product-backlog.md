@@ -567,7 +567,7 @@ Saat audio tilawah diputar, sistem operasi menampilkan metadata surat dan ayat s
 - [x] Kontrol Play/Pause dari lock screen sinkron dengan aplikasi
 - [x] Metadata diperbarui saat ganti ayat
 - [x] Fallback graceful jika `navigator.mediaSession` tidak tersedia
-- [ ] Tidak ada regresi `AudioTabSync` dan RepeatEngine (uji manual)
+- [x] Tidak ada regresi `AudioTabSync` dan RepeatEngine (uji manual)
 
 ### Subtasks
 
@@ -575,7 +575,7 @@ Saat audio tilawah diputar, sistem operasi menampilkan metadata surat dan ayat s
 - [x] Service `services/media-session.ts`
 - [x] Integrasi `AudioController`
 - [x] Unit test metadata, position state, handlers
-- [ ] Uji manual Android Chrome & iOS Safari (`docs/27` §8)
+- [x] Uji manual Android Chrome & iOS Safari (`docs/27` §8)
 - [x] (P2) Action handlers next/previous ayat — `setMediaSessionTrackNavigation`
 
 ### Related FR
@@ -605,7 +605,7 @@ Toggle **Mode Murotal** di Pengaturan → Playback (default OFF). Saat ON, tilaw
 - [x] Infinite repeat (∞) tidak memicu advance murotal
 - [x] Akhir Al-Qur'an (An-Nas) → stop + feedback
 - [x] Berlaku di Surah Detail dan Focus Mode
-- [ ] Tidak ada regresi RepeatEngine, Auto Follow, Media Session (uji manual)
+- [x] Tidak ada regresi RepeatEngine, Auto Follow, Media Session (uji manual)
 
 ### Subtasks
 

@@ -7,6 +7,7 @@ import { AccessibilityProvider } from '@/components/providers/accessibility-prov
 import { IntlProvider } from '@/components/providers/intl-provider';
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 import { PwaSplashDismisser } from '@/components/shared/pwa-splash-dismisser';
+import { AppToastHost } from '@/components/shared/app-toast-host';
 import { registerServiceWorker } from '@/lib/register-service-worker';
 
 interface AppProvidersProps {
@@ -24,6 +25,7 @@ export function AppProviders({ children }: AppProvidersProps) {
       <IntlProvider>
         <AccessibilityProvider>
           <PwaSplashDismisser />
+          <AppToastHost />
           {children}
         </AccessibilityProvider>
       </IntlProvider>

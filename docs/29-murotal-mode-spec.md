@@ -164,7 +164,7 @@ flowchart TD
 
 - Perbarui `lastRead` via `usePersistLastViewed` pada setiap transisi.
 - Prefetch audio ayat berikutnya tetap memakai `prefetchNextAyah` yang ada.
-- Jika audio surat berikutnya belum diunduh offline, coba streaming CDN; jika gagal → stop + pesan error ringkas.
+- Jika audio surat berikutnya belum diunduh offline: saat **online** coba streaming CDN; saat **offline** stop + feedback (tidak advance). Ref: `docs/30-offline-behavior-spec.md` §3.2.
 
 ### 7.2 Tombol Previous / Next (transport audio)
 
@@ -343,4 +343,4 @@ Lihat `docs/analytics.md`.
 
 - Versi `package.json` **0.3.0** — selaras `RELEASE.md` dan layar Tentang HanQuran.
 - Label UI wajib Bahasa Indonesia (kecuali proper noun); key i18n: `settings.playback.murotalEnabled`, `settings.playback.murotalEnabledDescription`.
-- Pengujian manual: Al-Fatihah → Al-Baqarah dengan murotal ON; kombinasi repeat 5× + murotal ON di tengah surat.
+- Pengujian manual ✅ lulus (25 Juni 2026): Al-Fatihah → Al-Baqarah dengan murotal ON; kombinasi repeat 5× + murotal ON di tengah surat.

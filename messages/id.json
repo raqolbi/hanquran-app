@@ -70,6 +70,9 @@
     "saveOfflineUnavailable": "Penyimpanan offline memerlukan browser yang mendukung cache.",
     "offlineDownloadProgress": "{completed} dari {total} ayat diunduh"
   },
+  "audio": {
+    "offlineUnavailableToast": "Audio tidak tersedia offline. Simpan surat ini saat online untuk mendengarkan tanpa internet."
+  },
   "focus": {
     "exit": "Keluar",
     "exitAriaLabel": "Keluar dari Mode Fokus",

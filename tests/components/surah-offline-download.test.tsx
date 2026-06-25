@@ -31,6 +31,7 @@ describe('SurahOfflineDownload', () => {
       isOfflineReady: true,
       isDownloading: false,
       canSave: false,
+      showDownloadUi: false,
       badgeStatus: null,
       progress: null,
       errorMessage: null,
@@ -50,6 +51,7 @@ describe('SurahOfflineDownload', () => {
       isOfflineReady: false,
       isDownloading: false,
       canSave: true,
+      showDownloadUi: true,
       badgeStatus: null,
       progress: null,
       errorMessage: null,
@@ -71,6 +73,7 @@ describe('SurahOfflineDownload', () => {
       isOfflineReady: false,
       isDownloading: true,
       canSave: false,
+      showDownloadUi: true,
       badgeStatus: 'downloading',
       progress: { completed: 2, total: 7 },
       errorMessage: null,
@@ -83,5 +86,25 @@ describe('SurahOfflineDownload', () => {
 
     expect(screen.getByText('2/7')).toBeTruthy();
     expect(screen.getAllByRole('status').length).toBeGreaterThan(0);
+  });
+
+  it('menyembunyikan aksi saat offline', () => {
+    mockUseSurahOfflineDownload.mockReturnValue({
+      saveOffline: vi.fn(),
+      isOfflineReady: false,
+      isDownloading: false,
+      canSave: false,
+      showDownloadUi: false,
+      badgeStatus: null,
+      progress: null,
+      errorMessage: null,
+      downloadStatus: 'idle',
+    });
+
+    const { container } = render(
+      <SurahOfflineDownload surahId={1} ayahCount={7} reciterId="Qari" />,
+    );
+
+    expect(container.firstChild).toBeNull();
   });
 });

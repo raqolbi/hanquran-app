@@ -103,6 +103,7 @@ Komponen di dokumen ini dipetakan ke modul pada `05-module-catalog.md`.
 | BottomSheet           | Shared           | —                                                                       |
 | OfflineStatusBadge    | Offline          | OfflineIndicator                                                        |
 | ConnectionIndicator   | Offline          | OfflineIndicator (subset)                                               |
+| SurahOfflineDownload  | Offline          | Unduh audio per surat — hanya saat online (`docs/30`)                   |
 | OfflineBanner         | Offline          | —                                                                       |
 | EmptyState            | Shared           | —                                                                       |
 | Logo / LogoWithText   | Shared           | Brand mark (lihat `branding/logo-guidelines.md`)                        |
@@ -995,6 +996,18 @@ Radius   : 999px
 Seekable : true
 ```
 
+### Mode offline (audio)
+
+Selaras `docs/30-offline-behavior-spec.md` §4.2:
+
+| Kondisi | Perilaku |
+|---------|----------|
+| Offline + audio surat **belum** disimpan | Play/Pause & seek **disabled**; tap Play → toast |
+| Offline + audio **sudah** disimpan | Normal |
+| Online | Normal (stream CDN; cache jika pernah diunduh) |
+
+Navigasi prev/next ayat **tetap aktif** untuk membaca meski Play disabled.
+
 ---
 
 ## Repeat Region
@@ -1872,7 +1885,70 @@ bukan di header.
 
 ---
 
-# 24. OfflineBanner
+# 24. SurahOfflineDownload
+
+## Purpose
+
+Unduh **audio** seluruh ayat satu surat untuk pemakaian offline. **Bukan** unduh teks Quran — teks sudah di-cache SW dari `public/data/*`.
+
+Spesifikasi perilaku: `docs/30-offline-behavior-spec.md` §4.1.
+
+---
+
+## Props
+
+```ts
+interface SurahOfflineDownloadProps {
+  surahId: number
+  ayahCount: number
+  reciterId: string
+  className?: string
+}
+```
+
+---
+
+## Visibility Rules
+
+| Kondisi | Tampilan |
+|---------|----------|
+| `connectionStatus === 'online'` && `!isOfflineReady` | Tombol **Simpan Offline** + progres |
+| `connectionStatus === 'online'` && unduh gagal | Pesan error + tombol retry |
+| `isOfflineReady` | **Tidak dirender** (badge di `SurahDetailHeader`) |
+| `connectionStatus === 'offline'` | **Tidak dirender** |
+
+```text
+PENTING: Jangan tampilkan tombol disabled saat offline.
+Sembunyikan seluruh komponen.
+```
+
+---
+
+## States
+
+### Mengunduh
+
+```text
+⬇ Mengunduh… 12/7 ayat
+Progress aria-live polite
+```
+
+### Gagal
+
+```text
+⚠ Gagal menyimpan. Coba lagi.
+role="alert"
+```
+
+---
+
+## Placement
+
+Surah Detail — di bawah header, di atas `VerseDisplayControls`.
+
+---
+
+# 25. OfflineBanner
 
 ## Purpose
 
@@ -1925,7 +2001,7 @@ atau menyalahkan user.
 
 ---
 
-# 25. EmptyState
+# 26. EmptyState
 
 ## Purpose
 
@@ -1987,7 +2063,7 @@ yang mengalihkan fokus.
 
 ---
 
-# 26. Logo / LogoWithText
+# 27. Logo / LogoWithText
 
 ## Purpose
 

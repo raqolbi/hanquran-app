@@ -167,7 +167,7 @@ P0 — Must Have
 4. Mengganti ayat memperbarui metadata ✅
 5. Jika perangkat tidak mendukung Media Session API, aplikasi tetap berfungsi normal ✅
 
-> **Status implementasi:** kode selesai (`services/media-session.ts`); uji manual lock screen — `docs/27` §8.
+> **Status implementasi:** kode selesai (`services/media-session.ts`); uji manual lock screen ✅ lulus (`docs/27` §8).
 
 ### Linked PB
 

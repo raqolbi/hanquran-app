@@ -7,6 +7,11 @@ import { useOfflineStore } from '@/stores/offlineStore';
 import { useSurahOfflineDownload } from '@/hooks/use-surah-offline-download';
 
 const downloadSurah = vi.fn();
+const prefetch = vi.fn();
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ prefetch, push: vi.fn() }),
+}));
 
 vi.mock('@/services/download-manager', () => ({
   getDownloadManager: () => ({
@@ -117,5 +122,20 @@ describe('useSurahOfflineDownload', () => {
       expect(result.current.isOfflineReady).toBe(false);
       expect(result.current.canSave).toBe(true);
     });
+  });
+
+  it('menyembunyikan UI unduh saat offline', () => {
+    useOfflineStore.setState({ connectionStatus: 'offline' });
+
+    const { result } = renderHook(() =>
+      useSurahOfflineDownload({
+        surahId: 3,
+        ayahCount: 5,
+        reciterId: 'Alafasy_128kbps',
+      }),
+    );
+
+    expect(result.current.canSave).toBe(false);
+    expect(result.current.showDownloadUi).toBe(false);
   });
 });

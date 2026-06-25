@@ -19,7 +19,22 @@
   }
 
   /**
+   * Permintaan RSC / prefetch App Router Next.js — perlu di-cache agar navigasi client offline.
+   *
+   * @param {Request} request
+   * @returns {boolean}
+   */
+  function isAppRouterRequest(request) {
+    if (request.headers.get('RSC') === '1') return true;
+    if (request.headers.get('Next-Router-Prefetch') === '1') return true;
+    if (request.headers.get('Next-Router-State-Tree')) return true;
+    const accept = request.headers.get('accept') || '';
+    return accept.includes('text/x-component');
+  }
+
+  /**
    * Network-first untuk navigasi dokumen; fallback ke cache shell lalu offline.html.
+   * Tidak fallback ke beranda — mencegah URL /surah/* menampilkan HTML salah.
    *
    * @param {Request} request
    * @param {string} shellCacheName
@@ -28,12 +43,11 @@
   async function networkFirstNavigation(request, shellCacheName, offlinePath) {
     const cache = await caches.open(shellCacheName);
     const offlineUrl = new URL(offlinePath, request.url).href;
-    const homeUrl = new URL('/', request.url).href;
 
     try {
       const response = await fetch(request);
       if (response.ok && response.type === 'basic') {
-        await cache.put(request.url, response.clone());
+        await cache.put(request, response.clone());
       }
       return response;
     } catch {
@@ -41,8 +55,7 @@
     }
 
     const cached =
-      (await cache.match(request.url)) ||
-      (await cache.match(homeUrl)) ||
+      (await cache.match(request)) ||
       (await cache.match(offlineUrl));
 
     if (cached) return cached;
@@ -104,12 +117,12 @@
    */
   async function cacheFirst(request, cacheName) {
     const cache = await caches.open(cacheName);
-    const cached = await cache.match(request.url);
+    const cached = await cache.match(request);
     if (cached) return cached;
 
     const response = await fetch(request);
     if (response.ok) {
-      await cache.put(request.url, response.clone());
+      await cache.put(request, response.clone());
     }
     return response;
   }
@@ -123,12 +136,12 @@
    */
   async function staleWhileRevalidate(request, cacheName, options) {
     const cache = await caches.open(cacheName);
-    const cached = await cache.match(request.url);
+    const cached = await cache.match(request);
 
     const networkPromise = fetch(request)
       .then(async (response) => {
         if (response.ok) {
-          await cache.put(request.url, response.clone());
+          await cache.put(request, response.clone());
         }
         return response;
       })
@@ -153,6 +166,7 @@
   global.SwHelpers = {
     AUDIO_CDN_HOST,
     isNavigationRequest,
+    isAppRouterRequest,
     networkFirstNavigation,
     getRequestCategory,
     cacheFirst,

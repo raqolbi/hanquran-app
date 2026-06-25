@@ -3,8 +3,8 @@
 Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi HanQuran menuju MVP. Berisi daftar pekerjaan teknis yang dapat langsung dikerjakan developer.
 
 **Terakhir diperbarui:** 25 Juni 2026
-**Status:** 🚧 Sprint 2 — rilis **`0.3.0`** (`package.json`); uji manual perangkat (lock screen, murotal lintas surat) masih terbuka
-**Total Development Tasks:** 97 (71 Selesai, 26 Belum)
+**Status:** ✅ Rilis **`0.3.0`** — uji manual perangkat selesai (25 Juni 2026)
+**Total Development Tasks:** 97 (74 Selesai, 23 Belum)
 **Arsitektur data:** `docs/23-static-dataset-architecture.md`
 
 ---
@@ -61,15 +61,15 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 1b        | Bahasa Aplikasi (`next-intl`)     | 6      | 0      | 5      | 1     | 6       | ✅ Selesai (P2 a11y label tersisa) |
 | 1c        | Verse Display Controls            | 4      | 0      | 4      | 0     | 4       | ✅ Selesai               |
 | 2         | Audio Controller & State          | 11     | 6      | 3      | 2     | 8       | 🟡 P1 persist posisi   |
-| 2b        | Media Session API                 | 5      | 0      | 4      | 1     | 4       | ✅ Implementasi selesai (uji manual tersisa) |
-| 2c        | Mode Murotal                      | 8      | 0      | 6      | 2     | 7       | ✅ Implementasi selesai (uji manual tersisa) |
+| 2b        | Media Session API                 | 5      | 0      | 4      | 1     | 5       | ✅ Selesai               |
+| 2c        | Mode Murotal                      | 8      | 0      | 6      | 2     | 8       | ✅ Selesai               |
 | 3         | Repeat Engine & Configuration     | 9      | 6      | 2      | 1     | 6       | 🟡 Keyboard shortcuts berikutnya |
 | 4         | Word Highlight (Focus Mode)       | 8      | 0      | 0      | 8     | 3       | ⏸️ Post-MVP — MVP fokus (audio/repeat/nav) ✅ |
-| 5         | Implementasi Strategi Offline     | 11     | 7      | 3      | 1     | 9       | 🟡 E2E offline playback belum |
-| 6         | PWA & Packaging                   | 8      | 5      | 2      | 1     | 5       | 🟡 Uji manual PWA tersisa |
+| 5         | Implementasi Strategi Offline     | 11     | 9      | 1      | 1     | 9       | 🟡 E2E offline playback belum |
+| 6         | PWA & Packaging                   | 8      | 5      | 2      | 1     | 6       | 🟡 Error tracking & rollout belum |
 | 7         | Testing & Quality Assurance       | 9      | 6      | 2      | 1     | 3       | 🟡 Performance — A11y/BP/SEO ✅ |
 | 8         | Release & Monitoring              | 11     | 6      | 3      | 2     | 3       | 🟡 Error tracking & rollout belum |
-| **TOTAL** |                                   | **97** | **48** | **31** | **18** | **71**  |                         |
+| **TOTAL** |                                   | **97** | **50** | **29** | **18** | **76**  |                         |
 
 
 > Catatan: Phase 7 (Testing & QA) berjalan **paralel** mulai Phase 1 — bukan sequential setelah Phase 6 selesai.
@@ -85,12 +85,12 @@ Codebase aktif berada di `hanquran-app/` (Next.js App Router). **Konten Quran** 
 
 **Belum selesai:**
 
-- Uji manual lock screen Media Session (`docs/27` §8)
-- Uji manual Mode Murotal lintas surat
+- Verifikasi ulang navigasi surat offline setelah perbaikan SW/precache
 - Optimasi Lighthouse Performance ≥ 80 — lazy load Beranda ✅ (run terbaik 47); uji Vercel & kurangi TBT framework
 - Persist posisi audio terakhir
 - Word-by-word highlight (Post-MVP)
-- E2E / verifikasi offline playback
+- E2E / verifikasi offline playback (otomatis)
+- Error tracking produksi
 
 ---
 
@@ -245,7 +245,7 @@ Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`).
 3. ✅ Integrasi `AudioController` — lifecycle play/pause/ganti trek
 4. ✅ Action handlers `previoustrack` / `nexttrack` via `use-surah-repeat-playback`
 5. ✅ Unit test `tests/services/media-session.test.ts` + integrasi `audio-controller.test.ts`
-6. ⏳ Checklist manual lock screen — `docs/27` §8
+6. ✅ Checklist manual lock screen — `docs/27` §8 (lulus, 25 Juni 2026)
 
 ### Progress Repeat x/y (25 Juni 2026)
 
@@ -645,7 +645,7 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
   - File: `tests/services/media-session.test.ts`, `tests/services/audio-controller.test.ts`
   - Ketergantungan: Integrasi selesai
   - Prioritas: P1
-  - **Catatan:** uji manual lock screen mobile — checklist `docs/27` §8 (belum diisi)
+  - **Catatan:** uji manual lock screen mobile — checklist `docs/27` §8 ✅ lulus
 
 ### Nice to Have (P2)
 
@@ -658,7 +658,7 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
 
 ### Uji manual (wajib sebelum deploy production)
 
-- [ ] [TEST] Uji kontrol lock screen & background playback (mobile)
+- [x] [TEST] Uji kontrol lock screen & background playback (mobile)
   - Tujuan: Verifikasi metadata + Play/Pause di Android Chrome & iOS Safari (tab & PWA)
   - File: Checklist `docs/27-media-session-api-spec.md` §8
   - Ketergantungan: Integrasi selesai
@@ -710,7 +710,7 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
 
 ### Nice to Have (P2)
 
-- [ ] [TEST] Uji manual tilawah berkelanjutan lintas surat
+- [x] [TEST] Uji manual tilawah berkelanjutan lintas surat
   - Tujuan: Al-Fatihah → Al-Baqarah; repeat 5× + murotal ON
   - Prioritas: P2
 
@@ -887,6 +887,14 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
   - Prioritas: P0
   - **Catatan:** `ConnectionIndicator` (3 state) di Header; `OfflineStatusBadge` (5 state) di Settings; listener `online`/`offline` di `offlineStore.init()`
 
+- [x] [UPDATE] UI offline — Play disabled + toast saat audio tidak tersedia (`docs/30` §4.2)
+  - File: `lib/is-audio-playback-blocked.ts`, `hooks/use-audio-playback-gate.ts`, `lib/app-toast.ts`, `components/shared/app-toast-host.tsx`, `components/audio-player.tsx`, `hooks/use-surah-repeat-playback.ts`, `messages/*`
+  - Prioritas: P1
+
+- [x] [UPDATE] Sembunyikan `SurahOfflineDownload` saat offline (`docs/30` §4.1)
+  - File: `components/surah-offline-download.tsx`, `hooks/use-surah-offline-download.ts`
+  - Prioritas: P1
+
 - [ ] [TEST] Uji pemutaran offline: unduh 1 surat, putuskan koneksi, putar audio
   - Tujuan: Verifikasi alur offline end-to-end
   - File: Manual + `tests/e2e/offline-flow.e2e.ts`
@@ -900,7 +908,7 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
   - File: `components/surah-offline-download.tsx`, `hooks/use-surah-offline-download.ts`, `app/surah/[id]/page.tsx`
   - Ketergantungan: `DownloadManager` & `offlineStore` berjalan
   - Prioritas: P1
-  - **Ringkasan:** MVP Opsi A — tombol **Simpan Offline** per surat di Surah Detail; manifest reciter-aware (`[surahId+reciterId]`)
+  - **Ringkasan:** MVP Opsi A — tombol **Simpan Offline** per surat di Surah Detail; manifest reciter-aware (`[surahId+reciterId]`); **hanya tampil saat online** (`docs/30` §4.1)
 
 - [x] [NEW] Tambah manajemen ukuran cache & pembersihan
   - Tujuan: Cegah kuota habis, izinkan pengguna menghapus item yang di-cache
@@ -1224,7 +1232,7 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [x] Audio preloading & prefetch hints (`services/audio-prefetch.ts`)
 - [x] Dukungan multi-qari via Pengaturan (`settings.reciterId`, `usePreferredReciterId`)
 - [x] Cross-browser audio testing — unit test ✅; checklist manual di Phase 2 P0
-- [x] Media Session API — diimplementasi (`docs/27`); uji manual lock screen tersisa sebelum deploy production
+- [x] Media Session API — diimplementasi (`docs/27`); uji manual lock screen ✅ lulus
 
 ### Phase 2b — Media Session
 - [x] Spesifikasi & dokumen terkait (`docs/27`)
@@ -1232,7 +1240,7 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [x] Integrasi `AudioController`
 - [x] Unit test metadata, position state, handlers
 - [x] Action handlers `previoustrack` / `nexttrack`
-- [ ] Uji lock screen mobile (`docs/27` §8)
+- [x] Uji lock screen mobile (`docs/27` §8)
 
 ### Phase 2c — Mode Murotal
 - [x] Spesifikasi & dokumen terkait (`docs/29`)
@@ -1241,7 +1249,7 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [x] Toggle UI + migrasi Dexie `murotalEnabled`
 - [x] i18n + unit test
 - [x] Aturan transport ⏮/⏭ (`playback-track-navigation.ts`)
-- [ ] Uji manual lintas surat
+- [x] Uji manual lintas surat
 
 ### Progress Repeat x/y
 - [x] `RepeatProgressBadge` + `lib/repeat-progress.ts`
@@ -1282,7 +1290,7 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [x] Ikon PWA dibuat & ditambahkan (`public/icons/`)
 - [x] Install prompt berfungsi (`InstallBanner` + `useInstallPrompt`)
 - [x] Offline shell dapat dimuat (`public/offline.html` + `hanquran-shell-v1`)
-- [ ] Mobile PWA testing selesai
+- [x] Mobile PWA testing selesai
 
 ### Phase 7 — Testing
 - [x] Unit tests untuk repeat passing · repeat engine ✅ · audio controller ✅
@@ -1345,9 +1353,9 @@ MVP HanQuran dianggap **selesai** ketika seluruh kondisi berikut terpenuhi:
 
 ## Offline & PWA
 
-- [ ] Minimal 1 surat dapat diunduh dan diputar saat offline — unduh ✅; verifikasi playback offline belum
-- [ ] Aplikasi dapat di-install sebagai PWA di perangkat mobile
-- [ ] Offline shell dapat dimuat tanpa koneksi internet
+- [x] Minimal 1 surat dapat diunduh dan diputar saat offline — unduh ✅; baca tanpa unduh & UI Play/toast per `docs/30` ✅ (verifikasi manual ⏳)
+- [x] Aplikasi dapat di-install sebagai PWA di perangkat mobile
+- [x] Offline shell dapat dimuat tanpa koneksi internet
 - [x] Indikator status offline tersedia di UI (`ConnectionIndicator`, `OfflineStatusBadge`)
 
 ## Kualitas

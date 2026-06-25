@@ -492,7 +492,7 @@ MVP HanQuran V1 dinyatakan **selesai** hanya jika seluruh kondisi berikut terpen
 
 ## 9.3 Offline & PWA
 
-- [ ] Minimal 1 surat dapat diunduh dan diputar saat perangkat offline — infrastruktur unduh ✅; verifikasi playback belum
+- [ ] Minimal 1 surat dapat **dibaca** offline (dataset SW) dan **diputar** offline (setelah Simpan Offline) — lihat `docs/30-offline-behavior-spec.md` §8
 - [ ] Aplikasi dapat diinstal sebagai PWA di perangkat Android dan iOS
 - [x] Offline shell dapat dimuat tanpa koneksi internet (`public/offline.html` + SW `hanquran-shell-v1`)
 - [x] Indikator status offline tersedia di UI

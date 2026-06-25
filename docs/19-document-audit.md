@@ -8,7 +8,7 @@ Dokumen ini adalah laporan audit komprehensif terhadap seluruh dokumentasi proye
 > **Pembaruan 24 Juni 2026:** Keputusan **Static Dataset Architecture** menggantikan Local-First / Dexie untuk konten Quran. Lihat `docs/23-static-dataset-architecture.md`. Beberapa temuan audit di bawah mengacu pada arsitektur lama.
 
 > **Pembaruan 25 Juni 2026:** Spesifikasi **Playback Settings** (`docs/28-playback-settings.md`) — Auto Follow Playback di Pengaturan, pra-implementasi.
-> **Pembaruan 25 Juni 2026:** **Media Session API** (`docs/27`) & **Mode Murotal** (`docs/29`) — diimplementasi di kode; uji manual & tag rilis menunggu.
+> **Pembaruan 25 Juni 2026:** **Media Session API** (`docs/27`) & **Mode Murotal** (`docs/29`) — diimplementasi; uji manual ✅ lulus.
 > **Pembaruan 25 Juni 2026:** Implementasi **Mode Murotal** (PB-017), **badge progress repeat x/y**, perbaikan **auto follow landscape** — pembaruan dokumen terkait.
 
 ---
@@ -62,10 +62,11 @@ Dokumen ini adalah laporan audit komprehensif terhadap seluruh dokumentasi proye
 | `15-state-management.md` | **Revisi Terbaru (v3)** | ✅ Aktif — §10.5 Media Session sync |
 | `16-folder-structure.md` | **Revisi Terbaru (v3)** | ✅ Aktif — `services/media-session.ts` |
 | `17-implementation-roadmap.md` | **Revisi Terbaru (v3)** | ✅ Aktif — Growth Phase Media Session |
-| `18-development-tasks.md` | **Revisi Terbaru (v3)** | ✅ Aktif — 97 tasks, 70 selesai |
+| `18-development-tasks.md` | **Revisi Terbaru (v3)** | ✅ Aktif — 97 tasks, 74 selesai |
 | `27-media-session-api-spec.md` | **v1** | ✅ Diimplementasi — dirilis `0.3.0` |
 | `28-playback-settings.md` | **v1** | ✅ Aktif — Auto Follow + Mode Murotal; §4.4 landscape HP |
 | `29-murotal-mode-spec.md` | **v1** | ✅ Diimplementasi — dirilis `0.3.0` |
+| `30-offline-behavior-spec.md` | **v1** | ✅ Spesifikasi resmi — UI §4 belum selaras kode |
 
 > **Pembaruan v3:** `docs/04-system-architecture.md` telah diperbarui langsung pada audit v3 ini. State Management, Route Focus Mode, Folder Structure, dan Dexie kini konsisten dengan seluruh dokumen terbaru. Tidak ada konflik aktif tersisa.
 
