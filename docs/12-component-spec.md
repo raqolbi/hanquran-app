@@ -80,6 +80,7 @@ Komponen di dokumen ini dipetakan ke modul pada `05-module-catalog.md`.
 | SearchInput           | Shared           | —                                                                       |
 | FavoriteFilter        | Quran            | —                                                                       |
 | SurahCard             | Quran            | SurahCard                                                               |
+| LazySurahCard         | Quran            | Lazy mount wrapper Beranda — `components/lazy-surah-card.tsx`           |
 | FavoriteButton        | Quran            | FavoriteButton                                                          |
 | SurahMetaHeader       | Quran            | SurahHeader                                                             |
 | VerseDisplayControls  | Quran            | ActionBar (legacy)                                                        |
@@ -304,7 +305,7 @@ isi list, tidak berpindah route.
 
 ## Purpose
 
-Menampilkan ringkasan surat pada Home.
+Menampilkan ringkasan surat pada Home. Di Beranda, dipakai melalui **`LazySurahCard`** — mount saat mendekati viewport (`IntersectionObserver`).
 
 ---
 

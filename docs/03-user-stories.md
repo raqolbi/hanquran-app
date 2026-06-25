@@ -161,11 +161,13 @@ P0 — Must Have
 
 ### Acceptance Criteria
 
-1. Saat audio diputar, lock screen (atau kontrol media OS) menampilkan nama surat dan nomor ayat — di platform yang mendukung
-2. Nama qari tampil sebagai informasi pendamping
-3. Tombol Play/Pause di lock screen mengontrol pemutaran yang sama dengan aplikasi
-4. Mengganti ayat memperbarui metadata
-5. Jika perangkat tidak mendukung Media Session API, aplikasi tetap berfungsi normal
+1. Saat audio diputar, lock screen (atau kontrol media OS) menampilkan nama surat dan nomor ayat — di platform yang mendukung ✅
+2. Nama qari tampil sebagai informasi pendamping ✅
+3. Tombol Play/Pause di lock screen mengontrol pemutaran yang sama dengan aplikasi ✅
+4. Mengganti ayat memperbarui metadata ✅
+5. Jika perangkat tidak mendukung Media Session API, aplikasi tetap berfungsi normal ✅
+
+> **Status implementasi:** kode selesai (`services/media-session.ts`); uji manual lock screen — `docs/27` §8.
 
 ### Linked PB
 

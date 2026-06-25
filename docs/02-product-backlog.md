@@ -431,20 +431,23 @@ Memastikan kualitas aplikasi sesuai target.
 
 ### Acceptance Criteria
 
-- [x] Belum dikerjakan
-- [ ] Performance >= 90
-- [ ] Accessibility >= 90
-- [ ] PWA >= 90
-- [ ] Mobile responsive
-- [ ] First load < 3 detik
+- [x] Tooling audit otomatis (`npm run perf:*`)
+- [x] Lazy load kartu surat Beranda (`LazySurahCard`)
+- [ ] Performance >= 90 (baseline run terbaik Beranda: **47** — variansi lab; target 90 belum)
+- [x] Accessibility >= 90 (baseline: 94–100)
+- [x] PWA smoke >= 90 (baseline: 100)
+- [x] Mobile responsive
+- [ ] First load < 3 detik (LCP run terbaik Beranda **5,5 s** — membaik dari 15,8 s)
 - [ ] Visual terasa polished dengan motion ringan tanpa mengganggu fokus hafalan
 
 ### Subtasks
 
-- [ ] Lighthouse audit
-- [ ] Performance optimization
-- [ ] Accessibility audit
-- [ ] PWA checklist
+- [x] Lighthouse audit — `scripts/run-lighthouse.mjs`
+- [x] Bundle size baseline — `scripts/measure-bundle.mjs`
+- [x] Lazy load kartu Beranda — `components/lazy-surah-card.tsx`
+- [ ] Performance optimization lanjutan (TBT framework; uji preview Vercel)
+- [x] Accessibility audit — skor Lighthouse ≥ 94
+- [x] PWA checklist — `scripts/validate-pwa.mjs`
 - [ ] Polish visual foundation V1
 
 ---
@@ -559,20 +562,21 @@ Saat audio tilawah diputar, sistem operasi menampilkan metadata surat dan ayat s
 
 ### Acceptance Criteria
 
-- [ ] Metadata lock screen: nama surat + nomor ayat
-- [ ] Metadata artis: nama qari
-- [ ] Kontrol Play/Pause dari lock screen sinkron dengan aplikasi
-- [ ] Metadata diperbarui saat ganti ayat
-- [ ] Fallback graceful jika `navigator.mediaSession` tidak tersedia
-- [ ] Tidak ada regresi `AudioTabSync` dan RepeatEngine
+- [x] Metadata lock screen: nama surat + nomor ayat
+- [x] Metadata artis: nama qari
+- [x] Kontrol Play/Pause dari lock screen sinkron dengan aplikasi
+- [x] Metadata diperbarui saat ganti ayat
+- [x] Fallback graceful jika `navigator.mediaSession` tidak tersedia
+- [ ] Tidak ada regresi `AudioTabSync` dan RepeatEngine (uji manual)
 
 ### Subtasks
 
 - [x] Spesifikasi teknis (`docs/27`)
-- [ ] Service `services/media-session.ts`
-- [ ] Integrasi `AudioController`
-- [ ] Unit test + uji manual Android & iOS
-- [ ] (P2) Action handlers next/previous ayat
+- [x] Service `services/media-session.ts`
+- [x] Integrasi `AudioController`
+- [x] Unit test metadata, position state, handlers
+- [ ] Uji manual Android Chrome & iOS Safari (`docs/27` §8)
+- [x] (P2) Action handlers next/previous ayat — `setMediaSessionTrackNavigation`
 
 ### Related FR
 
@@ -611,6 +615,7 @@ Toggle **Mode Murotal** di Pengaturan → Playback (default OFF). Saat ON, tilaw
 - [x] Toggle UI + i18n di Settings
 - [x] Migrasi Dexie `murotalEnabled`
 - [x] Unit test resolver + orkestrasi playback
+- [x] Aturan transport ⏮/⏭ — `playback-track-navigation.ts`
 
 ### Related FR
 

@@ -3,8 +3,8 @@
 Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi HanQuran menuju MVP. Berisi daftar pekerjaan teknis yang dapat langsung dikerjakan developer.
 
 **Terakhir diperbarui:** 25 Juni 2026
-**Status:** 🚧 Sprint 2 — word-by-word ditunda Post-MVP (`docs/24`); Media Session didokumentasikan (`docs/27`)
-**Total Development Tasks:** 95 (52 Selesai, 43 Belum Dimulai)
+**Status:** 🚧 Sprint 2 — Growth `0.2.0`/`0.3.0` diimplementasi di kode; uji manual perangkat & tag rilis menunggu
+**Total Development Tasks:** 97 (71 Selesai, 26 Belum)
 **Arsitektur data:** `docs/23-static-dataset-architecture.md`
 
 ---
@@ -61,14 +61,15 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 1b        | Bahasa Aplikasi (`next-intl`)     | 6      | 0      | 5      | 1     | 6       | ✅ Selesai (P2 a11y label tersisa) |
 | 1c        | Verse Display Controls            | 4      | 0      | 4      | 0     | 4       | ✅ Selesai               |
 | 2         | Audio Controller & State          | 11     | 6      | 3      | 2     | 8       | 🟡 P1 persist posisi   |
-| 2b        | Media Session API                 | 5      | 0      | 4      | 1     | 1       | 📋 Spesifikasi selesai |
+| 2b        | Media Session API                 | 5      | 0      | 4      | 1     | 4       | ✅ Implementasi selesai (uji manual tersisa) |
+| 2c        | Mode Murotal                      | 8      | 0      | 6      | 2     | 7       | ✅ Implementasi selesai (uji manual tersisa) |
 | 3         | Repeat Engine & Configuration     | 9      | 6      | 2      | 1     | 6       | 🟡 Keyboard shortcuts berikutnya |
 | 4         | Word Highlight (Focus Mode)       | 8      | 0      | 0      | 8     | 3       | ⏸️ Post-MVP — MVP fokus (audio/repeat/nav) ✅ |
 | 5         | Implementasi Strategi Offline     | 11     | 7      | 3      | 1     | 9       | 🟡 E2E offline playback belum |
-| 6         | PWA & Packaging                   | 8      | 5      | 2      | 1     | 0       | ⏳ Belum Dimulai         |
-| 7         | Testing & Quality Assurance       | 9      | 6      | 2      | 1     | 2       | ⏳ Audio + repeat unit ✅ |
-| 8         | Release & Monitoring              | 11     | 6      | 3      | 2     | 0       | ⏳ Belum Dimulai         |
-| **TOTAL** |                                   | **95** | **48** | **29** | **18** | **52**  |                         |
+| 6         | PWA & Packaging                   | 8      | 5      | 2      | 1     | 5       | 🟡 Uji manual PWA tersisa |
+| 7         | Testing & Quality Assurance       | 9      | 6      | 2      | 1     | 3       | 🟡 Performance — A11y/BP/SEO ✅ |
+| 8         | Release & Monitoring              | 11     | 6      | 3      | 2     | 3       | 🟡 Error tracking & rollout belum |
+| **TOTAL** |                                   | **97** | **48** | **31** | **18** | **71**  |                         |
 
 
 > Catatan: Phase 7 (Testing & QA) berjalan **paralel** mulai Phase 1 — bukan sequential setelah Phase 6 selesai.
@@ -84,6 +85,9 @@ Codebase aktif berada di `hanquran-app/` (Next.js App Router). **Konten Quran** 
 
 **Belum selesai:**
 
+- Uji manual lock screen Media Session (`docs/27` §8) — sebelum tag `v0.2.0`
+- Uji manual Mode Murotal lintas surat — sebelum tag `v0.3.0`
+- Optimasi Lighthouse Performance ≥ 80 — lazy load Beranda ✅ (run terbaik 47); uji Vercel & kurangi TBT framework
 - Persist posisi audio terakhir
 - Word-by-word highlight (Post-MVP)
 - E2E / verifikasi offline playback
@@ -153,9 +157,9 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 # ✅ 4. Completed Tasks
 
-**Total development task yang benar-benar selesai: 62**
+**Total development task yang benar-benar selesai: 71**
 
-Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **175 test passing**).
+Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`).
 
 ### Phase 0 — selesai (7/7, 24 Juni 2026) ✅
 
@@ -226,6 +230,23 @@ Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **175 test passing**).
 5. ✅ Analytics event murotal
 6. ✅ Unit test resolver, pending play, orkestrasi
 
+### Transport ⏮/⏭ audio (25 Juni 2026)
+
+1. ✅ Spesifikasi aturan — `docs/29-murotal-mode-spec.md` §7.2, `docs/28-playback-settings.md` §4.6
+2. ✅ `services/playback-track-navigation.ts` + `lib/surah-ayah-counts.ts`
+3. ✅ `goToPreviousTrack` / `goToNextTrack` di `use-surah-repeat-playback`
+4. ✅ Berlaku Surah Detail, Focus Mode, dan Media Session `previoustrack`/`nexttrack`
+5. ✅ Unit test `playback-track-navigation`
+
+### Media Session API (25 Juni 2026)
+
+1. ✅ Spesifikasi — `docs/27-media-session-api-spec.md`
+2. ✅ Service `services/media-session.ts` — metadata, play/pause, `setPositionState`, seek
+3. ✅ Integrasi `AudioController` — lifecycle play/pause/ganti trek
+4. ✅ Action handlers `previoustrack` / `nexttrack` via `use-surah-repeat-playback`
+5. ✅ Unit test `tests/services/media-session.test.ts` + integrasi `audio-controller.test.ts`
+6. ⏳ Checklist manual lock screen — `docs/27` §8 (wajib sebelum tag `v0.2.0`)
+
 ### Progress Repeat x/y (25 Juni 2026)
 
 1. ✅ `RepeatProgressBadge` — badge `current/target` (mis. `2/5`, `3/∞`) di `RepeatSelector` inline
@@ -242,6 +263,22 @@ Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **175 test passing**).
 3. ✅ `useSurahDetailBottomInset` — ukur chrome bawah dengan `visualViewport`
 4. ✅ Pembaruan `docs/28-playback-settings.md` §4.4
 5. ✅ Unit test chrome landscape
+
+### Performance baseline (25 Juni 2026)
+
+1. ✅ `scripts/measure-bundle.mjs` — budget bundle `.next/static`
+2. ✅ `scripts/run-lighthouse.mjs` — audit mobile (Lighthouse 12)
+3. ✅ `scripts/validate-pwa.mjs` — smoke PWA (manifest + SW)
+4. ✅ npm `perf`, `perf:bundle`, `perf:lighthouse`, `perf:pwa`
+5. ✅ Hasil baseline dicatat di Phase 7
+6. ✅ `LazySurahCard` — lazy mount kartu surat Beranda (`IntersectionObserver`)
+
+### Lazy load kartu Beranda (25 Juni 2026)
+
+1. ✅ `components/lazy-surah-card.tsx` — placeholder + mount saat mendekati viewport
+2. ✅ `app/page.tsx` — ganti `SurahCard` langsung; hapus animasi stagger 114 item
+3. ✅ Unit test `tests/components/lazy-surah-card.test.tsx`
+4. ✅ Re-audit Lighthouse — run terbaik: Performance Beranda 28 → 47; LCP 15,8 s → 5,5 s
 
 ### Lanjutkan Hafalan (24 Juni 2026)
 
@@ -590,37 +627,48 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
   - Prioritas: P1
   - **Ringkasan:** scope, arsitektur, kriteria penerimaan, dukungan platform, rencana rilis 0.2.0
 
-- [ ] [NEW] Buat service `media-session.ts`
+- [x] [NEW] Buat service `media-session.ts`
   - Tujuan: Metadata surat/ayat/qari + action handlers Play/Pause
   - File: `services/media-session.ts`
   - Ketergantungan: `AudioController` berjalan
   - Prioritas: P1
+  - **Ringkasan:** metadata, `playbackState`, `setPositionState`, `seekto`, fallback no-op
 
-- [ ] [UPDATE] Integrasikan Media Session ke `AudioController`
+- [x] [UPDATE] Integrasikan Media Session ke `AudioController`
   - Tujuan: Sinkron lifecycle play/pause/trek dengan `navigator.mediaSession`
   - File: `services/audio-controller.ts`, `services/media-session.ts`
   - Ketergantungan: Service `media-session.ts`
   - Prioritas: P1
 
-- [ ] [TEST] Uji kontrol lock screen & background playback (mobile)
-  - Tujuan: Verifikasi metadata + Play/Pause di Android Chrome & iOS Safari (tab & PWA)
-  - File: Manual checklist + `tests/services/media-session.test.ts`
+- [x] [TEST] Unit test Media Session
+  - Tujuan: Verifikasi metadata, position state, handlers play/pause/seek
+  - File: `tests/services/media-session.test.ts`, `tests/services/audio-controller.test.ts`
   - Ketergantungan: Integrasi selesai
   - Prioritas: P1
+  - **Catatan:** uji manual lock screen mobile — checklist `docs/27` §8 (belum diisi)
 
 ### Nice to Have (P2)
 
-- [ ] [UPDATE] Action handlers `previoustrack` / `nexttrack` dari lock screen
+- [x] [UPDATE] Action handlers `previoustrack` / `nexttrack` dari lock screen
   - Tujuan: Navigasi ayat tanpa membuka aplikasi
-  - File: `services/media-session.ts`, callback dari Surah Detail / Focus Mode
+  - File: `services/media-session.ts`, `hooks/use-surah-repeat-playback.ts`
   - Ketergantungan: Media Session dasar selesai
   - Prioritas: P2
+  - **Ringkasan:** mengikuti aturan transport `docs/29` §7.2 (lintas surat jika Murotal ON)
+
+### Uji manual (wajib sebelum tag `v0.2.0`)
+
+- [ ] [TEST] Uji kontrol lock screen & background playback (mobile)
+  - Tujuan: Verifikasi metadata + Play/Pause di Android Chrome & iOS Safari (tab & PWA)
+  - File: Checklist `docs/27-media-session-api-spec.md` §8
+  - Ketergantungan: Integrasi selesai
+  - Prioritas: P1
 
 ---
 
 ## Phase 2c — Mode Murotal
 
-**Total: 6 tasks | P0: 0 | P1: 5 | P2: 1**
+**Total: 8 tasks | P0: 0 | P1: 6 | P2: 2**
 
 > Spesifikasi: `docs/29-murotal-mode-spec.md` · Versi target: **0.3.0** · Bukan blocker MVP `0.1.0`
 
@@ -648,6 +696,16 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
 
 - [x] [UPDATE] i18n `settings.playback.murotalEnabled`
   - File: `messages/id.json`, `messages/en.json`
+  - Prioritas: P1
+
+- [x] [NEW] Aturan tombol ⏮/⏭ transport audio
+  - Tujuan: Prev/next dalam surat (default); lintas surat jika Murotal ON
+  - File: `services/playback-track-navigation.ts`, `lib/surah-ayah-counts.ts`, `hooks/use-surah-repeat-playback.ts`
+  - Prioritas: P1
+  - **Spesifikasi:** `docs/29-murotal-mode-spec.md` §7.2
+
+- [x] [TEST] Unit test navigasi transport & murotal
+  - File: `tests/services/playback-track-navigation.test.ts`, `tests/services/murotal-resolver.test.ts`, `tests/services/playback-murotal-orchestration.test.ts`
   - Prioritas: P1
 
 ### Nice to Have (P2)
@@ -907,7 +965,7 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
   - File: N/A (manual testing)
   - Ketergantungan: Setup PWA selesai
   - Prioritas: P0
-  - **Catatan:** setelah Media Session diimplementasi (Phase 2b), ulangi uji lock screen di checklist `docs/27` §8
+  - **Catatan:** ulangi uji lock screen di checklist `docs/27` §8 saat QA PWA mobile
 
 ### Disarankan (P1)
 
@@ -973,11 +1031,44 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
   - Ketergantungan: Komponen sudah dibangun
   - Prioritas: P0
 
-- [ ] [TEST] Performance testing: ukur bundle size & skor Lighthouse
+- [x] [TEST] Performance testing: ukur bundle size & skor Lighthouse
   - Tujuan: Pastikan aplikasi memenuhi target performa (Lighthouse ≥ 80)
-  - File: CI/build config, Lighthouse CI
+  - File: `scripts/measure-bundle.mjs`, `scripts/run-lighthouse.mjs`, `scripts/validate-pwa.mjs`, npm `perf:*`
   - Ketergantungan: Build berjalan
   - Prioritas: P0
+  - **Hasil (25 Juni 2026, produksi lokal `next start`, mobile throttling):**
+
+**Bundle** (tidak berubah setelah lazy load — strategi mount, bukan ukuran paket):
+
+| Metrik | Hasil | Ambang | Status |
+|--------|-------|--------|--------|
+| Bundle total JS+CSS | 1581 KB | ≤ 2048 KB | ✅ |
+| Chunk terbesar | 222 KB | ≤ 300 KB | ✅ |
+
+**Lighthouse Beranda (`/`) — sebelum vs sesudah `LazySurahCard`:**
+
+| Metrik | Sebelum | Run terbaik sesudah | Ambang | Status |
+|--------|---------|---------------------|--------|--------|
+| Performance | 28 | **47** | ≥ 80 | ❌ |
+| LCP | 15,8 s | **5,5 s** | — | ⬆️ |
+| TBT | 14.050 ms | **4.040 ms** | — | ⬆️ |
+| Speed Index | 12,7 s | **4,6 s** | — | ⬆️ |
+| CLS | 0,164 | **0** | — | ⬆️ |
+| Accessibility | 94 | 94–100 | ≥ 80 | ✅ |
+| Best Practices | 96 | 96 | ≥ 80 | ✅ |
+| SEO | 100 | 100 | ≥ 80 | ✅ |
+
+**Route lain & PWA (baseline awal):**
+
+| Metrik | Hasil | Ambang | Status |
+|--------|-------|--------|--------|
+| Lighthouse `/surah/1` — Performance | 45 | ≥ 80 | ❌ |
+| Lighthouse `/settings` — Performance | 54 | ≥ 80 | ❌ |
+| PWA smoke (manifest + SW) | 100 | ≥ 80 | ✅ |
+
+  - **Catatan variansi lab:** audit ulang di host yang sama dapat berkisar Performance **25–47** (TBT 4–24 s) karena throttling CPU Lighthouse 4× dan audit menscroll seluruh daftar sehingga kartu lazy tetap ter-mount bertahap. **Run terbaik** di atas dipakai sebagai indikator arah optimasi; uji ulang di **preview Vercel** direkomendasikan sebelum rilis.
+  - **Optimasi lanjutan:** framework JS Beranda, preview production, virtualisasi daftar bila perlu.
+  - **Perintah:** `npm run perf` · `PERF_BASE_URL=http://localhost:3000 npm run perf:lighthouse -- --soft`
 
 ### Disarankan (P1)
 
@@ -1133,13 +1224,15 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [x] Audio preloading & prefetch hints (`services/audio-prefetch.ts`)
 - [x] Dukungan multi-qari via Pengaturan (`settings.reciterId`, `usePreferredReciterId`)
 - [x] Cross-browser audio testing — unit test ✅; checklist manual di Phase 2 P0
-- [ ] Media Session API — spesifikasi ✅ (`docs/27`); implementasi menunggu v0.2.0
+- [x] Media Session API — diimplementasi (`docs/27`); uji manual lock screen tersisa sebelum tag `v0.2.0`
 
 ### Phase 2b — Media Session
 - [x] Spesifikasi & dokumen terkait (`docs/27`)
-- [ ] Service `media-session.ts`
-- [ ] Integrasi `AudioController`
-- [ ] Uji lock screen mobile
+- [x] Service `media-session.ts`
+- [x] Integrasi `AudioController`
+- [x] Unit test metadata, position state, handlers
+- [x] Action handlers `previoustrack` / `nexttrack`
+- [ ] Uji lock screen mobile (`docs/27` §8)
 
 ### Phase 2c — Mode Murotal
 - [x] Spesifikasi & dokumen terkait (`docs/29`)
@@ -1147,6 +1240,7 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [x] Integrasi `use-surah-repeat-playback`
 - [x] Toggle UI + migrasi Dexie `murotalEnabled`
 - [x] i18n + unit test
+- [x] Aturan transport ⏮/⏭ (`playback-track-navigation.ts`)
 - [ ] Uji manual lintas surat
 
 ### Progress Repeat x/y
@@ -1192,9 +1286,10 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 
 ### Phase 7 — Testing
 - [x] Unit tests untuk repeat passing · repeat engine ✅ · audio controller ✅
+- [x] Performance testing — bundle + Lighthouse + PWA smoke (`npm run perf:*`)
 - [ ] Integration & E2E tests passing
 - [ ] Accessibility scan passed
-- [ ] Performance metrics memenuhi target (Lighthouse >= 80)
+- [ ] Performance Lighthouse **Performance** ≥ 80 (Beranda run terbaik **47** setelah `LazySurahCard`; variansi lab 25–47 lokal)
 
 ### Phase 8 — Release
 - [x] Staging environment — panduan Vercel (`docs/25-deployment-vercel.md`)
@@ -1261,7 +1356,7 @@ MVP HanQuran dianggap **selesai** ketika seluruh kondisi berikut terpenuhi:
 - [x] Unit tests untuk audio controller & repeat engine passing (128 test)
 - [ ] Integration tests untuk core flows passing
 - [ ] Tidak ada critical regressions
-- [ ] Skor Lighthouse ≥ 80 (Performance, Accessibility, Best Practices, PWA)
+- [ ] Skor Lighthouse **Performance** ≥ 80 (Beranda run terbaik 47; A11y/BP/SEO/PWA smoke ≥ 80)
 
 ---
 

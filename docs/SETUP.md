@@ -40,6 +40,10 @@ npm install
 | `npm run typecheck`  | Pemeriksaan tipe TypeScript (`tsc --noEmit`)                             |
 | `npm run test`       | Menjalankan unit & integration test (Vitest)                             |
 | `npm run test:watch` | Menjalankan test dalam mode watch                                        |
+| `npm run perf`       | Build produksi + ukur bundle (`.next/static`)                            |
+| `npm run perf:bundle`| Ukur ukuran chunk JS/CSS hasil build                                       |
+| `npm run perf:lighthouse` | Audit Lighthouse mobile (butuh `npm run start` di port 3000)        |
+| `npm run perf:pwa`   | Smoke audit PWA (manifest + service worker)                              |
 
 
 ---
@@ -146,6 +150,20 @@ Jalankan:
 ```bash
 npm run test
 ```
+
+### Performance & Lighthouse
+
+Prasyarat audit Lighthouse: build + server produksi berjalan.
+
+```bash
+npm run build
+npm run start          # terminal 1
+npm run perf:bundle    # terminal 2
+npm run perf:pwa
+npm run perf:lighthouse -- --soft   # --soft: tidak gagal meski skor < 80
+```
+
+Output disimpan di `reports/` (diabaikan Git). Ambang: skor kategori ≥ 80 (`docs/18` Phase 7).
 
 ---
 

@@ -299,6 +299,7 @@ Lihat `docs/analytics.md`.
 - [x] ON + repeat ∞: tidak keluar dari scope repeat sampai pengguna mengubah pengaturan atau pause.
 - [x] `lastRead` terupdate pada setiap transisi.
 - [x] Unit test `murotal-resolver.ts` + orkestrasi repeat+murotal.
+- [x] Aturan transport ⏮/⏭ — §7.2 (`playback-track-navigation.ts`).
 - [ ] Uji manual lintas surat & regresi Media Session (belum diverifikasi penuh).
 
 ---

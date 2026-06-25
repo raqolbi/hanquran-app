@@ -285,8 +285,9 @@ Ini **bukan bug HanQuran** — keterbatasan integrasi Firefox dengan Media Sessi
 
 | Area | Perubahan |
 |------|-----------|
-| `services/media-session.ts` | **Baru** |
-| `services/audio-controller.ts` | Integrasi lifecycle |
+| `services/media-session.ts` | ✅ Diimplementasi |
+| `services/audio-controller.ts` | ✅ Integrasi lifecycle |
+| `hooks/use-surah-repeat-playback.ts` | ✅ `setMediaSessionTrackNavigation` |
 | `hooks/use-audio.ts` | Tidak wajib diubah (abstraksi controller) |
 | `stores/audioStore.ts` | Tidak diubah |
 | `package.json` | Versi → `0.2.0` saat rilis fitur |
@@ -319,6 +320,7 @@ Ini **bukan bug HanQuran** — keterbatasan integrasi Firefox dengan Media Sessi
 |---------|-----------|
 | 25 Juni 2026 | Dokumen awal — scope, arsitektur, kriteria penerimaan, rencana v0.2.0 |
 | 25 Juni 2026 | Implementasi `setPositionState` + `seekto`; §6 diperluas — matriks platform, keterbatasan Firefox Android |
+| 25 Juni 2026 | Sinkron checklist `docs/18` — implementasi kode selesai; uji manual §8 menunggu sebelum tag rilis |
 
 ---
 
