@@ -1526,17 +1526,19 @@ Mengikuti urutan wireframe:
 
 ```text
 1. Bahasa Aplikasi
-2. Ukuran Teks Arab
-3. Reciter
-4. Kontras Tinggi
-5. Offline & Cache
-6. Aksesibilitas
-7. Navigasi Tentang HanQuran  →  `/settings/about`
+2. Reciter
+3. Playback
+4. Ukuran Teks Arab
+5. Kontras Tinggi
+6. Offline & Cache
+7. Aksesibilitas
+8. Navigasi Tentang HanQuran  →  `/settings/about`
 ```
 
 > **Catatan:** Toggle Terjemahan dan Transliterasi **tidak** ada di Pengaturan — hanya di `VerseDisplayControls` pada Surah Detail (`docs/22-verse-display-controls.md`).
 
-Layar **Tentang HanQuran** (`AboutPage`): metadata aplikasi, filosofi, credits, repository — `docs/26-about-screen-spec.md`.
+Layar **Tentang HanQuran** (`AboutPage`): metadata aplikasi, filosofi, credits, repository — `docs/26-about-screen-spec.md`.  
+Bagian **Playback**: `docs/28-playback-settings.md`.
 
 ---
 
@@ -1565,6 +1567,16 @@ SegmentedControl atau Select:
 ```text
 ReciterSelector
 ```
+
+### Playback
+
+```text
+Auto Follow Playback    [ON / OFF]
+```
+
+- Label & deskripsi dilokalisasi via `next-intl`
+- Nilai disimpan: `settings.autoFollowPlayback` (default: `true`)
+- Spesifikasi perilaku: `docs/28-playback-settings.md`
 
 ### Kontras Tinggi
 

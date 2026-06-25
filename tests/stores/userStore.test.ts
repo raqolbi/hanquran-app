@@ -19,6 +19,7 @@ describe('useUserStore — reciterId', () => {
         transliterationVisible: false,
         contrastMode: 'default',
         smoothAnimation: true,
+        autoFollowPlayback: true,
         reciterId: getDefaultReciterId(),
         translationResourceId: 33,
         updatedAt: 0,
@@ -49,6 +50,7 @@ describe('useUserStore — reciterId', () => {
       transliterationVisible: false,
       contrastMode: 'default',
       smoothAnimation: true,
+      autoFollowPlayback: true,
       translationResourceId: 33,
       updatedAt: 1,
       // @ts-expect-error — bentuk legacy sebelum reciterId
@@ -106,6 +108,7 @@ describe('useUserStore — aksesibilitas', () => {
         transliterationVisible: false,
         contrastMode: 'default',
         smoothAnimation: true,
+        autoFollowPlayback: true,
         reciterId: getDefaultReciterId(),
         translationResourceId: 33,
         updatedAt: 0,
@@ -134,6 +137,35 @@ describe('useUserStore — aksesibilitas', () => {
     const stored = await db.settings.get('default');
     expect(stored?.smoothAnimation).toBe(false);
   });
+
+  it('menyimpan autoFollowPlayback ke Dexie', async () => {
+    await useUserStore.getState().init();
+    await useUserStore.getState().updateSettings({ autoFollowPlayback: false });
+
+    expect(useUserStore.getState().settings.autoFollowPlayback).toBe(false);
+
+    const stored = await db.settings.get('default');
+    expect(stored?.autoFollowPlayback).toBe(false);
+  });
+
+  it('memigrasi settings lama tanpa autoFollowPlayback', async () => {
+    await db.settings.put({
+      id: 'default',
+      appLocale: 'id',
+      fontSize: DEFAULT_ARABIC_FONT_SIZE_PX,
+      translationVisible: false,
+      transliterationVisible: false,
+      contrastMode: 'default',
+      smoothAnimation: true,
+      reciterId: getDefaultReciterId(),
+      translationResourceId: 33,
+      updatedAt: 1,
+    });
+
+    await useUserStore.getState().init();
+
+    expect(useUserStore.getState().settings.autoFollowPlayback).toBe(true);
+  });
 });
 
 describe('useUserStore — lastViewed', () => {
@@ -150,6 +182,7 @@ describe('useUserStore — lastViewed', () => {
         transliterationVisible: false,
         contrastMode: 'default',
         smoothAnimation: true,
+        autoFollowPlayback: true,
         reciterId: getDefaultReciterId(),
         translationResourceId: 33,
         updatedAt: 0,
@@ -215,6 +248,7 @@ describe('useUserStore — favorites', () => {
         transliterationVisible: false,
         contrastMode: 'default',
         smoothAnimation: true,
+        autoFollowPlayback: true,
         reciterId: getDefaultReciterId(),
         translationResourceId: 33,
         updatedAt: 0,

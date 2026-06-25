@@ -94,6 +94,13 @@
       "selectPlaceholder": "Pilih qari",
       "selectAriaLabel": "Pilih qari"
     },
+    "playback": {
+      "title": "Playback",
+      "description": "Atur perilaku layar saat audio tilawah berjalan.",
+      "autoFollow": "Auto Follow Playback",
+      "autoFollowDescription": "Otomatis menggulir layar agar ayat yang sedang diputar tetap terlihat.",
+      "autoFollowAriaLabel": "Aktifkan auto follow playback"
+    },
     "translation": {
       "title": "Terjemahan",
       "description": "Atur tampilan terjemahan ayat secara default.",

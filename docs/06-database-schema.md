@@ -302,6 +302,7 @@ interface SettingsRecord {
   transliterationVisible: boolean;
   contrastMode: 'default' | 'high';
   smoothAnimation: boolean;
+  autoFollowPlayback: boolean;
   qariId: number;
   translationResourceId: number;
   updatedAt: number;
@@ -317,6 +318,7 @@ interface SettingsRecord {
 - Record tunggal dengan `id: 'default'`
 - `appLocale`: bahasa UI aplikasi (`id` | `en`). Lihat `docs/21-i18n-and-locale.md`.
 - `translationVisible` / `transliterationVisible`: dikontrol dari **Verse Display Controls** pada Surah Detail — bukan dari Pengaturan. Lihat `docs/22-verse-display-controls.md`.
+- `autoFollowPlayback`: mengatur auto scroll ayat aktif saat playback di Surah Detail. Default `true`. Lihat `docs/28-playback-settings.md`.
 - Dapat diperluas via migration tanpa mengubah primary key
 - Phase: **MVP**
 

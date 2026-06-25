@@ -66,6 +66,13 @@ export const useUserStore = create<UserState & UserActions>()((set, get) => ({
         updatedAt: Date.now(),
       };
       await db.settings.put(settings);
+    } else if (settings.autoFollowPlayback === undefined) {
+      settings = {
+        ...settings,
+        autoFollowPlayback: true,
+        updatedAt: Date.now(),
+      };
+      await db.settings.put(settings);
     }
 
     const legacySettings = settings as SettingsRecord & { qariId?: number };

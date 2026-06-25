@@ -69,6 +69,7 @@ export default function SettingsPage() {
   const { reciters } = useReciters();
   const contrastMode = useUserStore((s) => s.settings.contrastMode);
   const smoothAnimation = useUserStore((s) => s.settings.smoothAnimation);
+  const autoFollowPlayback = useUserStore((s) => s.settings.autoFollowPlayback);
 
   const badgeStatus = useOfflineStore(selectBadgeVariant);
   const totalSizeBytes = useOfflineStore((s) => s.manifestSummary.totalSizeBytes);
@@ -157,6 +158,10 @@ export default function SettingsPage() {
     void updateSettings({ smoothAnimation: enabled });
   };
 
+  const handleAutoFollowPlaybackChange = (enabled: boolean) => {
+    void updateSettings({ autoFollowPlayback: enabled });
+  };
+
   return (
     <div className="min-h-dvh bg-background pb-16">
       <SettingsHeader />
@@ -195,6 +200,23 @@ export default function SettingsPage() {
               ))}
             </SelectContent>
           </Select>
+        </SettingsSection>
+
+        <SettingsSection
+          title={t('playback.title')}
+          description={t('playback.description')}
+        >
+          <SettingsRow
+            label={t('playback.autoFollow')}
+            description={t('playback.autoFollowDescription')}
+            control={
+              <Switch
+                checked={autoFollowPlayback}
+                onCheckedChange={handleAutoFollowPlaybackChange}
+                aria-label={t('playback.autoFollowAriaLabel')}
+              />
+            }
+          />
         </SettingsSection>
 
         <SettingsSection

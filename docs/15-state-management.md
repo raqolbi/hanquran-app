@@ -64,6 +64,7 @@ Preferensi pengguna dan data yang harus bertahan antar sesi atau saat offline. D
 * Toggle terjemahan — tabel `settings` (`translationVisible`); kontrol UI di `VerseDisplayControls`.
 * Toggle transliterasi — tabel `settings` (`transliterationVisible`); kontrol UI di `VerseDisplayControls`.
 * Aksesibilitas (`contrastMode`, `smoothAnimation`) — tabel `settings`; diterapkan via `AccessibilityProvider`.
+* Playback (`autoFollowPlayback`) — tabel `settings`; mengatur auto scroll ayat aktif di Surah Detail. Lihat `docs/28-playback-settings.md`.
 * Konfigurasi repeat (`count`, `target`, `range`) — tabel `settings`.
 * Penanda Lanjutkan Hafalan (`lastViewed`) — tabel `lastRead`.
 * Manifest cache audio — tabel `downloadManifest`.

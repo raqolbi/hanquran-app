@@ -18,6 +18,7 @@ export function SurahDetailTopChrome({
 }: SurahDetailTopChromeProps) {
   return (
     <div
+      data-surah-detail-top-chrome
       className={cn(
         'sticky top-[env(safe-area-inset-top,0px)] z-30',
         'border-b border-border bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/90',

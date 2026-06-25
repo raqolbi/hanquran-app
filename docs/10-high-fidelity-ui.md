@@ -575,9 +575,9 @@ White
 ```text
 Bahasa Aplikasi
 ↓
-Ukuran Teks
-↓
 Reciter
+↓
+Playback
 ↓
 Kontras
 ↓
@@ -589,6 +589,8 @@ Tentang HanQuran  →  `/settings/about`
 ```
 
 > Terjemahan dan Transliterasi dikontrol di Verse Display Controls (Surah Detail), bukan di Pengaturan.
+
+> **Playback:** Auto Follow Playback — `docs/28-playback-settings.md`.
 
 Layar **Tentang HanQuran**: informasi aplikasi, filosofi, credits, repository & lisensi — `docs/26-about-screen-spec.md`.
 

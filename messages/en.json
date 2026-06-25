@@ -94,6 +94,13 @@
       "selectPlaceholder": "Select reciter",
       "selectAriaLabel": "Select reciter"
     },
+    "playback": {
+      "title": "Playback",
+      "description": "Adjust on-screen behavior during audio playback.",
+      "autoFollow": "Auto Follow Playback",
+      "autoFollowDescription": "Automatically scroll so the playing verse stays visible.",
+      "autoFollowAriaLabel": "Enable auto follow playback"
+    },
     "translation": {
       "title": "Translation",
       "description": "Set the default translation display for verses.",
