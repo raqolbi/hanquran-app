@@ -2,9 +2,14 @@
 
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { useAudio, useAudioOnEnded } from '@/hooks/use-audio';
 import { useAudioPlaybackGate } from '@/hooks/use-audio-playback-gate';
+import { db } from '@/services/db/db';
+import { showAppToast } from '@/lib/app-toast';
+import { isSurahAudioAvailableOffline } from '@/lib/is-surah-audio-available-offline';
+import { useOfflineStore } from '@/stores/offlineStore';
 import type { PlayAyahParams } from '@/hooks/use-audio';
 import type { RepeatSettingsConfig } from '@/components/repeat-settings-dialog';
 import {
@@ -81,12 +86,28 @@ export function useSurahRepeatPlayback({
   const currentTrack = useAudioStore((s) => s.currentTrack);
   const murotalEnabled = useUserStore((s) => s.settings.murotalEnabled);
 
+  const tAudio = useTranslations('audio');
   const { isPlaybackBlocked, notifyIfPlaybackBlocked } = useAudioPlaybackGate(
     surahId,
     reciterId,
   );
 
   const pendingPlayConsumedRef = useRef<number | null>(null);
+
+  /**
+   * Saat offline, audio surat tujuan hanya bisa diputar jika sudah diunduh.
+   * Mengembalikan true jika boleh diputar (online, atau surat sudah `ready`).
+   */
+  const ensureTargetSurahPlayable = useCallback(
+    async (targetSurahId: number): Promise<boolean> => {
+      const connectionStatus = useOfflineStore.getState().connectionStatus;
+      if (connectionStatus !== 'offline') return true;
+
+      const record = await db.downloadManifest.get([targetSurahId, reciterId]);
+      return isSurahAudioAvailableOffline(connectionStatus, record?.status);
+    },
+    [reciterId],
+  );
 
   const isActiveAyahPlaying = useMemo(
     () =>
@@ -119,19 +140,29 @@ export function useSurahRepeatPlayback({
           void playAyah(playParams(murotal.ayahNumber));
           break;
         case 'advance_surah': {
-          trackMurotalSurahComplete({
-            surahId,
-            nextSurahId: murotal.surahId,
-          });
-          void useUserStore
-            .getState()
-            .setLastViewed(murotal.surahId, murotal.ayahNumber);
-          setPendingMurotalPlay(murotal.surahId, murotal.ayahNumber);
-          const href =
-            routeMode === 'surah'
-              ? routes.surah(murotal.surahId, murotal.ayahNumber)
-              : routes.focus(murotal.surahId, murotal.ayahNumber);
-          router.replace(href);
+          void (async () => {
+            // Lintas surat saat offline: berhenti jika audio surat berikutnya
+            // belum tersedia offline (docs/30 §5).
+            if (!(await ensureTargetSurahPlayable(murotal.surahId))) {
+              pause();
+              showAppToast(tAudio('offlineUnavailableToast'));
+              return;
+            }
+
+            trackMurotalSurahComplete({
+              surahId,
+              nextSurahId: murotal.surahId,
+            });
+            void useUserStore
+              .getState()
+              .setLastViewed(murotal.surahId, murotal.ayahNumber);
+            setPendingMurotalPlay(murotal.surahId, murotal.ayahNumber);
+            const href =
+              routeMode === 'surah'
+                ? routes.surah(murotal.surahId, murotal.ayahNumber)
+                : routes.focus(murotal.surahId, murotal.ayahNumber);
+            router.replace(href);
+          })();
           break;
         }
         case 'stop':
@@ -155,6 +186,8 @@ export function useSurahRepeatPlayback({
       router,
       onQuranComplete,
       pause,
+      ensureTargetSurahPlayable,
+      tAudio,
     ],
   );
 
@@ -304,19 +337,44 @@ export function useSurahRepeatPlayback({
         return;
       }
 
-      void useUserStore
-        .getState()
-        .setLastViewed(step.surahId, step.ayahNumber);
-      if (isPlaying) {
-        setPendingMurotalPlay(step.surahId, step.ayahNumber);
-      }
       const href =
         routeMode === 'surah'
           ? routes.surah(step.surahId, step.ayahNumber)
           : routes.focus(step.surahId, step.ayahNumber);
-      router.replace(href);
+
+      // Berpindah surat untuk dibaca selalu boleh (teks tersedia offline).
+      // Hanya saat sedang memutar audio kita cek ketersediaan offline.
+      if (!isPlaying) {
+        void useUserStore
+          .getState()
+          .setLastViewed(step.surahId, step.ayahNumber);
+        router.replace(href);
+        return;
+      }
+
+      void (async () => {
+        if (!(await ensureTargetSurahPlayable(step.surahId))) {
+          pause();
+          showAppToast(tAudio('offlineUnavailableToast'));
+          return;
+        }
+        void useUserStore
+          .getState()
+          .setLastViewed(step.surahId, step.ayahNumber);
+        setPendingMurotalPlay(step.surahId, step.ayahNumber);
+        router.replace(href);
+      })();
     },
-    [resetRuntime, navigateAyah, isPlaying, routeMode, router],
+    [
+      resetRuntime,
+      navigateAyah,
+      isPlaying,
+      routeMode,
+      router,
+      pause,
+      ensureTargetSurahPlayable,
+      tAudio,
+    ],
   );
 
   const goToPreviousTrack = useCallback(() => {

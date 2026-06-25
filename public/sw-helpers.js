@@ -54,8 +54,10 @@
       // Lanjut ke fallback cache di bawah.
     }
 
+    // `ignoreSearch` agar `/surah/5?ayah=3` cocok dengan shell `/surah/5`.
     const cached =
       (await cache.match(request)) ||
+      (await cache.match(request, { ignoreSearch: true })) ||
       (await cache.match(offlineUrl));
 
     if (cached) return cached;
@@ -136,7 +138,12 @@
    */
   async function staleWhileRevalidate(request, cacheName, options) {
     const cache = await caches.open(cacheName);
-    const cached = await cache.match(request);
+    const ignoreSearch = Boolean(options && options.ignoreSearch);
+    // `Vary: RSC` membedakan entri RSC vs dokumen pada URL yang sama;
+    // `ignoreSearch` menetralkan query `?_rsc=<hash>` yang berubah per build.
+    const cached =
+      (await cache.match(request)) ||
+      (ignoreSearch ? await cache.match(request, { ignoreSearch: true }) : null);
 
     const networkPromise = fetch(request)
       .then(async (response) => {
