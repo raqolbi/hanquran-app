@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import { useAudio, useAudioOnEnded } from '@/hooks/use-audio';
 import type { PlayAyahParams } from '@/hooks/use-audio';
@@ -16,6 +16,7 @@ import {
   toRepeatConfig,
 } from '@/services/repeat-engine';
 import { getRepeatTabSync } from '@/services/repeat-tab-sync';
+import { setMediaSessionTrackNavigation } from '@/services/media-session';
 import { useAudioStore } from '@/stores/audioStore';
 import { useRepeatStore } from '@/stores/repeatStore';
 import type { RepeatStatusProps } from '@/components/repeat-status';
@@ -69,8 +70,9 @@ export function useSurahRepeatPlayback({
       ayahNumber,
       reciterId,
       totalAyahs,
+      surahName,
     }),
-    [surahId, reciterId, totalAyahs],
+    [surahId, reciterId, totalAyahs, surahName],
   );
 
   const handleAyahEnded = useCallback(() => {
@@ -138,6 +140,21 @@ export function useSurahRepeatPlayback({
     },
     [isPlaying, playAyah, playParams, setActiveAyah],
   );
+
+  useEffect(() => {
+    return setMediaSessionTrackNavigation({
+      onPreviousTrack: () => {
+        if (activeAyah > 1) {
+          navigateAyah(activeAyah - 1);
+        }
+      },
+      onNextTrack: () => {
+        if (activeAyah < totalAyahs) {
+          navigateAyah(activeAyah + 1);
+        }
+      },
+    });
+  }, [activeAyah, totalAyahs, navigateAyah]);
 
   const handleCountChange = useCallback(
     (count: RepeatCount) => {

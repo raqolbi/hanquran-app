@@ -9,6 +9,10 @@ import {
 } from '@/services/audio-controller';
 import { AudioPrefetchBuffer } from '@/services/audio-prefetch';
 import { AudioTabSync } from '@/services/audio-tab-sync';
+import {
+  clearMediaSession,
+  resetMediaSessionBindings,
+} from '@/services/media-session';
 import { useAudioStore } from '@/stores/audioStore';
 
 const sampleTrack = {
@@ -16,6 +20,8 @@ const sampleTrack = {
   ayahNumber: 1,
   reciterId: 'Alafasy_128kbps',
   url: fixtureAyahAudioUrl(1, 1),
+  surahName: 'Al-Fatihah',
+  reciterName: 'Mishary Rashid Alafasy',
 };
 
 const otherTrack = {
@@ -35,15 +41,69 @@ function createController(audio?: HTMLAudioElement): {
   return { controller: new AudioController(element, null, null), audio: element };
 }
 
+function createMockMediaSession() {
+  const actionHandlers = new Map<string, (() => void) | null>();
+  let metadata: MediaMetadata | null = null;
+  let playbackState: MediaSessionPlaybackState = 'none';
+  let positionState: MediaPositionState | null = null;
+
+  return {
+    get metadata() {
+      return metadata;
+    },
+    set metadata(value: MediaMetadata | null) {
+      metadata = value;
+    },
+    get playbackState() {
+      return playbackState;
+    },
+    set playbackState(value: MediaSessionPlaybackState) {
+      playbackState = value;
+    },
+    get positionState() {
+      return positionState;
+    },
+    setPositionState(state: MediaPositionState): void {
+      positionState = state;
+    },
+    setActionHandler(
+      action: string,
+      handler: (() => void) | null,
+    ): void {
+      actionHandlers.set(action, handler);
+    },
+  };
+}
+
 describe('AudioController', () => {
+  let mockSession: ReturnType<typeof createMockMediaSession>;
+
   beforeEach(() => {
     MockBroadcastChannel.reset();
     vi.stubGlobal('BroadcastChannel', MockBroadcastChannel);
     resetAudioController();
     useAudioStore.getState().reset();
+
+    mockSession = createMockMediaSession();
+    class MockMediaMetadata {
+      title?: string;
+      artist?: string;
+      album?: string;
+
+      constructor(init: MediaMetadataInit) {
+        this.title = init.title;
+        this.artist = init.artist;
+        this.album = init.album;
+      }
+    }
+    vi.stubGlobal('MediaMetadata', MockMediaMetadata);
+    vi.stubGlobal('navigator', { mediaSession: mockSession });
+    resetMediaSessionBindings();
   });
 
   afterEach(() => {
+    clearMediaSession();
+    resetMediaSessionBindings();
     vi.unstubAllGlobals();
   });
 
@@ -59,6 +119,8 @@ describe('AudioController', () => {
       expect(state.error).toBeNull();
       expect(audio.src).toContain('001001.mp3');
       expect(audio.play).toHaveBeenCalled();
+      expect(mockSession.playbackState).toBe('playing');
+      expect(mockSession.metadata?.title).toBe('Al-Fatihah — Ayat 1');
     });
 
     it('tidak mengganti src saat memutar trek yang sama', async () => {
@@ -115,6 +177,7 @@ describe('AudioController', () => {
 
       expect(useAudioStore.getState().isPlaying).toBe(false);
       expect(audio.pause).toHaveBeenCalled();
+      expect(mockSession.playbackState).toBe('paused');
     });
   });
 
@@ -208,12 +271,18 @@ describe('AudioController', () => {
   describe('event listeners', () => {
     it('timeupdate memperbarui currentTime di store', async () => {
       const { controller, audio } = createController();
+      Object.defineProperty(audio, 'duration', { value: 30, configurable: true });
       await controller.play(sampleTrack);
       audio.currentTime = 7.25;
 
       audio.dispatchEvent(new Event('timeupdate'));
 
       expect(useAudioStore.getState().currentTime).toBe(7.25);
+      expect(mockSession.positionState).toEqual({
+        duration: 30,
+        position: 7.25,
+        playbackRate: 1,
+      });
     });
 
     it('loadedmetadata memperbarui duration', async () => {
@@ -340,6 +409,8 @@ describe('AudioController', () => {
         duration: 0,
         error: null,
       });
+      expect(mockSession.metadata).toBeNull();
+      expect(mockSession.playbackState).toBe('none');
     });
   });
 });

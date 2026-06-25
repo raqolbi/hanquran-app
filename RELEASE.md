@@ -60,6 +60,43 @@ Satu atau dua kalimat: apa yang berubah bagi pengguna.
 
 ---
 
+## Rencana (belum dirilis)
+
+### [0.2.0] — (rencana)
+
+#### Ringkasan
+
+Pengalaman pemutaran audio di mobile: metadata surat/ayat di lock screen dan kontrol Play/Pause via Media Session API.
+
+#### Fitur baru (rencana)
+
+- Media Session API — metadata surat, ayat, dan qari di kontrol media OS
+- Kontrol Play/Pause dari lock screen (jika platform mendukung)
+- Audio background lebih baik saat layar terkunci — selama browser mengizinkan
+
+#### PWA & offline
+
+- Tidak ada perubahan Service Worker; audio tetap via `HTMLAudioElement`
+- Disarankan uji dengan PWA terpasang di Android & iOS
+
+#### Dokumentasi
+
+- Spesifikasi lengkap: `docs/27-media-session-api-spec.md`
+- Task implementasi: `docs/18-development-tasks.md` Phase 2b
+
+#### Masalah yang diketahui (antisipasi)
+
+- Perilaku background audio **platform-dependent** — iOS Safari lebih ketat daripada Android Chrome
+- Next/Previous dari lock screen opsional (P2); MVP Media Session fokus Play/Pause + metadata
+
+#### Uji sebelum rilis
+
+- [ ] Checklist manual Phase 2b (`docs/18`)
+- [ ] Unit test `media-session` + integrasi `audio-controller`
+- [ ] Tidak ada regresi `AudioTabSync` dan RepeatEngine
+
+---
+
 ## Riwayat
 
 ### [0.1.0] — (belum dirilis)
@@ -97,6 +134,7 @@ Rilis MVP pertama HanQuran — aplikasi hafalan Al-Qur'an dengan audio per ayat,
 - Word-by-word highlight — Post-MVP
 - Persist posisi audio terakhir — belum
 - Verifikasi E2E pemutaran offline — manual
+- Media Session API / kontrol lock screen — direncanakan v0.2.0 (`docs/27`)
 
 #### Uji sebelum rilis
 
