@@ -163,7 +163,7 @@
       "principles": {
         "memorizationFirst": "Memorization First — every decision is evaluated: does this help memorization?",
         "mobileFirst": "Mobile First — designed for small screens and touch.",
-        "offlineFirst": "Offline First — after download, the app does not depend on the internet.",
+        "offlineFirst": "Offline First — the entire Quran is stored once the app is installed; internet is only for audio.",
         "simplicityFirst": "Simplicity First — no registration, no login, no complex setup."
       },
       "focusTitle": "App focus",
@@ -174,7 +174,7 @@
         "murotal": "Murotal mode — continuous recitation across verses and surahs",
         "mediaSession": "Lock screen audio controls (Media Session)",
         "continueReading": "Continue memorization from last position",
-        "offline": "Offline download per surah — audio and metadata stored locally",
+        "offline": "Read the entire Quran offline from install; download per-surah audio to listen without internet",
         "preferences": "Local preferences (UI language, reciter, verse display, accessibility)"
       }
     },
