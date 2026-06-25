@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
 
 import { Header } from '@/components/header';
@@ -9,7 +8,7 @@ import { ContinueReadingSection } from '@/components/continue-reading';
 import { InstallBanner } from '@/components/shared/install-banner';
 import { SearchInput } from '@/components/search-input';
 import { FilterChips } from '@/components/filter-chips';
-import { SurahCard } from '@/components/surah-card';
+import { LazySurahCard } from '@/components/lazy-surah-card';
 import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
 import { useSurahList } from '@/hooks/use-surah-list';
 import { useUserStore } from '@/stores/userStore';
@@ -74,39 +73,23 @@ export default function Home() {
               showHomeButton={false}
             />
           ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3, delay: 0.4 }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-4"
-            >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {surahsWithFavorites.length > 0 ? (
-                surahsWithFavorites.map((surah, index) => (
-                  <motion.div
+                surahsWithFavorites.map((surah) => (
+                  <LazySurahCard
                     key={surah.number}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
-                    className="relative"
-                  >
-                    <SurahCard
-                      number={surah.number}
-                      arabicName={surah.arabicName}
-                      englishName={surah.englishName}
-                      meaning={surah.meaning}
-                      ayahCount={surah.ayahCount}
-                      type={surah.type}
-                      isFavorited={surah.isFavorited}
-                      onToggleFavorite={() => void toggleFavorite(surah.number)}
-                    />
-                  </motion.div>
+                    number={surah.number}
+                    arabicName={surah.arabicName}
+                    englishName={surah.englishName}
+                    meaning={surah.meaning}
+                    ayahCount={surah.ayahCount}
+                    type={surah.type}
+                    isFavorited={surah.isFavorited}
+                    onToggleFavorite={() => void toggleFavorite(surah.number)}
+                  />
                 ))
               ) : (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="col-span-full flex flex-col items-center justify-center py-12 text-center"
-                >
+                <div className="col-span-full flex flex-col items-center justify-center py-12 text-center">
                   <svg
                     className="w-12 h-12 text-muted-foreground mb-4"
                     fill="none"
@@ -121,9 +104,9 @@ export default function Home() {
                     />
                   </svg>
                   <p className="text-muted-foreground">{emptyMessage}</p>
-                </motion.div>
+                </div>
               )}
-            </motion.div>
+            </div>
           )}
           </div>
         </div>

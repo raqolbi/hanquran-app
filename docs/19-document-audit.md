@@ -8,7 +8,7 @@ Dokumen ini adalah laporan audit komprehensif terhadap seluruh dokumentasi proye
 > **Pembaruan 24 Juni 2026:** Keputusan **Static Dataset Architecture** menggantikan Local-First / Dexie untuk konten Quran. Lihat `docs/23-static-dataset-architecture.md`. Beberapa temuan audit di bawah mengacu pada arsitektur lama.
 
 > **Pembaruan 25 Juni 2026:** Spesifikasi **Playback Settings** (`docs/28-playback-settings.md`) — Auto Follow Playback di Pengaturan, pra-implementasi.
-> **Pembaruan 25 Juni 2026:** Spesifikasi **Media Session API** (`docs/27-media-session-api-spec.md`) — fitur Growth target rilis `0.2.0`.
+> **Pembaruan 25 Juni 2026:** **Media Session API** (`docs/27`) & **Mode Murotal** (`docs/29`) — diimplementasi di kode; uji manual & tag rilis menunggu.
 > **Pembaruan 25 Juni 2026:** Implementasi **Mode Murotal** (PB-017), **badge progress repeat x/y**, perbaikan **auto follow landscape** — pembaruan dokumen terkait.
 
 ---
@@ -46,7 +46,7 @@ Dokumen ini adalah laporan audit komprehensif terhadap seluruh dokumentasi proye
 | `CLAUDE.md` | Final | ✅ Aktif |
 | `00-vision.md` | Final | ✅ Aktif |
 | `01-brd.md` | Final | ✅ Aktif |
-| `02-product-backlog.md` | **Revisi** | ✅ Aktif — PB-016 Media Session |
+| `02-product-backlog.md` | **Revisi** | ✅ Aktif — PB-016 & PB-017 diimplementasi |
 | `03-user-stories.md` | **Revisi** | ✅ Aktif — US-004b lock screen |
 | `04-system-architecture.md` | **Revisi Terbaru (v3)** | ✅ Aktif — §7 Media Session Bridge (`docs/27`) |
 | `05-module-catalog.md` | Final | ✅ Aktif |
@@ -62,8 +62,8 @@ Dokumen ini adalah laporan audit komprehensif terhadap seluruh dokumentasi proye
 | `15-state-management.md` | **Revisi Terbaru (v3)** | ✅ Aktif — §10.5 Media Session sync |
 | `16-folder-structure.md` | **Revisi Terbaru (v3)** | ✅ Aktif — `services/media-session.ts` |
 | `17-implementation-roadmap.md` | **Revisi Terbaru (v3)** | ✅ Aktif — Growth Phase Media Session |
-| `18-development-tasks.md` | **Revisi Terbaru (v3)** | ✅ Aktif — 95 tasks, Phase 2b Media Session |
-| `27-media-session-api-spec.md` | **Baru (v1)** | ✅ Aktif — spesifikasi lock screen & background audio, target `0.2.0` |
+| `18-development-tasks.md` | **Revisi Terbaru (v3)** | ✅ Aktif — 97 tasks, 70 selesai |
+| `27-media-session-api-spec.md` | **v1** | ✅ Diimplementasi — target rilis `0.2.0` |
 | `28-playback-settings.md` | **v1** | ✅ Aktif — Auto Follow + Mode Murotal; §4.4 landscape HP |
 | `29-murotal-mode-spec.md` | **v1** | ✅ Diimplementasi — target rilis `0.3.0` |
 

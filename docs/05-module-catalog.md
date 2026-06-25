@@ -141,7 +141,7 @@ Repeat / fokus hafalan
 - Previous ayah
 - Audio progress
 - Active ayah playback state
-- **Media Session** — metadata & kontrol lock screen OS (`docs/27`)
+- **Media Session** — metadata & kontrol lock screen OS (`docs/27`) ✅
 
 ### Owns
 

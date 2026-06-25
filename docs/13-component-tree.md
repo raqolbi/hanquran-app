@@ -22,7 +22,7 @@ HanQuran
 │  │  ├─ ContinueReading
 │  │  ├─ SearchInput
 │  │  ├─ FilterChips
-│  │  └─ SurahCard (list)
+│  │  └─ LazySurahCard (list, lazy mount)
 │  ├─ SurahDetail (app/surah/[id]/page.tsx)
 │  │  ├─ SurahDetailHeader
 │  │  ├─ VerseDisplayControls

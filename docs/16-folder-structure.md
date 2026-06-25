@@ -61,7 +61,7 @@ Dokumen ini mendefinisikan struktur folder yang direkomendasikan untuk HanQuran 
 │  ├─ types/                    # shared TS types / interfaces
 │  ├─ styles/                   # tailwind config, global css
 │  ├─ public/                   # static assets (branding/, favicon, fonts)
-│  ├─ scripts/                  # small dev scripts (generate-data, migrate)
+│  ├─ scripts/                  # dev scripts (perf audit, bundle measure)
 │  ├─ tests/                    # unit / integration tests for components & stores
 │  ├─ package.json
 │  └─ tsconfig.json
@@ -108,6 +108,7 @@ components/
 │  ├─ surah-detail-header.tsx
 │  ├─ action-bar.tsx              # legacy name → VerseDisplayControls (docs/22)
 │  └─ audio-player.tsx
+│  ├─ lazy-surah-card.tsx       # Beranda — mount SurahCard saat viewport
 ├─ atoms/              # very small components (AyahWordHighlight, Chip)
 └─ index.ts            # optional barrel export
 ```
@@ -145,6 +146,19 @@ Catatan:
 - `services/db/db.ts` hanya untuk data pengguna (settings, favorites, dll.).
 - Service Worker adalah sumber kebenaran untuk file di Cache Storage. Client memverifikasi via `caches.match`.
 - Komponen tidak boleh mengakses `services/db/` atau `services/quran/` secara langsung — konten Quran via hooks, data pengguna via Store.
+
+---
+
+## 6b. Struktur `scripts/` (audit performa)
+
+```
+scripts/
+├─ measure-bundle.mjs      # ukuran chunk .next/static
+├─ run-lighthouse.mjs       # audit Lighthouse mobile
+└─ validate-pwa.mjs        # smoke PWA (manifest + SW)
+```
+
+Perintah: `npm run perf`, `perf:bundle`, `perf:lighthouse`, `perf:pwa` — lihat `docs/SETUP.md` §8.
 
 ---
 

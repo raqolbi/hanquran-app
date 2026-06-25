@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 
 import { routes } from '@/lib/routes';
 
-interface SurahCardProps {
+export interface SurahCardProps {
   number: number;
   arabicName: string;
   englishName: string;

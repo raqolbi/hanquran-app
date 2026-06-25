@@ -146,7 +146,9 @@ Salin checklist ini ke PR atau `RELEASE.md` saat rilis.
 
 ### Kualitas
 
-- [ ] Lighthouse ≥ 80 (Performance, Accessibility, Best Practices, PWA) — mobile
+- [ ] Lighthouse **Performance** ≥ 80 mobile (Beranda run terbaik **47** setelah lazy load; variansi lab — lihat `docs/18` Phase 7)
+- [x] Lighthouse Accessibility / Best Practices / SEO ≥ 80 (baseline 94–100)
+- [x] PWA smoke audit ≥ 80 (`npm run perf:pwa`)
 - [ ] Tidak ada regresi kritis audio / repeat
 
 ---

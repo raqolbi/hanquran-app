@@ -62,7 +62,7 @@ Satu atau dua kalimat: apa yang berubah bagi pengguna.
 
 ## Rencana (belum dirilis)
 
-### [0.2.0] — (rencana)
+### [0.2.0] — (implementasi selesai, belum dirilis)
 
 #### Ringkasan
 
@@ -72,6 +72,8 @@ Pengalaman pemutaran audio di mobile: metadata surat/ayat di lock screen dan kon
 
 - Media Session API — metadata surat, ayat, dan qari di kontrol media OS
 - Kontrol Play/Pause dari lock screen (jika platform mendukung)
+- Progress bar & seek via `setPositionState` / `seekto` (Chrome Android)
+- Navigasi ayat dari lock screen (`previoustrack` / `nexttrack`) — mengikuti aturan transport `docs/29` §7.2
 - Audio background lebih baik saat layar terkunci — selama browser mengizinkan
 
 #### PWA & offline
@@ -87,13 +89,13 @@ Pengalaman pemutaran audio di mobile: metadata surat/ayat di lock screen dan kon
 #### Masalah yang diketahui (antisipasi)
 
 - Perilaku background audio **platform-dependent** — iOS Safari lebih ketat daripada Android Chrome
-- Next/Previous dari lock screen opsional (P2); MVP Media Session fokus Play/Pause + metadata
+- Firefox Android: progress bar lock screen tidak tersedia (known limitation, §6.3 `docs/27`)
 
 #### Uji sebelum rilis
 
-- [ ] Checklist manual Phase 2b (`docs/18`)
-- [ ] Unit test `media-session` + integrasi `audio-controller`
-- [ ] Tidak ada regresi `AudioTabSync` dan RepeatEngine
+- [x] Unit test `media-session` + integrasi `audio-controller`
+- [ ] Checklist manual lock screen (`docs/27` §8)
+- [ ] Tidak ada regresi `AudioTabSync` dan RepeatEngine (uji manual)
 
 ---
 
@@ -110,10 +112,13 @@ Tilawah berkelanjutan (**Mode Murotal**), progress repeat **x/y** di audio bar, 
 - Integrasi dengan RepeatEngine — repeat didahulukan; setelah siklus selesai, murotal advance
 - Berlaku di Surah Detail dan Focus Mode
 - Badge **`x/y`** (`RepeatProgressBadge`) saat sesi repeat aktif — Surah Detail & Focus Mode
+- Aturan tombol **⏮/⏭** transport — dalam surat (default) atau lintas surat saat Murotal ON
 
 #### Perbaikan (rencana)
 
 - Auto Follow Playback — pengukuran zona baca di landscape HP (`short-landscape`)
+- **Lazy load kartu surat Beranda** — `LazySurahCard` (LCP/TBT membaik pada run Lighthouse terbaik)
+- Tooling audit performa — `npm run perf:*` (bundle, Lighthouse, PWA smoke)
 
 #### PWA & offline
 
@@ -135,6 +140,7 @@ Tilawah berkelanjutan (**Mode Murotal**), progress repeat **x/y** di audio bar, 
 
 - [x] Unit test `murotal-resolver` + orkestrasi repeat+murotal
 - [x] Unit test auto follow landscape + `formatRepeatProgressLabel`
+- [x] Unit test `lazy-surah-card` + baseline performa (`docs/18` Phase 7)
 - [ ] Checklist manual Phase 2c (`docs/18`) — lintas surat, kombinasi repeat+murotal
 - [ ] Uji auto follow landscape HP (perangkat fisik)
 - [ ] Tidak ada regresi RepeatEngine dan Media Session
@@ -178,7 +184,7 @@ Rilis MVP pertama HanQuran — aplikasi hafalan Al-Qur'an dengan audio per ayat,
 - Word-by-word highlight — Post-MVP
 - Persist posisi audio terakhir — belum
 - Verifikasi E2E pemutaran offline — manual
-- Media Session API / kontrol lock screen — direncanakan v0.2.0 (`docs/27`)
+- Media Session API — diimplementasi; menunggu tag rilis `v0.2.0` & uji manual lock screen (`docs/27`)
 
 #### Uji sebelum rilis
 
