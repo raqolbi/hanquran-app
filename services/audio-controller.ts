@@ -15,6 +15,7 @@ import {
   bindMediaSession,
   clearMediaSession,
   setMediaSessionPlaybackState,
+  setMediaSessionPositionState,
   syncMediaSessionFromTrack,
 } from '@/services/media-session';
 import { trackAudioPlay } from '@/lib/analytics';
@@ -49,12 +50,14 @@ export class AudioController {
 
   private readonly handleTimeUpdate = (): void => {
     useAudioStore.getState().setCurrentTime(this.audio.currentTime);
+    this.syncMediaSessionPosition();
   };
 
   private readonly handleLoadedMetadata = (): void => {
     if (Number.isFinite(this.audio.duration)) {
       useAudioStore.getState().setDuration(this.audio.duration);
     }
+    this.syncMediaSessionPosition();
   };
 
   private readonly handleEnded = (): void => {
@@ -115,6 +118,7 @@ export class AudioController {
     bindMediaSession({
       onPlay: () => this.handleMediaSessionPlay(),
       onPause: () => this.pause(),
+      onSeekTo: (seekTime) => this.seek(seekTime),
     });
 
     this.attachListeners();
@@ -152,10 +156,29 @@ export class AudioController {
 
     if (playbackState === 'paused') {
       setMediaSessionPlaybackState('paused');
+      this.syncMediaSessionPosition();
       return;
     }
 
     this.syncMediaSessionForTrack(track, playbackState);
+  }
+
+  private syncMediaSessionPosition(): void {
+    if (!useAudioStore.getState().currentTrack) return;
+
+    const duration = this.audio.duration;
+    if (!Number.isFinite(duration) || duration <= 0) return;
+
+    const position = Math.min(
+      Math.max(this.audio.currentTime, 0),
+      duration,
+    );
+
+    setMediaSessionPositionState({
+      duration,
+      position,
+      playbackRate: this.audio.playbackRate,
+    });
   }
 
   /** Elemen audio yang dikelola (untuk pengujian / debugging). */
@@ -197,6 +220,7 @@ export class AudioController {
         });
       }
       this.syncMediaSessionForTrack(track, 'playing');
+      this.syncMediaSessionPosition();
     } catch (error) {
       const code = mapPlayError(error);
       if (code !== 'aborted') {
@@ -223,6 +247,7 @@ export class AudioController {
     try {
       await this.audio.play();
       this.syncMediaSessionPlaybackState('playing');
+      this.syncMediaSessionPosition();
     } catch (error) {
       const code = mapPlayError(error);
       if (code !== 'aborted') {
@@ -260,6 +285,7 @@ export class AudioController {
     this.audio.currentTime = clamped;
     useAudioStore.getState().setCurrentTime(clamped);
     this.tabSync?.notifySeek(clamped);
+    this.syncMediaSessionPosition();
   }
 
   /** Prefetch URL audio (hint browser + buffer tersembunyi). */
@@ -274,6 +300,7 @@ export class AudioController {
   setPlaybackRate(rate: PlaybackRate): void {
     this.applyPlaybackRate(rate);
     useAudioStore.getState().setPlaybackRate(rate);
+    this.syncMediaSessionPosition();
   }
 
   /** Langganan event ayat selesai (untuk RepeatEngine / navigasi ayat). */

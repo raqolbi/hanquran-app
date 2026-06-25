@@ -6,6 +6,7 @@ import {
   isMediaSessionSupported,
   resetMediaSessionBindings,
   setMediaSessionPlaybackState,
+  setMediaSessionPositionState,
   setMediaSessionTrackNavigation,
   syncMediaSessionFromTrack,
   updateMediaSessionMetadata,
@@ -23,9 +24,10 @@ const sampleTrack: AudioTrack = {
 };
 
 function createMockMediaSession() {
-  const actionHandlers = new Map<string, (() => void) | null>();
+  const actionHandlers = new Map<string, ((details?: { seekTime?: number }) => void) | null>();
   let metadata: MediaMetadata | null = null;
   let playbackState: MediaSessionPlaybackState = 'none';
+  let positionState: MediaPositionState | null = null;
 
   return {
     get metadata() {
@@ -40,14 +42,20 @@ function createMockMediaSession() {
     set playbackState(value: MediaSessionPlaybackState) {
       playbackState = value;
     },
+    get positionState() {
+      return positionState;
+    },
+    setPositionState(state: MediaPositionState): void {
+      positionState = state;
+    },
     setActionHandler(
       action: string,
-      handler: (() => void) | null,
+      handler: ((details?: { seekTime?: number }) => void) | null,
     ): void {
       actionHandlers.set(action, handler);
     },
-    invoke(action: string): void {
-      actionHandlers.get(action)?.();
+    invoke(action: string, details?: { seekTime?: number }): void {
+      actionHandlers.get(action)?.(details);
     },
     actionHandlers,
   };
@@ -175,6 +183,39 @@ describe('media-session', () => {
 
     expect(mockSession.metadata?.title).toBe('Al-Fatihah — Ayat 3');
     expect(mockSession.playbackState).toBe('playing');
+  });
+
+  it('setMediaSessionPositionState mengirim durasi dan posisi ke OS', () => {
+    setMediaSessionPositionState({
+      duration: 42.5,
+      position: 12.25,
+      playbackRate: 1.25,
+    });
+
+    expect(mockSession.positionState).toEqual({
+      duration: 42.5,
+      position: 12.25,
+      playbackRate: 1.25,
+    });
+  });
+
+  it('setMediaSessionPositionState mengabaikan durasi tidak valid', () => {
+    setMediaSessionPositionState({
+      duration: 0,
+      position: 0,
+      playbackRate: 1,
+    });
+
+    expect(mockSession.positionState).toBeNull();
+  });
+
+  it('handler seekto memanggil callback dengan waktu target', () => {
+    const onSeekTo = vi.fn();
+
+    bindMediaSession({ onPlay: vi.fn(), onPause: vi.fn(), onSeekTo });
+    mockSession.invoke('seekto', { seekTime: 18.5 });
+
+    expect(onSeekTo).toHaveBeenCalledWith(18.5);
   });
 
   it('clearMediaSession mereset metadata dan handlers', () => {
