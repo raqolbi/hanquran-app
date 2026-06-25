@@ -2,9 +2,9 @@
 
 Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi HanQuran menuju MVP. Berisi daftar pekerjaan teknis yang dapat langsung dikerjakan developer.
 
-**Terakhir diperbarui:** 24 Juni 2026
-**Status:** 🚧 Sprint 2 — word-by-word ditunda Post-MVP (`docs/24`)
-**Total Development Tasks:** 91 (56 Selesai, 35 Belum Dimulai)
+**Terakhir diperbarui:** 25 Juni 2026
+**Status:** 🚧 Sprint 2 — word-by-word ditunda Post-MVP (`docs/24`); Media Session didokumentasikan (`docs/27`)
+**Total Development Tasks:** 95 (52 Selesai, 43 Belum Dimulai)
 **Arsitektur data:** `docs/23-static-dataset-architecture.md`
 
 ---
@@ -61,13 +61,14 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 1b        | Bahasa Aplikasi (`next-intl`)     | 6      | 0      | 5      | 1     | 6       | ✅ Selesai (P2 a11y label tersisa) |
 | 1c        | Verse Display Controls            | 4      | 0      | 4      | 0     | 4       | ✅ Selesai               |
 | 2         | Audio Controller & State          | 11     | 6      | 3      | 2     | 8       | 🟡 P1 persist posisi   |
+| 2b        | Media Session API                 | 5      | 0      | 4      | 1     | 1       | 📋 Spesifikasi selesai |
 | 3         | Repeat Engine & Configuration     | 9      | 6      | 2      | 1     | 6       | 🟡 Keyboard shortcuts berikutnya |
 | 4         | Word Highlight (Focus Mode)       | 8      | 0      | 0      | 8     | 3       | ⏸️ Post-MVP — MVP fokus (audio/repeat/nav) ✅ |
 | 5         | Implementasi Strategi Offline     | 11     | 7      | 3      | 1     | 9       | 🟡 E2E offline playback belum |
 | 6         | PWA & Packaging                   | 8      | 5      | 2      | 1     | 0       | ⏳ Belum Dimulai         |
 | 7         | Testing & Quality Assurance       | 9      | 6      | 2      | 1     | 2       | ⏳ Audio + repeat unit ✅ |
 | 8         | Release & Monitoring              | 11     | 6      | 3      | 2     | 0       | ⏳ Belum Dimulai         |
-| **TOTAL** |                                   | **86** | **53** | **27** | **6** | **51**  |                         |
+| **TOTAL** |                                   | **95** | **48** | **29** | **18** | **52**  |                         |
 
 
 > Catatan: Phase 7 (Testing & QA) berjalan **paralel** mulai Phase 1 — bukan sequential setelah Phase 6 selesai.
@@ -541,6 +542,47 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
 
 ---
 
+## Phase 2b — Media Session API
+
+**Total: 5 tasks | P0: 0 | P1: 4 | P2: 1**
+
+> Spesifikasi: `docs/27-media-session-api-spec.md` · Versi target: **0.2.0** · Bukan blocker MVP `0.1.0`
+
+### Disarankan (P1)
+
+- [x] [DOC] Tulis spesifikasi Media Session API
+  - File: `docs/27-media-session-api-spec.md`, pembaruan dokumen terkait
+  - Prioritas: P1
+  - **Ringkasan:** scope, arsitektur, kriteria penerimaan, dukungan platform, rencana rilis 0.2.0
+
+- [ ] [NEW] Buat service `media-session.ts`
+  - Tujuan: Metadata surat/ayat/qari + action handlers Play/Pause
+  - File: `services/media-session.ts`
+  - Ketergantungan: `AudioController` berjalan
+  - Prioritas: P1
+
+- [ ] [UPDATE] Integrasikan Media Session ke `AudioController`
+  - Tujuan: Sinkron lifecycle play/pause/trek dengan `navigator.mediaSession`
+  - File: `services/audio-controller.ts`, `services/media-session.ts`
+  - Ketergantungan: Service `media-session.ts`
+  - Prioritas: P1
+
+- [ ] [TEST] Uji kontrol lock screen & background playback (mobile)
+  - Tujuan: Verifikasi metadata + Play/Pause di Android Chrome & iOS Safari (tab & PWA)
+  - File: Manual checklist + `tests/services/media-session.test.ts`
+  - Ketergantungan: Integrasi selesai
+  - Prioritas: P1
+
+### Nice to Have (P2)
+
+- [ ] [UPDATE] Action handlers `previoustrack` / `nexttrack` dari lock screen
+  - Tujuan: Navigasi ayat tanpa membuka aplikasi
+  - File: `services/media-session.ts`, callback dari Surah Detail / Focus Mode
+  - Ketergantungan: Media Session dasar selesai
+  - Prioritas: P2
+
+---
+
 ## Phase 3 — Repeat Engine & Configuration
 
 **Total: 9 tasks | P0: 6 | P1: 2 | P3: 1**
@@ -790,6 +832,7 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
   - File: N/A (manual testing)
   - Ketergantungan: Setup PWA selesai
   - Prioritas: P0
+  - **Catatan:** setelah Media Session diimplementasi (Phase 2b), ulangi uji lock screen di checklist `docs/27` §8
 
 ### Disarankan (P1)
 
@@ -1015,6 +1058,13 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [x] Audio preloading & prefetch hints (`services/audio-prefetch.ts`)
 - [x] Dukungan multi-qari via Pengaturan (`settings.reciterId`, `usePreferredReciterId`)
 - [x] Cross-browser audio testing — unit test ✅; checklist manual di Phase 2 P0
+- [ ] Media Session API — spesifikasi ✅ (`docs/27`); implementasi menunggu v0.2.0
+
+### Phase 2b — Media Session
+- [x] Spesifikasi & dokumen terkait (`docs/27`)
+- [ ] Service `media-session.ts`
+- [ ] Integrasi `AudioController`
+- [ ] Uji lock screen mobile
 
 ### Phase 3 — Repeat
 - [x] useRepeatStore dibuat — config + runtime

@@ -141,6 +141,7 @@ Repeat / fokus hafalan
 - Previous ayah
 - Audio progress
 - Active ayah playback state
+- **Media Session** — metadata & kontrol lock screen OS (`docs/27`)
 
 ### Owns
 
@@ -150,6 +151,7 @@ Repeat / fokus hafalan
 - `useAudio()`
 - `AudioEngine`
 - `PlaylistEngine`
+- `MediaSessionBridge` (`services/media-session.ts`)
 
 ### Public Hooks
 

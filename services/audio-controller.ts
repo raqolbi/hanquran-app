@@ -11,6 +11,12 @@ import {
   removeAudioPrefetchHints,
 } from '@/services/audio-prefetch';
 import { AudioTabSync } from '@/services/audio-tab-sync';
+import {
+  bindMediaSession,
+  clearMediaSession,
+  setMediaSessionPlaybackState,
+  syncMediaSessionFromTrack,
+} from '@/services/media-session';
 import { trackAudioPlay } from '@/lib/analytics';
 import { useAudioStore } from '@/stores/audioStore';
 import type { AudioErrorCode, AudioTrack, PlaybackRate } from '@/types';
@@ -54,6 +60,7 @@ export class AudioController {
   private readonly handleEnded = (): void => {
     useAudioStore.getState().pause();
     useAudioStore.getState().setCurrentTime(0);
+    this.syncMediaSessionPlaybackState('paused');
     for (const handler of this.endedHandlers) {
       handler();
     }
@@ -62,6 +69,7 @@ export class AudioController {
   private readonly handleError = (): void => {
     useAudioStore.getState().setError(mapMediaError(this.audio));
     useAudioStore.getState().pause();
+    this.syncMediaSessionPlaybackState('paused');
   };
 
   private readonly handlePlay = (): void => {
@@ -104,7 +112,50 @@ export class AudioController {
       this.pauseFromRemote();
     });
 
+    bindMediaSession({
+      onPlay: () => this.handleMediaSessionPlay(),
+      onPause: () => this.pause(),
+    });
+
     this.attachListeners();
+  }
+
+  private handleMediaSessionPlay(): void {
+    void this.resumeFromMediaSession();
+  }
+
+  private async resumeFromMediaSession(): Promise<void> {
+    const store = useAudioStore.getState();
+    if (!store.currentTrack || store.isPlaying) return;
+    await this.resume();
+  }
+
+  private syncMediaSessionForTrack(
+    track: AudioTrack,
+    playbackState: 'playing' | 'paused' | 'none',
+  ): void {
+    void syncMediaSessionFromTrack(track, playbackState);
+  }
+
+  private syncMediaSessionPlaybackState(
+    playbackState: 'playing' | 'paused' | 'none',
+  ): void {
+    const track = useAudioStore.getState().currentTrack;
+    if (!track) {
+      if (playbackState === 'none') {
+        clearMediaSession();
+      } else {
+        setMediaSessionPlaybackState(playbackState);
+      }
+      return;
+    }
+
+    if (playbackState === 'paused') {
+      setMediaSessionPlaybackState('paused');
+      return;
+    }
+
+    this.syncMediaSessionForTrack(track, playbackState);
   }
 
   /** Elemen audio yang dikelola (untuk pengujian / debugging). */
@@ -145,12 +196,14 @@ export class AudioController {
           reciterId: track.reciterId,
         });
       }
+      this.syncMediaSessionForTrack(track, 'playing');
     } catch (error) {
       const code = mapPlayError(error);
       if (code !== 'aborted') {
         store.setError(code);
       }
       store.pause();
+      this.syncMediaSessionForTrack(track, 'paused');
     }
   }
 
@@ -169,12 +222,14 @@ export class AudioController {
 
     try {
       await this.audio.play();
+      this.syncMediaSessionPlaybackState('playing');
     } catch (error) {
       const code = mapPlayError(error);
       if (code !== 'aborted') {
         store.setError(code);
       }
       store.pause();
+      this.syncMediaSessionPlaybackState('paused');
     }
   }
 
@@ -238,6 +293,7 @@ export class AudioController {
     this.audio.pause();
     this.audio.removeAttribute('src');
     this.audio.load();
+    clearMediaSession();
     useAudioStore.getState().reset();
   }
 
@@ -245,6 +301,7 @@ export class AudioController {
   private pauseFromRemote(): void {
     this.audio.pause();
     useAudioStore.getState().pause();
+    this.syncMediaSessionPlaybackState('paused');
   }
 
   private applyPlaybackRate(rate: PlaybackRate): void {

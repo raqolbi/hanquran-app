@@ -124,6 +124,7 @@ Prinsip:
 ```
 services/
 ├─ audio-controller.ts      # jembatan HTMLAudioElement ↔ useAudioStore
+├─ media-session.ts         # Media Session API — metadata & kontrol lock screen
 ├─ download-manager.ts      # orchestration unduh audio ke Cache Storage
 ├─ db/                      # Dexie — hanya data pengguna
 │  ├─ db.ts                 # Dexie instance + schema v2

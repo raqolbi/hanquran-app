@@ -112,6 +112,10 @@ export interface AudioTrack {
   ayahNumber: number;
   reciterId: string;
   url: string;
+  /** Label surat untuk Media Session (opsional — di-resolve otomatis jika kosong). */
+  surahName?: string;
+  /** Label qari untuk Media Session (opsional — di-resolve dari reciterId jika kosong). */
+  reciterName?: string;
 }
 
 export type PlaybackRate = 0.75 | 1 | 1.25 | 1.5;

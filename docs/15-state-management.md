@@ -117,6 +117,7 @@ Pemilik state non-store:
 | Service Worker                   | File audio di Cache Storage dan progres unduhan                               |
 | Komponen lokal                   | Temporary UI State (dialog terbuka, query pencarian, dst.)                    |
 | `services/audio-controller.ts`   | Jembatan antara HTMLAudioElement dengan `useAudioStore`                       |
+| `services/media-session.ts`      | Media Session API — metadata lock screen & action handlers Play/Pause         |
 | `services/download-manager.ts`   | Antarmuka client ↔ Service Worker untuk unduhan audio                          |
 
 Aturan kepemilikan:
@@ -424,6 +425,17 @@ Tujuan: hanya satu sumber kebenaran untuk pemutaran audio di satu sesi pengguna.
 * Saat ayat aktif berubah di Surah Detail atau Focus Mode, hook `usePersistLastViewed` memanggil `useUserStore.setLastViewed(surahId, ayahNumber)`.
 * Action ini menulis ke Dexie tabel `lastRead` secara langsung.
 * Nilai ini menjadi sumber **Lanjutkan Hafalan** di Beranda (`ContinueReadingSection`).
+
+## 10.5 Sinkronisasi Media Session
+
+Tujuan: OS mengenali pemutaran tilawah sebagai sesi media — metadata dan kontrol Play/Pause tersedia di lock screen jika platform mendukung.
+
+* Modul `services/media-session.ts` dipanggil dari `audio-controller` pada lifecycle play, pause, resume, ganti trek, dan reset.
+* Metadata di-resolve dari `currentTrack` + nama surat (via `services/quran/`) + label qari.
+* Action handler `play` / `pause` mendelegasikan ke method `AudioController` yang sama dengan UI — bukan duplikasi logika store.
+* `playbackState` mengikuti `useAudioStore.isPlaying`.
+* Jika `navigator.mediaSession` tidak tersedia, seluruh jalur Media Session adalah no-op.
+* Spesifikasi lengkap: `docs/27-media-session-api-spec.md`
 
 ---
 

@@ -79,7 +79,8 @@ hanquran-app/
 ├─ services/
 │  ├─ db/          — Dexie setup & migrations
 │  ├─ api/         — Repository Layer (Phase 1)
-│  ├─ audio-controller/  — (Phase 2)
+│  ├─ audio-controller.ts  — jembatan HTMLAudioElement ↔ store (Phase 2)
+│  ├─ media-session.ts     — Media Session API, lock screen (Phase 2b, `docs/27`)
 │  └─ download-manager/  — (Phase 5)
 ├─ data/           — reciters.json dan metadata domain
 ├─ types/          — TypeScript types/interfaces domain
