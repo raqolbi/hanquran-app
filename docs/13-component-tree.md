@@ -6,7 +6,7 @@ Dokumen ini mendokumentasikan struktur komponen pada proyek HanQuran. Ditujukan 
 
 ## Ringkasan cepat
 - Pages: Beranda, Halaman Surat (Surah detail), Mode Fokus, Pengaturan.
-- Screen Components: header, action bar, surah list/card, ayah card, audio player, focus player, repeat UI, dll.
+- Screen Components: header, action bar, surah list/card, ayah card, audio player, repeat inline, dll.
 - Shared Components: header, bottom navigation, offline badge, audio player, repeat dialog.
 - UI Components: atoms dan primitives di `components/ui` (Button, Dialog, Drawer, SegmentedControl, Select, Switch).
 
@@ -27,12 +27,13 @@ HanQuran
 │  │  ├─ SurahDetailHeader
 │  │  ├─ VerseDisplayControls
 │  │  ├─ AyahCard (list)
-│  │  ├─ AudioPlayer (sticky)
-│  │  └─ RepeatSelector (floating)
+│  │  ├─ SurahDetailScrollSpacer
+│  │  └─ AudioPlayer (fixed)
+│  │      └─ RepeatSelector (inline, toolbarStart)
 │  ├─ FocusMode (app/focus/[id]/page.tsx)
-│  │  ├─ AyahWordHighlight (many)
-│  │  ├─ FocusModePlayer
-│  │  └─ RepeatStatus / RepeatSettingsDialog
+│  │  ├─ AyahWordHighlight (stub Post-MVP)
+│  │  └─ AudioPlayer (fixed)
+│  │      └─ RepeatSelector (inline) + RepeatSettingsDialog
 │  └─ Settings (app/settings/page.tsx)
 │     ├─ SettingsHeader
 │     ├─ SettingsSection / SettingsRow
@@ -54,10 +55,10 @@ HanQuran
 │  ├─ Favorites
 │  ├─ BottomNavigation
 │  ├─ AudioPlayer
-│  ├─ FocusModePlayer
 │  ├─ RepeatSelector
-│  ├─ RepeatStatus
 │  ├─ RepeatSettingsDialog
+│  ├─ SurahDetailScrollSpacer
+│  ├─ FocusModePlayer (legacy, tidak dipakai)
 │  └─ SettingsSection / SettingsRow
 
 ├─ Shared Components (components/shared)
@@ -89,13 +90,13 @@ Semua penjelasan ditulis dalam Bahasa Indonesia dan mengikuti implementasi saat 
 - SurahDetail (app/surah/[id]/page.tsx)
   - Tujuan: Menyajikan daftar ayat pada sebuah surat, kontrol audio, dan fitur repeat/fokus.
   - Tanggung jawab: Mengelola ayat aktif, status pemutaran, pengaturan repeat, dan membuka Mode Fokus.
-  - Dependensi utama: `SurahDetailHeader`, `VerseDisplayControls`, `AyahCard`, `AudioPlayer`, `RepeatSelector`, `RepeatSettingsDialog`, `lib/surahs-data`.
+  - Dependensi utama: `SurahDetailHeader`, `VerseDisplayControls`, `AyahCard`, `AudioPlayer`, `RepeatSelector` (inline), `RepeatSettingsDialog`, `SurahDetailScrollSpacer`, `useSurahDetailBottomInset`, `useSurahRepeatPlayback`.
   - Reusable: Tidak (halaman spesifik).
 
 - FocusMode (app/focus/[id]/page.tsx)
   - Tujuan: Layar baca fokus bebas distraksi — satu ayat nyata, tanpa word highlight MVP.
   - Tanggung jawab: Menampilkan ayat aktif, audio play/pause, navigasi prev/next, preferensi baca, keluar ke Surah Detail.
-  - Dependensi utama: `FocusModePlayer`, `RepeatStatus`, `RepeatSettingsDialog`, `useSurah`, `useReadingDisplay`, `useAudio`.
+  - Dependensi utama: `AudioPlayer`, `RepeatSelector` (inline), `RepeatSettingsDialog`, `useSurah`, `useReadingDisplay`, `useSurahRepeatPlayback`, `useSurahDetailBottomInset`.
   - Reusable: Tidak (mode khusus).
 
 - Settings (app/settings/page.tsx)
@@ -170,22 +171,25 @@ Untuk setiap entri: Tujuan / Tanggung jawab / Dependensi / Reusable
   - Reusable: Ya.
 
 - `AudioPlayer`
-  - Tujuan: Pemain audio sticky di halaman Surat (kontrol playback, prev/next, progress, repeat info).
-  - Tanggung jawab: Render progress, play/pause, prev/next, dan ringkasan repeat; menerima callbacks dari parent untuk kontrol pemutaran.
-  - Dependensi utama: `lib/repeat-options` util.
-  - Reusable: Ya (komponen yang bisa dipakai kembali dengan props audio).
+  - Tujuan: Pemain audio fixed di bagian bawah (Surah Detail & Focus Mode).
+  - Tanggung jawab: Progress, play/pause, prev/next, slot `toolbarStart` untuk repeat inline; ukur tinggi chrome via ref untuk scroll spacer.
+  - Dependensi utama: `useAudio`, `lib/surah-detail-chrome`.
+  - Reusable: Ya.
 
-- `FocusModePlayer`
-  - Tujuan: Player minimal untuk Mode Fokus (progress + play/pause).
-  - Tanggung jawab: Menyajikan progress dan tombol play/pause saja.
-  - Dependensi utama: none.
-  - Reusable: Ya (khusus Mode Fokus tetapi atomic).
+- `FocusModePlayer` *(legacy)*
+  - Tujuan: Digantikan `AudioPlayer` di Focus Mode. File masih ada, tidak dirender.
+  - Reusable: Tidak (deprecated).
 
 - `RepeatSelector`
-  - Tujuan: Kontrol ringkas untuk mengubah jumlah repeat; menampilkan opsi singkat.
-  - Tanggung jawab: Menyediakan UI pemilihan jumlah repeat dan tombol pengaturan lanjutan.
-  - Dependensi utama: `lib/repeat-options`, `RepeatStatus`.
+  - Tujuan: Kontrol ringkas jumlah repeat (`variant="inline"` di audio bar) atau panel vertikal legacy.
+  - Tanggung jawab: Select jumlah + tombol ⚙ ke `RepeatSettingsDialog`.
+  - Dependensi utama: `lib/repeat-options`, `components/ui/select`.
   - Reusable: Ya.
+
+- `SurahDetailScrollSpacer`
+  - Tujuan: Ruang scroll di akhir daftar ayat agar ayat terakhir tidak tertutup chrome audio.
+  - Tanggung jawab: Menerima `height` dari `useSurahDetailBottomInset` (≈ tinggi audio + 16px comfort).
+  - Reusable: Ya (Surah Detail).
 
 - `RepeatStatus`
   - Tujuan: Menampilkan status repeat yang sedang aktif (target, siklus, ayat saat ini).
@@ -194,9 +198,9 @@ Untuk setiap entri: Tujuan / Tanggung jawab / Dependensi / Reusable
   - Reusable: Ya.
 
 - `RepeatSettingsDialog`
-  - Tujuan: Dialog / drawer yang mengatur konfigurasi repeat (count, target, range).
-  - Tanggung jawab: Menyediakan form pengaturan repeat; beralih antara Dialog (desktop) dan Drawer (mobile).
-  - Dependensi utama: `components/ui/dialog`, `components/ui/drawer`, `hooks/use-media-query`, `lib/repeat-options`.
+  - Tujuan: Dialog / drawer pengaturan repeat (count, target, range).
+  - Tanggung jawab: Drawer di mobile & landscape HP (`DESKTOP_DIALOG_MEDIA` dari `lib/viewport.ts`); Dialog di desktop/tablet tinggi.
+  - Dependensi utama: `components/ui/dialog`, `components/ui/drawer`, `hooks/use-media-query`, `lib/viewport`, `lib/repeat-options`.
   - Reusable: Ya.
 
 - `OfflineStatusBadge`
@@ -274,19 +278,19 @@ Folder: `components/ui`
 - `ContinueReading` — kartu entry untuk melanjutkan hafalan.
 - `FocusMode` page (`app/focus/[id]/page.tsx`) — layar baca fokus MVP (ayat utuh; word highlight Post-MVP).
 - `AyahWordHighlight` — komponen highlight kata; **belum dipakai** di MVP V1 (`docs/24-focus-mode-mvp-scope.md`).
-- `RepeatSettingsDialog`, `RepeatSelector`, `RepeatStatus`, `lib/repeat-options` — mengatur logika dan UI pengulangan hafalan.
+- `RepeatSettingsDialog`, `RepeatSelector`, `lib/repeat-options`, `lib/viewport` — mengatur logika dan UI pengulangan hafalan.
 
-Catatan: logika pengulangan disimpan di `lib/repeat-options` (opsi dan helper) sementara state dan siklus dikelola di halaman Mode Fokus atau SurahDetail.
+Catatan: state repeat di `useRepeatStore`; UI repeat inline di `AudioPlayer.toolbarStart` pada Surah Detail dan Focus Mode.
 
 ### Komponen audio
-- `AudioPlayer` — pemutar sticky di halaman surat; menerima callback untuk prev/next/putar.
-- `FocusModePlayer` — player Mode Fokus; baris ⏮ play/pause ⏭ selaras `AudioPlayer`.
-- Dependensi: UI icons (lucide-react), util repeat untuk menampilkan status singkat.
+- `AudioPlayer` — chrome bawah fixed (progress + repeat inline + transport) di Surah Detail dan Focus Mode.
+- `FocusModePlayer` — **legacy**, digantikan `AudioPlayer`.
+- `useSurahDetailBottomInset` — mengukur tinggi chrome untuk `SurahDetailScrollSpacer` dan padding Focus Mode.
 
 ### Komponen repeat
-- `RepeatSelector` — UI cepat untuk memilih jumlah repeat.
-- `RepeatSettingsDialog` — dialog lengkap / drawer untuk pengaturan target dan range.
-- `RepeatStatus` — ringkasan status repeat aktif.
+- `RepeatSelector` — `variant="inline"` di audio bar; `variant="panel"` legacy.
+- `RepeatSettingsDialog` — drawer (mobile & landscape HP) atau dialog (desktop lebar+tinggi).
+- `RepeatStatus` — dipakai di dalam dialog / panel legacy; tidak di chrome bawah.
 - `lib/repeat-options.ts` — definisi opsi repeat, helper `getRepeatOption`, `formatRepeatCount`.
 
 ### Komponen offline

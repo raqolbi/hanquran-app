@@ -603,10 +603,10 @@ Radius     : 8px
 
 ## Sticky Player
 
-Height:
+Height (min):
 
 ```text
-96px
+~112px
 ```
 
 Background:
@@ -626,6 +626,8 @@ Shadow:
 ```text
 Medium
 ```
+
+Layout: progress + baris `[repeat inline][⚙] ··· ⏮ ▶ ⏭`.
 
 ---
 

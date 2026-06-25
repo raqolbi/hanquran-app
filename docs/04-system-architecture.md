@@ -573,17 +573,15 @@ Tanpa perubahan besar pada struktur aplikasi.
 │   │       │       ├── <AyahTranslation />     ← toggle show/hide
 │   │       │       └── <PlayButton />
 │   │       └── <AudioBar>
-│   │           ├── <AudioControls />   (play, pause, next, prev)
 │   │           ├── <AudioProgress />
-│   │           └── <RepeatSelector />
-│   │               └── <RepeatOption /> (×6)
+│   │           └── <AudioControls />
+│   │               ├── <RepeatSelector variant="inline" />
+│   │               └── transport (prev / play / next)
 │   │
 │   ├── [Halaman: /focus/[id]]
 │   │   └── <FocusPage>
 │   │       ├── <FocusAyah />       ← ayat besar; Arab + transliterasi + terjemahan sesuai settings
-│   │       ├── <FocusAudio />      ← kontrol audio minimal
-│   │       ├── <FocusRepeat />     ← repeat tetap ada
-│   │       └── <FocusProgress />   ← progress hafalan
+│   │       └── <AudioBar />        ← sama dengan Surah Detail (repeat inline)
 │   │
 │   └── [Halaman: /settings]
 │       └── <SettingsPage>

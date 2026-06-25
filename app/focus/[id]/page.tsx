@@ -4,24 +4,18 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import {
-  ChevronDown,
-  X,
-} from 'lucide-react';
+import { X } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import { FocusModePlayer } from '@/components/focus-mode-player';
-import { RepeatStatus } from '@/components/repeat-status';
+import { AudioPlayer } from '@/components/audio-player';
+import { RepeatSelector } from '@/components/repeat-selector';
 import { RepeatSettingsDialog } from '@/components/repeat-settings-dialog';
-import {
-  INFINITE,
-  getRepeatOption,
-} from '@/lib/repeat-options';
 import { routes } from '@/lib/routes';
 import { useArabicTextSize } from '@/hooks/use-arabic-text-size';
 import { usePreferredReciterId } from '@/hooks/use-preferred-reciter';
 import { useSurah } from '@/hooks/use-surah';
 import { useReadingDisplay } from '@/hooks/use-reading-display';
+import { useSurahDetailBottomInset } from '@/hooks/use-surah-detail-bottom-inset';
 import { useSurahRepeatPlayback } from '@/hooks/use-surah-repeat-playback';
 import { usePersistLastViewed } from '@/hooks/use-persist-last-viewed';
 import { useTrackSurahOpened } from '@/hooks/use-track-surah-opened';
@@ -44,8 +38,6 @@ function FocusModeLoaded({
   startAyah,
 }: FocusModeLoadedProps) {
   const tFocus = useTranslations('focus');
-  const tRepeat = useTranslations('repeat');
-  const tCommon = useTranslations('common');
   const router = useRouter();
   const { showTranslation, showTransliteration } = useReadingDisplay();
   const { focusArabicStyle } = useArabicTextSize();
@@ -63,13 +55,13 @@ function FocusModeLoaded({
 
   const {
     isActiveAyahPlaying,
-    audioProgress,
     togglePlayback,
     navigateAyah,
     prefetchNextAyah,
     repeatCount,
     repeatStatusProps,
     showRepeatStatus,
+    handleCountChange,
     handleApplyRepeatSettings,
   } = useSurahRepeatPlayback({
     surahId: surah.number,
@@ -78,6 +70,11 @@ function FocusModeLoaded({
     reciterId,
     surahName: surah.englishName,
     setActiveAyah,
+  });
+
+  const { bottomInset, audioChromeHeight, audioRef } = useSurahDetailBottomInset({
+    enabled: true,
+    remeasureKey: `${isActiveAyahPlaying}-${showTranslation}-${showTransliteration}`,
   });
 
   useEffect(() => {
@@ -92,10 +89,6 @@ function FocusModeLoaded({
   useEffect(() => {
     prefetchNextAyah();
   }, [activeAyah, prefetchNextAyah]);
-
-  const repeatOption = getRepeatOption(repeatCount);
-  const repeatLabel =
-    repeatCount === INFINITE ? tRepeat('infinite') : repeatOption.label;
 
   const handleExit = () => {
     router.push(routes.surah(surahIdParam, activeAyah));
@@ -139,7 +132,10 @@ function FocusModeLoaded({
         </p>
       </motion.header>
 
-      <main className="relative z-10 flex flex-1 items-center justify-center px-4 sm:px-8">
+      <main
+        className="relative z-10 flex flex-1 items-center justify-center px-4 sm:px-8"
+        style={{ paddingBottom: bottomInset }}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={activeAyah}
@@ -179,51 +175,28 @@ function FocusModeLoaded({
         </AnimatePresence>
       </main>
 
-      <motion.footer
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, ease: 'easeOut', delay: 0.05 }}
-        className="relative z-10 mx-auto w-full max-w-2xl px-4 pb-6 sm:px-8 sm:pb-10"
-      >
-        <FocusModePlayer
-          isPlaying={isActiveAyahPlaying}
-          progress={audioProgress}
-          onPlayPause={() => void togglePlayback()}
-          onPrevious={handlePrevAyah}
-          onNext={handleNextAyah}
-          isPreviousDisabled={activeAyah <= 1}
-          isNextDisabled={activeAyah >= totalAyahs}
-        />
-
-        <div className="mt-6 flex flex-col items-center gap-2">
-          <span className="text-sm font-medium text-foreground">{tCommon('repeat')}</span>
-          <button
-            type="button"
-            onClick={() => setSettingsOpen(true)}
-            className={cn(
-              'inline-flex items-center gap-2 rounded-full border px-4 h-10 text-sm font-medium transition-all duration-200 ease-out',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-              showRepeatStatus
-                ? 'border-transparent bg-primary text-white'
-                : 'border-border bg-white text-foreground hover:border-primary/40',
-            )}
-            aria-label={tFocus('openRepeatSettings')}
-          >
-            <span className="text-base leading-none">{repeatOption.emoji}</span>
-            <span>{repeatLabel}</span>
-            <ChevronDown size={16} className="opacity-70" />
-          </button>
-          <p className="text-xs text-muted-foreground text-center px-4">
-            {tFocus('repeatSyncedHint')}
-          </p>
-        </div>
-
-        {showRepeatStatus ? (
-          <div className="mt-4">
-            <RepeatStatus {...repeatStatusProps} />
-          </div>
-        ) : null}
-      </motion.footer>
+      <AudioPlayer
+        ref={audioRef}
+        surahId={surah.number}
+        currentAyah={activeAyah}
+        reciterId={reciterId}
+        onTogglePlay={() => void togglePlayback()}
+        onPrevious={handlePrevAyah}
+        onNext={handleNextAyah}
+        isPreviousDisabled={activeAyah <= 1}
+        isNextDisabled={activeAyah >= totalAyahs}
+        toolbarStart={
+          <RepeatSelector
+            variant="inline"
+            count={repeatCount}
+            isActive={showRepeatStatus}
+            statusProps={repeatStatusProps}
+            bottomChromeHeight={audioChromeHeight}
+            onCountChange={handleCountChange}
+            onOpenSettings={() => setSettingsOpen(true)}
+          />
+        }
+      />
 
       <RepeatSettingsDialog
         open={settingsOpen}

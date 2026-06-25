@@ -36,9 +36,9 @@ Simulasi interval tetap **dihapus** dari kode. Komponen `AyahWordHighlight` teta
 - Route `/focus/[id]?ayah=[n]`
 - Konten ayat nyata: Arab, transliterasi & terjemahan (sesuai preferensi `useReadingDisplay`)
 - Navigasi ayat sebelumnya / berikutnya tanpa keluar dari mode
-- **Audio per ayat** — play/pause + progress + navigasi ⏮/⏭ via `FocusModePlayer` (ikon & layout selaras `AudioPlayer` Surah Detail)
+- **Audio per ayat** — play/pause + progress + navigasi ⏮/⏭ via `AudioPlayer` + `RepeatSelector` inline (layout identik Surah Detail)
 - Tombol keluar kembali ke Surah Detail pada ayat aktif
-- UI repeat (konfigurasi) — **sinkron** dengan `useRepeatStore` + otomasi `RepeatEngine` (sama seperti Surah Detail)
+- UI repeat — select cepat + ⚙ → `RepeatSettingsDialog`; state via `useRepeatStore` + `RepeatEngine` (sama seperti Surah Detail); **tanpa** teks hint di layar
 
 ### Tidak termasuk ❌ (Post-MVP)
 
@@ -88,5 +88,5 @@ Saat data timing tersedia:
 - `docs/20-mvp-freeze.md` — PB-005 & kriteria Focus Mode
 - `docs/18-development-tasks.md` — Phase 4 ditandai Post-MVP
 - `docs/02-product-backlog.md` — PB-005 prioritas
-- `docs/14-routing-spec.md` — deskripsi route Focus Mode
-- `docs/13-component-tree.md` — tanggung jawab halaman Focus Mode
+- `docs/13-component-tree.md` — pohon komponen & chrome audio
+- `docs/12-component-spec.md` — spesifikasi `AudioPlayer`, `RepeatSelector` inline

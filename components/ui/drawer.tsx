@@ -41,7 +41,8 @@ const DrawerContent = React.forwardRef<
         className={cn(
           'bg-card text-card-foreground border-t border-border shadow-lg',
           'rounded-t-3xl',
-          'max-h-[85vh] overflow-hidden',
+          'flex max-h-[min(85dvh,calc(100dvh-env(safe-area-inset-bottom,0px)))] flex-col overflow-hidden',
+          'short-landscape:max-h-[calc(100dvh-env(safe-area-inset-top,0px)-env(safe-area-inset-bottom,0px)-0.5rem)]',
           'transition-all duration-200 ease-out',
           'data-[starting-style]:translate-y-full',
           'data-[ending-style]:translate-y-full',
@@ -50,11 +51,11 @@ const DrawerContent = React.forwardRef<
         )}
         {...props}
       >
-        <DrawerPrimitive.Content className="max-h-[85vh] overflow-y-auto px-5 pt-3 pb-6 outline-none">
-          <div
-            className="mx-auto mb-3 h-1 w-12 rounded-full bg-border"
-            aria-hidden
-          />
+        <div
+          className="mx-auto mb-3 mt-3 h-1 w-12 shrink-0 rounded-full bg-border"
+          aria-hidden
+        />
+        <DrawerPrimitive.Content className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pb-6 pt-0 outline-none [-webkit-overflow-scrolling:touch]">
           {children}
         </DrawerPrimitive.Content>
       </DrawerPrimitive.Popup>

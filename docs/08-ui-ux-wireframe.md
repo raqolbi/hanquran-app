@@ -267,7 +267,7 @@ Elemen penting lain muncul di konteks layar:
 * Mengontrol audio tanpa bingung
 * Masuk ke mode hafalan dengan cepat
 * Translation dan transliterasi opsional — dikontrol dari Verse Display Controls
-* Repeat mudah digunakan tanpa memenuhi layar
+* Repeat inline di audio bar — tidak memenuhi layar, tidak ada kartu mengambang
 * Mendukung penggunaan offline
 
 ---
@@ -315,14 +315,9 @@ Urutan render ayat (jika semua ON): Arab → Transliterasi → Terjemahan.
 │ └──────────────────────────────────┘ │
 │                                      │
 │══════════════════════════════════════│
-│ ⏮      ▶      ❚❚      ⏭            │
-│                                      │
 │ ━━━━━━━━━●━━━━━━━━━━━               │
 │                                      │
-│ Repeat                              ⚙│
-│ [🐥 5x ▼]                            │
-│                                      │
-│ Ayat 2 • 4x tersisa                 │
+│ [🐥 5x ▼][⚙]     ⏮   ▶/⏸   ⏭      │
 │══════════════════════════════════════│
 └──────────────────────────────────────┘
 ```
@@ -333,6 +328,8 @@ Urutan render ayat (jika semua ON): Arab → Transliterasi → Terjemahan.
 * Audio selalu dikontrol dari player bawah.
 * Ayat aktif diberi highlight lembut.
 * Audio bar sticky di bagian bawah layar.
+* **Repeat inline** — `RepeatSelector` (`variant="inline"`) + tombol pengaturan (⚙) berada di **baris yang sama** dengan kontrol transport, bukan kartu mengambang terpisah.
+* Padding scroll ayat terakhir mengikuti tinggi chrome audio terukur (`useSurahDetailBottomInset`); tidak ada panel repeat mengambang.
 
 ---
 
@@ -341,32 +338,27 @@ Urutan render ayat (jika semua ON): Arab → Transliterasi → Terjemahan.
 ```text
 ┌──────────────────────────────────────┐
 │══════════════════════════════════════│
-│ ⏮      ▶      ❚❚      ⏭            │
-│                                      │
 │ ━━━━━━━━━●━━━━━━━━━━━               │
 │                                      │
-│ Repeat                              ⚙│
-│ [🐥 5x ▼]                            │
+│ [🐥 5x ▼][⚙]     ⏮   ▶/⏸   ⏭      │
 │══════════════════════════════════════│
 └──────────────────────────────────────┘
 ```
 
 ## Repeat Status Variants
 
+> **Catatan:** `RepeatStatus` tidak lagi ditampilkan di chrome bawah. Status repeat aktif ditangani oleh `RepeatEngine`; konfigurasi dan preview ada di `RepeatSettingsDialog`.
+
 ### Repeat Ayat Aktif
+
+Saat repeat berjalan, chrome bawah **tetap** layout inline yang sama; tidak ada kartu status tambahan.
 
 ```text
 ┌──────────────────────────────────────┐
 │══════════════════════════════════════│
-│ ⏮      ▶      ❚❚      ⏭            │
-│                                      │
 │ ━━━━━━━━━●━━━━━━━━━━━               │
 │                                      │
-│ Repeat                              ⚙│
-│ [🐥 5x ▼]                            │
-│                                      │
-│ 🟢 Ayat Aktif                        │
-│ Ayat 2 • 4x tersisa                 │
+│ [🐥 5x ▼][⚙]     ⏮   ▶/⏸   ⏭      │
 │══════════════════════════════════════│
 └──────────────────────────────────────┘
 ```
@@ -387,31 +379,18 @@ Tampilan player:
 ```text
 ┌──────────────────────────────────────┐
 │══════════════════════════════════════│
-│ ⏮      ▶      ❚❚      ⏭            │
-│                                      │
 │ ━━━━━━━━━●━━━━━━━━━━━               │
 │                                      │
-│ Repeat                              ⚙│
-│ [🐥 5x ▼]                            │
-│                                      │
-│ 🟢 Range Ayat 1-5                    │
-│ Siklus 2 / 5                        │
-│ Sedang di Ayat 3                    │
+│ [🐥 5x ▼][⚙]     ⏮   ▶/⏸   ⏭      │
 │══════════════════════════════════════│
 └──────────────────────────────────────┘
 ```
-
-User langsung paham:
-
-* Range yang diulang = 1-5
-* Saat ini putaran ke-2
-* Posisi sekarang = ayat 3
 
 ---
 
 ### Repeat Surat
 
-Misal:
+Misal user memilih seluruh surat:
 
 ```text
 Surat Al-Ikhlas
@@ -423,16 +402,9 @@ Tampilan player:
 ```text
 ┌──────────────────────────────────────┐
 │══════════════════════════════════════│
-│ ⏮      ▶      ❚❚      ⏭            │
-│                                      │
 │ ━━━━━━━━━●━━━━━━━━━━━               │
 │                                      │
-│ Repeat                              ⚙│
-│ [🐥 5x ▼]                            │
-│                                      │
-│ 🟢 Surat Al-Ikhlas                   │
-│ Siklus 2 / 5                        │
-│ Sedang di Ayat 3 dari 4             │
+│ [🐥 5x ▼][⚙]     ⏮   ▶/⏸   ⏭      │
 │══════════════════════════════════════│
 └──────────────────────────────────────┘
 ```
@@ -631,15 +603,9 @@ Ayat 4
 │ └──────────────────────────────────────────────────────────────┘ │
 │                                                                  │
 ├──────────────────────────────────────────────────────────────────┤
-│ ⏮        ▶        ❚❚        ⏭                                  │
-│                                                                  │
 │ ━━━━━━━━━━━━━━━●━━━━━━━━━━━━━━━━━━━━                            │
 │                                                                  │
-│ Repeat                              ⚙                           │
-│ [🐥 5x ▼]                                                     │
-│                                                                  │
-│  🟢 Ayat Aktif                                                   │
-│ Ayat 2 • 4x tersisa                                              │
+│ [🐥 5x ▼][⚙]              ⏮   ▶/⏸   ⏭                          │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
@@ -761,18 +727,11 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │                                      │
 │ ───────────●───────────             │
 │                                      │
-│      ⏮        ▶/⏸        ⏭          │
-│   (ikon sama dengan AudioPlayer)     │
-│                                      │
-│ Repeat                              │
-│ [🐥 5x ▼]                            │
-│                                      │
-│ 🟢 Ayat Aktif                        │
-│ Ayat 1 • 4x tersisa                 │
+│ [🐥 5x ▼][⚙]     ⏮   ▶/⏸   ⏭      │
 └──────────────────────────────────────┘
 ```
 
-> **Navigasi ayat:** `⏮` / `⏭` berada di baris kontrol audio (`FocusModePlayer`), **bukan** tombol teks terpisah — selaras `AudioPlayer` di Surah Detail (`docs/12-component-spec.md` §16).
+> **Navigasi ayat:** `⏮` / `⏭` berada di baris kontrol audio (`AudioPlayer`), **bukan** tombol teks terpisah — layout **identik** dengan Surah Detail (`docs/12-component-spec.md` §11).
 
 ### Repeat Range Ayat
 
@@ -788,15 +747,7 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │                                      │
 │ ───────────●───────────             │
 │                                      │
-│      ⏮        ▶/⏸        ⏭          │
-│   (ikon sama dengan AudioPlayer)     │
-│                                      │
-│ Repeat                              │
-│ [🐥 5x ▼]                            │
-│                                      │
-│ 🟢 Range Ayat 1-5                    │
-│ Siklus 2 / 5                         │
-│ Sedang di Ayat 3                     │
+│ [🐥 5x ▼][⚙]     ⏮   ▶/⏸   ⏭      │
 └──────────────────────────────────────┘
 ```
 
@@ -814,15 +765,7 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │                                      │
 │ ───────────●───────────             │
 │                                      │
-│      ⏮        ▶/⏸        ⏭          │
-│   (ikon sama dengan AudioPlayer)     │
-│                                      │
-│ Repeat                              │
-│ [🐥 5x ▼]                            │
-│                                      │
-│ 🟢 Surat Al-Ikhlas                   │
-│ Siklus 2 / 5                         │
-│ Sedang di Ayat 3 dari 4              │
+│ [🐥 5x ▼][⚙]     ⏮   ▶/⏸   ⏭      │
 └──────────────────────────────────────┘
 ```
 
@@ -843,13 +786,7 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │                                                                  │
 │                ━━━━━━━━━●━━━━━━━━━                               │
 │                                                                  │
-│                   ⏮      ▶/⏸      ⏭                             │
-│                                                                  │
-│        Repeat                                                    │
-│        [🐥 5x ▼]                                                 │
-│                                                                  │
-│        🟢 Ayat Aktif                                             │
-│        Ayat 1 • 4x tersisa                                       │
+│        [🐥 5x ▼][⚙]              ⏮   ▶/⏸   ⏭                   │
 │                                                                  │
 └──────────────────────────────────────────────────────────────────┘
 ```
@@ -869,14 +806,7 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │                                                                  │
 │                ━━━━━━━━━●━━━━━━━━━                               │
 │                                                                  │
-│                   ⏮      ▶/⏸      ⏭                             │
-│                                                                  │
-│        Repeat                                                    │
-│        [🐥 5x ▼]                                                 │
-│                                                                  │
-│        🟢 Range Ayat 1-5                                          │
-│        Siklus 2 / 5                                              │
-│        Sedang di Ayat 3                                          │
+│        [🐥 5x ▼][⚙]              ⏮   ▶/⏸   ⏭                   │
 │                                                                  │
 └──────────────────────────────────────────────────────────────────┘
 ```
@@ -896,14 +826,7 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │                                                                  │
 │                ━━━━━━━━━●━━━━━━━━━                               │
 │                                                                  │
-│                   ⏮      ▶/⏸      ⏭                             │
-│                                                                  │
-│        Repeat                                                    │
-│        [🐥 5x ▼]                                                 │
-│                                                                  │
-│        🟢 Surat Al-Ikhlas                                         │
-│        Siklus 2 / 5                                              │
-│        Sedang di Ayat 3 dari 4                                   │
+│        [🐥 5x ▼][⚙]              ⏮   ▶/⏸   ⏭                   │
 │                                                                  │
 └──────────────────────────────────────────────────────────────────┘
 ```
@@ -916,7 +839,9 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 - Background lebih tenang dibanding halaman biasa
 - Tidak ada elemen dekoratif yang bergerak aktif di layar ini
 - Tombol keluar focus mode harus selalu mudah ditemukan
-- Focus Mode menggunakan Repeat Status Variant yang sama dengan Surah Detail.
+- Focus Mode memakai **`AudioPlayer` + `RepeatSelector` inline** — layout chrome bawah identik dengan Surah Detail.
+- Tidak ada teks hint sinkronisasi repeat; state repeat dibagi via `useRepeatStore`.
+- **Landscape HP (`short-landscape`):** header surat lebih ringkas, chrome atas tidak sticky; `RepeatSettingsDialog` memakai Drawer (bukan Dialog) agar konten dapat di-scroll.
 
 ---
 
@@ -1399,9 +1324,19 @@ Text       : White
 Background : White
 Border Top : Gray-200
 Shadow     : Soft
+Min Height : ~112px (progress + baris transport + repeat inline)
 ```
 
-Player harus selalu sticky pada mobile.
+Player harus selalu sticky pada mobile (`fixed bottom`).
+
+### Layout
+
+```text
+Baris 1 : Progress bar (full width)
+Baris 2 : [RepeatSelector inline][⚙]  ···  ⏮  ▶/⏸  ⏭
+```
+
+`RepeatSelector` tidak lagi berupa kartu mengambang di sisi kanan.
 
 ---
 

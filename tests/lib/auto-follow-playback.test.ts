@@ -7,10 +7,12 @@ import {
   getAutoFollowProgrammaticScrollClearDelay,
   getAutoFollowResumeTimestamp,
   getAyahElementId,
+  getReadableBounds,
   getReadableViewport,
   getScrollBehavior,
   isAutoFollowSuspended,
   isAyahVisibleInReadableZone,
+  isAyahWellPositionedForAutoFollow,
   measureSurahDetailTopInset,
   scrollAyahIntoReadableZone,
   shouldAutoFollowScroll,
@@ -18,9 +20,18 @@ import {
 
 describe('auto-follow-playback', () => {
   const viewport = getReadableViewport(800, 200, 68);
+  const bounds = getReadableBounds(viewport);
+
+  describe('getReadableBounds', () => {
+    it('menghitung zona baca dengan padding', () => {
+      expect(bounds.top).toBe(76);
+      expect(bounds.bottom).toBe(592);
+      expect(bounds.center).toBe(334);
+    });
+  });
 
   describe('isAyahVisibleInReadableZone', () => {
-    it('menganggap ayat terlihat jika overlap zona baca', () => {
+    it('menganggap ayat terlihat jika seluruh kartu dalam zona baca', () => {
       expect(
         isAyahVisibleInReadableZone({ top: 100, bottom: 300 }, viewport),
       ).toBe(true);
@@ -37,25 +48,61 @@ describe('auto-follow-playback', () => {
         isAyahVisibleInReadableZone({ top: 650, bottom: 750 }, viewport),
       ).toBe(false);
     });
+
+    it('menganggap ayat tidak terlihat jika hanya overlap sebagian (tertutup audio)', () => {
+      expect(
+        isAyahVisibleInReadableZone({ top: 500, bottom: 620 }, viewport),
+      ).toBe(false);
+    });
+  });
+
+  describe('isAyahWellPositionedForAutoFollow', () => {
+    it('true jika kartu penuh terlihat dan mendekati tengah zona baca', () => {
+      const height = 100;
+      const top = bounds.center - height / 2;
+      expect(
+        isAyahWellPositionedForAutoFollow(
+          { top, bottom: top + height },
+          viewport,
+        ),
+      ).toBe(true);
+    });
+
+    it('false jika penuh terlihat tetapi jauh dari tengah', () => {
+      expect(
+        isAyahWellPositionedForAutoFollow({ top: 120, bottom: 220 }, viewport),
+      ).toBe(false);
+    });
   });
 
   describe('computeScrollDeltaForReadableZone', () => {
-    it('mengembalikan delta negatif saat ayat di atas zona baca (wrap ke ayat pertama)', () => {
+    it('mengembalikan delta negatif saat ayat di atas zona baca', () => {
       expect(
-        computeScrollDeltaForReadableZone({ top: -1200, bottom: -1000 }, viewport),
-      ).toBe(-1268);
+        computeScrollDeltaForReadableZone({ top: -500, bottom: -300 }, viewport),
+      ).toBe(-734);
     });
 
     it('mengembalikan delta positif saat ayat di bawah chrome bawah', () => {
       expect(
         computeScrollDeltaForReadableZone({ top: 650, bottom: 750 }, viewport),
-      ).toBe(150);
+      ).toBe(366);
     });
 
-    it('mengembalikan 0 jika ayat sudah dalam zona baca', () => {
+    it('mengembalikan 0 jika ayat sudah di tengah zona baca', () => {
+      const height = 100;
+      const top = bounds.center - height / 2;
       expect(
-        computeScrollDeltaForReadableZone({ top: 120, bottom: 220 }, viewport),
+        computeScrollDeltaForReadableZone(
+          { top, bottom: top + height },
+          viewport,
+        ),
       ).toBe(0);
+    });
+
+    it('menggeser ke tengah saat kartu hanya terlihat sebagian di bawah', () => {
+      expect(
+        computeScrollDeltaForReadableZone({ top: 500, bottom: 620 }, viewport),
+      ).toBe(226);
     });
   });
 
@@ -164,18 +211,46 @@ describe('auto-follow-playback', () => {
       ).toBe(true);
     });
 
-    it('tidak scroll jika ayat masih terlihat', () => {
+    it('scroll jika ayat hanya terlihat sebagian', () => {
       const element = document.createElement('div');
       element.getBoundingClientRect = () =>
         ({
-          top: 120,
-          bottom: 220,
+          top: 500,
+          bottom: 620,
           left: 0,
           right: 0,
           width: 0,
-          height: 100,
+          height: 120,
           x: 0,
-          y: 120,
+          y: 500,
+          toJSON: () => ({}),
+        }) as DOMRect;
+
+      expect(
+        shouldAutoFollowScroll({
+          enabled: true,
+          isPlaying: true,
+          suspendedUntil: 0,
+          element,
+          viewport,
+        }),
+      ).toBe(true);
+    });
+
+    it('tidak scroll jika ayat sudah di tengah zona baca', () => {
+      const height = 100;
+      const top = bounds.center - height / 2;
+      const element = document.createElement('div');
+      element.getBoundingClientRect = () =>
+        ({
+          top,
+          bottom: top + height,
+          left: 0,
+          right: 0,
+          width: 0,
+          height,
+          x: 0,
+          y: top,
           toJSON: () => ({}),
         }) as DOMRect;
 
@@ -192,7 +267,7 @@ describe('auto-follow-playback', () => {
   });
 
   describe('scrollAyahIntoReadableZone', () => {
-    it('memanggil window.scrollTo dengan posisi presisi di bawah chrome atas', () => {
+    it('memanggil window.scrollTo untuk memusatkan ayat di atas viewport', () => {
       const element = document.createElement('div');
       element.getBoundingClientRect = () =>
         ({
@@ -217,7 +292,7 @@ describe('auto-follow-playback', () => {
       scrollAyahIntoReadableZone(element, viewport, true, 3000);
 
       expect(scrollTo).toHaveBeenCalledWith({
-        top: 2432,
+        top: 2266,
         behavior: 'smooth',
       });
 
@@ -249,7 +324,7 @@ describe('auto-follow-playback', () => {
       scrollAyahIntoReadableZone(element, viewport, false, 1000);
 
       expect(scrollTo).toHaveBeenCalledWith({
-        top: 1150,
+        top: 1366,
         behavior: 'instant',
       });
 

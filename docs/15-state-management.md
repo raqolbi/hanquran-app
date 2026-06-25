@@ -405,7 +405,8 @@ Tujuan: hanya satu sumber kebenaran untuk pemutaran audio di satu sesi pengguna.
 
 * `audio-controller` adalah satu-satunya modul yang memegang referensi `HTMLAudioElement`.
 * Event `timeupdate`, `ended`, `error` diterjemahkan menjadi action store (`setCurrentTime`, `next`, `setError`).
-* Komponen `AudioPlayer` dan `FocusModePlayer` hanya berkomunikasi melalui hook store dan action.
+* Komponen `AudioPlayer` (Surah Detail & Focus Mode) hanya berkomunikasi melalui hook store dan action.
+* `FocusModePlayer` legacy — tidak dipakai; Focus Mode memakai `AudioPlayer` yang sama.
 
 ## 10.2 Sinkronisasi Lintas Tab
 

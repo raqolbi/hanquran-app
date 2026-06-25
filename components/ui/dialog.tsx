@@ -41,6 +41,9 @@ const DialogContent = React.forwardRef<
       ref={ref}
       className={cn(
         'fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2',
+        'max-h-[calc(100dvh-env(safe-area-inset-top,0px)-env(safe-area-inset-bottom,0px)-2rem)]',
+        'overflow-y-auto overscroll-contain',
+        'short-landscape:top-[max(1rem,env(safe-area-inset-top,0px))] short-landscape:translate-y-0',
         'bg-card text-card-foreground border border-border shadow-lg',
         'rounded-2xl p-6',
         'transition-all duration-200 ease-out',

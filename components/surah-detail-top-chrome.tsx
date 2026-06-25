@@ -22,6 +22,7 @@ export function SurahDetailTopChrome({
       className={cn(
         'sticky top-[env(safe-area-inset-top,0px)] z-30',
         'border-b border-border bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/90',
+        'short-landscape:static short-landscape:z-auto',
         className,
       )}
     >

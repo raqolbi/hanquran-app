@@ -27,7 +27,7 @@ function ReadingToggle({ checked, label, onClick }: ReadingToggleProps) {
       onClick={onClick}
       aria-pressed={checked}
       className={cn(
-        'flex flex-1 min-h-11 items-center justify-center gap-1 rounded-lg px-2 py-2 text-sm font-medium transition-all duration-200',
+        'flex flex-1 min-h-11 short-landscape:min-h-9 items-center justify-center gap-1 rounded-lg px-2 py-2 text-sm font-medium transition-all duration-200 short-landscape:text-xs short-landscape:py-1.5',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
         checked
           ? 'border border-primary bg-primary/10 text-foreground'
@@ -59,7 +59,7 @@ export function VerseDisplayControls({
   return (
     <div
       className={cn(
-        'max-w-3xl mx-auto px-4 py-3',
+        'max-w-3xl mx-auto px-4 py-3 short-landscape:py-2',
         sticky &&
           'sticky top-[env(safe-area-inset-top,0px)] z-30 border-b border-border bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/90',
       )}
@@ -79,7 +79,7 @@ export function VerseDisplayControls({
           type="button"
           onClick={onFocusMode}
           className={cn(
-            'flex flex-1 min-h-11 items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-sm font-medium transition-all duration-200',
+            'flex flex-1 min-h-11 short-landscape:min-h-9 items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-sm font-medium transition-all duration-200 short-landscape:text-xs short-landscape:py-1.5',
             'border border-border bg-secondary text-foreground hover:border-primary/50',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
           )}

@@ -35,7 +35,7 @@ export function SurahDetailHeader({
       transition={{ duration: 0.3 }}
       className="bg-background"
     >
-      <div className="max-w-3xl mx-auto px-4 py-3 flex items-center">
+      <div className="max-w-3xl mx-auto px-4 py-3 flex items-center short-landscape:hidden">
         <Link
           href={routes.home()}
           className="p-2 hover:bg-secondary rounded-lg transition-colors -ml-2"
@@ -45,11 +45,22 @@ export function SurahDetailHeader({
         </Link>
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 py-6 border-t border-border">
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold text-foreground">{surahName}</h1>
-            <p className="text-sm text-muted-foreground mt-1">{arabicName}</p>
+      <div className="max-w-3xl mx-auto px-4 py-6 border-t border-border short-landscape:py-2 short-landscape:border-t-0">
+        <div className="flex items-start justify-between mb-4 short-landscape:mb-0 short-landscape:items-center short-landscape:gap-2">
+          <Link
+            href={routes.home()}
+            className="hidden short-landscape:flex p-2 hover:bg-secondary rounded-lg transition-colors shrink-0"
+            aria-label={t('backToSurahList')}
+          >
+            <ArrowLeft size={18} className="text-foreground" />
+          </Link>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-3xl font-bold text-foreground short-landscape:text-lg short-landscape:truncate">
+              {surahName}
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1 short-landscape:mt-0 short-landscape:text-xs short-landscape:truncate">
+              {arabicName}
+            </p>
           </div>
           <motion.button
             whileTap={{ scale: 0.9 }}
@@ -66,7 +77,7 @@ export function SurahDetailHeader({
           </motion.button>
         </div>
 
-        <div className="flex items-center gap-4 flex-wrap">
+        <div className="flex items-center gap-4 flex-wrap short-landscape:gap-2 short-landscape:mt-1">
           <span className="text-sm text-muted-foreground">
             {ayahCount} {t('ayahs')}
           </span>

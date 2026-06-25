@@ -176,8 +176,9 @@ Kontrol berikut **tetap** di lokasi masing-masing dan **tidak** dipindah ke bari
 
 | Fitur | Lokasi |
 |-------|--------|
-| Pengaturan Repeat | Bottom sheet / dialog (`RepeatSettingsDialog`) — via `RepeatSelector` |
-| Audio play/pause, next/prev | `AudioPlayer` sticky bawah |
+| Pengaturan Repeat | `RepeatSettingsDialog` — dibuka dari ⚙ di `RepeatSelector` inline pada `AudioPlayer` |
+| Pilih jumlah repeat cepat | `RepeatSelector variant="inline"` di baris transport `AudioPlayer` |
+| Audio play/pause, next/prev | `AudioPlayer` fixed bawah |
 | Ukuran teks Arab | Pengaturan (`/settings`) |
 | Bahasa aplikasi (UI shell) | Pengaturan (`/settings`) |
 | Qari / reciter | Pengaturan (`/settings`) |

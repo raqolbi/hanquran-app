@@ -84,7 +84,7 @@ Media Session API adalah standar web yang dirancang untuk kasus ini dan selaras 
 ### 5.1 Diagram alur
 
 ```text
-UI (AudioPlayer / FocusModePlayer)
+UI (AudioPlayer — Surah Detail & Focus Mode)
       │
       ▼
 useAudio() ──► AudioController ──► HTMLAudioElement
