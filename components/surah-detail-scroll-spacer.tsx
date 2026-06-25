@@ -5,7 +5,7 @@ interface SurahDetailScrollSpacerProps {
 
 /**
  * Spacer di akhir daftar ayat agar ayat terakhir dapat discroll
- * sepenuhnya di atas audio player & panel repeat.
+ * sepenuhnya di atas audio player.
  */
 export function SurahDetailScrollSpacer({ height }: SurahDetailScrollSpacerProps) {
   return (

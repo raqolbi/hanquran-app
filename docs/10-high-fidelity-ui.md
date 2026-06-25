@@ -354,39 +354,32 @@ Secondary Text
 
 ## Mobile
 
-Tinggi:
+Tinggi minimum:
 
 ```text
-96px
+~112px (progress + baris repeat inline + transport)
 ```
 
 Posisi:
 
 ```text
-bottom:0
+fixed bottom: 0
 ```
 
 Selalu terlihat.
 
 ---
 
-### Controls
-
-Urutan:
+### Layout
 
 ```text
-Previous
-Play/Pause
-Next
+Baris 1 : ━━━━━●━━━━━  (progress)
+Baris 2 : [🐥 5x ▼][⚙]     ⏮  ▶/⏸  ⏭
 ```
 
-Play button:
+Play button lebih besar dibanding kontrol lain.
 
-```text
-Lebih besar
-```
-
-dibanding kontrol lain.
+Repeat **inline** di kiri — bukan kartu mengambang.
 
 ---
 
@@ -411,14 +404,14 @@ Radius:
 Posisi:
 
 ```text
-Bawah progress
+Baris transport (kiri), bersama tombol ⚙
 ```
 
 Komponen:
 
 ```text
-Repeat Chip
-Settings Button
+RepeatSelector (inline)
+Settings Button (⚙)
 ```
 
 ---
@@ -448,18 +441,12 @@ Subtle Emerald Tint
 ```text
 Top Bar
 ↓
-Arabic Text
+Arabic Text (+ transliterasi / terjemahan opsional)
 ↓
-Word Highlight
-↓
-Progress
-↓
-Player
-↓
-Repeat Status
-↓
-Navigation
+AudioPlayer (fixed, identik Surah Detail)
 ```
+
+Tidak ada blok repeat terpisah atau teks hint sinkronisasi.
 
 ---
 

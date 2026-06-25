@@ -8,6 +8,12 @@ export const AUTO_FOLLOW_SCROLL_RESUME_MS = 2000;
 /** Durasi mengabaikan event scroll dari auto-scroll programatik. */
 export const AUTO_FOLLOW_PROGRAMMATIC_SCROLL_MS = 800;
 
+/** Padding dalam zona baca (px) — ayat tidak menempel ke tepi chrome. */
+export const AUTO_FOLLOW_READABLE_PADDING = 8;
+
+/** Toleransi (px) dari pusat zona baca sebelum auto follow menggeser lagi. */
+export const AUTO_FOLLOW_CENTER_TOLERANCE = 32;
+
 export const SURAH_DETAIL_TOP_CHROME_SELECTOR =
   '[data-surah-detail-top-chrome]';
 
@@ -20,6 +26,27 @@ export interface ReadableViewport {
 export interface ElementRect {
   top: number;
   bottom: number;
+}
+
+export interface ReadableBounds {
+  top: number;
+  bottom: number;
+  height: number;
+  center: number;
+}
+
+export function getReadableBounds(viewport: ReadableViewport): ReadableBounds {
+  const top = viewport.topInset + AUTO_FOLLOW_READABLE_PADDING;
+  const bottom =
+    viewport.viewportHeight - viewport.bottomInset - AUTO_FOLLOW_READABLE_PADDING;
+  const height = Math.max(0, bottom - top);
+
+  return {
+    top,
+    bottom,
+    height,
+    center: top + height / 2,
+  };
 }
 
 export function getReadableViewport(
@@ -53,17 +80,29 @@ export function measureSurahDetailTopInset(
 }
 
 /**
- * Ayat dianggap terlihat jika ada overlap dengan zona baca
- * (di antara chrome atas dan bawah).
+ * Ayat dianggap terlihat penuh jika seluruh kartu berada di zona baca
+ * (antara chrome atas dan bawah, dengan padding).
  */
 export function isAyahVisibleInReadableZone(
   rect: ElementRect,
   viewport: ReadableViewport,
 ): boolean {
-  const readableTop = viewport.topInset;
-  const readableBottom = viewport.viewportHeight - viewport.bottomInset;
+  const { top, bottom } = getReadableBounds(viewport);
 
-  return rect.bottom > readableTop && rect.top < readableBottom;
+  return rect.top >= top && rect.bottom <= bottom;
+}
+
+export function isAyahWellPositionedForAutoFollow(
+  rect: ElementRect,
+  viewport: ReadableViewport,
+  centerTolerance = AUTO_FOLLOW_CENTER_TOLERANCE,
+): boolean {
+  if (!isAyahVisibleInReadableZone(rect, viewport)) {
+    return false;
+  }
+
+  const delta = computeScrollDeltaForReadableZone(rect, viewport);
+  return Math.abs(delta) <= centerTolerance;
 }
 
 export function isAutoFollowSuspended(
@@ -92,7 +131,7 @@ export function shouldAutoFollowScroll(options: {
   }
 
   const rect = element.getBoundingClientRect();
-  return !isAyahVisibleInReadableZone(rect, viewport);
+  return !isAyahWellPositionedForAutoFollow(rect, viewport);
 }
 
 export function getScrollBehavior(
@@ -102,25 +141,22 @@ export function getScrollBehavior(
 }
 
 /**
- * Delta scroll vertikal agar ayat masuk zona baca.
- * Negatif = gulir ke atas, positif = gulir ke bawah.
+ * Delta scroll vertikal agar ayat berada di tengah zona baca (jika muat),
+ * atau menempel aman di bawah chrome atas jika kartu lebih tinggi dari zona.
  */
 export function computeScrollDeltaForReadableZone(
   rect: ElementRect,
   viewport: ReadableViewport,
 ): number {
-  const readableTop = viewport.topInset;
-  const readableBottom = viewport.viewportHeight - viewport.bottomInset;
+  const { top, center, height } = getReadableBounds(viewport);
+  const elementHeight = rect.bottom - rect.top;
 
-  if (rect.top < readableTop) {
-    return rect.top - readableTop;
+  if (elementHeight >= height) {
+    return rect.top - top;
   }
 
-  if (rect.bottom > readableBottom) {
-    return rect.bottom - readableBottom;
-  }
-
-  return 0;
+  const elementCenter = (rect.top + rect.bottom) / 2;
+  return elementCenter - center;
 }
 
 export function scrollAyahIntoReadableZone(
@@ -132,7 +168,7 @@ export function scrollAyahIntoReadableZone(
   const rect = element.getBoundingClientRect();
   const delta = computeScrollDeltaForReadableZone(rect, viewport);
 
-  if (delta === 0) {
+  if (Math.abs(delta) < 1) {
     return;
   }
 

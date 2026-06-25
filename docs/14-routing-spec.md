@@ -23,15 +23,15 @@ Semua penjelasan menggunakan Bahasa Indonesia dan mengikuti implementasi saat in
 2. URL: `/surah/[id]` (contoh: `/surah/2`)
    - Nama halaman: Surah Detail
    - Tujuan: Menampilkan seluruh ayat sebuah surat, kontrol audio, dan opsi repeat/fokus.
-   - Komponen utama: `SurahDetailHeader`, `VerseDisplayControls`, daftar `AyahCard`, `AudioPlayer`, `RepeatSelector`, `RepeatSettingsDialog`.
+   - Komponen utama: `SurahDetailHeader`, `VerseDisplayControls`, daftar `AyahCard`, `AudioPlayer` (dengan `RepeatSelector` inline), `RepeatSettingsDialog`, `SurahDetailScrollSpacer`.
    - Aksi pengguna: Pilih ayat aktif, putar / jeda audio, lompat ayat, toggle Terjemahan/Transliterasi, buka Mode Fokus, buka pengaturan repeat, tandai favorit.
    - Query opsional: `?ayah=<number>` untuk membuka halaman pada ayat tertentu.
 
 3. URL: `/focus/[id]` (contoh: `/focus/2`)
    - Nama halaman: Focus Mode (Mode Fokus)
    - Tujuan: Layar baca bebas distraksi — satu ayat nyata (Arab + transliterasi/terjemahan sesuai preferensi). **Tanpa** word-by-word highlight pada MVP V1 (`docs/24-focus-mode-mvp-scope.md`).
-   - Komponen utama: teks ayat, `FocusModePlayer`, `RepeatStatus`, `RepeatSettingsDialog`.
-   - Aksi pengguna: Putar/jeda audio ayat, navigasi ayat sebelumnya/berikutnya, buka pengaturan repeat, keluar ke halaman surah.
+   - Komponen utama: teks ayat, `AudioPlayer` (repeat inline), `RepeatSettingsDialog`.
+   - Aksi pengguna: Putar/jeda audio ayat, navigasi ayat sebelumnya/berikutnya, ubah repeat cepat atau buka pengaturan repeat, keluar ke halaman surah.
    - Query opsional: `?ayah=<number>` untuk memulai dari ayat tertentu.
 
 4. URL: `/settings`
@@ -130,7 +130,7 @@ sequenceDiagram
 - **Locale UI:** MVP mempertahankan route tanpa prefix locale (`/settings`, bukan `/id/settings`). Bahasa UI dari `settings.appLocale` + `next-intl` — lihat `docs/21-i18n-and-locale.md`.
 - Wireframe / High-Fidelity / Component Spec:
   - Daftar rute di atas konsisten dengan halaman yang terdapat di `app/` dan komponen yang digunakan dalam wireframe/high-fidelity (mis. `Focus Mode`, `Surah Detail`, `Settings`).
-  - Repeat UI dan audio player ditempatkan sesuai spes (RepeatControls pada SurahDetail + dialog, FocusMode memiliki player minimal).
+  - Repeat dan audio player digabung di `AudioPlayer` fixed bawah (Surah Detail & Focus Mode); pengaturan lanjutan via `RepeatSettingsDialog`.
 
 Jika Anda ingin saya jalankan verifikasi lebih teknis (mis. memeriksa semua `Link`/`href` di codebase agar memakai `routes` helper), saya bisa menjalankan pencarian kode untuk memastikan.
 

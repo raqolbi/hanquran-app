@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 
 import { cn } from '@/lib/utils';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { DESKTOP_DIALOG_MEDIA } from '@/lib/viewport';
 import {
   Dialog,
   DialogContent,
@@ -54,9 +55,9 @@ interface RepeatSettingsDialogProps {
 
 export function RepeatSettingsDialog(props: RepeatSettingsDialogProps) {
   const t = useTranslations('repeat');
-  const isDesktop = useMediaQuery('(min-width: 768px)');
+  const useDesktopDialog = useMediaQuery(DESKTOP_DIALOG_MEDIA);
 
-  if (isDesktop) {
+  if (useDesktopDialog) {
     return (
       <Dialog open={props.open} onOpenChange={props.onOpenChange}>
         <DialogContent>
@@ -170,12 +171,12 @@ function RepeatSettingsForm({
   };
 
   return (
-    <div className="space-y-6">
-      <section className="space-y-3">
+    <div className="space-y-6 short-landscape:space-y-4">
+      <section className="space-y-3 short-landscape:space-y-2">
         <h3 className="text-sm font-semibold text-foreground">
           {t('countTitle')}
         </h3>
-        <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label={t('countAriaLabel')}>
+        <div className="grid grid-cols-3 gap-2 short-landscape:gap-1.5" role="radiogroup" aria-label={t('countAriaLabel')}>
           {repeatOptions.map((option) => {
             const selected = draftCount === option.value;
             return (
@@ -187,13 +188,14 @@ function RepeatSettingsForm({
                 onClick={() => setDraftCount(option.value)}
                 className={cn(
                   'flex flex-col items-center justify-center gap-1 rounded-xl border px-3 py-3 transition-all duration-200 ease-out',
+                  'short-landscape:px-2 short-landscape:py-2',
                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                   selected
                     ? 'border-primary bg-primary/10 text-foreground'
                     : 'border-border bg-white text-foreground hover:border-primary/40 hover:bg-muted/40',
                 )}
               >
-                <span className="text-2xl leading-none">{option.emoji}</span>
+                <span className="text-2xl leading-none short-landscape:text-xl">{option.emoji}</span>
                 <span className="text-xs font-medium">{option.label}</span>
               </button>
             );

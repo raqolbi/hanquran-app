@@ -681,7 +681,7 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
   - Prioritas: MVP ✅ — `app/focus/[id]/page.tsx` + `useSurahRepeatPlayback`
 
 - [x] [UPDATE] Play/pause & progress bar FocusMode terhubung audio nyata
-  - Prioritas: MVP ✅ — `FocusModePlayer` + `useSurahRepeatPlayback`
+  - Prioritas: MVP ✅ — `AudioPlayer` + `RepeatSelector` inline + `useSurahRepeatPlayback`
 
 - [x] [UPDATE] Navigasi prev/next ayat di FocusMode
   - Prioritas: MVP ✅ — `navigateAyah` di `app/focus/[id]/page.tsx`

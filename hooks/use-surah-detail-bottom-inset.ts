@@ -5,21 +5,17 @@ import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import {
   SURAH_DETAIL_MIN_SCROLL_INSET,
   SURAH_DETAIL_READING_COMFORT_GAP,
-  SURAH_DETAIL_REPEAT_ABOVE_AUDIO_GAP,
   SURAH_DETAIL_AUDIO_MIN_HEIGHT,
 } from '@/lib/surah-detail-chrome';
 
 interface UseSurahDetailBottomInsetOptions {
-  /** Ukur hanya setelah chrome (audio + repeat) benar-benar di DOM. */
+  /** Ukur hanya setelah chrome audio benar-benar di DOM. */
   enabled: boolean;
   /** Paksa ukur ulang saat konten chrome berubah (repeat status, dll.). */
   remeasureKey?: string;
 }
 
-function measureChromeInset(
-  audioEl: HTMLElement | null,
-  repeatEl: HTMLElement | null,
-): number {
+function measureChromeInset(audioEl: HTMLElement | null): number {
   if (typeof window === 'undefined') {
     return SURAH_DETAIL_MIN_SCROLL_INSET;
   }
@@ -34,14 +30,6 @@ function measureChromeInset(
     );
   }
 
-  if (repeatEl) {
-    const repeatRect = repeatEl.getBoundingClientRect();
-    obstructionFromBottom = Math.max(
-      obstructionFromBottom,
-      window.innerHeight - repeatRect.top,
-    );
-  }
-
   return Math.max(
     obstructionFromBottom + SURAH_DETAIL_READING_COMFORT_GAP,
     SURAH_DETAIL_MIN_SCROLL_INSET,
@@ -49,7 +37,7 @@ function measureChromeInset(
 }
 
 /**
- * Mengukur tinggi chrome bawah (audio + repeat) untuk padding scroll aman.
+ * Mengukur tinggi chrome bawah (audio + repeat inline) untuk padding scroll aman.
  * Memakai posisi viewport aktual + ResizeObserver.
  */
 export function useSurahDetailBottomInset({
@@ -57,29 +45,20 @@ export function useSurahDetailBottomInset({
   remeasureKey = '',
 }: UseSurahDetailBottomInsetOptions) {
   const audioRef = useRef<HTMLDivElement | null>(null);
-  const repeatRef = useRef<HTMLDivElement | null>(null);
 
   const [bottomInset, setBottomInset] = useState(SURAH_DETAIL_MIN_SCROLL_INSET);
-  const [repeatPanelBottom, setRepeatPanelBottom] = useState(
-    SURAH_DETAIL_AUDIO_MIN_HEIGHT + SURAH_DETAIL_REPEAT_ABOVE_AUDIO_GAP,
-  );
   const [audioChromeHeight, setAudioChromeHeight] = useState(
     SURAH_DETAIL_AUDIO_MIN_HEIGHT,
   );
 
   const measure = useCallback(() => {
     const audioEl = audioRef.current;
-    const repeatEl = repeatRef.current;
 
     if (audioEl) {
-      const audioHeight = audioEl.offsetHeight;
-      setAudioChromeHeight(audioHeight);
-      setRepeatPanelBottom(
-        audioHeight + SURAH_DETAIL_REPEAT_ABOVE_AUDIO_GAP,
-      );
+      setAudioChromeHeight(audioEl.offsetHeight);
     }
 
-    setBottomInset(measureChromeInset(audioEl, repeatEl));
+    setBottomInset(measureChromeInset(audioEl));
   }, []);
 
   useLayoutEffect(() => {
@@ -96,10 +75,8 @@ export function useSurahDetailBottomInset({
     });
 
     const audioEl = audioRef.current;
-    const repeatEl = repeatRef.current;
 
     if (audioEl) ro.observe(audioEl);
-    if (repeatEl) ro.observe(repeatEl);
 
     window.addEventListener('resize', measure);
     window.visualViewport?.addEventListener('resize', measure);
@@ -114,9 +91,7 @@ export function useSurahDetailBottomInset({
 
   return {
     bottomInset,
-    repeatPanelBottom,
     audioChromeHeight,
     audioRef,
-    repeatRef,
   };
 }

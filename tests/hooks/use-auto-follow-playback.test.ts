@@ -101,7 +101,7 @@ describe('useAutoFollowPlayback', () => {
     );
 
     expect(scrollTo).toHaveBeenCalledWith({
-      top: 2152,
+      top: 2076,
       behavior: 'smooth',
     });
   });

@@ -88,12 +88,12 @@ Komponen di dokumen ini dipetakan ke modul pada `05-module-catalog.md`.
 | FocusModeButton       | Quran            | —                                                                         |
 | AyahCard              | Quran            | AyahItem                                                                |
 | AyahWordHighlight     | Memorization     | HighlightEngine output                                                  |
-| AudioPlayer           | Audio            | AudioBar + AudioControls + AudioProgress                                |
-| RepeatSelector        | Memorization     | RepeatSelector                                                          |
-| RepeatSettingsDialog  | Memorization     | RepeatOption                                                            |
-| RepeatStatus          | Memorization     | —                                                                       |
-| FocusModeScreen       | Memorization     | FocusPage + FocusAyah                                                   |
-| FocusModePlayer       | Memorization     | FocusAudio + FocusRepeat                                                |
+| AudioPlayer           | Audio            | AudioBar + repeat inline + transport                                    |
+| RepeatSelector        | Memorization     | `variant`: `inline` (produksi) \| `panel` (legacy)                      |
+| RepeatSettingsDialog  | Memorization     | RepeatOption; Drawer mobile / Dialog desktop (`DESKTOP_DIALOG_MEDIA`)   |
+| RepeatStatus          | Memorization     | Hanya di dialog / panel legacy — bukan chrome bawah                     |
+| FocusModeScreen       | Memorization     | FocusPage + FocusAyah + AudioPlayer                                     |
+| FocusModePlayer       | Memorization     | **Legacy** — digantikan `AudioPlayer`                                   |
 | SettingsCard          | Settings         | FontSizeSetting / LanguageSetting / ContrastSetting / CacheManagement |
 | LanguageSetting       | Settings         | —                                                                       |
 | ReciterSelector       | Settings         | —                                                                       |
@@ -919,24 +919,19 @@ Sticky di bagian bawah pada mobile.
 
 ```ts
 interface AudioPlayerProps {
+  surahId: number
   currentAyah: number
-  currentTime: number
-  duration: number
-
-  isPlaying: boolean
-
-  repeatTarget: RepeatTarget
-  repeatCount: RepeatCount
-
-  onPlayPause: () => void
-  onPrevious: () => void
-  onNext: () => void
-
-  onSeek: (time: number) => void
-
-  onOpenRepeatSettings: () => void
+  reciterId?: string
+  onPrevious?: () => void
+  onNext?: () => void
+  onTogglePlay?: () => void
+  isPreviousDisabled?: boolean
+  isNextDisabled?: boolean
+  toolbarStart?: ReactNode // RepeatSelector inline
 }
 ```
+
+State playback dibaca dari `useAudio()` di dalam komponen.
 
 ---
 
@@ -946,15 +941,26 @@ interface AudioPlayerProps {
 Background : White
 Border Top : Gray-200
 Shadow     : Medium
-Height     : 96px (mobile sticky)
-Position   : sticky bottom (mobile)
+Min Height : ~112px (progress + transport + repeat inline)
+Position   : fixed bottom (mobile & focus)
 ```
+
+---
+
+## Layout
+
+```text
+Baris 1 — Progress (full width, seekable)
+Baris 2 — toolbarStart (kiri) + transport ⏮ ▶/⏸ ⏭ (kanan)
+```
+
+`toolbarStart` pada Surah Detail dan Focus Mode berisi `RepeatSelector variant="inline"`.
 
 ---
 
 ## Controls
 
-Urutan:
+Urutan transport (kanan):
 
 ```text
 Previous
@@ -968,6 +974,8 @@ Play / Pause:
 Lebih besar dibanding kontrol lain.
 ```
 
+Pada Focus Mode, `isPreviousDisabled` / `isNextDisabled` aktif di ayat pertama/terakhir (tidak wrap).
+
 ---
 
 ## Progress
@@ -975,8 +983,7 @@ Lebih besar dibanding kontrol lain.
 ```text
 Track    : Gray-200
 Progress : Emerald
-Thumb    : Emerald
-Height   : 6px
+Height   : 6px (4px di short-landscape)
 Radius   : 999px
 Seekable : true
 ```
@@ -988,16 +995,20 @@ Seekable : true
 Posisi:
 
 ```text
-Bawah progress
+Inline di baris transport (kiri), bukan kartu mengambang
 ```
 
-Konten:
+Konten `toolbarStart`:
 
 ```text
-RepeatSelector
-Settings Button (⚙)
-RepeatStatus (jika repeat aktif)
+RepeatSelector (variant="inline")
+  ├── Select jumlah (🐣 1x … ♾️)
+  └── Settings Button (⚙) → RepeatSettingsDialog
 ```
+
+`RepeatStatus` **tidak** ditampilkan di chrome bawah; preview ada di dialog pengaturan.
+
+Konstanta scroll: `lib/surah-detail-chrome.ts` (`SURAH_DETAIL_MIN_SCROLL_INSET` ≈ 136px, `READING_COMFORT_GAP` 16px). Pengukuran aktual via `useSurahDetailBottomInset`.
 
 ---
 
@@ -1023,7 +1034,7 @@ Play Button visible
 
 Menampilkan dan memilih jumlah repeat aktif.
 
-Membuka RepeatSettingsDialog untuk konfigurasi lanjutan.
+Membuka `RepeatSettingsDialog` untuk konfigurasi lanjutan (target, range, preview).
 
 ---
 
@@ -1031,11 +1042,22 @@ Membuka RepeatSettingsDialog untuk konfigurasi lanjutan.
 
 ```ts
 interface RepeatSelectorProps {
-  repeatCount: RepeatCount
-  isActive: boolean
-  onClick: () => void
+  count: RepeatCount
+  isActive?: boolean
+  statusProps?: RepeatStatusProps
+  onOpenSettings?: () => void
+  onCountChange?: (count: RepeatCount) => void
+  bottomChromeHeight?: number
+  variant?: 'panel' | 'inline' // default: 'panel'
 }
 ```
+
+### Variant
+
+| Variant | Pemakaian |
+|---------|-----------|
+| `inline` | **Produksi** — di `AudioPlayer.toolbarStart` (Surah Detail & Focus Mode) |
+| `panel` | Legacy / dokumentasi — kartu vertikal (tidak dipakai di halaman surat) |
 
 ---
 
@@ -1059,30 +1081,24 @@ ikon + angka.
 
 ## Visual
 
+### Inline (default produksi)
+
 ```text
-Height : 40px
-Radius : 999px (pill)
+Select trigger : h-9, min-w ~5.5rem
+Settings (⚙)   : p-2, di samping select
 ```
 
-### Default
+Format:
 
 ```text
-Background : White
-Border     : Gray-200
-Text       : Primary
-
-Format:
-[ 🐥 5x ▼ ]
+[ 🐥 5x ▼ ] [ ⚙ ]
 ```
 
-### Active
+### Panel (legacy)
 
 ```text
-Background : Emerald
-Text       : White
-
-Format:
-[ 🐥 5x ▼ ]
+Height : 40px (pill select)
+Label  : "Repeat" + settings di header kartu
 ```
 
 ---
@@ -1386,21 +1402,13 @@ Arabic
 ```text
 Top Bar (Keluar + Ayat N / Total)
 
-Quran Text (48px / 56px)
+Quran Text (48px / 56px, mengikuti settings.fontSize)
 
-Progress
-
-FocusModePlayer
-  ├── Previous Ayah (ikon ⏮, sama AudioPlayer)
-  ├── Play / Pause
-  └── Next Ayah (ikon ⏭, sama AudioPlayer)
-
-RepeatSelector
-
-RepeatStatus
+AudioPlayer (fixed bottom, identik Surah Detail)
+  └── toolbarStart: RepeatSelector (inline)
 ```
 
-> Navigasi ayat **tidak** memakai tombol teks penuh terpisah di bawah footer — ikon prev/next digabung dalam `FocusModePlayer`.
+> Navigasi ayat **tidak** memakai tombol teks terpisah — ikon prev/next di `AudioPlayer`. Tidak ada blok repeat terpisah atau teks hint sinkronisasi.
 
 ---
 
@@ -1445,58 +1453,41 @@ saat teks Arab terlihat.
 
 # 16. FocusModePlayer
 
+> **Status: Legacy / tidak dipakai.** Focus Mode (`app/focus/[id]/page.tsx`) memakai `AudioPlayer` + `RepeatSelector variant="inline"` langsung. File `components/focus-mode-player.tsx` dapat dihapus di refactor berikutnya.
+
 ## Purpose
 
-Player khusus Focus Mode — **baris kontrol audio selaras `AudioPlayer`** (progress + ⏮ play/pause ⏭), tanpa chrome sticky bawah.
+Sebelumnya: player khusus Focus Mode. Sekarang digantikan pemakaian `AudioPlayer` bersama `useSurahRepeatPlayback`.
 
 ---
 
-## Props
+## Props (referensi file legacy)
 
 ```ts
 interface FocusModePlayerProps {
   isPlaying: boolean
   progress: number
-
   onPlayPause: () => void
   onPrevious?: () => void
   onNext?: () => void
+  isPreviousDisabled?: boolean
+  isNextDisabled?: boolean
 }
 ```
 
 ---
 
-## Controls
+## Pengganti (implementasi aktual)
 
 ```text
-Baris tunggal (gap 24px, sama AudioPlayer §9):
-  SkipBack (⏮) — aria-label dari namespace `surah.previousAyah`
-  Play / Pause — tombol bulat primary
-  SkipForward (⏭) — aria-label dari namespace `surah.nextAyah`
+AudioPlayer
+  ref={audioRef}
+  toolbarStart={<RepeatSelector variant="inline" ... />}
+  isPreviousDisabled={activeAyah <= 1}
+  isNextDisabled={activeAyah >= totalAyahs}
 ```
 
-Ikon: `lucide-react` `SkipBack` / `SkipForward`, ukuran 20px. Tombol samping: `rounded-lg p-2 hover:bg-secondary`.
-
----
-
-## Progress
-
-```text
-Track    : Gray-200
-Progress : Emerald
-Thumb    : Emerald
-```
-
----
-
-## Important
-
-```text
-Player Focus Mode tidak menampilkan
-metadata surat besar.
-
-Fokus tetap pada teks ayat.
-```
+Padding bawah konten: `useSurahDetailBottomInset`.
 
 ---
 

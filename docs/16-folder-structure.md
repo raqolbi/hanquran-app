@@ -52,7 +52,7 @@ Dokumen ini mendefinisikan struktur folder yang direkomendasikan untuk HanQuran 
 │  │  ├─ shared/                # shared components (Logo, Header, OfflineBadge)
 │  │  ├─ screens/               # screen-level components (SurahDetailHeader, VerseDisplayControls)
 │  │  └─ atoms/                 # sangat kecil, optional
-│  ├─ lib/                      # utilities, route helpers (routes, repeat-options)
+│  ├─ lib/                      # utilities, routes, repeat-options, surah-detail-chrome, viewport
 │  ├─ messages/                 # next-intl: id.json, en.json (UI strings)
 │  ├─ i18n/                     # next-intl config, locale detection
 │  ├─ hooks/                    # reusable hooks (useMediaQuery, useAudioController)
@@ -76,7 +76,7 @@ Dokumen ini mendefinisikan struktur folder yang direkomendasikan untuk HanQuran 
 ## 4. Penjelasan Setiap Folder
 - `app/` — Next.js App Router: tempat halaman (server+client components), layouts, dan routing. Gunakan struktur file/route sesuai Next.js (folder per route).
 - `components/` — Semua komponen UI. Subfolder disusun untuk kemudahan: `ui/` (primitives), `shared/` (brand + utilities), `screens/` (komponen yang mewakili bagian layar), `atoms/` (komponen sangat kecil).
-- `lib/` — Pure helpers, route builders (`routes.ts`), repeat logic helpers.
+- `lib/` — Pure helpers, route builders (`routes.ts`), repeat logic (`repeat-options.ts`), layout chrome (`surah-detail-chrome.ts`), media query viewport (`viewport.ts`).
 - `messages/` + `i18n/` — Lokalisasi UI via **`next-intl`** (`id`, `en`). Lihat `docs/21-i18n-and-locale.md`.
 - `hooks/` — Custom React hooks yang reusable (harus client-side). Contoh: `useMediaQuery`, `useAudioController`.
 - `services/` — Layanan aplikasi yang berinteraksi dengan platform: `service-worker/`, `download-manager.ts`, `audio-controller.ts`, `api/` (jika ada sinkronisasi server).

@@ -90,7 +90,7 @@ function SurahDetailLoaded({
     setActiveAyah,
   });
 
-  const { bottomInset, repeatPanelBottom, audioChromeHeight, audioRef, repeatRef } =
+  const { bottomInset, audioChromeHeight, audioRef } =
     useSurahDetailBottomInset({
       enabled: true,
       remeasureKey: `${isPlaying}-${showTranslation}-${showTransliteration}`,
@@ -143,7 +143,7 @@ function SurahDetailLoaded({
         />
       </SurahDetailTopChrome>
 
-      <div className="max-w-3xl mx-auto px-4 py-6">
+      <div className="max-w-3xl mx-auto px-4 py-6 short-landscape:py-3">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -189,20 +189,9 @@ function SurahDetailLoaded({
             activeAyah < surah.ayahs.length ? activeAyah + 1 : 1,
           )
         }
-      />
-
-      <div
-        ref={repeatRef}
-        className="fixed right-4 z-40 w-48 max-w-[calc(100vw-2rem)]"
-        style={{ bottom: repeatPanelBottom }}
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="bg-white border border-border rounded-lg p-4 shadow-lg"
-        >
+        toolbarStart={
           <RepeatSelector
+            variant="inline"
             count={repeatCount}
             isActive={showRepeatStatus}
             statusProps={repeatStatusProps}
@@ -210,8 +199,8 @@ function SurahDetailLoaded({
             onCountChange={handleCountChange}
             onOpenSettings={() => setRepeatSettingsOpen(true)}
           />
-        </motion.div>
-      </div>
+        }
+      />
 
       <RepeatSettingsDialog
         open={repeatSettingsOpen}

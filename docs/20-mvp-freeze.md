@@ -118,6 +118,7 @@ Berikut adalah seluruh fitur yang termasuk dalam MVP V1. Semua berasal dari Prod
 - Putar, jeda, lanjutkan audio per ayat
 - Progress bar audio
 - Navigasi next/previous ayat
+- **Repeat inline** di baris transport `AudioPlayer` (`RepeatSelector` + ⚙)
 - Auto-advance ke ayat berikutnya
 - Indikator ayat yang sedang diputar
 
@@ -156,7 +157,7 @@ Counter menampilkan target aktif dan jumlah tersisa. Repeat berjalan otomatis ta
 - Layar bebas distraksi: menampilkan satu ayat (Arab, transliterasi/terjemahan sesuai preferensi) ✅
 - Sembunyikan daftar surat, navigasi utama, dan elemen non-esensial ✅
 - Navigasi ayat sebelumnya/berikutnya dalam mode ✅
-- **Audio per ayat** (play/pause, progress) via `FocusModePlayer` ✅
+- **Audio per ayat** (play/pause, progress) via `AudioPlayer` + repeat inline ✅
 - **Repeat** — konfigurasi & otomasi sinkron dengan Surah Detail (`useSurahRepeatPlayback`) ✅
 - **Ukuran teks Arab** mengikuti `settings.fontSize` ✅
 - **Tanpa** word-by-word highlight pada MVP V1
@@ -196,7 +197,7 @@ Counter menampilkan target aktif dan jumlah tersisa. Repeat berjalan otomatis ta
 
 - Berfungsi di Android phone, iPhone, dan tablet
 - Touch target minimum 44×44 px
-- Portrait dan landscape
+- Portrait dan landscape (tanpa lock orientasi di `manifest.json`; layout `short-landscape` untuk HP landscape)
 
 ## 4.13 Pengaturan (Settings)
 
