@@ -19,6 +19,9 @@ interface AudioPlayerProps {
   onTogglePlay?: () => void;
   isPreviousDisabled?: boolean;
   isNextDisabled?: boolean;
+  /** Offline tanpa unduhan audio — Play/seek disabled (`docs/30` §4.2). */
+  isPlaybackBlocked?: boolean;
+  onPlaybackBlocked?: () => void;
   /** Kontrol tambahan di baris transport (mis. repeat inline). */
   toolbarStart?: ReactNode;
 }
@@ -35,6 +38,8 @@ export const AudioPlayer = forwardRef<HTMLDivElement, AudioPlayerProps>(
       toolbarStart,
       isPreviousDisabled = false,
       isNextDisabled = false,
+      isPlaybackBlocked = false,
+      onPlaybackBlocked,
     },
     ref,
   ) {
@@ -49,6 +54,10 @@ export const AudioPlayer = forwardRef<HTMLDivElement, AudioPlayerProps>(
       isPlaying && isCurrentAyah(surahId, currentAyah);
 
     const handlePlayPause = () => {
+      if (isPlaybackBlocked) {
+        onPlaybackBlocked?.();
+        return;
+      }
       if (onTogglePlay) {
         onTogglePlay();
         return;
@@ -57,7 +66,7 @@ export const AudioPlayer = forwardRef<HTMLDivElement, AudioPlayerProps>(
     };
 
     const handleProgressClick = (event: MouseEvent<HTMLDivElement>) => {
-      if (!duration || duration <= 0) return;
+      if (isPlaybackBlocked || !duration || duration <= 0) return;
       const rect = event.currentTarget.getBoundingClientRect();
       const ratio = Math.min(
         1,
@@ -82,13 +91,15 @@ export const AudioPlayer = forwardRef<HTMLDivElement, AudioPlayerProps>(
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={Math.round(progress)}
-            tabIndex={0}
+            aria-disabled={isPlaybackBlocked}
+            tabIndex={isPlaybackBlocked ? -1 : 0}
             onClick={handleProgressClick}
             onKeyDown={(event) => {
+              if (isPlaybackBlocked) return;
               if (event.key === 'ArrowRight') seek(Math.min(duration, duration * (progress / 100) + 5));
               if (event.key === 'ArrowLeft') seek(Math.max(0, duration * (progress / 100) - 5));
             }}
-            className="h-1.5 w-full cursor-pointer overflow-hidden rounded-full bg-border short-landscape:h-1"
+            className={`h-1.5 w-full overflow-hidden rounded-full bg-border short-landscape:h-1 ${isPlaybackBlocked ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
           >
             <motion.div
               className="pointer-events-none h-full rounded-full bg-primary"
@@ -112,7 +123,8 @@ export const AudioPlayer = forwardRef<HTMLDivElement, AudioPlayerProps>(
               <button
                 type="button"
                 onClick={handlePlayPause}
-                className="rounded-full bg-primary p-2.5 text-white transition-colors hover:bg-primary/90 sm:p-3"
+                aria-disabled={isPlaybackBlocked}
+                className={`rounded-full bg-primary p-2.5 text-white transition-colors hover:bg-primary/90 sm:p-3 ${isPlaybackBlocked ? 'cursor-not-allowed opacity-50' : ''}`}
                 aria-label={showAsPlaying ? tCommon('pause') : tCommon('play')}
               >
                 {showAsPlaying ? (

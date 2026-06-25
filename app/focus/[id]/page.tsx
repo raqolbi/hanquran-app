@@ -68,6 +68,8 @@ function FocusModeLoaded({
     showRepeatProgress,
     handleCountChange,
     handleApplyRepeatSettings,
+    isPlaybackBlocked,
+    notifyIfPlaybackBlocked,
   } = useSurahRepeatPlayback({
     surahId: surah.number,
     routeMode: 'focus',
@@ -182,6 +184,8 @@ function FocusModeLoaded({
         onNext={goToNextTrack}
         isPreviousDisabled={isPreviousDisabled}
         isNextDisabled={isNextDisabled}
+        isPlaybackBlocked={isPlaybackBlocked}
+        onPlaybackBlocked={notifyIfPlaybackBlocked}
         toolbarStart={
           <RepeatSelector
             variant="inline"

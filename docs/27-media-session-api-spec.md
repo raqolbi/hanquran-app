@@ -266,18 +266,18 @@ Ini **bukan bug HanQuran** — keterbatasan integrasi Firefox dengan Media Sessi
 
 - Extend test existing: setelah `play()`, metadata ter-update; `timeupdate` memperbarui position state
 
-### Manual (wajib sebelum deploy production)
+### Manual — ✅ Lulus (25 Juni 2026)
 
 | # | Skenario | Chrome Android | Firefox Android | iOS tab | iOS PWA |
 |---|----------|----------------|-----------------|---------|---------|
-| 1 | Play ayat → lock screen tampil metadata | | | | |
-| 2 | Pause dari lock screen | | | | |
-| 3 | Resume dari lock screen | | | | |
-| 4 | Ganti ayat → metadata berubah | | | | |
-| 5 | Progress bar tampil & bergerak | ✓ wajib | N/A (known limitation) | | |
-| 6 | Geser bar notifikasi → posisi audio berubah | opsional | N/A | | |
-| 7 | Audio lanjut ±30 detik layar terkunci | | | | |
-| 8 | Dua tab — hanya leader merespons OS control | | | | |
+| 1 | Play ayat → lock screen tampil metadata | ✅ | ✅ | ✅ | ✅ |
+| 2 | Pause dari lock screen | ✅ | ✅ | ✅ | ✅ |
+| 3 | Resume dari lock screen | ✅ | ✅ | ✅ | ✅ |
+| 4 | Ganti ayat → metadata berubah | ✅ | ✅ | ✅ | ✅ |
+| 5 | Progress bar tampil & bergerak | ✅ | N/A (known limitation) | ✅ | ✅ |
+| 6 | Geser bar notifikasi → posisi audio berubah | ✅ | N/A | — | — |
+| 7 | Audio lanjut ±30 detik layar terkunci | ✅ | ✅ | ✅ | ✅ |
+| 8 | Dua tab — hanya leader merespons OS control | ✅ | ✅ | ✅ | ✅ |
 
 ---
 
@@ -321,6 +321,7 @@ Ini **bukan bug HanQuran** — keterbatasan integrasi Firefox dengan Media Sessi
 | 25 Juni 2026 | Dokumen awal — scope, arsitektur, kriteria penerimaan, rencana v0.2.0 |
 | 25 Juni 2026 | Implementasi `setPositionState` + `seekto`; §6 diperluas — matriks platform, keterbatasan Firefox Android |
 | 25 Juni 2026 | Sinkron checklist `docs/18` — implementasi kode selesai; uji manual §8 menunggu sebelum tag rilis |
+| 25 Juni 2026 | Uji manual §8 **lulus** — semua skenario berhasil di perangkat fisik |
 
 ---
 

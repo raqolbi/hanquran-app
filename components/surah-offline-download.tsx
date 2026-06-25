@@ -27,16 +27,16 @@ export function SurahOfflineDownload({
   const t = useTranslations('surah');
   const {
     saveOffline,
-    isOfflineReady,
     isDownloading,
     canSave,
+    showDownloadUi,
     badgeStatus,
     progress,
     errorMessage,
     downloadStatus,
   } = useSurahOfflineDownload({ surahId, ayahCount, reciterId });
 
-  if (isOfflineReady) {
+  if (!showDownloadUi) {
     return null;
   }
 
@@ -73,10 +73,6 @@ export function SurahOfflineDownload({
         )}
         {isDownloading ? t('saveOfflineDownloading') : t('saveOffline')}
       </button>
-
-      {!canSave && !isDownloading && downloadStatus !== 'failed' ? (
-        <p className="text-xs text-muted-foreground">{t('saveOfflineUnavailable')}</p>
-      ) : null}
     </div>
   );
 }

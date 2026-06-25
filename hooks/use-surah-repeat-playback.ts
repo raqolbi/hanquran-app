@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useAudio, useAudioOnEnded } from '@/hooks/use-audio';
+import { useAudioPlaybackGate } from '@/hooks/use-audio-playback-gate';
 import type { PlayAyahParams } from '@/hooks/use-audio';
 import type { RepeatSettingsConfig } from '@/components/repeat-settings-dialog';
 import {
@@ -79,6 +80,11 @@ export function useSurahRepeatPlayback({
     useAudio();
   const currentTrack = useAudioStore((s) => s.currentTrack);
   const murotalEnabled = useUserStore((s) => s.settings.murotalEnabled);
+
+  const { isPlaybackBlocked, notifyIfPlaybackBlocked } = useAudioPlaybackGate(
+    surahId,
+    reciterId,
+  );
 
   const pendingPlayConsumedRef = useRef<number | null>(null);
 
@@ -225,6 +231,10 @@ export function useSurahRepeatPlayback({
   }, [surahId, setActiveAyah, playAyah, playParams]);
 
   const togglePlayback = useCallback(async () => {
+    if (notifyIfPlaybackBlocked()) {
+      return;
+    }
+
     const track = useAudioStore.getState().currentTrack;
     const currentTrackMatchesAyah =
       track?.surahId === surahId && track?.ayahNumber === activeAyah;
@@ -248,6 +258,7 @@ export function useSurahRepeatPlayback({
     beginSession,
     toggleAyah,
     playParams,
+    notifyIfPlaybackBlocked,
   ]);
 
   const navigateAyah = useCallback(
@@ -393,5 +404,7 @@ export function useSurahRepeatPlayback({
     showRepeatProgress,
     handleCountChange,
     handleApplyRepeatSettings,
+    isPlaybackBlocked,
+    notifyIfPlaybackBlocked,
   };
 }

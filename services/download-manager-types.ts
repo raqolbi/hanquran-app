@@ -6,6 +6,12 @@ export type DownloadClientMessage =
       surahId: number;
       urls: string[];
     }
+  | {
+      type: 'cache-surah-offline';
+      surahId: number;
+      dataUrls: string[];
+      routeUrls: string[];
+    }
   | { type: 'PING' };
 
 /** Pesan Service Worker → client. */

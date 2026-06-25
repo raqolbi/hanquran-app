@@ -10,6 +10,7 @@ import { useRepeatStore } from './repeatStore';
 import { useOfflineStore } from './offlineStore';
 import { getDownloadManager } from '@/services/download-manager';
 import { getRepeatTabSync } from '@/services/repeat-tab-sync';
+import { repairOfflineSurahCachesIfNeeded } from '@/services/offline-surah-precache';
 
 export { useAudioStore } from './audioStore';
 export { useUserStore } from './userStore';
@@ -26,4 +27,6 @@ export async function initStores(): Promise<void> {
     useRepeatStore.getState().init(),
     useOfflineStore.getState().init(),
   ]);
+
+  void repairOfflineSurahCachesIfNeeded();
 }

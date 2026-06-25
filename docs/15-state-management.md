@@ -420,9 +420,9 @@ Tujuan: hanya satu sumber kebenaran untuk pemutaran audio di satu sesi pengguna.
 
 ## 10.3 Sinkronisasi Online ↔ Offline
 
-* Sebelum memutar trek, `audio-controller` mengecek `useOfflineStore.connectionStatus`.
-  * `online`: trek dialirkan dari jaringan; Service Worker melakukan runtime caching di background.
-  * `offline`: trek diambil via `caches.match(url)`; jika tidak ada, `useAudioStore` mengeset error `audio_not_cached` dan UI menampilkan pesan ramah.
+* Sebelum memutar trek, `audio-controller` mengecek ketersediaan audio untuk surat+qari aktif.
+  * `online`: trek dialirkan dari CDN; fallback ke Cache Storage jika file sudah pernah diunduh.
+  * `offline`: trek **hanya** dari `caches.match(url)` jika `downloadManifest` `ready`; jika tidak ada → `audio_not_cached` dan UI menampilkan toast + Play disabled (`docs/30-offline-behavior-spec.md` §4.2).
 
 ## 10.4 Sinkronisasi Posisi Terakhir
 
@@ -485,10 +485,12 @@ Tujuan: aplikasi dapat dipakai membaca, mendengarkan, dan menghafal tanpa koneks
 
 ## 12.1 Lapisan Offline
 
-1. **Aset aplikasi** (HTML, JS, CSS, font) — di-cache oleh Service Worker dengan strategi `stale-while-revalidate`.
-2. **Data Al-Qur'an** (teks, terjemahan, metadata) — disimpan di **Dexie** untuk akses cepat langsung dari client tanpa Service Worker.
-3. **File audio** — di-cache oleh Service Worker pada `hanquran-audio-v1` ketika user menekan **Simpan Offline** atau saat trek pertama kali diputar (runtime caching).
-4. **Preferensi pengguna & progres** — disimpan via **Dexie** sehingga selalu tersedia offline.
+1. **Aset aplikasi** (HTML, JS, CSS, font) — di-cache oleh Service Worker (`hanquran-static-v1`, `hanquran-shell-v1`).
+2. **Data Al-Qur'an** (teks, terjemahan, metadata) — aset statis `public/data/*` via Service Worker `hanquran-data-v1` (cache-first) + in-memory sesi. **Bukan** Dexie — lihat `docs/23`, `docs/30-offline-behavior-spec.md` §2.1.
+3. **File audio** — hanya di `hanquran-audio-v1` setelah pengguna menekan **Simpan Offline** (unduh eksplisit per surat+qari). Runtime cache otomatis saat pertama play **tidak** diimplementasi pada MVP.
+4. **Preferensi pengguna & progres** — Dexie; selalu tersedia offline.
+
+Perilaku UI lengkap (baca vs putar, tombol unduh, toast): **`docs/30-offline-behavior-spec.md`**.
 
 ## 12.2 Status Koneksi
 

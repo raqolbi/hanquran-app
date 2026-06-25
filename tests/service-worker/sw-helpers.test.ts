@@ -8,6 +8,7 @@ type RequestCategory = 'static' | 'data' | 'audio' | 'bypass';
 type SwHelpers = {
   AUDIO_CDN_HOST: string;
   isNavigationRequest: (request: Request) => boolean;
+  isAppRouterRequest: (request: Request) => boolean;
   networkFirstNavigation: (
     request: Request,
     shellCacheName: string,
@@ -147,6 +148,25 @@ describe('SwHelpers.isNavigationRequest', () => {
   });
 });
 
+describe('SwHelpers.isAppRouterRequest', () => {
+  it('mendeteksi header RSC dan prefetch App Router', () => {
+    const { helpers } = loadSwHelpers();
+    const rsc = new Request(`${APP_ORIGIN}/surah/1`, {
+      headers: { RSC: '1', Accept: 'text/x-component' },
+    });
+    const prefetch = new Request(`${APP_ORIGIN}/surah/1`, {
+      headers: { 'Next-Router-Prefetch': '1' },
+    });
+    const html = new Request(`${APP_ORIGIN}/surah/1`, {
+      headers: { Accept: 'text/html' },
+    });
+
+    expect(helpers.isAppRouterRequest(rsc)).toBe(true);
+    expect(helpers.isAppRouterRequest(prefetch)).toBe(true);
+    expect(helpers.isAppRouterRequest(html)).toBe(false);
+  });
+});
+
 describe('SwHelpers.networkFirstNavigation', () => {
   it('mengembalikan respons jaringan dan menyimpan shell saat online', async () => {
     const network = new Response('<html>ok</html>', {
@@ -174,10 +194,40 @@ describe('SwHelpers.networkFirstNavigation', () => {
     );
 
     expect(response).toBe(network);
-    expect(cacheStore.put).toHaveBeenCalled();
+    expect(cacheStore.put).toHaveBeenCalledWith(request, network);
   });
 
-  it('fallback ke cache shell lalu offline.html saat offline', async () => {
+  it('mengembalikan cache shell untuk URL yang sama saat offline', async () => {
+    const surahShell = new Response('<html>surah</html>', { status: 200 });
+    const cacheStore = {
+      match: vi.fn(async (key: RequestInfo | URL) => {
+        const request = key instanceof Request ? key : new Request(String(key));
+        if (request.url.endsWith('/surah/1')) return surahShell;
+        return undefined;
+      }),
+      put: vi.fn(),
+    };
+    const fetchFn = vi.fn(async () => {
+      throw new Error('offline');
+    });
+    const { helpers } = loadSwHelpers({
+      caches: { open: vi.fn(async () => cacheStore) },
+      fetch: fetchFn,
+    });
+
+    const request = new Request(`${APP_ORIGIN}/surah/1`, {
+      headers: { Accept: 'text/html' },
+    });
+    const response = await helpers.networkFirstNavigation(
+      request,
+      'hanquran-shell-v1',
+      '/offline.html',
+    );
+
+    expect(response).toBe(surahShell);
+  });
+
+  it('fallback ke offline.html saat offline tanpa cache route', async () => {
     const offlinePage = new Response('<html>offline</html>', { status: 200 });
     const cacheStore = {
       match: vi.fn(async (key: RequestInfo) => {
@@ -245,7 +295,7 @@ describe('SwHelpers.cacheFirst', () => {
     const response = await helpers.cacheFirst(request, 'hanquran-audio-v1');
 
     expect(response).toBe(network);
-    expect(cacheStore.put).toHaveBeenCalledWith(url, network);
+    expect(cacheStore.put).toHaveBeenCalledWith(request, network);
   });
 });
 

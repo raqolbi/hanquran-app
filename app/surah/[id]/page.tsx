@@ -86,6 +86,8 @@ function SurahDetailLoaded({
     handleCountChange,
     handleApplyRepeatSettings,
     pause,
+    isPlaybackBlocked,
+    notifyIfPlaybackBlocked,
   } = useSurahRepeatPlayback({
     surahId: surah.number,
     routeMode: 'surah',
@@ -190,6 +192,8 @@ function SurahDetailLoaded({
         onNext={goToNextTrack}
         isPreviousDisabled={isPreviousDisabled}
         isNextDisabled={isNextDisabled}
+        isPlaybackBlocked={isPlaybackBlocked}
+        onPlaybackBlocked={notifyIfPlaybackBlocked}
         toolbarStart={
           <RepeatSelector
             variant="inline"

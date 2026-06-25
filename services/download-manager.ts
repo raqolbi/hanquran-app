@@ -13,6 +13,7 @@ import {
   DOWNLOAD_MANIFEST_VERSION,
 } from '@/services/audio-cache-constants';
 import { downloadManifestKey } from '@/services/download-manifest-key';
+import { precacheSurahForOffline } from '@/services/offline-surah-precache';
 import type {
   DownloadProgressHandler,
   DownloadSurahParams,
@@ -237,6 +238,7 @@ export class DownloadManager {
       await putManifestReady(surahId, reciterId, ayahCount, sizeBytes);
       useOfflineStore.getState().setDownloadStatus(surahId, reciterId, 'ready');
       await useOfflineStore.getState().refreshManifest();
+      await precacheSurahForOffline(surahId);
 
       return { surahId, sizeBytes, ayahsCount: ayahCount };
     } catch (error) {
@@ -281,6 +283,7 @@ export class DownloadManager {
             .getState()
             .setDownloadStatus(message.surahId, reciterId, 'ready');
           await useOfflineStore.getState().refreshManifest();
+          await precacheSurahForOffline(message.surahId);
           pending?.resolve({
             surahId: message.surahId,
             sizeBytes: message.sizeBytes,

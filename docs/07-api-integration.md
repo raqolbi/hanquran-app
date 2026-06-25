@@ -116,7 +116,14 @@ Metadata qari dari `data/reciters.json` — bukan Dexie.
 
 ## Offline Friendly
 
-Konten Quran tersedia offline setelah Service Worker (Phase 5) meng-cache aset `public/data/*`, atau setelah browser HTTP cache terisi. **Bukan** via IndexedDB content tables.
+Konten Quran tersedia offline setelah Service Worker meng-cache aset `public/data/*` (`hanquran-data-v1`), atau setelah browser HTTP cache terisi. **Bukan** via IndexedDB.
+
+**Pemisahan penting:**
+
+- **Membaca** surat (teks, terjemahan, navigasi ayat) → bergantung cache dataset, **tidak** memerlukan Simpan Offline.
+- **Memutar audio** → memerlukan Simpan Offline per surat+qari, atau koneksi online untuk streaming CDN.
+
+Lihat matriks lengkap: `docs/30-offline-behavior-spec.md` §3.
 
 ---
 
@@ -662,6 +669,7 @@ Contoh error yang user-facing:
 - `Tidak dapat memuat daftar surat.`
 - `Tidak dapat memuat ayat surat ini.`
 - `Audio tidak tersedia saat ini.`
+- `Audio tidak tersedia offline. Simpan surat ini saat online untuk mendengarkan tanpa internet.` (toast — `docs/30` §4.2)
 - `Terjemahan belum tersedia secara offline.`
 
 Pesan error harus:

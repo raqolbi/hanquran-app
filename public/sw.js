@@ -24,6 +24,7 @@ const SHELL_PRECACHE_URLS = ['/offline.html'];
 const {
   getRequestCategory,
   isNavigationRequest,
+  isAppRouterRequest,
   networkFirstNavigation,
   cacheFirst,
   staleWhileRevalidate,
@@ -73,6 +74,15 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  if (isAppRouterRequest(request) && url.origin === self.location.origin) {
+    event.respondWith(
+      staleWhileRevalidate(request, CACHE_SHELL, {
+        waitUntil: (promise) => event.waitUntil(promise),
+      }),
+    );
+    return;
+  }
+
   const category = getRequestCategory(url, self.location.origin);
   if (category === 'bypass') return;
 
@@ -113,6 +123,14 @@ self.addEventListener('message', (event) => {
     if (!requestId || !surahId || !Array.isArray(urls)) return;
 
     void prefetchSurahAudio(event, { requestId, surahId, urls });
+    return;
+  }
+
+  if (data.type === 'cache-surah-offline') {
+    const { surahId, dataUrls, routeUrls } = data;
+    if (!surahId || !Array.isArray(dataUrls) || !Array.isArray(routeUrls)) return;
+
+    void cacheSurahOfflineContent({ dataUrls, routeUrls });
   }
 });
 
@@ -122,6 +140,53 @@ function postDownloadMessage(event, payload) {
   const target = event.source;
   if (!target || typeof target.postMessage !== 'function') return;
   target.postMessage(payload);
+}
+
+async function cacheSurahOfflineContent({ dataUrls, routeUrls }) {
+  const dataCache = await caches.open(CACHE_DATA);
+  const shellCache = await caches.open(CACHE_SHELL);
+
+  await Promise.all(
+    dataUrls.map(async (path) => {
+      try {
+        const url = new URL(path, self.location.origin).href;
+        const response = await fetch(url);
+        if (response.ok) {
+          await dataCache.put(new Request(url), response.clone());
+        }
+      } catch (error) {
+        console.warn('[HanQuran SW] Precache data gagal:', path, error);
+      }
+    }),
+  );
+
+  await Promise.all(
+    routeUrls.map(async (path) => {
+      try {
+        const url = new URL(path, self.location.origin).href;
+        const documentRequest = new Request(url, {
+          headers: { Accept: 'text/html,application/xhtml+xml' },
+        });
+        const documentResponse = await fetch(documentRequest);
+        if (documentResponse.ok) {
+          await shellCache.put(documentRequest, documentResponse.clone());
+        }
+
+        const rscRequest = new Request(url, {
+          headers: {
+            RSC: '1',
+            Accept: 'text/x-component',
+          },
+        });
+        const rscResponse = await fetch(rscRequest);
+        if (rscResponse.ok) {
+          await shellCache.put(rscRequest, rscResponse.clone());
+        }
+      } catch (error) {
+        console.warn('[HanQuran SW] Precache route gagal:', path, error);
+      }
+    }),
+  );
 }
 
 async function prefetchSurahAudio(event, { requestId, surahId, urls }) {

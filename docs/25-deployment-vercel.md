@@ -124,32 +124,34 @@ Salin checklist ini ke PR atau `RELEASE.md` saat rilis.
 
 ### Build & deploy
 
-- [ ] `npm run test` lulus di CI / lokal
-- [ ] `npm run build` sukses
-- [ ] Preview / staging URL dapat dibuka tanpa error
+- [x] `npm run test` lulus di CI / lokal
+- [x] `npm run build` sukses
+- [x] Preview / staging URL dapat dibuka tanpa error
 
 ### Core flows
 
-- [ ] Beranda — daftar surat, cari, filter favorit
-- [ ] Surah Detail — audio, repeat, unduh offline
-- [ ] Mode Fokus — navigasi ayat
-- [ ] Pengaturan — bahasa, qari, ukuran teks, aksesibilitas
-- [ ] Lanjutkan Hafalan — posisi terakhir tersimpan
+- [x] Beranda — daftar surat, cari, filter favorit
+- [x] Surah Detail — audio, repeat, unduh offline
+- [x] Mode Fokus — navigasi ayat
+- [x] Pengaturan — bahasa, qari, ukuran teks, aksesibilitas
+- [x] Lanjutkan Hafalan — posisi terakhir tersimpan
 
 ### PWA & offline
 
-- [ ] Manifest valid (DevTools → Application)
-- [ ] Service Worker aktif
-- [ ] Install prompt / banner (Android Chrome; petunjuk iOS Safari)
-- [ ] Mode offline — shell / halaman fallback
-- [ ] Minimal 1 surat diunduh dan diputar offline
+- [x] Manifest valid (DevTools → Application)
+- [x] Service Worker aktif
+- [x] Install prompt / banner (Android Chrome; petunjuk iOS Safari)
+- [x] Mode offline — shell / halaman fallback
+- [ ] Baca surat offline (dataset ter-cache) — `docs/30` §8
+- [ ] Putar audio offline hanya setelah Simpan Offline — `docs/30` §8
+- [ ] Offline + belum unduh: Play disabled + toast; tanpa tombol Simpan Offline
 
 ### Kualitas
 
 - [ ] Lighthouse **Performance** ≥ 80 mobile (Beranda run terbaik **47** setelah lazy load; variansi lab — lihat `docs/18` Phase 7)
 - [x] Lighthouse Accessibility / Best Practices / SEO ≥ 80 (baseline 94–100)
 - [x] PWA smoke audit ≥ 80 (`npm run perf:pwa`)
-- [ ] Tidak ada regresi kritis audio / repeat
+- [x] Tidak ada regresi kritis audio / repeat
 
 ---
 

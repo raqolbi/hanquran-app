@@ -110,12 +110,12 @@ Rilis growth HanQuran — Media Session di lock screen, **Mode Murotal** tilawah
 - [x] Unit test `murotal-resolver` + orkestrasi repeat+murotal
 - [x] Unit test auto follow landscape + `formatRepeatProgressLabel`
 - [x] Unit test `lazy-surah-card` + baseline performa (`docs/18` Phase 7)
-- [ ] Checklist manual lock screen (`docs/27` §8)
-- [ ] Checklist manual Phase 2c (`docs/18`) — lintas surat, kombinasi repeat+murotal
-- [ ] Uji auto follow landscape HP (perangkat fisik)
-- [ ] Preview / staging diuji
-- [ ] Production deploy
-- [ ] Checklist `docs/25-deployment-vercel.md` §5
+- [x] Checklist manual lock screen (`docs/27` §8)
+- [x] Checklist manual Phase 2c (`docs/18`) — lintas surat, kombinasi repeat+murotal
+- [x] Uji auto follow landscape HP (perangkat fisik)
+- [x] Preview / staging diuji
+- [x] Production deploy
+- [x] Checklist `docs/25-deployment-vercel.md` §5 (uji manual)
 
 ---
 
