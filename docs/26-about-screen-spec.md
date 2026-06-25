@@ -71,7 +71,7 @@ Menjelaskan (via i18n):
 
 - Tujuan HanQuran
 - Filosofi produk (empat prinsip: Memorization / Mobile / Offline / Simplicity First)
-- Fokus aplikasi (bullet: repeat, audio per ayat, mode fokus, lanjutkan hafalan, preferensi lokal)
+- Fokus aplikasi (bullet: repeat, audio per ayat, mode fokus, Mode Murotal, Media Session, lanjutkan hafalan, offline, preferensi lokal)
 
 Konsep selaras `docs/00-vision.md` dan `docs/20-mvp-freeze.md` §3 — wording UI boleh disederhanakan untuk pengguna.
 
@@ -86,7 +86,7 @@ Kelompok **Sumber Data** (struktur di `data/about-credits.ts`, label via i18n):
 | Transliterasi | [eQuran.id](https://equran.id/) |
 | Audio Murottal | Para qari dan penyedia audio yang digunakan HanQuran |
 
-Tambahan: kategori **Teknologi utama** (Next.js, React, dll.) — ringkas, dapat diperbarui tanpa mengunci string di komponen.
+Tambahan kategori teknologi **tidak** ditampilkan — hanya sumber data konten.
 
 ### 4.4 Repository & Lisensi
 

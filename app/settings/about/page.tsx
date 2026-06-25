@@ -7,7 +7,6 @@ import { useTranslations } from 'next-intl';
 
 import {
   ABOUT_DATA_SOURCE_CREDITS,
-  ABOUT_TECHNOLOGY_CREDITS,
 } from '@/data/about-credits';
 import {
   ABOUT_FOCUS_ITEM_KEYS,
@@ -113,25 +112,6 @@ export default function AboutPage() {
                         {tCredits(item.sourceKey)}
                       </p>
                     )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="space-y-2 border-t border-border pt-4">
-              <h3 className="text-sm font-semibold text-foreground">
-                {tCredits('technology.title')}
-              </h3>
-              <p className="text-xs text-muted-foreground">
-                {tCredits('technology.description')}
-              </p>
-              <ul className="space-y-1.5">
-                {ABOUT_TECHNOLOGY_CREDITS.map((entry) => (
-                  <li
-                    key={entry.labelKey}
-                    className="text-sm text-muted-foreground"
-                  >
-                    {tCredits(entry.labelKey)}
                   </li>
                 ))}
               </ul>

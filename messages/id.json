@@ -149,7 +149,7 @@
     "navAriaLabel": "Informasi aplikasi",
     "app": {
       "sectionTitle": "Informasi Aplikasi",
-      "description": "Platform hafalan Al-Qur'an — audio per ayat, repeat, mode fokus, dan dukungan offline. Tanpa akun. Mobile-first.",
+      "description": "Platform hafalan Al-Qur'an — audio per ayat, repeat, Mode Murotal, kontrol lock screen, mode fokus, dan dukungan offline. Tanpa akun. Mobile-first.",
       "version": "Versi {version}"
     },
     "mission": {
@@ -168,13 +168,16 @@
         "repeat": "Repeat ayat, range, atau seluruh surat",
         "audio": "Audio tilawah per ayat",
         "focusMode": "Mode Fokus — satu ayat, minim distraksi",
+        "murotal": "Mode Murotal — tilawah berkelanjutan lintas ayat dan surat",
+        "mediaSession": "Kontrol audio dari lock screen (Media Session)",
         "continueReading": "Lanjutkan Hafalan dari posisi terakhir",
+        "offline": "Unduh offline per surat — audio dan metadata tersimpan lokal",
         "preferences": "Preferensi lokal (bahasa UI, qari, tampilan ayat, aksesibilitas)"
       }
     },
     "credits": {
       "title": "Credits",
-      "description": "Sumber data dan teknologi utama yang digunakan project.",
+      "description": "Sumber data konten Al-Qur'an yang digunakan aplikasi.",
       "opensInNewTab": "(buka di tab baru)",
       "dataSources": {
         "title": "Sumber Data",
@@ -194,11 +197,6 @@
           "label": "Audio Murottal",
           "source": "Para qari dan penyedia audio yang digunakan oleh HanQuran"
         }
-      },
-      "technology": {
-        "title": "Teknologi utama",
-        "description": "Framework dan library inti.",
-        "stack": "Next.js, React, TypeScript, Tailwind CSS, Zustand, Dexie, next-intl"
       }
     },
     "repository": {

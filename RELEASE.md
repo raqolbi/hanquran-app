@@ -60,100 +60,70 @@ Satu atau dua kalimat: apa yang berubah bagi pengguna.
 
 ---
 
-## Rencana (belum dirilis)
+## Riwayat
 
-### [0.2.0] — (implementasi selesai, belum dirilis)
+### [0.3.0] — 2026-06-25
 
 #### Ringkasan
 
-Pengalaman pemutaran audio di mobile: metadata surat/ayat di lock screen dan kontrol Play/Pause via Media Session API.
+Rilis growth HanQuran — Media Session di lock screen, **Mode Murotal** tilawah berkelanjutan, progress repeat **x/y**, lazy load Beranda, dan tooling audit performa.
 
-#### Fitur baru (rencana)
+#### Fitur baru
 
-- Media Session API — metadata surat, ayat, dan qari di kontrol media OS
-- Kontrol Play/Pause dari lock screen (jika platform mendukung)
+- **Media Session API** — metadata surat/ayat/qari di kontrol media OS; Play/Pause dari lock screen
 - Progress bar & seek via `setPositionState` / `seekto` (Chrome Android)
 - Navigasi ayat dari lock screen (`previoustrack` / `nexttrack`) — mengikuti aturan transport `docs/29` §7.2
-- Audio background lebih baik saat layar terkunci — selama browser mengizinkan
-
-#### PWA & offline
-
-- Tidak ada perubahan Service Worker; audio tetap via `HTMLAudioElement`
-- Disarankan uji dengan PWA terpasang di Android & iOS
-
-#### Dokumentasi
-
-- Spesifikasi lengkap: `docs/27-media-session-api-spec.md`
-- Task implementasi: `docs/18-development-tasks.md` Phase 2b
-
-#### Masalah yang diketahui (antisipasi)
-
-- Perilaku background audio **platform-dependent** — iOS Safari lebih ketat daripada Android Chrome
-- Firefox Android: progress bar lock screen tidak tersedia (known limitation, §6.3 `docs/27`)
-
-#### Uji sebelum rilis
-
-- [x] Unit test `media-session` + integrasi `audio-controller`
-- [ ] Checklist manual lock screen (`docs/27` §8)
-- [ ] Tidak ada regresi `AudioTabSync` dan RepeatEngine (uji manual)
-
----
-
-### [0.3.0] — (rencana — implementasi selesai, belum dirilis)
-
-#### Ringkasan
-
-Tilawah berkelanjutan (**Mode Murotal**), progress repeat **x/y** di audio bar, dan perbaikan auto follow di landscape HP.
-
-#### Fitur baru (rencana)
-
 - Toggle **Mode Murotal** di Pengaturan → Playback (default OFF)
-- Pemutaran otomatis lanjut ke ayat berikutnya atau surat berikutnya
-- Integrasi dengan RepeatEngine — repeat didahulukan; setelah siklus selesai, murotal advance
-- Berlaku di Surah Detail dan Focus Mode
+- Pemutaran otomatis lanjut ke ayat berikutnya atau surat berikutnya setelah repeat selesai
 - Badge **`x/y`** (`RepeatProgressBadge`) saat sesi repeat aktif — Surah Detail & Focus Mode
 - Aturan tombol **⏮/⏭** transport — dalam surat (default) atau lintas surat saat Murotal ON
+- **Lazy load kartu surat Beranda** — `LazySurahCard` (LCP/TBT membaik pada run Lighthouse terbaik)
 
-#### Perbaikan (rencana)
+#### Perbaikan
 
 - Auto Follow Playback — pengukuran zona baca di landscape HP (`short-landscape`)
-- **Lazy load kartu surat Beranda** — `LazySurahCard` (LCP/TBT membaik pada run Lighthouse terbaik)
 - Tooling audit performa — `npm run perf:*` (bundle, Lighthouse, PWA smoke)
 
 #### PWA & offline
 
-- Tidak ada perubahan Service Worker
+- Tidak ada perubahan Service Worker; audio tetap via `HTMLAudioElement`
 - Navigasi lintas surat memakai route yang sama (`/surah/[id]`, `/focus/[id]`)
-
-#### Dokumentasi
-
-- Spesifikasi lengkap: `docs/29-murotal-mode-spec.md`, `docs/12-component-spec.md` (§14–15)
-- Task implementasi: `docs/18-development-tasks.md` Phase 2c
+- Disarankan uji dengan PWA terpasang di Android & iOS
 
 #### Catatan penting
 
 - Migrasi Dexie: field baru `settings.murotalEnabled` (default `false`)
 - Akhir Al-Qur'an (An-Nas): pemutaran berhenti + feedback pengguna
-- `package.json` belum di-bump — naik ke `0.3.0` saat rilis formal
+- Versi `package.json` **0.3.0** — tampil otomatis di layar Tentang HanQuran
+
+#### Masalah yang diketahui
+
+- Perilaku background audio **platform-dependent** — iOS Safari lebih ketat daripada Android Chrome
+- Firefox Android: progress bar lock screen tidak tersedia (known limitation, §6.3 `docs/27`)
+- Lighthouse Performance Beranda — run terbaik ~47; target ≥ 80 belum tercapai
+- Word-by-word highlight — Post-MVP
+- Persist posisi audio terakhir — belum
 
 #### Uji sebelum rilis
 
+- [x] Unit test `media-session` + integrasi `audio-controller`
 - [x] Unit test `murotal-resolver` + orkestrasi repeat+murotal
 - [x] Unit test auto follow landscape + `formatRepeatProgressLabel`
 - [x] Unit test `lazy-surah-card` + baseline performa (`docs/18` Phase 7)
+- [ ] Checklist manual lock screen (`docs/27` §8)
 - [ ] Checklist manual Phase 2c (`docs/18`) — lintas surat, kombinasi repeat+murotal
 - [ ] Uji auto follow landscape HP (perangkat fisik)
-- [ ] Tidak ada regresi RepeatEngine dan Media Session
+- [ ] Preview / staging diuji
+- [ ] Production deploy
+- [ ] Checklist `docs/25-deployment-vercel.md` §5
 
 ---
 
-## Riwayat
-
-### [0.1.0] — (belum dirilis)
+### [0.1.0] — baseline MVP (pengembangan)
 
 #### Ringkasan
 
-Rilis MVP pertama HanQuran — aplikasi hafalan Al-Qur'an dengan audio per ayat, repeat, mode fokus, dan dukungan offline.
+Baseline MVP HanQuran — aplikasi hafalan Al-Qur'an dengan audio per ayat, repeat, mode fokus, dan dukungan offline. Fitur growth `0.2.0`/`0.3.0` digabung dalam rilis **0.3.0** di atas.
 
 #### Fitur baru
 
@@ -165,10 +135,6 @@ Rilis MVP pertama HanQuran — aplikasi hafalan Al-Qur'an dengan audio per ayat,
 - Unduh offline per surat — audio + metadata cache
 - PWA — instal ke layar utama, splash screen, shell offline
 
-#### Perbaikan
-
-- _(Isi saat rilis dari delta sejak tag sebelumnya)_
-
 #### PWA & offline
 
 - Service Worker — caching dataset, aset, dan audio CDN
@@ -179,19 +145,6 @@ Rilis MVP pertama HanQuran — aplikasi hafalan Al-Qur'an dengan audio per ayat,
 - Data hafalan (favorit, pengaturan, progres) disimpan **lokal di perangkat** (IndexedDB); tidak ada akun cloud pada MVP.
 - Setelah instal PWA, update aplikasi mengikuti deploy baru di Vercel (refresh / update SW).
 
-#### Masalah yang diketahui
-
-- Word-by-word highlight — Post-MVP
-- Persist posisi audio terakhir — belum
-- Verifikasi E2E pemutaran offline — manual
-- Media Session API — diimplementasi; menunggu tag rilis `v0.2.0` & uji manual lock screen (`docs/27`)
-
-#### Uji sebelum rilis
-
-- [ ] Preview / staging diuji
-- [ ] Production deploy
-- [ ] Checklist `docs/25-deployment-vercel.md` §5
-
 ---
 
-<!-- Versi berikutnya: salin Template di atas ke sini, di atas entri 0.1.0 -->
+<!-- Versi berikutnya: salin Template di atas ke sini, di atas entri 0.3.0 -->

@@ -3,7 +3,7 @@
 Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi HanQuran menuju MVP. Berisi daftar pekerjaan teknis yang dapat langsung dikerjakan developer.
 
 **Terakhir diperbarui:** 25 Juni 2026
-**Status:** 🚧 Sprint 2 — Growth `0.2.0`/`0.3.0` diimplementasi di kode; uji manual perangkat & tag rilis menunggu
+**Status:** 🚧 Sprint 2 — rilis **`0.3.0`** (`package.json`); uji manual perangkat (lock screen, murotal lintas surat) masih terbuka
 **Total Development Tasks:** 97 (71 Selesai, 26 Belum)
 **Arsitektur data:** `docs/23-static-dataset-architecture.md`
 
@@ -85,8 +85,8 @@ Codebase aktif berada di `hanquran-app/` (Next.js App Router). **Konten Quran** 
 
 **Belum selesai:**
 
-- Uji manual lock screen Media Session (`docs/27` §8) — sebelum tag `v0.2.0`
-- Uji manual Mode Murotal lintas surat — sebelum tag `v0.3.0`
+- Uji manual lock screen Media Session (`docs/27` §8)
+- Uji manual Mode Murotal lintas surat
 - Optimasi Lighthouse Performance ≥ 80 — lazy load Beranda ✅ (run terbaik 47); uji Vercel & kurangi TBT framework
 - Persist posisi audio terakhir
 - Word-by-word highlight (Post-MVP)
@@ -245,7 +245,7 @@ Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`).
 3. ✅ Integrasi `AudioController` — lifecycle play/pause/ganti trek
 4. ✅ Action handlers `previoustrack` / `nexttrack` via `use-surah-repeat-playback`
 5. ✅ Unit test `tests/services/media-session.test.ts` + integrasi `audio-controller.test.ts`
-6. ⏳ Checklist manual lock screen — `docs/27` §8 (wajib sebelum tag `v0.2.0`)
+6. ⏳ Checklist manual lock screen — `docs/27` §8
 
 ### Progress Repeat x/y (25 Juni 2026)
 
@@ -618,7 +618,7 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
 
 **Total: 5 tasks | P0: 0 | P1: 4 | P2: 1**
 
-> Spesifikasi: `docs/27-media-session-api-spec.md` · Versi target: **0.2.0** · Bukan blocker MVP `0.1.0`
+> Spesifikasi: `docs/27-media-session-api-spec.md` · Versi rilis: **0.3.0** (gabungan) · Bukan blocker MVP `0.1.0`
 
 ### Disarankan (P1)
 
@@ -656,7 +656,7 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
   - Prioritas: P2
   - **Ringkasan:** mengikuti aturan transport `docs/29` §7.2 (lintas surat jika Murotal ON)
 
-### Uji manual (wajib sebelum tag `v0.2.0`)
+### Uji manual (wajib sebelum deploy production)
 
 - [ ] [TEST] Uji kontrol lock screen & background playback (mobile)
   - Tujuan: Verifikasi metadata + Play/Pause di Android Chrome & iOS Safari (tab & PWA)
@@ -670,7 +670,7 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
 
 **Total: 8 tasks | P0: 0 | P1: 6 | P2: 2**
 
-> Spesifikasi: `docs/29-murotal-mode-spec.md` · Versi target: **0.3.0** · Bukan blocker MVP `0.1.0`
+> Spesifikasi: `docs/29-murotal-mode-spec.md` · Versi rilis: **0.3.0** · Bukan blocker MVP `0.1.0`
 
 ### Disarankan (P1)
 
@@ -1224,7 +1224,7 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [x] Audio preloading & prefetch hints (`services/audio-prefetch.ts`)
 - [x] Dukungan multi-qari via Pengaturan (`settings.reciterId`, `usePreferredReciterId`)
 - [x] Cross-browser audio testing — unit test ✅; checklist manual di Phase 2 P0
-- [x] Media Session API — diimplementasi (`docs/27`); uji manual lock screen tersisa sebelum tag `v0.2.0`
+- [x] Media Session API — diimplementasi (`docs/27`); uji manual lock screen tersisa sebelum deploy production
 
 ### Phase 2b — Media Session
 - [x] Spesifikasi & dokumen terkait (`docs/27`)

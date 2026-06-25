@@ -1,8 +1,8 @@
 # 27 — Spesifikasi Media Session API
 
 **Tanggal:** 25 Juni 2026  
-**Status:** ✅ Diimplementasi (target rilis `0.2.0`)  
-**Versi target rilis:** `0.2.0`  
+**Status:** ✅ Diimplementasi — dirilis **`0.3.0`**
+**Versi rilis:** `0.3.0` (Media Session termasuk dalam rilis gabungan)
 **Mengacu:** `docs/04-system-architecture.md` §7, `docs/15-state-management.md` §10, `docs/18-development-tasks.md` Phase 2b
 
 ---
@@ -74,7 +74,7 @@ Media Session API adalah standar web yang dirancang untuk kasus ini dan selaras 
 |-------|-------|
 | Product Backlog | **PB-016** — Post-MVP / Growth (P1) |
 | MVP blocker | **Tidak** — tidak memblokir rilis `0.1.0` |
-| Versi target | **`0.2.0`** |
+| Versi target | **`0.3.0`** (Media Session termasuk rilis gabungan) |
 | Sprint disarankan | Setelah MVP `0.1.0` stabil; paralel dengan uji PWA mobile |
 
 ---
@@ -234,7 +234,7 @@ Ini **bukan bug HanQuran** — keterbatasan integrasi Firefox dengan Media Sessi
 | Chrome Android, audio jalan | Semua sinkron | Metadata + bar + Play/Pause |
 | Firefox Android, audio jalan | Semua sinkron di sisi web | Metadata + Play/Pause saja |
 
-**Keputusan QA:** checklist manual di `docs/18` Phase 2b wajib diisi sebelum tag `v0.2.0`. Kolom Firefox dicatat sebagai **known limitation**, bukan regresi.
+**Keputusan QA:** checklist manual di `docs/18` Phase 2b wajib diisi sebelum deploy production. Kolom Firefox dicatat sebagai **known limitation**, bukan regresi.
 
 ---
 
@@ -266,7 +266,7 @@ Ini **bukan bug HanQuran** — keterbatasan integrasi Firefox dengan Media Sessi
 
 - Extend test existing: setelah `play()`, metadata ter-update; `timeupdate` memperbarui position state
 
-### Manual (wajib sebelum rilis 0.2.0)
+### Manual (wajib sebelum deploy production)
 
 | # | Skenario | Chrome Android | Firefox Android | iOS tab | iOS PWA |
 |---|----------|----------------|-----------------|---------|---------|
@@ -290,8 +290,8 @@ Ini **bukan bug HanQuran** — keterbatasan integrasi Firefox dengan Media Sessi
 | `hooks/use-surah-repeat-playback.ts` | ✅ `setMediaSessionTrackNavigation` |
 | `hooks/use-audio.ts` | Tidak wajib diubah (abstraksi controller) |
 | `stores/audioStore.ts` | Tidak diubah |
-| `package.json` | Versi → `0.2.0` saat rilis fitur |
-| `RELEASE.md` | Entri `[0.2.0]` |
+| `package.json` | Versi → `0.3.0` |
+| `RELEASE.md` | Entri `[0.3.0]` |
 | Analytics | Tidak ada event baru (opsional: track di fase berikutnya) |
 
 ---
@@ -310,7 +310,7 @@ Ini **bukan bug HanQuran** — keterbatasan integrasi Firefox dengan Media Sessi
 | `docs/17-implementation-roadmap.md` | Fase Growth |
 | `docs/18-development-tasks.md` | Phase 2b |
 | `docs/20-mvp-freeze.md` | §5.6 Growth |
-| `RELEASE.md` | Rencana 0.2.0 |
+| `RELEASE.md` | Riwayat `0.3.0` |
 
 ---
 
