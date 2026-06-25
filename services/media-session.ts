@@ -18,6 +18,13 @@ export interface MediaSessionMetadataInput {
 export interface MediaSessionHandlers {
   onPlay: () => void | Promise<void>;
   onPause: () => void;
+  onSeekTo?: (seconds: number) => void;
+}
+
+export interface MediaSessionPositionState {
+  duration: number;
+  position: number;
+  playbackRate?: number;
 }
 
 export interface MediaSessionTrackNavigationHandlers {
@@ -32,7 +39,6 @@ type MediaSessionPlaybackState = 'playing' | 'paused' | 'none';
 
 let boundHandlers: MediaSessionHandlers | null = null;
 let trackNavigationHandlers: MediaSessionTrackNavigationHandlers = {};
-let playPauseHandlersBound = false;
 
 function getMediaSession(): MediaSession | null {
   if (typeof navigator === 'undefined' || !('mediaSession' in navigator)) {
@@ -72,7 +78,15 @@ function applyPlayPauseHandlers(): void {
   session.setActionHandler('pause', () => {
     boundHandlers?.onPause();
   });
-  playPauseHandlersBound = true;
+
+  if (boundHandlers.onSeekTo) {
+    session.setActionHandler('seekto', (details) => {
+      if (details.seekTime == null || !Number.isFinite(details.seekTime)) return;
+      boundHandlers?.onSeekTo?.(details.seekTime);
+    });
+  } else {
+    session.setActionHandler('seekto', null);
+  }
 }
 
 function applyTrackNavigationHandlers(): void {
@@ -100,11 +114,7 @@ export function bindMediaSession(handlers: MediaSessionHandlers): void {
   if (!isMediaSessionSupported()) return;
 
   boundHandlers = handlers;
-
-  if (!playPauseHandlersBound) {
-    applyPlayPauseHandlers();
-  }
-
+  applyPlayPauseHandlers();
   applyTrackNavigationHandlers();
 }
 
@@ -153,6 +163,28 @@ export function setMediaSessionPlaybackState(
   session.playbackState = state;
 }
 
+export function setMediaSessionPositionState(
+  state: MediaSessionPositionState,
+): void {
+  const session = getMediaSession();
+  if (!session || typeof session.setPositionState !== 'function') return;
+
+  const { duration, position, playbackRate = 1 } = state;
+  if (!Number.isFinite(duration) || duration <= 0) return;
+  if (!Number.isFinite(position) || position < 0 || position > duration) return;
+  if (!Number.isFinite(playbackRate) || playbackRate <= 0) return;
+
+  try {
+    session.setPositionState({
+      duration,
+      position,
+      playbackRate,
+    });
+  } catch {
+    // Browser menolak nilai di luar rentang — abaikan agar playback tidak terganggu.
+  }
+}
+
 export function clearMediaSession(): void {
   const session = getMediaSession();
   if (!session) return;
@@ -163,14 +195,24 @@ export function clearMediaSession(): void {
   session.setActionHandler('pause', null);
   session.setActionHandler('previoustrack', null);
   session.setActionHandler('nexttrack', null);
-  playPauseHandlersBound = false;
+  session.setActionHandler('seekto', null);
+  if (typeof session.setPositionState === 'function') {
+    try {
+      session.setPositionState({
+        duration: 0,
+        position: 0,
+        playbackRate: 1,
+      });
+    } catch {
+      // Abaikan jika browser menolak reset posisi.
+    }
+  }
   boundHandlers = null;
   trackNavigationHandlers = {};
 }
 
 /** Hanya untuk pengujian — reset state binding internal. */
 export function resetMediaSessionBindings(): void {
-  playPauseHandlersBound = false;
   boundHandlers = null;
   trackNavigationHandlers = {};
 }

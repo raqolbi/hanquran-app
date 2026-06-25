@@ -45,6 +45,7 @@ function createMockMediaSession() {
   const actionHandlers = new Map<string, (() => void) | null>();
   let metadata: MediaMetadata | null = null;
   let playbackState: MediaSessionPlaybackState = 'none';
+  let positionState: MediaPositionState | null = null;
 
   return {
     get metadata() {
@@ -58,6 +59,12 @@ function createMockMediaSession() {
     },
     set playbackState(value: MediaSessionPlaybackState) {
       playbackState = value;
+    },
+    get positionState() {
+      return positionState;
+    },
+    setPositionState(state: MediaPositionState): void {
+      positionState = state;
     },
     setActionHandler(
       action: string,
@@ -264,12 +271,18 @@ describe('AudioController', () => {
   describe('event listeners', () => {
     it('timeupdate memperbarui currentTime di store', async () => {
       const { controller, audio } = createController();
+      Object.defineProperty(audio, 'duration', { value: 30, configurable: true });
       await controller.play(sampleTrack);
       audio.currentTime = 7.25;
 
       audio.dispatchEvent(new Event('timeupdate'));
 
       expect(useAudioStore.getState().currentTime).toBe(7.25);
+      expect(mockSession.positionState).toEqual({
+        duration: 30,
+        position: 7.25,
+        playbackRate: 1,
+      });
     });
 
     it('loadedmetadata memperbarui duration', async () => {
