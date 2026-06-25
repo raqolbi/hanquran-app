@@ -43,6 +43,7 @@ Tidak termasuk (post-MVP):
 - Multi-user server sync (account, cloud sync)
 - Advanced analytics beyond basic usage
 - Full content management backend
+- **Media Session API** — lock screen metadata & kontrol OS (`docs/27`, target v0.2.0)
 
 ---
 
@@ -109,7 +110,7 @@ Fase 7 — Release & Monitoring (0.5 sprint)
 ---
 
 ## 6. Risiko Teknis (utama)
-- Cross-browser audio behavior (autoplay, background playback): mitigasi — require user gesture to start, test on major browsers.
+- Cross-browser audio behavior (autoplay, background playback): mitigasi — require user gesture to start, test on major browsers; **Media Session API** (`docs/27`) untuk pengalaman lock screen di v0.2.0.
 - Storage quota & Cache eviction: mitigasi — manifest + size limits, allow user to manage cache in Settings.
 - Service Worker complexity & SW/client sync: mitigasi — clear messaging protocol and retries.
 - Timing/sync between audio & highlight: mitigasi — support two modes: timed-simulated highlight (MVP) and later audio-synced mode.
@@ -212,6 +213,7 @@ Fitur hafalan lanjutan:
 - Bookmark ayat spesifik
 - Target hafalan
 - Dashboard progress
+- **Media Session API** — metadata surat/ayat di lock screen, kontrol Play/Pause OS (`docs/27`, rilis `0.2.0`)
 
 Tabel Dexie ditambahkan: `bookmarks`, `memorization_progress`, `murajaah_sessions`, `statistics`, `notes`
 

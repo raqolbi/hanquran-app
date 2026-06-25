@@ -10,6 +10,7 @@ import { usePreferredReciterId } from '@/hooks/use-preferred-reciter';
 import {
   buildAyahAudioUrl,
   getNextAyahPrefetchUrl,
+  getReciterById,
 } from '@/services/quran';
 import { useAudioStore } from '@/stores/audioStore';
 import type { AudioTrack, PlaybackRate } from '@/types';
@@ -18,6 +19,8 @@ export interface PlayAyahParams {
   surahId: number;
   ayahNumber: number;
   reciterId?: string;
+  /** Label surat untuk Media Session lock screen. */
+  surahName?: string;
   /** Jumlah ayat surat — dipakai untuk prefetch ayat berikutnya. */
   totalAyahs?: number;
 }
@@ -46,6 +49,7 @@ function buildTrack(
     surahId,
     ayahNumber,
     reciterId,
+    surahName,
   }: PlayAyahParams,
   fallbackReciterId: string,
 ): AudioTrack {
@@ -55,6 +59,8 @@ function buildTrack(
     ayahNumber,
     reciterId: resolvedReciterId,
     url: buildAyahAudioUrl(resolvedReciterId, surahId, ayahNumber),
+    surahName,
+    reciterName: getReciterById(resolvedReciterId)?.name,
   };
 }
 

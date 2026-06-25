@@ -153,6 +153,34 @@ P0 — Must Have
 
 ---
 
+## US-004b: Kontrol Audio dari Lock Screen
+
+**Sebagai** 📖 Penghafal
+**Saya ingin** melihat informasi surat dan ayat serta mengontrol Play/Pause dari lock screen
+**Sehingga** saya dapat melanjutkan hafalan tanpa harus membuka aplikasi terus-menerus.
+
+### Acceptance Criteria
+
+1. Saat audio diputar, lock screen (atau kontrol media OS) menampilkan nama surat dan nomor ayat — di platform yang mendukung
+2. Nama qari tampil sebagai informasi pendamping
+3. Tombol Play/Pause di lock screen mengontrol pemutaran yang sama dengan aplikasi
+4. Mengganti ayat memperbarui metadata
+5. Jika perangkat tidak mendukung Media Session API, aplikasi tetap berfungsi normal
+
+### Linked PB
+
+PB-016
+
+### Priority
+
+P1 — Should Have (Post-MVP)
+
+### Spesifikasi
+
+`docs/27-media-session-api-spec.md`
+
+---
+
 ## US-005: Highlight Kata per Kata
 
 **Sebagai** 🧒 Anak

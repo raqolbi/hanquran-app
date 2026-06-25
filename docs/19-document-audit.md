@@ -2,10 +2,12 @@
 
 Dokumen ini adalah laporan audit komprehensif terhadap seluruh dokumentasi proyek HanQuran. Audit dilakukan untuk memastikan konsistensi, mengidentifikasi konflik, duplikasi, dan gap dalam dokumentasi sebelum Sprint 1 dimulai.
 
-**Terakhir diperbarui:** 15 Juni 2026  
+**Terakhir diperbarui:** 25 Juni 2026  
 **Versi audit:** 3 (revisi setelah unifikasi arsitektur final: Zustand + Dexie + Local First)
 
 > **Pembaruan 24 Juni 2026:** Keputusan **Static Dataset Architecture** menggantikan Local-First / Dexie untuk konten Quran. Lihat `docs/23-static-dataset-architecture.md`. Beberapa temuan audit di bawah mengacu pada arsitektur lama.
+
+> **Pembaruan 25 Juni 2026:** Spesifikasi **Media Session API** (`docs/27-media-session-api-spec.md`) — fitur Growth target rilis `0.2.0`.
 
 ---
 
@@ -42,9 +44,9 @@ Dokumen ini adalah laporan audit komprehensif terhadap seluruh dokumentasi proye
 | `CLAUDE.md` | Final | ✅ Aktif |
 | `00-vision.md` | Final | ✅ Aktif |
 | `01-brd.md` | Final | ✅ Aktif |
-| `02-product-backlog.md` | Final | ✅ Aktif |
-| `03-user-stories.md` | Final | ✅ Aktif |
-| `04-system-architecture.md` | **Revisi Terbaru (v3)** | ✅ Aktif — diperbarui: Zustand, `/focus/[id]`, folder structure sesuai docs/16 |
+| `02-product-backlog.md` | **Revisi** | ✅ Aktif — PB-016 Media Session |
+| `03-user-stories.md` | **Revisi** | ✅ Aktif — US-004b lock screen |
+| `04-system-architecture.md` | **Revisi Terbaru (v3)** | ✅ Aktif — §7 Media Session Bridge (`docs/27`) |
 | `05-module-catalog.md` | Final | ✅ Aktif |
 | `06-database-schema.md` | **Revisi Terbaru (v3)** | ✅ Aktif — schema Dexie diperluas: 13 tabel, indexing, migration, versioning |
 | `07-api-integration.md` | **Revisi Terbaru (v3)** | ✅ Aktif — Local-First principle + Repository Pattern diperkuat |
@@ -55,10 +57,11 @@ Dokumen ini adalah laporan audit komprehensif terhadap seluruh dokumentasi proye
 | `12-component-spec.md` | Final | ✅ Aktif |
 | `13-component-tree.md` | Final | ✅ Aktif |
 | `14-routing-spec.md` | **Revisi Terbaru** | ✅ Aktif — route final |
-| `15-state-management.md` | **Revisi Terbaru (v3)** | ✅ Aktif — **Dexie** sebagai persistent storage, bukan localForage |
-| `16-folder-structure.md` | **Revisi Terbaru (v3)** | ✅ Aktif — Dexie di `services/db/`, Repository di `services/api/` |
-| `17-implementation-roadmap.md` | **Revisi Terbaru (v3)** | ✅ Aktif — Dexie setup + Platform Evolution (MVP→Growth→Future) |
-| `18-development-tasks.md` | **Revisi Terbaru (v3)** | ✅ Aktif — 81 tasks, Dexie Phase 0, Repository Pattern Phase 1 |
+| `15-state-management.md` | **Revisi Terbaru (v3)** | ✅ Aktif — §10.5 Media Session sync |
+| `16-folder-structure.md` | **Revisi Terbaru (v3)** | ✅ Aktif — `services/media-session.ts` |
+| `17-implementation-roadmap.md` | **Revisi Terbaru (v3)** | ✅ Aktif — Growth Phase Media Session |
+| `18-development-tasks.md` | **Revisi Terbaru (v3)** | ✅ Aktif — 95 tasks, Phase 2b Media Session |
+| `27-media-session-api-spec.md` | **Baru (v1)** | ✅ Aktif — spesifikasi lock screen & background audio, target `0.2.0` |
 
 > **Pembaruan v3:** `docs/04-system-architecture.md` telah diperbarui langsung pada audit v3 ini. State Management, Route Focus Mode, Folder Structure, dan Dexie kini konsisten dengan seluruh dokumen terbaru. Tidak ada konflik aktif tersisa.
 

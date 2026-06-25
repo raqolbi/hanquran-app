@@ -265,6 +265,7 @@ Fitur-fitur berikut **tidak boleh dikerjakan** dalam MVP. Seluruh request terkai
 - Progress tracker per juz atau per halaman mushaf
 - Catatan hafalan (Notes)
 - Bookmark per ayat (bukan favorit surat)
+- **Media Session API** — metadata & kontrol lock screen (`docs/27`, target v0.2.0)
 
 ## 5.7 Konten Tambahan
 
