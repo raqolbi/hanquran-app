@@ -64,7 +64,7 @@ Preferensi pengguna dan data yang harus bertahan antar sesi atau saat offline. D
 * Toggle terjemahan — tabel `settings` (`translationVisible`); kontrol UI di `VerseDisplayControls`.
 * Toggle transliterasi — tabel `settings` (`transliterationVisible`); kontrol UI di `VerseDisplayControls`.
 * Aksesibilitas (`contrastMode`, `smoothAnimation`) — tabel `settings`; diterapkan via `AccessibilityProvider`.
-* Playback (`autoFollowPlayback`) — tabel `settings`; mengatur auto scroll ayat aktif di Surah Detail. Lihat `docs/28-playback-settings.md`.
+* Playback (`autoFollowPlayback`, `murotalEnabled`) — tabel `settings`; auto scroll ayat aktif & tilawah berkelanjutan. Lihat `docs/28-playback-settings.md`, `docs/29-murotal-mode-spec.md`.
 * Konfigurasi repeat (`count`, `target`, `range`) — tabel `settings`.
 * Penanda Lanjutkan Hafalan (`lastViewed`) — tabel `lastRead`.
 * Manifest cache audio — tabel `downloadManifest`.
@@ -348,6 +348,8 @@ Tabel ini adalah daftar lengkap state pada MVP. Setiap penambahan state wajib me
 | Toggle transliterasi               | IndexedDB          | Ya        | Dexie (`settings.transliterationVisible`) |
 | Kontras tinggi                     | IndexedDB          | Ya        | Dexie (`settings`) |
 | Animasi halus                      | IndexedDB          | Ya        | Dexie (`settings`) |
+| Mode Murotal (`murotalEnabled`)    | IndexedDB          | Ya        | Dexie (`settings`) |
+| Auto Follow Playback               | IndexedDB          | Ya        | Dexie (`settings.autoFollowPlayback`) |
 | Status koneksi                     | Zustand            | Tidak     | Zustand            |
 | Manifest cache audio               | IndexedDB          | Ya        | Dexie (`downloadManifest`) |
 | File audio biner                   | Cache Storage      | Ya        | Cache Storage      |

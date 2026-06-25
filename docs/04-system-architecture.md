@@ -415,13 +415,13 @@ Menampilkan:
 - Font size
 - Bahasa aplikasi (UI shell)
 - Reciter / qari
-- Playback (Auto Follow Playback)
+- Playback (Auto Follow Playback, Mode Murotal)
 - High contrast mode
 - Cache management
 - Offline settings
 
 > Toggle terjemahan dan transliterasi ada di **Verse Display Controls** pada Surah Detail, bukan di `/settings`.  
-> Spesifikasi Playback: `docs/28-playback-settings.md`.
+> Spesifikasi Playback: `docs/28-playback-settings.md`, `docs/29-murotal-mode-spec.md`.
 
 ---
 

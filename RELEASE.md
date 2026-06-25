@@ -97,6 +97,50 @@ Pengalaman pemutaran audio di mobile: metadata surat/ayat di lock screen dan kon
 
 ---
 
+### [0.3.0] — (rencana — implementasi selesai, belum dirilis)
+
+#### Ringkasan
+
+Tilawah berkelanjutan (**Mode Murotal**), progress repeat **x/y** di audio bar, dan perbaikan auto follow di landscape HP.
+
+#### Fitur baru (rencana)
+
+- Toggle **Mode Murotal** di Pengaturan → Playback (default OFF)
+- Pemutaran otomatis lanjut ke ayat berikutnya atau surat berikutnya
+- Integrasi dengan RepeatEngine — repeat didahulukan; setelah siklus selesai, murotal advance
+- Berlaku di Surah Detail dan Focus Mode
+- Badge **`x/y`** (`RepeatProgressBadge`) saat sesi repeat aktif — Surah Detail & Focus Mode
+
+#### Perbaikan (rencana)
+
+- Auto Follow Playback — pengukuran zona baca di landscape HP (`short-landscape`)
+
+#### PWA & offline
+
+- Tidak ada perubahan Service Worker
+- Navigasi lintas surat memakai route yang sama (`/surah/[id]`, `/focus/[id]`)
+
+#### Dokumentasi
+
+- Spesifikasi lengkap: `docs/29-murotal-mode-spec.md`, `docs/12-component-spec.md` (§14–15)
+- Task implementasi: `docs/18-development-tasks.md` Phase 2c
+
+#### Catatan penting
+
+- Migrasi Dexie: field baru `settings.murotalEnabled` (default `false`)
+- Akhir Al-Qur'an (An-Nas): pemutaran berhenti + feedback pengguna
+- `package.json` belum di-bump — naik ke `0.3.0` saat rilis formal
+
+#### Uji sebelum rilis
+
+- [x] Unit test `murotal-resolver` + orkestrasi repeat+murotal
+- [x] Unit test auto follow landscape + `formatRepeatProgressLabel`
+- [ ] Checklist manual Phase 2c (`docs/18`) — lintas surat, kombinasi repeat+murotal
+- [ ] Uji auto follow landscape HP (perangkat fisik)
+- [ ] Tidak ada regresi RepeatEngine dan Media Session
+
+---
+
 ## Riwayat
 
 ### [0.1.0] — (belum dirilis)

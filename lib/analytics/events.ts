@@ -7,6 +7,9 @@ export const ANALYTICS_EVENTS = {
   BOOKMARK_CREATED: 'bookmark_created',
   LAST_READ_UPDATED: 'last_read_updated',
   REPEAT_ENABLED: 'repeat_enabled',
+  MUROTAL_ENABLED: 'murotal_enabled',
+  MUROTAL_SURAH_COMPLETE: 'murotal_surah_complete',
+  MUROTAL_QURAN_COMPLETE: 'murotal_quran_complete',
 } as const;
 
 export type AnalyticsEventName =
@@ -37,6 +40,19 @@ export type RepeatEnabledMode = 'ayah' | 'range';
 
 export interface RepeatEnabledPayload {
   mode: RepeatEnabledMode;
+}
+
+export interface MurotalEnabledPayload {
+  enabled: true;
+}
+
+export interface MurotalSurahCompletePayload {
+  surahId: number;
+  nextSurahId: number;
+}
+
+export interface MurotalQuranCompletePayload {
+  surahId: number;
 }
 
 export function repeatTargetToAnalyticsMode(

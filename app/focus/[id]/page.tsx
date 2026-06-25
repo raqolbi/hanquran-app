@@ -38,6 +38,7 @@ function FocusModeLoaded({
   startAyah,
 }: FocusModeLoadedProps) {
   const tFocus = useTranslations('focus');
+  const tPlayback = useTranslations('settings.playback');
   const router = useRouter();
   const { showTranslation, showTransliteration } = useReadingDisplay();
   const { focusArabicStyle } = useArabicTextSize();
@@ -47,6 +48,7 @@ function FocusModeLoaded({
     Math.min(Math.max(startAyah, 1), surah.ayahs.length),
   );
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [quranCompleteNotice, setQuranCompleteNotice] = useState(false);
 
   const totalAyahs = surah.ayahs.length;
 
@@ -56,20 +58,25 @@ function FocusModeLoaded({
   const {
     isActiveAyahPlaying,
     togglePlayback,
-    navigateAyah,
+    goToPreviousTrack,
+    goToNextTrack,
+    isPreviousDisabled,
+    isNextDisabled,
     prefetchNextAyah,
     repeatCount,
     repeatStatusProps,
-    showRepeatStatus,
+    showRepeatProgress,
     handleCountChange,
     handleApplyRepeatSettings,
   } = useSurahRepeatPlayback({
     surahId: surah.number,
+    routeMode: 'focus',
     activeAyah,
     totalAyahs,
     reciterId,
     surahName: surah.englishName,
     setActiveAyah,
+    onQuranComplete: () => setQuranCompleteNotice(true),
   });
 
   const { bottomInset, audioChromeHeight, audioRef } = useSurahDetailBottomInset({
@@ -92,16 +99,6 @@ function FocusModeLoaded({
 
   const handleExit = () => {
     router.push(routes.surah(surahIdParam, activeAyah));
-  };
-
-  const handlePrevAyah = () => {
-    if (activeAyah <= 1) return;
-    navigateAyah(activeAyah - 1);
-  };
-
-  const handleNextAyah = () => {
-    if (activeAyah >= totalAyahs) return;
-    navigateAyah(activeAyah + 1);
   };
 
   return (
@@ -181,15 +178,15 @@ function FocusModeLoaded({
         currentAyah={activeAyah}
         reciterId={reciterId}
         onTogglePlay={() => void togglePlayback()}
-        onPrevious={handlePrevAyah}
-        onNext={handleNextAyah}
-        isPreviousDisabled={activeAyah <= 1}
-        isNextDisabled={activeAyah >= totalAyahs}
+        onPrevious={goToPreviousTrack}
+        onNext={goToNextTrack}
+        isPreviousDisabled={isPreviousDisabled}
+        isNextDisabled={isNextDisabled}
         toolbarStart={
           <RepeatSelector
             variant="inline"
             count={repeatCount}
-            isActive={showRepeatStatus}
+            isActive={showRepeatProgress}
             statusProps={repeatStatusProps}
             bottomChromeHeight={audioChromeHeight}
             onCountChange={handleCountChange}
@@ -197,6 +194,15 @@ function FocusModeLoaded({
           />
         }
       />
+
+      {quranCompleteNotice ? (
+        <p
+          role="status"
+          className="fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] left-4 right-4 z-40 mx-auto max-w-2xl rounded-lg border border-border bg-background/95 px-4 py-3 text-center text-sm text-foreground shadow-md"
+        >
+          {tPlayback('quranComplete')}
+        </p>
+      ) : null}
 
       <RepeatSettingsDialog
         open={settingsOpen}

@@ -214,6 +214,7 @@ Fitur hafalan lanjutan:
 - Target hafalan
 - Dashboard progress
 - **Media Session API** — metadata surat/ayat di lock screen, kontrol Play/Pause OS (`docs/27`, rilis `0.2.0`)
+- **Mode Murotal** — tilawah berkelanjutan ayat → surat (`docs/29`, rilis `0.3.0`)
 
 Tabel Dexie ditambahkan: `bookmarks`, `memorization_progress`, `murajaah_sessions`, `statistics`, `notes`
 

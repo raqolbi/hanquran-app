@@ -99,7 +99,11 @@
       "description": "Atur perilaku layar saat audio tilawah berjalan.",
       "autoFollow": "Auto Follow Playback",
       "autoFollowDescription": "Otomatis menggulir layar agar ayat yang sedang diputar tetap terlihat.",
-      "autoFollowAriaLabel": "Aktifkan auto follow playback"
+      "autoFollowAriaLabel": "Aktifkan auto follow playback",
+      "murotalEnabled": "Mode Murotal",
+      "murotalEnabledDescription": "Putar tilawah secara berkelanjutan: lanjut ke ayat berikutnya atau surat berikutnya hingga Anda berhenti.",
+      "murotalEnabledAriaLabel": "Aktifkan mode murotal",
+      "quranComplete": "Anda telah mencapai akhir Al-Qur'an."
     },
     "translation": {
       "title": "Terjemahan",
@@ -229,6 +233,7 @@
     "remainingInfinite": "∞ tersisa",
     "remainingCount": "{count}x tersisa",
     "cycleProgress": "Siklus {current} / {total}",
+    "progressAriaLabel": "Pengulangan ke-{current} dari {total}",
     "atAyah": "Sedang di Ayat {ayah}",
     "atAyahOfTotal": "Sedang di Ayat {current} dari {total}",
     "previewAyah": "Ayat {ayah} • {count}",

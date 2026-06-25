@@ -20,6 +20,7 @@ describe('useUserStore — reciterId', () => {
         contrastMode: 'default',
         smoothAnimation: true,
         autoFollowPlayback: true,
+        murotalEnabled: false,
         reciterId: getDefaultReciterId(),
         translationResourceId: 33,
         updatedAt: 0,
@@ -51,6 +52,7 @@ describe('useUserStore — reciterId', () => {
       contrastMode: 'default',
       smoothAnimation: true,
       autoFollowPlayback: true,
+      murotalEnabled: false,
       translationResourceId: 33,
       updatedAt: 1,
       // @ts-expect-error — bentuk legacy sebelum reciterId
@@ -75,6 +77,7 @@ describe('useUserStore — reciterId', () => {
   });
 
   it('menormalisasi fontSize legacy saat init', async () => {
+    // @ts-expect-error — bentuk legacy sebelum autoFollowPlayback / murotalEnabled
     await db.settings.put({
       id: 'default',
       appLocale: 'id',
@@ -109,6 +112,7 @@ describe('useUserStore — aksesibilitas', () => {
         contrastMode: 'default',
         smoothAnimation: true,
         autoFollowPlayback: true,
+        murotalEnabled: false,
         reciterId: getDefaultReciterId(),
         translationResourceId: 33,
         updatedAt: 0,
@@ -149,6 +153,7 @@ describe('useUserStore — aksesibilitas', () => {
   });
 
   it('memigrasi settings lama tanpa autoFollowPlayback', async () => {
+    // @ts-expect-error — bentuk legacy sebelum autoFollowPlayback
     await db.settings.put({
       id: 'default',
       appLocale: 'id',
@@ -165,6 +170,37 @@ describe('useUserStore — aksesibilitas', () => {
     await useUserStore.getState().init();
 
     expect(useUserStore.getState().settings.autoFollowPlayback).toBe(true);
+  });
+
+  it('menyimpan murotalEnabled ke Dexie', async () => {
+    await useUserStore.getState().init();
+    await useUserStore.getState().updateSettings({ murotalEnabled: true });
+
+    expect(useUserStore.getState().settings.murotalEnabled).toBe(true);
+
+    const stored = await db.settings.get('default');
+    expect(stored?.murotalEnabled).toBe(true);
+  });
+
+  it('memigrasi settings lama tanpa murotalEnabled', async () => {
+    // @ts-expect-error — bentuk legacy sebelum murotalEnabled
+    await db.settings.put({
+      id: 'default',
+      appLocale: 'id',
+      fontSize: DEFAULT_ARABIC_FONT_SIZE_PX,
+      translationVisible: false,
+      transliterationVisible: false,
+      contrastMode: 'default',
+      smoothAnimation: true,
+      autoFollowPlayback: true,
+      reciterId: getDefaultReciterId(),
+      translationResourceId: 33,
+      updatedAt: 1,
+    });
+
+    await useUserStore.getState().init();
+
+    expect(useUserStore.getState().settings.murotalEnabled).toBe(false);
   });
 });
 
@@ -183,6 +219,7 @@ describe('useUserStore — lastViewed', () => {
         contrastMode: 'default',
         smoothAnimation: true,
         autoFollowPlayback: true,
+        murotalEnabled: false,
         reciterId: getDefaultReciterId(),
         translationResourceId: 33,
         updatedAt: 0,
@@ -249,6 +286,7 @@ describe('useUserStore — favorites', () => {
         contrastMode: 'default',
         smoothAnimation: true,
         autoFollowPlayback: true,
+        murotalEnabled: false,
         reciterId: getDefaultReciterId(),
         translationResourceId: 33,
         updatedAt: 0,

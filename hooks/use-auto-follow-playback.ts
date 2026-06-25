@@ -8,6 +8,7 @@ import {
   getAutoFollowResumeTimestamp,
   getAyahElementId,
   getReadableViewport,
+  getViewportHeight,
   measureSurahDetailTopInset,
   scrollAyahIntoReadableZone,
   shouldAutoFollowScroll,
@@ -95,7 +96,7 @@ export function useAutoFollowPlayback({
     const element = document.getElementById(getAyahElementId(activeAyah));
     const topInset = measureSurahDetailTopInset();
     const viewport = getReadableViewport(
-      window.innerHeight,
+      getViewportHeight(),
       bottomInset,
       topInset,
     );

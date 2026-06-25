@@ -102,7 +102,7 @@ Semua penjelasan ditulis dalam Bahasa Indonesia dan mengikuti implementasi saat 
 - Settings (app/settings/page.tsx)
   - Tujuan: Menyediakan konfigurasi aplikasi (bahasa UI, qari, ukuran teks, playback, offline, dsb.).
   - Tanggung jawab: Menyusun sections pengaturan termasuk **Bahasa Aplikasi**, **Playback**, menampilkan status offline dan kontrol UI untuk memilih opsi.
-  - Dependensi utama: `SettingsSection`, `SettingsRow`, `LanguageSetting`, `OfflineStatusBadge`, `next-intl`, `components/ui/*` primitives. Spesifikasi: `docs/21-i18n-and-locale.md`, `docs/28-playback-settings.md`.
+  - Dependensi utama: `SettingsSection`, `SettingsRow`, `LanguageSetting`, `OfflineStatusBadge`, `next-intl`, `components/ui/*` primitives. Spesifikasi: `docs/21-i18n-and-locale.md`, `docs/28-playback-settings.md`, `docs/29-murotal-mode-spec.md`.
   - Reusable: Tidak (halaman konfigurasi), beberapa sub-komponen bersifat reusable.
 
 **Komponen Layar (Screen Components)**
@@ -182,8 +182,14 @@ Untuk setiap entri: Tujuan / Tanggung jawab / Dependensi / Reusable
 
 - `RepeatSelector`
   - Tujuan: Kontrol ringkas jumlah repeat (`variant="inline"` di audio bar) atau panel vertikal legacy.
-  - Tanggung jawab: Select jumlah + tombol ⚙ ke `RepeatSettingsDialog`.
-  - Dependensi utama: `lib/repeat-options`, `components/ui/select`.
+  - Tanggung jawab: Select jumlah + `RepeatProgressBadge` (x/y saat aktif) + tombol ⚙ ke `RepeatSettingsDialog`.
+  - Dependensi utama: `lib/repeat-options`, `lib/repeat-progress`, `components/repeat-progress-badge`, `components/ui/select`.
+  - Reusable: Ya.
+
+- `RepeatProgressBadge`
+  - Tujuan: Label fraksi progress repeat (mis. `2/5`, `3/∞`).
+  - Tanggung jawab: Render badge emerald di audio bar & di dalam `RepeatStatus`.
+  - Dependensi utama: `lib/repeat-progress`, `lib/repeat-options`.
   - Reusable: Ya.
 
 - `SurahDetailScrollSpacer`
@@ -192,9 +198,9 @@ Untuk setiap entri: Tujuan / Tanggung jawab / Dependensi / Reusable
   - Reusable: Ya (Surah Detail).
 
 - `RepeatStatus`
-  - Tujuan: Menampilkan status repeat yang sedang aktif (target, siklus, ayat saat ini).
-  - Tanggung jawab: Menyajikan label dan detail tergantung targetType.
-  - Dependensi utama: `lib/repeat-options` (INFINITE) dan props dari parent.
+  - Tujuan: Menampilkan status repeat (target, konteks ayat) + badge x/y.
+  - Tanggung jawab: Kartu panel/dialog; di inline hanya badge lewat `RepeatSelector`.
+  - Dependensi utama: `RepeatProgressBadge`, `lib/repeat-options`.
   - Reusable: Ya.
 
 - `RepeatSettingsDialog`

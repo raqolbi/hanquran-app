@@ -44,6 +44,7 @@ function SurahDetailLoaded({
   startAyah,
 }: SurahDetailLoadedProps) {
   const router = useRouter();
+  const tPlayback = useTranslations('settings.playback');
   const {
     showTranslation,
     showTransliteration,
@@ -53,6 +54,7 @@ function SurahDetailLoaded({
   const [activeAyah, setActiveAyah] = useState(startAyah);
   const [completedAyahs, setCompletedAyahs] = useState<number[]>([]);
   const [repeatSettingsOpen, setRepeatSettingsOpen] = useState(false);
+  const [quranCompleteNotice, setQuranCompleteNotice] = useState(false);
   const isFavorited = useUserStore((s) => s.favorites.includes(surah.number));
   const toggleFavorite = useUserStore((s) => s.toggleFavorite);
   const autoFollowPlayback = useUserStore((s) => s.settings.autoFollowPlayback);
@@ -70,24 +72,29 @@ function SurahDetailLoaded({
   const {
     isPlaying,
     togglePlayback,
-    navigateAyah,
+    goToPreviousTrack,
+    goToNextTrack,
+    isPreviousDisabled,
+    isNextDisabled,
     prefetchNextAyah,
     repeatCount,
     repeatTarget,
     rangeFrom,
     rangeTo,
     repeatStatusProps,
-    showRepeatStatus,
+    showRepeatProgress,
     handleCountChange,
     handleApplyRepeatSettings,
     pause,
   } = useSurahRepeatPlayback({
     surahId: surah.number,
+    routeMode: 'surah',
     activeAyah,
     totalAyahs: surah.ayahs.length,
     reciterId,
     surahName: surah.englishName,
     setActiveAyah,
+    onQuranComplete: () => setQuranCompleteNotice(true),
   });
 
   const { bottomInset, audioChromeHeight, audioRef } =
@@ -179,21 +186,15 @@ function SurahDetailLoaded({
         currentAyah={activeAyah}
         reciterId={reciterId}
         onTogglePlay={() => void togglePlayback()}
-        onPrevious={() =>
-          navigateAyah(
-            activeAyah > 1 ? activeAyah - 1 : surah.ayahs.length,
-          )
-        }
-        onNext={() =>
-          navigateAyah(
-            activeAyah < surah.ayahs.length ? activeAyah + 1 : 1,
-          )
-        }
+        onPrevious={goToPreviousTrack}
+        onNext={goToNextTrack}
+        isPreviousDisabled={isPreviousDisabled}
+        isNextDisabled={isNextDisabled}
         toolbarStart={
           <RepeatSelector
             variant="inline"
             count={repeatCount}
-            isActive={showRepeatStatus}
+            isActive={showRepeatProgress}
             statusProps={repeatStatusProps}
             bottomChromeHeight={audioChromeHeight}
             onCountChange={handleCountChange}
@@ -201,6 +202,15 @@ function SurahDetailLoaded({
           />
         }
       />
+
+      {quranCompleteNotice ? (
+        <p
+          role="status"
+          className="fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] left-4 right-4 z-40 mx-auto max-w-2xl rounded-lg border border-border bg-background/95 px-4 py-3 text-center text-sm text-foreground shadow-md"
+        >
+          {tPlayback('quranComplete')}
+        </p>
+      ) : null}
 
       <RepeatSettingsDialog
         open={repeatSettingsOpen}

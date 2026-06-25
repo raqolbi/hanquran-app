@@ -15,6 +15,9 @@ import {
   trackLastReadUpdated,
   trackRepeatEnabled,
   trackSurahOpened,
+  trackMurotalEnabled,
+  trackMurotalSurahComplete,
+  trackMurotalQuranComplete,
 } from '@/lib/analytics';
 
 describe('lib/analytics', () => {
@@ -83,6 +86,32 @@ describe('lib/analytics', () => {
     expect(trackMock).toHaveBeenCalledWith(ANALYTICS_EVENTS.REPEAT_ENABLED, {
       mode: 'range',
     });
+  });
+
+  it('trackMurotalEnabled mengirim payload ke Vercel', () => {
+    trackMurotalEnabled({ enabled: true });
+
+    expect(trackMock).toHaveBeenCalledWith(ANALYTICS_EVENTS.MUROTAL_ENABLED, {
+      enabled: true,
+    });
+  });
+
+  it('trackMurotalSurahComplete mengirim payload ke Vercel', () => {
+    trackMurotalSurahComplete({ surahId: 1, nextSurahId: 2 });
+
+    expect(trackMock).toHaveBeenCalledWith(
+      ANALYTICS_EVENTS.MUROTAL_SURAH_COMPLETE,
+      { surahId: 1, nextSurahId: 2 },
+    );
+  });
+
+  it('trackMurotalQuranComplete mengirim payload ke Vercel', () => {
+    trackMurotalQuranComplete({ surahId: 114 });
+
+    expect(trackMock).toHaveBeenCalledWith(
+      ANALYTICS_EVENTS.MUROTAL_QURAN_COMPLETE,
+      { surahId: 114 },
+    );
   });
 
   it('tidak memanggil track di development', () => {

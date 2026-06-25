@@ -3,8 +3,9 @@
 import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
 
+import { RepeatProgressBadge } from '@/components/repeat-progress-badge';
+import { type RepeatCount, type RepeatTarget } from '@/lib/repeat-options';
 import { cn } from '@/lib/utils';
-import { INFINITE, type RepeatCount, type RepeatTarget } from '@/lib/repeat-options';
 
 interface RepeatStatusProps {
   targetType: RepeatTarget;
@@ -31,38 +32,25 @@ export function RepeatStatus({
 }: RepeatStatusProps) {
   const t = useTranslations('repeat');
 
-  const totalLabel = repeatCount === INFINITE ? '∞' : `${repeatCount}`;
-  const isInfinite = repeatCount === INFINITE;
-
-  let title: string;
-  let details: string[];
+  let contextLabel: string;
+  let detail: string | null = null;
 
   switch (targetType) {
     case 'current_ayah': {
-      const remainingCount = Math.max(0, (repeatCount as number) - currentCycle + 1);
-      const remainingLabel = isInfinite
-        ? t('remainingInfinite')
-        : t('remainingCount', { count: remainingCount });
-      title = t('statusActiveAyah');
-      details = [t('statusAyahDetail', { ayah: activeAyah, remaining: remainingLabel })];
+      contextLabel = t('statusActiveAyah');
+      detail = t('atAyah', { ayah: activeAyah });
       break;
     }
     case 'ayah_range': {
       const from = rangeFrom ?? 1;
       const to = rangeTo ?? totalAyahs;
-      title = t('statusRange', { from, to });
-      details = [
-        t('cycleProgress', { current: currentCycle, total: totalLabel }),
-        t('atAyah', { ayah: activeAyah }),
-      ];
+      contextLabel = t('statusRange', { from, to });
+      detail = t('atAyah', { ayah: activeAyah });
       break;
     }
     case 'entire_surah': {
-      title = t('statusSurah', { name: surahName });
-      details = [
-        t('cycleProgress', { current: currentCycle, total: totalLabel }),
-        t('atAyahOfTotal', { current: activeAyah, total: totalAyahs }),
-      ];
+      contextLabel = t('statusSurah', { name: surahName });
+      detail = t('atAyahOfTotal', { current: activeAyah, total: totalAyahs });
       break;
     }
   }
@@ -77,19 +65,24 @@ export function RepeatStatus({
         className,
       )}
     >
-      <div className="flex items-center gap-1.5">
-        <span aria-hidden className="text-sm leading-none">
-          🟢
-        </span>
-        <span className="text-sm font-medium text-foreground">{title}</span>
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex min-w-0 items-center gap-1.5">
+          <span aria-hidden className="text-sm leading-none">
+            🟢
+          </span>
+          <span className="truncate text-sm font-medium text-foreground">
+            {contextLabel}
+          </span>
+        </div>
+        <RepeatProgressBadge
+          current={currentCycle}
+          total={repeatCount}
+          className="text-xs"
+        />
       </div>
-      <div className="mt-0.5 space-y-0.5">
-        {details.map((line) => (
-          <p key={line} className="text-xs text-muted-foreground">
-            {line}
-          </p>
-        ))}
-      </div>
+      {detail ? (
+        <p className="mt-0.5 text-xs text-muted-foreground">{detail}</p>
+      ) : null}
     </motion.div>
   );
 }

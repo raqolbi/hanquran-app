@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { RepeatStatus, type RepeatStatusProps } from './repeat-status';
+import { RepeatProgressBadge } from './repeat-progress-badge';
 
 interface RepeatSelectorProps {
   count: RepeatCount;
@@ -148,6 +149,12 @@ export function RepeatSelector({
     return (
       <div className="flex shrink-0 items-center gap-1">
         {selectControl}
+        {isActive && statusProps ? (
+          <RepeatProgressBadge
+            current={statusProps.currentCycle}
+            total={statusProps.repeatCount}
+          />
+        ) : null}
         {settingsButton}
       </div>
     );

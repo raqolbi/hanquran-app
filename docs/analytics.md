@@ -18,6 +18,9 @@ Jangan memanggil `track()` dari `@vercel/analytics` langsung di komponen. Gunaka
 | `bookmark_created` | `trackBookmarkCreated()` | Favorit surat **berhasil** ditambahkan ke Dexie |
 | `last_read_updated` | `trackLastReadUpdated()` | Posisi `lastRead` **berubah** dan tersimpan |
 | `repeat_enabled` | `trackRepeatEnabled()` | Pengguna menyimpan konfigurasi repeat dari dialog |
+| `murotal_enabled` | `trackMurotalEnabled()` | Pengguna mengaktifkan Mode Murotal (OFF→ON) |
+| `murotal_surah_complete` | `trackMurotalSurahComplete()` | Murotal selesai satu surat dan lanjut ke surat berikutnya |
+| `murotal_quran_complete` | `trackMurotalQuranComplete()` | Mencapai akhir An-Nas dalam sesi murotal |
 
 ---
 
@@ -68,6 +71,31 @@ Jangan memanggil `track()` dari `@vercel/analytics` langsung di komponen. Gunaka
 }
 ```
 
+### `murotal_enabled`
+
+```ts
+{
+  enabled: true;
+}
+```
+
+### `murotal_surah_complete`
+
+```ts
+{
+  surahId: number;
+  nextSurahId: number;
+}
+```
+
+### `murotal_quran_complete`
+
+```ts
+{
+  surahId: 114;
+}
+```
+
 ---
 
 ## Lokasi implementasi
@@ -82,6 +110,7 @@ Jangan memanggil `track()` dari `@vercel/analytics` langsung di komponen. Gunaka
 | Favorit / bookmark | `stores/userStore.ts` — `toggleFavorite()` setelah `db.favorites.put` |
 | Last read | `stores/userStore.ts` — `setLastViewed()` setelah perubahan |
 | Repeat | `stores/repeatStore.ts` — `applyConfig()` setelah persist |
+| Murotal | `stores/userStore.ts` — setter `murotalEnabled` saat OFF→ON; hook playback saat lintas surat / akhir Quran |
 
 ---
 

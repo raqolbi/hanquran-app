@@ -38,7 +38,7 @@ Semua penjelasan menggunakan Bahasa Indonesia dan mengikuti implementasi saat in
    - Nama halaman: Pengaturan
    - Tujuan: Menyediakan konfigurasi aplikasi seperti pilihan qari, ukuran teks, status offline/cache, aksesibilitas, playback, dan navigasi ke Tentang HanQuran.
    - Komponen utama: `SettingsHeader`, `SettingsSection`, `SettingsRow`, `OfflineStatusBadge`, primitives (`Select`, `Switch`, `SegmentedControl`).
-   - Aksi pengguna: Ubah qari, ubah preferensi tampilan, ubah Auto Follow Playback, hapus cache, lihat status offline, buka Tentang HanQuran.
+   - Aksi pengguna: Ubah qari, ubah preferensi tampilan, ubah Auto Follow Playback, ubah Mode Murotal, hapus cache, lihat status offline, buka Tentang HanQuran.
 
 5. URL: `/settings/about`
    - Nama halaman: Tentang HanQuran

@@ -8,6 +8,9 @@ import {
   type LastReadUpdatedPayload,
   type RepeatEnabledPayload,
   type SurahOpenedPayload,
+  type MurotalEnabledPayload,
+  type MurotalSurahCompletePayload,
+  type MurotalQuranCompletePayload,
 } from '@/lib/analytics/events';
 
 type AnalyticsPayload = Record<
@@ -50,4 +53,20 @@ export function trackLastReadUpdated(payload: LastReadUpdatedPayload): void {
 
 export function trackRepeatEnabled(payload: RepeatEnabledPayload): void {
   sendEvent(ANALYTICS_EVENTS.REPEAT_ENABLED, payload);
+}
+
+export function trackMurotalEnabled(payload: MurotalEnabledPayload): void {
+  sendEvent(ANALYTICS_EVENTS.MUROTAL_ENABLED, payload);
+}
+
+export function trackMurotalSurahComplete(
+  payload: MurotalSurahCompletePayload,
+): void {
+  sendEvent(ANALYTICS_EVENTS.MUROTAL_SURAH_COMPLETE, payload);
+}
+
+export function trackMurotalQuranComplete(
+  payload: MurotalQuranCompletePayload,
+): void {
+  sendEvent(ANALYTICS_EVENTS.MUROTAL_QURAN_COMPLETE, payload);
 }

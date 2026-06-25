@@ -99,7 +99,11 @@
       "description": "Adjust on-screen behavior during audio playback.",
       "autoFollow": "Auto Follow Playback",
       "autoFollowDescription": "Automatically scroll so the playing verse stays visible.",
-      "autoFollowAriaLabel": "Enable auto follow playback"
+      "autoFollowAriaLabel": "Enable auto follow playback",
+      "murotalEnabled": "Murotal Mode",
+      "murotalEnabledDescription": "Play tilawah continuously: advance to the next verse or surah until you stop.",
+      "murotalEnabledAriaLabel": "Enable murotal mode",
+      "quranComplete": "You have reached the end of the Quran."
     },
     "translation": {
       "title": "Translation",
@@ -229,6 +233,7 @@
     "remainingInfinite": "∞ remaining",
     "remainingCount": "{count}x remaining",
     "cycleProgress": "Cycle {current} / {total}",
+    "progressAriaLabel": "Repeat {current} of {total}",
     "atAyah": "Currently on Verse {ayah}",
     "atAyahOfTotal": "Currently on Verse {current} of {total}",
     "previewAyah": "Verse {ayah} • {count}",

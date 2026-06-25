@@ -39,6 +39,9 @@ Simulasi interval tetap **dihapus** dari kode. Komponen `AyahWordHighlight` teta
 - **Audio per ayat** — play/pause + progress + navigasi ⏮/⏭ via `AudioPlayer` + `RepeatSelector` inline (layout identik Surah Detail)
 - Tombol keluar kembali ke Surah Detail pada ayat aktif
 - UI repeat — select cepat + ⚙ → `RepeatSettingsDialog`; state via `useRepeatStore` + `RepeatEngine` (sama seperti Surah Detail); **tanpa** teks hint di layar
+- **Mode Murotal** — tilawah berkelanjutan via `settings.murotalEnabled`; perilaku sama Surah Detail — `docs/29-murotal-mode-spec.md` ✅
+- **Progress repeat** — badge `x/y` di `RepeatSelector` inline (identik Surah Detail) ✅
+- **Transport ⏮/⏭** — aturan `docs/29-murotal-mode-spec.md` §7.2 (lintas surat jika Murotal ON) ✅
 
 ### Tidak termasuk ❌ (Post-MVP)
 

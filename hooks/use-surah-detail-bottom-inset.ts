@@ -20,13 +20,16 @@ function measureChromeInset(audioEl: HTMLElement | null): number {
     return SURAH_DETAIL_MIN_SCROLL_INSET;
   }
 
+  const viewportHeight =
+    window.visualViewport?.height ?? window.innerHeight;
+
   let obstructionFromBottom = SURAH_DETAIL_AUDIO_MIN_HEIGHT;
 
   if (audioEl) {
     const audioRect = audioEl.getBoundingClientRect();
     obstructionFromBottom = Math.max(
       obstructionFromBottom,
-      window.innerHeight - audioRect.top,
+      viewportHeight - audioRect.top,
     );
   }
 

@@ -19,6 +19,8 @@ import { clearOfflineAudioCache } from '@/services/cache-manager';
 import { useUserStore } from '@/stores/userStore';
 import { selectBadgeVariant, useOfflineStore } from '@/stores/offlineStore';
 import { normalizeReciterId } from '@/lib/reciter-preference';
+import { trackMurotalEnabled } from '@/lib/analytics';
+import type { AppLocale } from '@/types';
 
 import { Logo } from '@/components/shared/Logo';
 import { Switch } from '@/components/ui/switch';
@@ -70,6 +72,7 @@ export default function SettingsPage() {
   const contrastMode = useUserStore((s) => s.settings.contrastMode);
   const smoothAnimation = useUserStore((s) => s.settings.smoothAnimation);
   const autoFollowPlayback = useUserStore((s) => s.settings.autoFollowPlayback);
+  const murotalEnabled = useUserStore((s) => s.settings.murotalEnabled);
 
   const badgeStatus = useOfflineStore(selectBadgeVariant);
   const totalSizeBytes = useOfflineStore((s) => s.manifestSummary.totalSizeBytes);
@@ -162,6 +165,13 @@ export default function SettingsPage() {
     void updateSettings({ autoFollowPlayback: enabled });
   };
 
+  const handleMurotalEnabledChange = (enabled: boolean) => {
+    if (enabled && !murotalEnabled) {
+      trackMurotalEnabled({ enabled: true });
+    }
+    void updateSettings({ murotalEnabled: enabled });
+  };
+
   return (
     <div className="min-h-dvh bg-background pb-16">
       <SettingsHeader />
@@ -206,17 +216,34 @@ export default function SettingsPage() {
           title={t('playback.title')}
           description={t('playback.description')}
         >
-          <SettingsRow
-            label={t('playback.autoFollow')}
-            description={t('playback.autoFollowDescription')}
-            control={
-              <Switch
-                checked={autoFollowPlayback}
-                onCheckedChange={handleAutoFollowPlaybackChange}
-                aria-label={t('playback.autoFollowAriaLabel')}
+          <div className="divide-y divide-border">
+            <div className="pb-4">
+              <SettingsRow
+                label={t('playback.autoFollow')}
+                description={t('playback.autoFollowDescription')}
+                control={
+                  <Switch
+                    checked={autoFollowPlayback}
+                    onCheckedChange={handleAutoFollowPlaybackChange}
+                    aria-label={t('playback.autoFollowAriaLabel')}
+                  />
+                }
               />
-            }
-          />
+            </div>
+            <div className="pt-4">
+              <SettingsRow
+                label={t('playback.murotalEnabled')}
+                description={t('playback.murotalEnabledDescription')}
+                control={
+                  <Switch
+                    checked={murotalEnabled}
+                    onCheckedChange={handleMurotalEnabledChange}
+                    aria-label={t('playback.murotalEnabledAriaLabel')}
+                  />
+                }
+              />
+            </div>
+          </div>
         </SettingsSection>
 
         <SettingsSection

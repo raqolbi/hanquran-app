@@ -76,7 +76,7 @@ Dokumen ini mendefinisikan struktur folder yang direkomendasikan untuk HanQuran 
 ## 4. Penjelasan Setiap Folder
 - `app/` — Next.js App Router: tempat halaman (server+client components), layouts, dan routing. Gunakan struktur file/route sesuai Next.js (folder per route).
 - `components/` — Semua komponen UI. Subfolder disusun untuk kemudahan: `ui/` (primitives), `shared/` (brand + utilities), `screens/` (komponen yang mewakili bagian layar), `atoms/` (komponen sangat kecil).
-- `lib/` — Pure helpers, route builders (`routes.ts`), repeat logic (`repeat-options.ts`), layout chrome (`surah-detail-chrome.ts`), media query viewport (`viewport.ts`).
+- `lib/` — Pure helpers, route builders (`routes.ts`), repeat (`repeat-options.ts`, `repeat-progress.ts`), auto follow (`auto-follow-playback.ts`), murotal pending play (`murotal-pending-play.ts`), layout chrome (`surah-detail-chrome.ts`), media query viewport (`viewport.ts`).
 - `messages/` + `i18n/` — Lokalisasi UI via **`next-intl`** (`id`, `en`). Lihat `docs/21-i18n-and-locale.md`.
 - `hooks/` — Custom React hooks yang reusable (harus client-side). Contoh: `useMediaQuery`, `useAudioController`.
 - `services/` — Layanan aplikasi yang berinteraksi dengan platform: `service-worker/`, `download-manager.ts`, `audio-controller.ts`, `api/` (jika ada sinkronisasi server).
@@ -125,6 +125,8 @@ Prinsip:
 services/
 ├─ audio-controller.ts      # jembatan HTMLAudioElement ↔ useAudioStore
 ├─ media-session.ts         # Media Session API — metadata & kontrol lock screen
+├─ murotal-resolver.ts    # logika advance ayat/surat saat Mode Murotal ON
+├─ repeat-engine.ts         # logika siklus repeat
 ├─ download-manager.ts      # orchestration unduh audio ke Cache Storage
 ├─ db/                      # Dexie — hanya data pengguna
 │  ├─ db.ts                 # Dexie instance + schema v2

@@ -217,6 +217,32 @@ Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **175 test passing**).
 5. ✅ i18n namespace `settings.playback` (`id` / `en`)
 6. ✅ Unit test perilaku auto follow & suspend saat scroll manual
 
+### Mode Murotal (25 Juni 2026)
+
+1. ✅ Spesifikasi — `docs/29-murotal-mode-spec.md`
+2. ✅ Field `murotalEnabled` + migrasi Dexie
+3. ✅ `services/murotal-resolver.ts` + integrasi `use-surah-repeat-playback`
+4. ✅ Toggle UI + i18n di Settings
+5. ✅ Analytics event murotal
+6. ✅ Unit test resolver, pending play, orkestrasi
+
+### Progress Repeat x/y (25 Juni 2026)
+
+1. ✅ `RepeatProgressBadge` — badge `current/target` (mis. `2/5`, `3/∞`) di `RepeatSelector` inline
+2. ✅ `lib/repeat-progress.ts` — formatter label
+3. ✅ `RepeatStatus` — fraksi x/y di panel/dialog
+4. ✅ Tampil saat `runtime.isActive` (termasuk pause di tengah siklus)
+5. ✅ Berlaku Surah Detail & Focus Mode
+6. ✅ Unit test `formatRepeatProgressLabel`
+
+### Auto Follow — perbaikan landscape (25 Juni 2026)
+
+1. ✅ `measureSurahDetailTopInset` — abaikan chrome static yang ter-scroll keluar layar
+2. ✅ `getViewportHeight` — memakai `visualViewport` di mobile
+3. ✅ `useSurahDetailBottomInset` — ukur chrome bawah dengan `visualViewport`
+4. ✅ Pembaruan `docs/28-playback-settings.md` §4.4
+5. ✅ Unit test chrome landscape
+
 ### Lanjutkan Hafalan (24 Juni 2026)
 
 1. ✅ `usePersistLastViewed` — simpan surat/ayat aktif ke Dexie `lastRead` dari Surah Detail & Focus
@@ -588,6 +614,46 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
   - Tujuan: Navigasi ayat tanpa membuka aplikasi
   - File: `services/media-session.ts`, callback dari Surah Detail / Focus Mode
   - Ketergantungan: Media Session dasar selesai
+  - Prioritas: P2
+
+---
+
+## Phase 2c — Mode Murotal
+
+**Total: 6 tasks | P0: 0 | P1: 5 | P2: 1**
+
+> Spesifikasi: `docs/29-murotal-mode-spec.md` · Versi target: **0.3.0** · Bukan blocker MVP `0.1.0`
+
+### Disarankan (P1)
+
+- [x] [DOC] Tulis spesifikasi Mode Murotal
+  - File: `docs/29-murotal-mode-spec.md`, pembaruan dokumen terkait
+  - Prioritas: P1
+
+- [x] [NEW] Buat service `murotal-resolver.ts`
+  - Tujuan: Pure functions — tentukan aksi setelah ayat selesai saat murotal ON
+  - File: `services/murotal-resolver.ts`, `tests/services/murotal-resolver.test.ts`
+  - Prioritas: P1
+
+- [x] [UPDATE] Integrasikan murotal ke `use-surah-repeat-playback.ts`
+  - Tujuan: Setelah RepeatEngine `stop`, evaluasi murotal dan advance ayat/surat
+  - File: `hooks/use-surah-repeat-playback.ts`, `app/surah/[id]/page.tsx`, `app/focus/[id]/page.tsx`
+  - Ketergantungan: `murotal-resolver.ts`, RepeatEngine
+  - Prioritas: P1
+
+- [x] [UPDATE] Toggle Mode Murotal di Settings
+  - Tujuan: `settings.murotalEnabled` persisten + UI Switch di section Playback
+  - File: `app/settings/page.tsx`, `stores/userStore.ts`, migrasi Dexie
+  - Prioritas: P1
+
+- [x] [UPDATE] i18n `settings.playback.murotalEnabled`
+  - File: `messages/id.json`, `messages/en.json`
+  - Prioritas: P1
+
+### Nice to Have (P2)
+
+- [ ] [TEST] Uji manual tilawah berkelanjutan lintas surat
+  - Tujuan: Al-Fatihah → Al-Baqarah; repeat 5× + murotal ON
   - Prioritas: P2
 
 ---
@@ -1074,6 +1140,23 @@ Gunakan checklist ini untuk tracking progress sprint. Copy ke project management
 - [ ] Service `media-session.ts`
 - [ ] Integrasi `AudioController`
 - [ ] Uji lock screen mobile
+
+### Phase 2c — Mode Murotal
+- [x] Spesifikasi & dokumen terkait (`docs/29`)
+- [x] Service `murotal-resolver.ts`
+- [x] Integrasi `use-surah-repeat-playback`
+- [x] Toggle UI + migrasi Dexie `murotalEnabled`
+- [x] i18n + unit test
+- [ ] Uji manual lintas surat
+
+### Progress Repeat x/y
+- [x] `RepeatProgressBadge` + `lib/repeat-progress.ts`
+- [x] Integrasi `RepeatSelector` inline & `RepeatStatus`
+- [x] Unit test formatter
+
+### Auto Follow landscape
+- [x] Perbaikan pengukuran chrome atas/bawah di `short-landscape`
+- [x] Unit test + pembaruan `docs/28` §4.4
 
 ### Phase 3 — Repeat
 - [x] useRepeatStore dibuat — config + runtime

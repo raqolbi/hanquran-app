@@ -468,6 +468,33 @@ P1 — Should Have
 
 ---
 
+## US-016: Mode Murotal (Tilawah Berkelanjutan)
+
+**Sebagai** 📖 Penghafal  
+**Saya ingin** tilawah audio berlanjut otomatis ke ayat dan surat berikutnya  
+**Sehingga** saya dapat mendengarkan Al-Qur'an secara utuh tanpa menekan play setiap ayat.
+
+### Acceptance Criteria
+
+1. Toggle **Mode Murotal** tersedia di Pengaturan → Playback
+2. Default toggle adalah **OFF** (perilaku saat ini tetap)
+3. Saat ON: setelah satu ayat selesai diputar, otomatis lanjut ke ayat berikutnya
+4. Saat ON: pada ayat terakhir surat, otomatis lanjut ke surat berikutnya
+5. Pemutaran berkelanjutan berhenti hanya jika pengguna menekan stop/pause atau mencapai akhir Al-Qur'an (An-Nas)
+6. Jika repeat aktif: siklus repeat diselesaikan dulu; setelah repeat `stop`, baru murotal lanjut
+7. Infinite repeat (∞) tidak memicu lanjut otomatis — audio tetap berulang sampai user stop
+8. Berlaku di Surah Detail dan Focus Mode
+
+### Linked PB
+
+PB-017
+
+### Priority
+
+P1 — Should Have
+
+---
+
 ## US-015: Memilih Bahasa Aplikasi
 
 **Sebagai** semua pengguna
@@ -530,7 +557,7 @@ Epic 5: Mobile & A11y
 |---------|--------------|
 | 🧒 Anak | US-005, US-006, US-008, US-013 |
 | 👨‍👩‍👧 Orang Tua | US-009, US-013, US-014 |
-| 📖 Penghafal | US-005, US-006, US-007, US-008, US-010 |
+| 📖 Penghafal | US-005, US-006, US-007, US-008, US-010, US-016 |
 | 🏫 Komunitas | US-010 |
 | Semua | US-001, US-002, US-003, US-004, US-011, US-012 |
 
