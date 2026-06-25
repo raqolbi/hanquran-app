@@ -1,25 +1,40 @@
 # 30 — Spesifikasi Perilaku Mode Offline
 
-**Tanggal:** 25 Juni 2026  
-**Status:** ✅ Spesifikasi resmi (implementasi UI selaras — lihat §9)  
+**Tanggal:** 26 Juni 2026  
+**Status:** ✅ Spesifikasi resmi — **offline-first sejati** (lihat §9 untuk status implementasi)  
 **Mengacu:** `docs/23-static-dataset-architecture.md`, `docs/15-state-management.md` §12, `docs/12-component-spec.md`
 
 ---
 
-## 1. Prinsip Inti
+## 1. Prinsip Inti — Offline First
+
+> **Aturan utama:** Seluruh aplikasi (shell + dataset Qur'an) tersimpan sebagai
+> **aset offline sejak install Service Worker**. Setelah SW terpasang **satu kali
+> saat online**, aplikasi **harus berfungsi penuh tanpa jaringan** — termasuk
+> *cold start* PWA terinstal dalam keadaan offline. **Jaringan hanya dibutuhkan
+> untuk: (a) streaming audio yang belum diunduh, (b) proses Simpan Offline audio.**
 
 HanQuran memisahkan **dua lapisan offline** yang tidak boleh dicampur:
 
 | Lapisan | Apa yang di-cache | Kapan tersedia offline | Aksi pengguna |
 |---------|-------------------|------------------------|---------------|
-| **Konten baca** (teks Arab, transliterasi, terjemahan, metadata surat) | Aset statis `public/data/*` via Service Worker (`hanquran-data-v1`, cache-first) + cache in-memory sesi | Setelah pernah dimuat saat online **atau** setelah precache saat **Simpan Offline** | **Tidak** perlu unduh manual per surat hanya untuk membaca |
+| **Aplikasi + Konten baca** (shell HTML/JS/CSS, route, teks Arab, transliterasi, terjemahan, metadata surat) | App shell + seluruh `public/data/*`, **di-precache saat SW `install`** | **Sejak SW terpasang** — tidak perlu pernah membuka surat saat online | **Tidak ada** — otomatis tersedia |
 | **Audio tilawah** | File MP3 CDN di `hanquran-audio-v1` | Hanya setelah **Simpan Offline** surat + qari aktif (`downloadManifest.status === 'ready'`) | Wajib unduh eksplisit per surat |
 
 **Kesimpulan bagi pengguna:**
 
-- Offline + buka surat → **harus tetap bisa membaca** ayat (selama dataset sudah pernah di-cache SW).
-- Offline + audio belum disimpan → **baca OK, putar audio tidak**.
-- Yang butuh jaringan saat online: **streaming audio CDN** dan **proses unduh audio**.
+- PWA terinstal dibuka offline (cold start) → **Beranda, daftar surat, dan setiap halaman tampil** (bukan «Anda sedang offline»).
+- Offline + buka surat **mana pun** (belum pernah dibuka) → **tetap bisa membaca** ayat penuh.
+- Offline + buka **Tentang HanQuran / Mode Fokus** → tampil normal.
+- Offline + audio belum disimpan → **baca OK, putar audio tidak** (Play disabled + toast).
+- Yang butuh jaringan: **streaming audio CDN** dan **proses unduh audio** — **tidak ada lagi**.
+
+### 1.1 Halaman «Anda sedang offline» (`offline.html`)
+
+`offline.html` adalah **jaring pengaman terakhir**, hanya muncul untuk navigasi ke
+URL **di luar** route aplikasi yang dikenal (mis. salah ketik path) **dan** tidak
+ada di cache. Dalam pemakaian normal offline-first, pengguna **tidak boleh** pernah
+melihat halaman ini saat membuka Beranda/surat/about/focus.
 
 ---
 
@@ -38,9 +53,8 @@ In-memory Map (per sesi tab)
 ```
 
 - **Bukan** disimpan di Dexie.
-- Beranda memuat daftar surat → memicu fetch 114 file quran (dan terjemahan sesuai locale) → SW mengisi cache data.
-- Surat yang pernah dibuka saat online juga ter-cache.
-- **Precache penuh:** saat pertama online, `precacheAppForOffline()` mengisi cache untuk **seluruh** dataset + shell route sehingga setiap surat dapat dibaca offline meski belum pernah dibuka (lihat §6.1).
+- **Di-precache saat SW `install`** (lihat §6.1): seluruh dataset (`manifest.json`, 114 file quran, terjemahan `id` + `en`) langsung tersimpan di `hanquran-data-v1` sebagai aset offline — **tanpa** menunggu pengguna membuka surat.
+- Runtime (cache-first) tetap mengisi entri apa pun yang belum sempat ter-precache.
 
 ### 2.2 Audio tilawah (CDN)
 
@@ -184,38 +198,59 @@ next/prev) menuju **surat lain** yang audionya belum tersedia offline, pemutaran
 
 ---
 
-## 6. Service Worker (ringkasan)
+## 6. Service Worker — Offline First
 
 | Cache | Isi | Strategi |
 |-------|-----|----------|
-| `hanquran-data-v1` | `/data/*` (seluruh dataset di-precache) | cache-first |
-| `hanquran-audio-v1` | MP3 CDN | cache-first |
-| `hanquran-shell-v1` | HTML navigasi + RSC App Router | network-first / stale-while-revalidate (`ignoreSearch`) |
-| `hanquran-static-v1` | `/_next/static/*`, font, ikon | stale-while-revalidate |
+| `hanquran-shell-v1` | App shell: `offline.html`, **app-shell HTML** + RSC route | network-first nav / SWR (`ignoreSearch`), **fallback app-shell** |
+| `hanquran-static-v1` | `/_next/static/*` (JS/CSS hashed), font, ikon, `manifest.json` | **precache install** + SWR |
+| `hanquran-data-v1` | seluruh `/data/*` | **precache install** + cache-first |
+| `hanquran-audio-v1` | MP3 CDN | cache-first (runtime / Simpan Offline) |
 
-**Jangan** fallback navigasi `/surah/*` ke HTML Beranda — menyebabkan splash + kembali ke home (bug yang diperbaiki 25 Juni 2026).
+**Jangan** fallback navigasi `/surah/*` ke HTML Beranda — menyebabkan splash + kembali ke home (bug 25 Juni 2026).
 
-### 6.1 Precache penuh konten baca (Offline First)
+### 6.1 Precache saat `install` (wajib untuk cold-start offline)
 
-Dataset teks **kecil (~5,7 MB)**, sehingga seluruhnya di-precache saat pertama
-online agar **setiap surat dapat dibaca offline** tanpa perlu diunduh:
+Saat event `install`, Service Worker **wajib** mem-precache seluruh aset yang
+dibutuhkan agar aplikasi boot tanpa jaringan:
 
-- `services/offline-app-precache.ts` → `precacheAppForOffline()` dipanggil dari
-  `initStores()` (hanya saat online, sekali per versi dataset via flag
-  `localStorage`).
-- Yang di-precache: `manifest.json`, semua `/data/quran/*.json`, semua
-  `/data/translations/{id,en}/*.json`, serta **shell semua route** (home,
-  settings, about, `/surah/[id]`, `/focus/[id]`) — dokumen + payload RSC.
-- Service Worker memproses batch (`cache-offline-batch`) dengan konkurensi
-  terbatas.
+1. **App shell & boot assets** — `offline.html`, app-shell HTML, dan **seluruh
+   `/_next/static/*`** (JS/CSS). Karena nama file di-*hash* per build, daftar ini
+   **di-generate saat build** (lihat §6.3) lalu di-`importScripts` oleh `sw.js`.
+2. **Dataset penuh** — `manifest.json`, 114 `/data/quran/*.json`, semua
+   `/data/translations/{id,en}/*.json` (~5,7 MB).
+3. **Ikon, font, `manifest.json`**.
 
-### 6.2 Pencocokan RSC App Router (`_rsc`)
+Precache ini **tidak** bergantung pada `localStorage` atau kunjungan online;
+ia berjalan sekali saat SW dipasang/diperbarui. Selama proses install, perangkat
+**harus online** (instalasi PWA memang memerlukan koneksi awal).
+
+### 6.2 Route dinamis via App Shell
+
+`/surah/[id]` dan `/focus/[id]` adalah route **dinamis** (server-rendered
+on-demand) — tidak ada HTML statis per-id untuk di-precache. Strategi:
+
+- Precache **satu app-shell** (mis. dokumen `/surah/1` atau shell khusus) di
+  `hanquran-shell-v1`.
+- Untuk navigasi offline ke `/surah/<id>` / `/focus/<id>` yang **tidak** ada di
+  cache, SW mengembalikan **app-shell** tersebut (bukan `offline.html`).
+- Halaman membaca `id` dari **URL sisi-klien** (`parseSurahIdFromPathname(usePathname())`),
+  lalu memuat data dari `hanquran-data-v1`. Dengan demikian satu shell melayani semua id.
+- Mode Fokus tidak boleh menampilkan error boundary saat offline; data ayat
+  diambil dari cache data yang sudah di-precache.
+
+### 6.3 Manifest precache hasil build
+
+Karena `/_next/static/*` memakai nama ber-hash, daftar precache **di-generate**
+oleh skrip `postbuild` (mis. `scripts/generate-sw-precache.mjs`) yang memindai
+output `.next` + `public/data`, lalu menulis berkas yang di-`importScripts`
+`sw.js`. Tanpa ini, cold-start offline gagal karena chunk JS belum ter-cache.
+
+### 6.4 Pencocokan RSC App Router (`_rsc`)
 
 Navigasi SPA Next.js mengambil payload RSC dengan query `?_rsc=<hash>` yang
 berubah per build. SW mencocokkan dengan `ignoreSearch: true` dan mengandalkan
 header `Vary: RSC` untuk membedakan entri dokumen vs RSC pada URL yang sama.
-Tanpa ini, navigasi ke route yang sudah di-precache tetap jatuh ke
-`offline.html`.
 
 ---
 
@@ -246,19 +281,25 @@ Tanpa ini, navigasi ke route yang sudah di-precache tetap jatuh ke
 
 ---
 
-## 9. Gap Implementasi (25 Juni 2026)
+## 9. Gap Implementasi (26 Juni 2026)
 
 | Item | Dokumen | Status |
 |------|---------|--------|
 | Tombol Simpan Offline saat offline | §4.1 | ✅ Disembunyikan (`showDownloadUi`) |
 | Play disabled + toast offline | §4.2 | ✅ `useAudioPlaybackGate` + `AppToastHost` |
-| Navigasi surat/route apa pun offline | §6 | ✅ Precache penuh + SW `ignoreSearch` |
-| Baca seluruh surat offline tanpa unduh | §3, §6.1 | ✅ `precacheAppForOffline()` |
 | Murotal stop di batas offline | §3.2, §5.3 | ✅ `ensureTargetSurahPlayable` |
-| `docs/15` §12.1 menyebut Dexie untuk konten Quran | — | ✅ Dikoreksi di `docs/15` |
+| SW `ignoreSearch` untuk RSC | §6.4 | ✅ |
+| Precache app shell + `/_next/static/*` saat install | §6.1, §6.3 | ✅ `precacheOnInstall()` + manifest build |
+| Manifest precache hasil build (`postbuild`) | §6.3 | ✅ `scripts/generate-sw-precache.mjs` |
+| App-shell untuk route dinamis (baca id dari URL) | §6.2 | ✅ `parseSurahIdFromPathname` + fallback SW |
+| Precache dataset penuh saat install | §6.1 | ✅ `__SW_PRECACHE__.data` |
 | Runtime cache audio saat pertama play (online) | `docs/15` §12.1 | **Tidak** diimplementasi — hanya unduh eksplisit |
 
-Task implementasi: `docs/18-development-tasks.md` Phase 5 (pembaruan 25 Juni 2026).
+**Catatan verifikasi:** semua jalur di atas perlu diuji ulang di perangkat
+(install SW saat online sekali → matikan jaringan → cold start). Service Worker
+cache dinaikkan ke `*-v2` agar precache install berjalan ulang.
+
+Task implementasi: `docs/18-development-tasks.md` Phase 5.
 
 ---
 
@@ -267,7 +308,8 @@ Task implementasi: `docs/18-development-tasks.md` Phase 5 (pembaruan 25 Juni 202
 | Tanggal | Perubahan |
 |---------|-----------|
 | 25 Juni 2026 | Dokumen awal — pemisahan konten baca vs audio, matriks UI, gap implementasi |
-| 25 Juni 2026 | Precache penuh dataset + shell semua route (§6.1), SW `ignoreSearch` RSC (§6.2), batas Murotal offline (§5.3) |
+| 25 Juni 2026 | Precache penuh dataset + shell semua route, SW `ignoreSearch` RSC, batas Murotal offline |
+| 26 Juni 2026 | **Revisi offline-first sejati**: precache app shell + `/_next/static/*` + dataset saat SW `install` (§6.1), manifest precache hasil build (§6.3), app-shell route dinamis via `useParams` (§6.2); §9 mencatat gap cold-start offline yang masih terbuka |
 
 ---
 

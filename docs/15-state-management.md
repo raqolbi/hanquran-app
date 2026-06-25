@@ -483,14 +483,18 @@ Tujuan: konfigurasi repeat konsisten dari Pengaturan, Mode Fokus, dan SurahDetai
 
 Tujuan: aplikasi dapat dipakai membaca, mendengarkan, dan menghafal tanpa koneksi setelah unduhan pertama.
 
-## 12.1 Lapisan Offline
+## 12.1 Lapisan Offline (Offline First)
 
-1. **Aset aplikasi** (HTML, JS, CSS, font) — di-cache oleh Service Worker (`hanquran-static-v1`, `hanquran-shell-v1`).
-2. **Data Al-Qur'an** (teks, terjemahan, metadata) — aset statis `public/data/*` via Service Worker `hanquran-data-v1` (cache-first) + in-memory sesi. **Bukan** Dexie — lihat `docs/23`, `docs/30-offline-behavior-spec.md` §2.1.
+**Prinsip:** aplikasi + seluruh dataset di-precache sebagai aset offline saat
+Service Worker `install` → berfungsi penuh tanpa jaringan sejak terpasang
+(termasuk cold-start PWA terinstal). Jaringan hanya untuk stream / Simpan Offline audio.
+
+1. **Aset aplikasi** (HTML app-shell, JS/CSS `/_next/static/*`, font) — **di-precache saat SW `install`** (`hanquran-static-v1`, `hanquran-shell-v1`); daftar file ber-hash di-generate `postbuild`. Lihat `docs/30` §6.1, §6.3.
+2. **Data Al-Qur'an** (teks, terjemahan, metadata) — seluruh `public/data/*` **di-precache saat SW `install`** (`hanquran-data-v1`, cache-first). **Bukan** Dexie — lihat `docs/23`, `docs/30` §2.1.
 3. **File audio** — hanya di `hanquran-audio-v1` setelah pengguna menekan **Simpan Offline** (unduh eksplisit per surat+qari). Runtime cache otomatis saat pertama play **tidak** diimplementasi pada MVP.
 4. **Preferensi pengguna & progres** — Dexie; selalu tersedia offline.
 
-Perilaku UI lengkap (baca vs putar, tombol unduh, toast): **`docs/30-offline-behavior-spec.md`**.
+Perilaku UI lengkap (baca vs putar, tombol unduh, toast, app-shell route dinamis): **`docs/30-offline-behavior-spec.md`**.
 
 ## 12.2 Status Koneksi
 

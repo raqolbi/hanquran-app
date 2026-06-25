@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { SurahDetailHeader } from '@/components/surah-detail-header';
 import { SurahOfflineDownload } from '@/components/surah-offline-download';
@@ -13,7 +13,7 @@ import { AudioPlayer } from '@/components/audio-player';
 import { SurahDetailScrollSpacer } from '@/components/surah-detail-scroll-spacer';
 import { RepeatSelector } from '@/components/repeat-selector';
 import { RepeatSettingsDialog } from '@/components/repeat-settings-dialog';
-import { routes } from '@/lib/routes';
+import { parseSurahIdFromPathname, routes } from '@/lib/routes';
 import { useSurah } from '@/hooks/use-surah';
 import { useReadingDisplay } from '@/hooks/use-reading-display';
 import { useSurahDetailBottomInset } from '@/hooks/use-surah-detail-bottom-inset';
@@ -235,11 +235,14 @@ function SurahDetailLoaded({
 export default function SurahDetailPage({ params }: SurahDetailPageProps) {
   const t = useTranslations('errors');
   const tLoading = useTranslations('loading');
+  // Baca id dari URL (bukan params HTML) agar app-shell offline melayani id apa pun.
+  const pathname = usePathname();
   const resolvedParams = React.use(params);
+  const surahId = parseSurahIdFromPathname(pathname) || resolvedParams.id;
   const searchParams = useSearchParams();
   const startAyah = parseInt(searchParams.get('ayah') || '1', 10);
 
-  const { surah, loading, error, retry } = useSurah(resolvedParams.id);
+  const { surah, loading, error, retry } = useSurah(surahId);
 
   if (loading) {
     return (
@@ -268,7 +271,7 @@ export default function SurahDetailPage({ params }: SurahDetailPageProps) {
   return (
     <SurahDetailLoaded
       surah={surah}
-      surahIdParam={resolvedParams.id}
+      surahIdParam={surahId}
       startAyah={startAyah}
     />
   );
