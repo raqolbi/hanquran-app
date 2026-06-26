@@ -1921,7 +1921,7 @@ interface SurahOfflineDownloadProps {
 |---------|----------|
 | `connectionStatus === 'online'` && `!isOfflineReady` | Tombol **Simpan Offline** + progres |
 | `connectionStatus === 'online'` && unduh gagal | Pesan error + tombol retry |
-| `isOfflineReady` | **Tidak dirender** (badge di `SurahDetailHeader`) |
+| `isOfflineReady` (manifest `ready` **atau** seluruh ayat di cache — `docs/31`) | **Tidak dirender** (badge di `SurahDetailHeader`) |
 | `connectionStatus === 'offline'` | **Tidak dirender** |
 
 ```text

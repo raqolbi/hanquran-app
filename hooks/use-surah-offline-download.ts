@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { getDownloadManager } from '@/services/download-manager';
 import { downloadManifestKey } from '@/services/download-manifest-key';
+import { useSurahOfflineReady } from '@/hooks/use-surah-offline-ready';
 import { routes } from '@/lib/routes';
 import { db } from '@/services/db/db';
 import { useOfflineStore } from '@/stores/offlineStore';
@@ -108,7 +109,7 @@ export function useSurahOfflineDownload({
     }
   }, [ayahCount, downloadStatus, isSaving, reciterId, router, surahId]);
 
-  const isOfflineReady = downloadStatus === 'ready';
+  const isOfflineReady = useSurahOfflineReady(surahId, reciterId, ayahCount);
   const isDownloading = downloadStatus === 'downloading' || isSaving;
   const badgeStatus = toSurahBadgeStatus(downloadStatus);
   const isOnline = connectionStatus === 'online';

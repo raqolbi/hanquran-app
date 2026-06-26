@@ -109,8 +109,8 @@ Aturan identik Surah Detail: teks ayat selalu dapat dibaca; audio mengikuti bari
 
 | Kondisi | Tampilan |
 |---------|----------|
-| `connectionStatus === 'online'` dan belum `ready` | Tombol **Simpan Offline** + progres unduhan |
-| `connectionStatus === 'online'` dan `ready` | Komponen **tidak** dirender (badge di header surat) |
+| `connectionStatus === 'online'` dan belum `ready` **dan** belum seluruh ayat di cache | Tombol **Simpan Offline** + progres unduhan |
+| `connectionStatus === 'online'` dan `ready` **atau** seluruh ayat di cache (`docs/31`) | Komponen **tidak** dirender (badge di header surat) |
 | `connectionStatus === 'offline'` | Komponen **tidak** dirender — unduh tidak dapat dimulai tanpa jaringan |
 | Unduh gagal (online) | Pesan error + tombol coba lagi (jika online) |
 
@@ -310,7 +310,7 @@ header `Vary: RSC` untuk membedakan entri dokumen vs RSC pada URL yang sama.
 | Manifest precache hasil build (`postbuild`) | §6.3 | ✅ `scripts/generate-sw-precache.mjs` |
 | App-shell untuk route dinamis (baca id dari URL) | §6.2 | ✅ `parseSurahIdFromPathname` + fallback SW |
 | Precache dataset penuh saat install | §6.1 | ✅ `__SW_PRECACHE__.data` |
-| Auto download audio saat play (opt-in) | `docs/31-auto-download-audio-spec.md` | 📋 Belum diimplementasi — default OFF |
+| Auto download audio saat play (opt-in) | `docs/31-auto-download-audio-spec.md` | ✅ `settings.autoDownloadOnPlay` — default OFF |
 | Runtime cache audio saat play tanpa pengaturan ON | `docs/31` §6 | **Tidak** — hanya saat `autoDownloadOnPlay === true` atau Simpan Offline |
 
 **Catatan verifikasi:** semua jalur di atas perlu diuji ulang di perangkat

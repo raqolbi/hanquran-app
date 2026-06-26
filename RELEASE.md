@@ -62,6 +62,38 @@ Satu atau dua kalimat: apa yang berubah bagi pengguna.
 
 ## Riwayat
 
+### [0.5.0] — 2026-06-26
+
+#### Ringkasan
+
+Pengaturan **Auto Download Audio** (opt-in, default OFF) — menyimpan otomatis file MP3 ayat yang diputar agar dapat didengar offline nanti, tanpa menggantikan unduhan penuh per surat via **Simpan Offline**.
+
+#### Fitur baru
+
+- Toggle **Auto Download Audio** di Pengaturan → Offline & Cache (`settings.autoDownloadOnPlay`, default `false`)
+- Cache background per ayat saat play (online) ke `hanquran-audio-v1` — tidak memblokir streaming
+- Pemutaran offline per ayat: ayat yang pernah diputar (saat fitur ON) dapat diputar tanpa jaringan
+- Spesifikasi: `docs/31-auto-download-audio-spec.md`
+
+#### Perbaikan
+
+- Gate pemutaran offline & Murotal memeriksa cache per ayat, bukan hanya manifest surat penuh
+
+#### Catatan penting
+
+- Badge «Siap offline» surat tetap hanya untuk **Simpan Offline** penuh — bukan auto download sebagian
+- Versi `package.json` **0.5.0** — tampil otomatis di layar Tentang HanQuran
+
+#### Uji sebelum rilis
+
+- [x] Unit test `audio-play-cache`, `can-play-ayah-offline`, gate pemutaran — 292 test hijau
+- [ ] Verifikasi manual: ON → play beberapa ayat online → offline → hanya ayat tersebut dapat diputar
+- [ ] Preview / staging diuji
+- [ ] Production deploy
+- [ ] Checklist `docs/25-deployment-vercel.md` §5
+
+---
+
 ### [0.4.0] — 2026-06-26
 
 #### Ringkasan
@@ -193,4 +225,4 @@ Baseline MVP HanQuran — aplikasi hafalan Al-Qur'an dengan audio per ayat, repe
 
 ---
 
-<!-- Versi berikutnya: salin Template di atas ke sini, di atas entri 0.4.0 -->
+<!-- Versi berikutnya: salin Template di atas ke sini, di atas entri 0.5.0 -->

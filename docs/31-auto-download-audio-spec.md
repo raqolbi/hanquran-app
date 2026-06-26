@@ -1,7 +1,7 @@
 # 31 — Auto Download Audio Saat Putar
 
 **Tanggal:** 26 Juni 2026  
-**Status:** 📋 Spesifikasi — belum diimplementasi  
+**Status:** ✅ Diimplementasi — dirilis `0.5.0`  
 **Lokasi UI:** `/settings` — bagian **Offline & Cache**
 
 ---
@@ -106,10 +106,11 @@ AND file MP3 ayat belum ada di hanquran-audio-v1
 - **Tidak** mengubah `downloadManifest.status` menjadi `ready` — status `ready` tetap eksklusif untuk unduhan penuh via **Simpan Offline**.
 - Auto download hanya menambah entri di Cache Storage; metadata manifest surat penuh tidak diperbarui.
 
-### 5.5 Badge «Siap offline»
+### 5.5 Badge «Siap offline» & tombol Simpan Offline
 
-- Badge header surat (`Siap offline`) tetap hanya muncul bila `downloadManifest[surahId + reciterId].status === 'ready'` (unduhan penuh).
-- Ayat yang hanya di-cache via auto download **tidak** menampilkan badge surat penuh.
+- **Tombol Simpan Offline** disembunyikan bila seluruh ayat surat+qari sudah ada di Cache Storage — baik via manifest `ready` (Simpan Offline) maupun auto download per ayat (`isSurahAudioFullyCached`).
+- **Badge** header surat (`Siap offline`) mengikuti aturan yang sama: tampil bila seluruh audio surat tersedia offline.
+- Surat yang **sebagian** ayatnya tercache (auto download) tetap menampilkan tombol Simpan Offline untuk mengunduh sisa ayat sekaligus.
 
 ---
 
@@ -199,6 +200,7 @@ Implementasi unduh background disarankan di layer service (mis. hook pemutaran a
 - [ ] ON + offline + ayat pernah diputar saat ON → Play aktif dari cache.
 - [ ] ON + offline + ayat belum pernah diputar → Play disabled + toast.
 - [ ] Badge «Siap offline» surat hanya untuk Simpan Offline penuh, bukan auto download sebagian.
+- [ ] Badge «Siap offline» & tombol Simpan Offline hilang bila seluruh ayat surat tercache (manifest atau auto download).
 - [ ] Ganti qari → cache auto download terpisah per qari.
 - [ ] Bersihkan Cache → file auto download ikut terhapus.
 
