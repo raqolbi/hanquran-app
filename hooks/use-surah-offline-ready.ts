@@ -17,18 +17,16 @@ export function useSurahOfflineReady(
 ): boolean {
   const manifestKey = downloadManifestKey(surahId, reciterId);
   const downloadStatus = useOfflineStore((s) => s.downloadStatuses[manifestKey]);
-  const cacheSizeBytes = useOfflineStore((s) => s.manifestSummary.totalSizeBytes);
+  const audioCacheRevision = useOfflineStore((s) => s.audioCacheRevision);
   const manifestReady = downloadStatus === 'ready';
   const [allAyahsCached, setAllAyahsCached] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (manifestReady) {
-      setAllAyahsCached(null);
       return;
     }
 
     let cancelled = false;
-    setAllAyahsCached(null);
 
     void isSurahAudioFullyCached(surahId, reciterId, ayahCount).then((ready) => {
       if (!cancelled) {
@@ -39,7 +37,7 @@ export function useSurahOfflineReady(
     return () => {
       cancelled = true;
     };
-  }, [surahId, reciterId, ayahCount, manifestReady, cacheSizeBytes]);
+  }, [surahId, reciterId, ayahCount, manifestReady, audioCacheRevision]);
 
   if (manifestReady) {
     return true;

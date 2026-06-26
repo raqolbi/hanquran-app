@@ -12,6 +12,7 @@ describe('offlineStore selectors', () => {
       connectionStatus: 'online',
       downloadStatuses: {},
       manifestSummary: { surahsCached: 0, totalSizeBytes: 0 },
+      audioCacheRevision: 0,
       initialized: false,
     });
   });
@@ -21,6 +22,7 @@ describe('offlineStore selectors', () => {
       connectionStatus: 'online',
       downloadStatuses: {},
       manifestSummary: { surahsCached: 0, totalSizeBytes: 0 },
+      audioCacheRevision: 0,
     });
   });
 
@@ -65,5 +67,11 @@ describe('offlineStore selectors', () => {
     expect(selectConnectionIndicatorStatus(useOfflineStore.getState())).toBe(
       'offline',
     );
+  });
+
+  it('notifyAudioCacheUpdated menaikkan audioCacheRevision', () => {
+    expect(useOfflineStore.getState().audioCacheRevision).toBe(0);
+    useOfflineStore.getState().notifyAudioCacheUpdated();
+    expect(useOfflineStore.getState().audioCacheRevision).toBe(1);
   });
 });

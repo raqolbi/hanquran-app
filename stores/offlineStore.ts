@@ -21,6 +21,8 @@ interface OfflineStateData {
   connectionStatus: ConnectionStatus;
   downloadStatuses: Record<string, DownloadStatus>;
   manifestSummary: ManifestSummary;
+  /** Counter agar UI mendeteksi ayat baru di-cache tanpa reload halaman. */
+  audioCacheRevision: number;
   initialized: boolean;
 }
 
@@ -35,6 +37,8 @@ interface OfflineActions {
   ) => void;
   /** Hitung ulang ringkasan manifest dari Dexie + ukuran aktual Cache Storage audio. */
   refreshManifest: () => Promise<void>;
+  /** Sinyal realtime: ayat baru masuk cache (auto download / SW runtime). */
+  notifyAudioCacheUpdated: () => void;
   /** Varian badge turunan (docs/15 Bagian 12.2). */
   badgeVariant: () => OfflineBadgeVariant;
 }
@@ -98,6 +102,7 @@ export const useOfflineStore = create<OfflineStateData & OfflineActions>()(
     connectionStatus: 'online',
     downloadStatuses: {},
     manifestSummary: emptySummary,
+    audioCacheRevision: 0,
     initialized: false,
 
     init: async () => {
@@ -129,6 +134,9 @@ export const useOfflineStore = create<OfflineStateData & OfflineActions>()(
         },
       });
     },
+
+    notifyAudioCacheUpdated: () =>
+      set((s) => ({ audioCacheRevision: s.audioCacheRevision + 1 })),
 
     badgeVariant: () => selectBadgeVariant(get()),
   }),

@@ -30,12 +30,16 @@ export async function cacheAyahAudioOnPlay(url: string): Promise<void> {
   try {
     const cache = await caches.open(AUDIO_CACHE_NAME);
     const existing = await cache.match(url);
-    if (existing) return;
+    if (existing) {
+      useOfflineStore.getState().notifyAudioCacheUpdated();
+      return;
+    }
 
     const response = await fetch(url, { mode: 'cors' });
     if (!response.ok) return;
 
     await cache.put(url, response.clone());
+    useOfflineStore.getState().notifyAudioCacheUpdated();
     void useOfflineStore.getState().refreshManifest();
   } catch {
     // best-effort — kegagalan tidak memengaruhi streaming

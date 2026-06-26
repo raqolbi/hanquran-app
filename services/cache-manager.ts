@@ -32,6 +32,7 @@ export async function clearOfflineAudioCache(): Promise<ClearOfflineCacheResult>
   }
 
   useOfflineStore.setState({ downloadStatuses: {} });
+  useOfflineStore.getState().notifyAudioCacheUpdated();
   await useOfflineStore.getState().refreshManifest();
 
   return {
