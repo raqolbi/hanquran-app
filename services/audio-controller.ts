@@ -19,6 +19,7 @@ import {
   syncMediaSessionFromTrack,
 } from '@/services/media-session';
 import { trackAudioPlay } from '@/lib/analytics';
+import { maybeCacheAyahOnPlay } from '@/services/audio-play-cache';
 import { useAudioStore } from '@/stores/audioStore';
 import type { AudioErrorCode, AudioTrack, PlaybackRate } from '@/types';
 
@@ -218,6 +219,7 @@ export class AudioController {
           ayahNumber: track.ayahNumber,
           reciterId: track.reciterId,
         });
+        maybeCacheAyahOnPlay(track.url);
       }
       this.syncMediaSessionForTrack(track, 'playing');
       this.syncMediaSessionPosition();

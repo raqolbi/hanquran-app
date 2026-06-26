@@ -121,7 +121,7 @@ Konten Quran tersedia offline setelah Service Worker meng-cache aset `public/dat
 **Pemisahan penting:**
 
 - **Membaca** surat (teks, terjemahan, navigasi ayat) → bergantung cache dataset, **tidak** memerlukan Simpan Offline.
-- **Memutar audio** → memerlukan Simpan Offline per surat+qari, atau koneksi online untuk streaming CDN.
+- **Memutar audio offline** → memerlukan Simpan Offline per surat+qari **atau** ayat yang pernah di-cache via **Auto Download Audio** (opt-in). Online: stream CDN tanpa cache kecuali salah satu cara di atas aktif.
 
 Lihat matriks lengkap: `docs/30-offline-behavior-spec.md` §3.
 
@@ -696,7 +696,7 @@ Error teknis dapat dicatat untuk debugging internal, tetapi:
 - Hindari fetch berulang dalam satu sesi (in-memory cache)
 - Andalkan browser HTTP cache + Service Worker untuk aset statis
 - Gunakan preload ringan hanya untuk ayat berikutnya bila perlu
-- Jangan download audio massal secara default di V1
+- Jangan download audio massal secara default — unduh otomatis **hanya** jika pengguna mengaktifkan **Auto Download Audio** di Pengaturan (default OFF). Lihat `docs/31-auto-download-audio-spec.md`.
 
 ---
 

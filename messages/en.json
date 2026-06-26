@@ -133,7 +133,10 @@
       "clearCacheTitle": "Clear cache?",
       "clearCacheDescription": "Cached audio will be removed. You'll need an internet connection to download it again.",
       "clearCacheInProgress": "Clearing…",
-      "clearCacheFailed": "Failed to clear cache. Please try again."
+      "clearCacheFailed": "Failed to clear cache. Please try again.",
+      "autoDownloadOnPlay": "Auto Download Audio",
+      "autoDownloadOnPlayDescription": "Automatically save audio for verses you play so you can listen offline later.",
+      "autoDownloadOnPlayAriaLabel": "Enable auto download audio on play"
     },
     "accessibility": {
       "title": "Accessibility",

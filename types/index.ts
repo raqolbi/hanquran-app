@@ -17,6 +17,8 @@ export interface SettingsRecord {
   autoFollowPlayback: boolean;
   /** Tilawah berkelanjutan ayat → surat. Default: false. */
   murotalEnabled: boolean;
+  /** Cache audio ayat saat diputar (online). Default: false. */
+  autoDownloadOnPlay: boolean;
   /** Slug qari dari `data/reciters.json` (mis. `Alafasy_128kbps`). */
   reciterId: string;
   /** Konfigurasi repeat hafalan — persisten di Dexie. */

@@ -491,7 +491,10 @@ Service Worker `install` → berfungsi penuh tanpa jaringan sejak terpasang
 
 1. **Aset aplikasi** (HTML app-shell, JS/CSS `/_next/static/*`, font) — **di-precache saat SW `install`** (`hanquran-static-v1`, `hanquran-shell-v1`); daftar file ber-hash di-generate `postbuild`. Lihat `docs/30` §6.1, §6.3.
 2. **Data Al-Qur'an** (teks, terjemahan, metadata) — seluruh `public/data/*` **di-precache saat SW `install`** (`hanquran-data-v1`, cache-first). **Bukan** Dexie — lihat `docs/23`, `docs/30` §2.1.
-3. **File audio** — hanya di `hanquran-audio-v1` setelah pengguna menekan **Simpan Offline** (unduh eksplisit per surat+qari). Runtime cache otomatis saat pertama play **tidak** diimplementasi pada MVP.
+3. **File audio** — di `hanquran-audio-v1` melalui:
+   - **Simpan Offline** (unduh eksplisit seluruh surat+qari → `downloadManifest.status === 'ready'`), atau
+   - **Auto Download Audio** saat play (opt-in, default OFF — lihat `docs/31-auto-download-audio-spec.md`).
+   Tanpa salah satu dari dua cara di atas, play online hanya stream CDN tanpa persist cache.
 4. **Preferensi pengguna & progres** — Dexie; selalu tersedia offline.
 
 Perilaku UI lengkap (baca vs putar, tombol unduh, toast, app-shell route dinamis): **`docs/30-offline-behavior-spec.md`**.

@@ -177,11 +177,11 @@ terpasang. Jaringan hanya untuk **stream audio** atau **Simpan Offline audio**.
 |------------|--------------|------------------|
 | App shell + `/_next/static/*` | Precache saat SW `install` (daftar di-generate `postbuild`) | App **boot tanpa jaringan** (cold start PWA) |
 | Konten Quran `public/data/*` | Precache penuh saat SW `install` (`hanquran-data-v1`) | **Baca surat mana pun** tanpa pernah online membukanya |
-| Audio | CDN + SW `hanquran-audio-v1` + Dexie `downloadManifest` | **Putar** hanya setelah **Simpan Offline** surat+qari |
+| Audio | CDN + SW `hanquran-audio-v1` + Dexie `downloadManifest` | **Putar offline** setelah **Simpan Offline** penuh surat+qari, **atau** ayat per ayat jika **Auto Download Audio** ON (`docs/31`) |
 | Preferensi pengguna | Dexie | Selalu lokal |
 
 Konten Quran **tidak** di-seed ke IndexedDB — tersimpan sebagai aset Cache Storage.
-Yang diunduh eksplisit pengguna hanya **audio** — bukan teks ayat.
+Yang diunduh pengguna hanya **audio** — bukan teks ayat. Cara unduh: (1) **Simpan Offline** eksplisit per surat, atau (2) **Auto Download Audio** opt-in saat play (`docs/31`).
 
 Spesifikasi lengkap (precache install, app-shell route dinamis, manifest build,
 Play disabled/toast): **`docs/30-offline-behavior-spec.md`**.

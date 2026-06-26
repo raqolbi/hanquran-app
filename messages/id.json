@@ -133,7 +133,10 @@
       "clearCacheTitle": "Hapus cache?",
       "clearCacheDescription": "Audio yang sudah tersimpan akan dihapus. Kamu perlu koneksi internet untuk mengunduhnya kembali.",
       "clearCacheInProgress": "Menghapus…",
-      "clearCacheFailed": "Gagal menghapus cache. Coba lagi."
+      "clearCacheFailed": "Gagal menghapus cache. Coba lagi.",
+      "autoDownloadOnPlay": "Auto Download Audio",
+      "autoDownloadOnPlayDescription": "Simpan otomatis audio ayat yang Anda putar agar bisa didengar offline nanti.",
+      "autoDownloadOnPlayAriaLabel": "Aktifkan auto download audio saat putar"
     },
     "accessibility": {
       "title": "Aksesibilitas",

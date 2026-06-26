@@ -14,6 +14,7 @@ import {
   resetMediaSessionBindings,
 } from '@/services/media-session';
 import { useAudioStore } from '@/stores/audioStore';
+import * as audioPlayCache from '@/services/audio-play-cache';
 
 const sampleTrack = {
   surahId: 1,
@@ -109,6 +110,7 @@ describe('AudioController', () => {
 
   describe('play', () => {
     it('mengatur trek dan memperbarui store', async () => {
+      const maybeCache = vi.spyOn(audioPlayCache, 'maybeCacheAyahOnPlay');
       const { controller, audio } = createController();
 
       await controller.play(sampleTrack);
@@ -119,6 +121,7 @@ describe('AudioController', () => {
       expect(state.error).toBeNull();
       expect(audio.src).toContain('001001.mp3');
       expect(audio.play).toHaveBeenCalled();
+      expect(maybeCache).toHaveBeenCalledWith(sampleTrack.url);
       expect(mockSession.playbackState).toBe('playing');
       expect(mockSession.metadata?.title).toBe('Al-Fatihah — Ayat 1');
     });

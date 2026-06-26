@@ -896,8 +896,15 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │                                      │
 │ ┌──────────────────────────────────┐ │
 │ │ Offline & Cache                  │ │
+│ │ Status: Online                   │ │
 │ │ Audio tersimpan: 24 MB           │ │
 │ │ Data Quran     : Cached          │ │
+│ │                                  │ │
+│ │ Auto Download Audio   [Off]      │ │
+│ │ Simpan otomatis audio ayat yang  │ │
+│ │ Anda putar agar bisa didengar    │ │
+│ │ offline nanti.                   │ │
+│ │                                  │ │
 │ │ [Bersihkan Cache]                │ │
 │ └──────────────────────────────────┘ │
 │                                      │
@@ -933,6 +940,7 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │ ┌─────────────────────┐   ┌─────────────────────┐               │
 │ │ Offline & Cache     │   │                     │               │
 │ │ Audio: 24 MB        │   │                     │               │
+│ │ Auto Download [OFF] │   │                     │               │
 │ │ [ Bersihkan Cache ] │   │ Tentang HanQuran →  │               │
 │ └─────────────────────┘   └─────────────────────┘               │
 │                                                                  │

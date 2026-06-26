@@ -347,7 +347,7 @@ P2 — Nice to Have
 ### Acceptance Criteria
 
 1. Surat dan ayat yang pernah dibuka tetap tampil saat offline
-2. Audio yang pernah diputar tetap bisa diputar saat offline
+2. Audio yang pernah diputar tetap bisa diputar saat offline — jika **Auto Download Audio** diaktifkan di Pengaturan (`docs/31-auto-download-audio-spec.md`); default OFF
 3. Word timing tetap berfungsi saat offline
 4. Indikator status offline terlihat di UI
 5. Tidak ada error atau blank screen saat offline

@@ -925,10 +925,20 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
 ### Nice to Have (P2)
 
 - [ ] [NEW] Auto-download surat favorit saat online
-  - Tujuan: Fitur kenyamanan agar pengguna tidak perlu unduh manual
+  - Tujuan: Fitur kenyamanan agar pengguna tidak perlu unduh manual seluruh surat favorit
   - File: `services/download-manager.ts`, background sync
   - Ketergantungan: `userStore` (favorites), infrastruktur offline
   - Prioritas: P2
+  - **Catatan:** Berbeda dari **Auto Download Audio saat play** (`docs/31`) — fitur ini unduh seluruh surat favorit, bukan per ayat saat diputar
+
+### Post-MVP (P1)
+
+- [ ] [NEW] Auto Download Audio saat play ayat (opt-in)
+  - Tujuan: Cache otomatis file MP3 ayat yang diputar agar tersedia offline nanti — default OFF
+  - File: `app/settings/page.tsx`, `services/download-manager.ts` (method `cacheAyahOnPlay`), hook pemutaran audio, migration Dexie `autoDownloadOnPlay`
+  - Ketergantungan: Infrastruktur offline & SW audio cache
+  - Prioritas: P1
+  - Spesifikasi: `docs/31-auto-download-audio-spec.md`
 
 ---
 

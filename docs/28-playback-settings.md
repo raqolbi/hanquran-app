@@ -19,6 +19,8 @@ Pada MVP V1, bagian ini berisi pengaturan playback. **Mode Murotal** tersedia se
 
 > **Bukan bagian Playback Settings:** pengaturan repeat (`RepeatSettingsDialog`), play/pause, navigasi ayat — tetap di kontrol audio pada Surah Detail. Lihat `docs/22-verse-display-controls.md` (Bagian 6).
 
+> **Bukan bagian Playback Settings:** **Auto Download Audio** — toggle di section **Offline & Cache**. Lihat `docs/31-auto-download-audio-spec.md`.
+
 ---
 
 ## 2. Posisi di Halaman Pengaturan
@@ -195,3 +197,4 @@ Runtime sementara (tidak dipersist):
 | `docs/22-verse-display-controls.md` | Kontrol baca vs kontrol playback |
 | `docs/14-routing-spec.md` | Route Surah Detail & Pengaturan |
 | `docs/29-murotal-mode-spec.md` | Mode Murotal — pemutaran berkelanjutan |
+| `docs/31-auto-download-audio-spec.md` | Auto Download Audio — cache saat play (Offline & Cache) |

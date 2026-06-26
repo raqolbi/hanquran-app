@@ -73,6 +73,7 @@ export default function SettingsPage() {
   const smoothAnimation = useUserStore((s) => s.settings.smoothAnimation);
   const autoFollowPlayback = useUserStore((s) => s.settings.autoFollowPlayback);
   const murotalEnabled = useUserStore((s) => s.settings.murotalEnabled);
+  const autoDownloadOnPlay = useUserStore((s) => s.settings.autoDownloadOnPlay);
 
   const badgeStatus = useOfflineStore(selectBadgeVariant);
   const totalSizeBytes = useOfflineStore((s) => s.manifestSummary.totalSizeBytes);
@@ -170,6 +171,10 @@ export default function SettingsPage() {
       trackMurotalEnabled({ enabled: true });
     }
     void updateSettings({ murotalEnabled: enabled });
+  };
+
+  const handleAutoDownloadOnPlayChange = (enabled: boolean) => {
+    void updateSettings({ autoDownloadOnPlay: enabled });
   };
 
   return (
@@ -282,6 +287,18 @@ export default function SettingsPage() {
                 </dd>
               </div>
             </dl>
+
+            <SettingsRow
+              label={t('offline.autoDownloadOnPlay')}
+              description={t('offline.autoDownloadOnPlayDescription')}
+              control={
+                <Switch
+                  checked={autoDownloadOnPlay}
+                  onCheckedChange={handleAutoDownloadOnPlayChange}
+                  aria-label={t('offline.autoDownloadOnPlayAriaLabel')}
+                />
+              }
+            />
 
             <button
               type="button"

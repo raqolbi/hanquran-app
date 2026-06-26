@@ -19,7 +19,7 @@ HanQuran memisahkan **dua lapisan offline** yang tidak boleh dicampur:
 | Lapisan | Apa yang di-cache | Kapan tersedia offline | Aksi pengguna |
 |---------|-------------------|------------------------|---------------|
 | **Aplikasi + Konten baca** (shell HTML/JS/CSS, route, teks Arab, transliterasi, terjemahan, metadata surat) | App shell + seluruh `public/data/*`, **di-precache saat SW `install`** | **Sejak SW terpasang** — tidak perlu pernah membuka surat saat online | **Tidak ada** — otomatis tersedia |
-| **Audio tilawah** | File MP3 CDN di `hanquran-audio-v1` | Hanya setelah **Simpan Offline** surat + qari aktif (`downloadManifest.status === 'ready'`) | Wajib unduh eksplisit per surat |
+| **Audio tilawah** | File MP3 CDN di `hanquran-audio-v1` | (a) **Simpan Offline** penuh surat+qari (`downloadManifest.status === 'ready'`), atau (b) ayat per ayat yang pernah diputar saat **Auto Download Audio** ON (`docs/31`) | (a) Unduh eksplisit per surat, atau (b) opt-in per ayat saat play |
 
 **Kesimpulan bagi pengguna:**
 
@@ -66,8 +66,9 @@ Service Worker: hanquran-audio-v1 (cache-first)
 Dexie downloadManifest (metadata: surahId + reciterId, status ready)
 ```
 
-- Unduhan eksplisit via **Simpan Offline** di Surah Detail.
-- Saat unduh selesai, precache juga shell route `/surah/[id]` + data JSON surat tersebut (`services/offline-surah-precache.ts`).
+- Unduhan eksplisit via **Simpan Offline** di Surah Detail (seluruh ayat surat + qari).
+- **Auto Download Audio** (opt-in, default OFF): saat play ayat online, cache file MP3 ayat tersebut ke `hanquran-audio-v1` — lihat `docs/31-auto-download-audio-spec.md`.
+- Saat Simpan Offline selesai, precache juga shell route `/surah/[id]` + data JSON surat tersebut (`services/offline-surah-precache.ts`).
 
 ### 2.3 Preferensi pengguna
 
@@ -81,8 +82,9 @@ Dexie (`settings`, `favorites`, `lastRead`, dll.) — selalu lokal, tidak bergan
 |---------|------------------|---------------------------|-------------|------------------------|
 | Online | Belum diunduh | ✅ Baca + stream audio | ✅ Stream CDN | ✅ Tampil |
 | Online | Sudah diunduh | ✅ Baca + stream/cache | ✅ | ❌ Sembunyi (badge «Siap offline» di header) |
-| Offline | Belum diunduh | ✅ Baca (dataset di-precache penuh) | ❌ Disabled | ❌ **Sembunyi** (hanya online) |
-| Offline | Sudah diunduh | ✅ Baca + putar dari cache | ✅ Dari cache | ❌ Sembunyi |
+| Offline | Belum diunduh (manifest & cache ayat miss) | ✅ Baca (dataset di-precache penuh) | ❌ Disabled | ❌ **Sembunyi** (hanya online) |
+| Offline | Sebagian (auto download ON, ayat pernah diputar) | ✅ Baca; putar **hanya ayat yang ada di cache** | ✅ Per ayat tercache | ❌ Sembunyi |
+| Offline | Sudah diunduh penuh (Simpan Offline) | ✅ Baca + putar seluruh surat dari cache | ✅ Dari cache | ❌ Sembunyi |
 
 ### 3.1 Mode Fokus
 
@@ -90,8 +92,8 @@ Aturan identik Surah Detail: teks ayat selalu dapat dibaca; audio mengikuti bari
 
 ### 3.2 Mode Murotal saat offline
 
-- Hanya berlaku untuk surat yang **audio-nya sudah diunduh** untuk qari aktif.
-- Lintas surat: surat tujuan harus `downloadManifest.ready` untuk qari yang sama; jika tidak → stop + feedback (bukan crash).
+- Hanya berlaku untuk ayat/surat yang **file audionya ada di cache** (Simpan Offline penuh **atau** auto download per ayat).
+- Lintas surat: surat/ayat tujuan harus tercache untuk qari yang sama; jika tidak → stop + feedback (bukan crash).
 - Ref: `docs/29-murotal-mode-spec.md` § integrasi offline.
 
 ### 3.3 Repeat saat offline
@@ -181,14 +183,27 @@ Pengguna offline → buka app (Beranda dari cache)
   → (tidak ada tombol Simpan Offline)
 ```
 
-### 5.3 Mendengarkan offline (sudah disimpan)
+### 5.3 Mendengarkan offline (surat disimpan penuh)
 
 ```text
-Pengguna offline → buka surat yang pernah disimpan
-  → Play aktif → audio dari Cache Storage
+Pengguna offline → buka surat yang pernah Simpan Offline penuh
+  → Play aktif → audio seluruh ayat dari Cache Storage
   → Repeat & Murotal (dalam batas cache) berfungsi
   → Murotal/next/prev menuju surat yang BELUM disimpan → otomatis berhenti + toast
 ```
+
+### 5.4 Mendengarkan offline (auto download per ayat)
+
+```text
+Pengaturan Auto Download Audio ON (pernah online)
+  → pengguna play ayat 1, 3, 5 → file tersimpan di cache
+Pengguna offline → buka surat yang sama
+  → Play ayat 1/3/5 → aktif dari cache
+  → Play ayat 2/4 → disabled + toast
+  → Murotal berhenti saat ayat tujuan belum di-cache
+```
+
+Ref: `docs/31-auto-download-audio-spec.md`.
 
 **Aturan batas Murotal offline:** ketika tilawah berlanjut (atau pengguna menekan
 next/prev) menuju **surat lain** yang audionya belum tersedia offline, pemutaran
@@ -205,7 +220,7 @@ next/prev) menuju **surat lain** yang audionya belum tersedia offline, pemutaran
 | `hanquran-shell-v1` | App shell: `offline.html`, **app-shell HTML** + RSC route | network-first nav / SWR (`ignoreSearch`), **fallback app-shell** |
 | `hanquran-static-v1` | `/_next/static/*` (JS/CSS hashed), font, ikon, `manifest.json` | **precache install** + SWR |
 | `hanquran-data-v1` | seluruh `/data/*` | **precache install** + cache-first |
-| `hanquran-audio-v1` | MP3 CDN | cache-first (runtime / Simpan Offline) |
+| `hanquran-audio-v1` | MP3 CDN | cache-first (Simpan Offline / auto download saat play jika ON) |
 
 **Jangan** fallback navigasi `/surah/*` ke HTML Beranda — menyebabkan splash + kembali ke home (bug 25 Juni 2026).
 
@@ -273,7 +288,9 @@ header `Vary: RSC` untuk membedakan entri dokumen vs RSC pada URL yang sama.
 - [ ] Online: Simpan Offline tampil dan berhasil mengunduh 1 surat.
 - [ ] Online → offline: buka surat **tanpa** unduh audio → teks tampil, Play disabled, toast saat tap Play.
 - [ ] Offline: tombol Simpan Offline **tidak** tampil.
-- [ ] Online → unduh → offline: audio diputar tanpa jaringan.
+- [ ] Online → unduh (Simpan Offline) → offline: audio diputar tanpa jaringan.
+- [ ] Auto Download ON → play beberapa ayat online → offline: hanya ayat yang pernah diputar dapat diputar.
+- [ ] Auto Download default OFF → play online → offline: ayat tidak tersedia kecuali Simpan Offline penuh.
 - [ ] Cold start offline: Beranda tampil; **surat apa pun** (termasuk yang belum pernah dibuka) dapat dibuka & dibaca — bukan splash → home / «Anda sedang offline».
 - [ ] Offline: buka **Tentang HanQuran** & **Mode Fokus** → halaman tampil normal (bukan «Anda sedang offline»).
 - [ ] Focus Mode: aturan Play sama dengan Surah Detail.
@@ -293,7 +310,8 @@ header `Vary: RSC` untuk membedakan entri dokumen vs RSC pada URL yang sama.
 | Manifest precache hasil build (`postbuild`) | §6.3 | ✅ `scripts/generate-sw-precache.mjs` |
 | App-shell untuk route dinamis (baca id dari URL) | §6.2 | ✅ `parseSurahIdFromPathname` + fallback SW |
 | Precache dataset penuh saat install | §6.1 | ✅ `__SW_PRECACHE__.data` |
-| Runtime cache audio saat pertama play (online) | `docs/15` §12.1 | **Tidak** diimplementasi — hanya unduh eksplisit |
+| Auto download audio saat play (opt-in) | `docs/31-auto-download-audio-spec.md` | 📋 Belum diimplementasi — default OFF |
+| Runtime cache audio saat play tanpa pengaturan ON | `docs/31` §6 | **Tidak** — hanya saat `autoDownloadOnPlay === true` atau Simpan Offline |
 
 **Catatan verifikasi:** semua jalur di atas perlu diuji ulang di perangkat
 (install SW saat online sekali → matikan jaringan → cold start). Service Worker

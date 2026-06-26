@@ -6,9 +6,9 @@ import { useTranslations } from 'next-intl';
 
 import { useAudio, useAudioOnEnded } from '@/hooks/use-audio';
 import { useAudioPlaybackGate } from '@/hooks/use-audio-playback-gate';
-import { db } from '@/services/db/db';
 import { showAppToast } from '@/lib/app-toast';
-import { isSurahAudioAvailableOffline } from '@/lib/is-surah-audio-available-offline';
+import { canPlayAyahOffline } from '@/lib/can-play-ayah-offline';
+import { downloadManifestKey } from '@/services/download-manifest-key';
 import { useOfflineStore } from '@/stores/offlineStore';
 import type { PlayAyahParams } from '@/hooks/use-audio';
 import type { RepeatSettingsConfig } from '@/components/repeat-settings-dialog';
@@ -90,21 +90,29 @@ export function useSurahRepeatPlayback({
   const { isPlaybackBlocked, notifyIfPlaybackBlocked } = useAudioPlaybackGate(
     surahId,
     reciterId,
+    activeAyah,
   );
 
   const pendingPlayConsumedRef = useRef<number | null>(null);
 
   /**
-   * Saat offline, audio surat tujuan hanya bisa diputar jika sudah diunduh.
-   * Mengembalikan true jika boleh diputar (online, atau surat sudah `ready`).
+   * Saat offline, audio ayat tujuan hanya bisa diputar jika surat sudah `ready`
+   * atau file ayat ada di cache (auto download saat play).
    */
-  const ensureTargetSurahPlayable = useCallback(
-    async (targetSurahId: number): Promise<boolean> => {
+  const ensureAyahPlayable = useCallback(
+    async (targetSurahId: number, targetAyahNumber: number): Promise<boolean> => {
       const connectionStatus = useOfflineStore.getState().connectionStatus;
-      if (connectionStatus !== 'offline') return true;
+      const manifestKey = downloadManifestKey(targetSurahId, reciterId);
+      const downloadStatus =
+        useOfflineStore.getState().downloadStatuses[manifestKey];
 
-      const record = await db.downloadManifest.get([targetSurahId, reciterId]);
-      return isSurahAudioAvailableOffline(connectionStatus, record?.status);
+      return canPlayAyahOffline(
+        connectionStatus,
+        downloadStatus,
+        reciterId,
+        targetSurahId,
+        targetAyahNumber,
+      );
     },
     [reciterId],
   );
@@ -143,7 +151,7 @@ export function useSurahRepeatPlayback({
           void (async () => {
             // Lintas surat saat offline: berhenti jika audio surat berikutnya
             // belum tersedia offline (docs/30 §5).
-            if (!(await ensureTargetSurahPlayable(murotal.surahId))) {
+            if (!(await ensureAyahPlayable(murotal.surahId, murotal.ayahNumber))) {
               pause();
               showAppToast(tAudio('offlineUnavailableToast'));
               return;
@@ -186,7 +194,7 @@ export function useSurahRepeatPlayback({
       router,
       onQuranComplete,
       pause,
-      ensureTargetSurahPlayable,
+      ensureAyahPlayable,
       tAudio,
     ],
   );
@@ -353,7 +361,7 @@ export function useSurahRepeatPlayback({
       }
 
       void (async () => {
-        if (!(await ensureTargetSurahPlayable(step.surahId))) {
+        if (!(await ensureAyahPlayable(step.surahId, step.ayahNumber))) {
           pause();
           showAppToast(tAudio('offlineUnavailableToast'));
           return;
@@ -372,7 +380,7 @@ export function useSurahRepeatPlayback({
       routeMode,
       router,
       pause,
-      ensureTargetSurahPlayable,
+      ensureAyahPlayable,
       tAudio,
     ],
   );
