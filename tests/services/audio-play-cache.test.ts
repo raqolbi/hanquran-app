@@ -27,8 +27,10 @@ describe('audio-play-cache', () => {
 
   beforeEach(() => {
     cachePut.mockClear();
-    cacheMatch.mockClear();
+    cacheMatch.mockReset();
+    cacheMatch.mockResolvedValue(undefined);
     refreshManifest.mockClear();
+    vi.restoreAllMocks();
 
     vi.stubGlobal('fetch', vi.fn(async () => mockFetchResponse()));
     vi.stubGlobal('caches', {
@@ -41,7 +43,7 @@ describe('audio-play-cache', () => {
     useUserStore.setState({
       settings: { ...defaultSettings, autoDownloadOnPlay: true },
     });
-    useOfflineStore.setState({ connectionStatus: 'online' });
+    useOfflineStore.setState({ connectionStatus: 'online', audioCacheRevision: 0 });
     vi.spyOn(useOfflineStore.getState(), 'refreshManifest').mockImplementation(
       refreshManifest,
     );
@@ -67,20 +69,30 @@ describe('audio-play-cache', () => {
 
   describe('cacheAyahAudioOnPlay', () => {
     it('menyimpan file baru ke cache dan refresh ringkasan', async () => {
+      const notifyAudioCacheUpdated = vi.spyOn(
+        useOfflineStore.getState(),
+        'notifyAudioCacheUpdated',
+      );
+
       await cacheAyahAudioOnPlay(sampleUrl);
 
       expect(fetch).toHaveBeenCalledWith(sampleUrl, { mode: 'cors' });
       expect(cachePut).toHaveBeenCalledTimes(1);
+      expect(notifyAudioCacheUpdated).toHaveBeenCalledTimes(1);
       expect(refreshManifest).toHaveBeenCalledTimes(1);
     });
 
-    it('tidak fetch ulang jika sudah di cache', async () => {
-      cacheMatch.mockResolvedValueOnce(mockFetchResponse());
+    it('tidak fetch ulang jika sudah di cache tetapi tetap memberi sinyal UI', async () => {
+      const revisionBefore = useOfflineStore.getState().audioCacheRevision;
+      cacheMatch.mockResolvedValue(mockFetchResponse());
 
       await cacheAyahAudioOnPlay(sampleUrl);
 
       expect(fetch).not.toHaveBeenCalled();
       expect(cachePut).not.toHaveBeenCalled();
+      expect(useOfflineStore.getState().audioCacheRevision).toBe(
+        revisionBefore + 1,
+      );
     });
   });
 
