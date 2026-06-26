@@ -933,12 +933,13 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
 
 ### Post-MVP (P1)
 
-- [ ] [NEW] Auto Download Audio saat play ayat (opt-in)
+- [x] [NEW] Auto Download Audio saat play ayat (opt-in)
   - Tujuan: Cache otomatis file MP3 ayat yang diputar agar tersedia offline nanti — default OFF
-  - File: `app/settings/page.tsx`, `services/download-manager.ts` (method `cacheAyahOnPlay`), hook pemutaran audio, migration Dexie `autoDownloadOnPlay`
+  - File: `app/settings/page.tsx`, `services/audio-play-cache.ts`, `services/audio-controller.ts`, migration Dexie `autoDownloadOnPlay`
   - Ketergantungan: Infrastruktur offline & SW audio cache
   - Prioritas: P1
   - Spesifikasi: `docs/31-auto-download-audio-spec.md`
+  - **Ringkasan:** Dirilis `0.5.0` — toggle Offline & Cache, cache per ayat saat play, gate offline per ayat
 
 ---
 

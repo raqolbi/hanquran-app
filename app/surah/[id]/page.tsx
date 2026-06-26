@@ -22,8 +22,7 @@ import { useAutoFollowPlayback } from '@/hooks/use-auto-follow-playback';
 import { usePersistLastViewed } from '@/hooks/use-persist-last-viewed';
 import { useTrackSurahOpened } from '@/hooks/use-track-surah-opened';
 import { usePreferredReciterId } from '@/hooks/use-preferred-reciter';
-import { downloadManifestKey } from '@/services/download-manifest-key';
-import { useOfflineStore } from '@/stores/offlineStore';
+import { useSurahOfflineReady } from '@/hooks/use-surah-offline-ready';
 import { useUserStore } from '@/stores/userStore';
 import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
 import type { SurahData } from '@/services/quran';
@@ -64,10 +63,11 @@ function SurahDetailLoaded({
   useTrackSurahOpened(surah);
 
   const reciterId = usePreferredReciterId();
-  const isOfflineReady =
-    useOfflineStore(
-      (s) => s.downloadStatuses[downloadManifestKey(surah.number, reciterId)],
-    ) === 'ready';
+  const isOfflineReady = useSurahOfflineReady(
+    surah.number,
+    reciterId,
+    surah.ayahs.length,
+  );
 
   const {
     isPlaying,

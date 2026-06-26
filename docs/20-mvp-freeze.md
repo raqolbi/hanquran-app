@@ -211,7 +211,7 @@ Counter menampilkan target aktif dan jumlah tersisa. Repeat berjalan otomatis ta
 - Aksesibilitas dasar — kontras tinggi & animasi halus persisten (`contrastMode`, `smoothAnimation`); diterapkan global via `AccessibilityProvider` ✅
 - **Playback** — Auto Follow Playback (`settings.autoFollowPlayback`, default ON) ✅ — `docs/28-playback-settings.md`
 - **Mode Murotal** — tilawah berkelanjutan (`settings.murotalEnabled`, default OFF) ✅ — `docs/29-murotal-mode-spec.md` (v0.3.0)
-- **Auto Download Audio** — cache ayat saat play (`settings.autoDownloadOnPlay`, default OFF) 📋 — `docs/31-auto-download-audio-spec.md` (post-MVP)
+- **Auto Download Audio** — cache ayat saat play (`settings.autoDownloadOnPlay`, default OFF) ✅ — `docs/31-auto-download-audio-spec.md` (v0.5.0)
 - **Progress repeat** — badge `x/y` di audio bar saat sesi repeat aktif ✅
 - **Tentang HanQuran** ✅ — `/settings/about`; informasi aplikasi, filosofi, credits, repository & lisensi (`docs/26-about-screen-spec.md`)
 

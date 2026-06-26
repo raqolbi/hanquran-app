@@ -5,6 +5,7 @@ import 'fake-indexeddb/auto';
 import { db } from '@/services/db/db';
 import { useOfflineStore } from '@/stores/offlineStore';
 import { useSurahOfflineDownload } from '@/hooks/use-surah-offline-download';
+import { isSurahAudioFullyCached } from '@/services/surah-audio-cache';
 
 const downloadSurah = vi.fn();
 const prefetch = vi.fn();
@@ -17,6 +18,10 @@ vi.mock('@/services/download-manager', () => ({
   getDownloadManager: () => ({
     downloadSurah,
   }),
+}));
+
+vi.mock('@/services/surah-audio-cache', () => ({
+  isSurahAudioFullyCached: vi.fn(async () => false),
 }));
 
 describe('useSurahOfflineDownload', () => {
@@ -137,5 +142,23 @@ describe('useSurahOfflineDownload', () => {
 
     expect(result.current.canSave).toBe(false);
     expect(result.current.showDownloadUi).toBe(false);
+  });
+
+  it('menyembunyikan UI unduh saat seluruh ayat sudah di cache (auto download)', async () => {
+    vi.mocked(isSurahAudioFullyCached).mockResolvedValue(true);
+
+    const { result } = renderHook(() =>
+      useSurahOfflineDownload({
+        surahId: 4,
+        ayahCount: 3,
+        reciterId: 'Alafasy_128kbps',
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isOfflineReady).toBe(true);
+      expect(result.current.showDownloadUi).toBe(false);
+      expect(result.current.canSave).toBe(false);
+    });
   });
 });
