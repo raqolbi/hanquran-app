@@ -1624,11 +1624,18 @@ Mode Murotal            [ON / OFF]
 ### Offline & Cache
 
 ```text
+Status offline / siap offline
 Audio tersimpan : 24 MB
 Data Quran      : Cached
 
+Auto Download Audio    [ON / OFF]
+Simpan otomatis audio ayat yang Anda putar.
+
 [Bersihkan Cache]
 ```
+
+- Toggle **Auto Download Audio**: `settings.autoDownloadOnPlay` (default: `false`)
+- Spesifikasi perilaku: `docs/31-auto-download-audio-spec.md`
 
 ---
 

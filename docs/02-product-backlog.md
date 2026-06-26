@@ -366,7 +366,7 @@ Data surat, ayat, dan audio yang pernah dibuka tetap tersedia tanpa internet.
 
 - [x] Belum dikerjakan
 - [ ] Ayat yang pernah dibuka tersedia offline
-- [ ] Audio yang pernah diputar tersedia offline
+- [ ] Audio yang pernah diputar tersedia offline — via **Auto Download Audio** (opt-in, default OFF); spesifikasi `docs/31-auto-download-audio-spec.md`
 - [ ] Word timing yang pernah diakses tersedia offline
 - [ ] Indikator status offline di UI
 - [ ] Cache strategy: Cache First

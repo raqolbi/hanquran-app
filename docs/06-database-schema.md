@@ -304,6 +304,8 @@ interface SettingsRecord {
   smoothAnimation: boolean;
   autoFollowPlayback: boolean;
   murotalEnabled: boolean;
+  /** Cache audio ayat saat diputar (online). Default: false. Lihat docs/31. */
+  autoDownloadOnPlay: boolean;
   qariId: number;
   translationResourceId: number;
   updatedAt: number;
@@ -321,6 +323,7 @@ interface SettingsRecord {
 - `translationVisible` / `transliterationVisible`: dikontrol dari **Verse Display Controls** pada Surah Detail — bukan dari Pengaturan. Lihat `docs/22-verse-display-controls.md`.
 - `autoFollowPlayback`: mengatur auto scroll ayat aktif saat playback di Surah Detail. Default `true`. Lihat `docs/28-playback-settings.md`.
 - `murotalEnabled`: mengaktifkan pemutaran tilawah berkelanjutan (ayat → ayat, surat → surat). Default `false`. Lihat `docs/29-murotal-mode-spec.md`.
+- `autoDownloadOnPlay`: mengaktifkan cache otomatis file MP3 ayat yang diputar saat online. Default `false`. Lihat `docs/31-auto-download-audio-spec.md`.
 - Dapat diperluas via migration tanpa mengubah primary key
 - Phase: **MVP**
 

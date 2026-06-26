@@ -21,6 +21,7 @@ describe('useUserStore — reciterId', () => {
         smoothAnimation: true,
         autoFollowPlayback: true,
         murotalEnabled: false,
+        autoDownloadOnPlay: false,
         reciterId: getDefaultReciterId(),
         translationResourceId: 33,
         updatedAt: 0,
@@ -53,6 +54,7 @@ describe('useUserStore — reciterId', () => {
       smoothAnimation: true,
       autoFollowPlayback: true,
       murotalEnabled: false,
+      autoDownloadOnPlay: false,
       translationResourceId: 33,
       updatedAt: 1,
       // @ts-expect-error — bentuk legacy sebelum reciterId
@@ -113,6 +115,7 @@ describe('useUserStore — aksesibilitas', () => {
         smoothAnimation: true,
         autoFollowPlayback: true,
         murotalEnabled: false,
+        autoDownloadOnPlay: false,
         reciterId: getDefaultReciterId(),
         translationResourceId: 33,
         updatedAt: 0,
@@ -202,6 +205,38 @@ describe('useUserStore — aksesibilitas', () => {
 
     expect(useUserStore.getState().settings.murotalEnabled).toBe(false);
   });
+
+  it('menyimpan autoDownloadOnPlay ke Dexie', async () => {
+    await useUserStore.getState().init();
+    await useUserStore.getState().updateSettings({ autoDownloadOnPlay: true });
+
+    expect(useUserStore.getState().settings.autoDownloadOnPlay).toBe(true);
+
+    const stored = await db.settings.get('default');
+    expect(stored?.autoDownloadOnPlay).toBe(true);
+  });
+
+  it('memigrasi settings lama tanpa autoDownloadOnPlay', async () => {
+    // @ts-expect-error — bentuk legacy sebelum autoDownloadOnPlay
+    await db.settings.put({
+      id: 'default',
+      appLocale: 'id',
+      fontSize: DEFAULT_ARABIC_FONT_SIZE_PX,
+      translationVisible: false,
+      transliterationVisible: false,
+      contrastMode: 'default',
+      smoothAnimation: true,
+      autoFollowPlayback: true,
+      murotalEnabled: false,
+      reciterId: getDefaultReciterId(),
+      translationResourceId: 33,
+      updatedAt: 1,
+    });
+
+    await useUserStore.getState().init();
+
+    expect(useUserStore.getState().settings.autoDownloadOnPlay).toBe(false);
+  });
 });
 
 describe('useUserStore — lastViewed', () => {
@@ -220,6 +255,7 @@ describe('useUserStore — lastViewed', () => {
         smoothAnimation: true,
         autoFollowPlayback: true,
         murotalEnabled: false,
+        autoDownloadOnPlay: false,
         reciterId: getDefaultReciterId(),
         translationResourceId: 33,
         updatedAt: 0,
@@ -287,6 +323,7 @@ describe('useUserStore — favorites', () => {
         smoothAnimation: true,
         autoFollowPlayback: true,
         murotalEnabled: false,
+        autoDownloadOnPlay: false,
         reciterId: getDefaultReciterId(),
         translationResourceId: 33,
         updatedAt: 0,

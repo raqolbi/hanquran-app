@@ -80,6 +80,13 @@ export const useUserStore = create<UserState & UserActions>()((set, get) => ({
         updatedAt: Date.now(),
       };
       await db.settings.put(settings);
+    } else if (settings.autoDownloadOnPlay === undefined) {
+      settings = {
+        ...settings,
+        autoDownloadOnPlay: false,
+        updatedAt: Date.now(),
+      };
+      await db.settings.put(settings);
     }
 
     const legacySettings = settings as SettingsRecord & { qariId?: number };
