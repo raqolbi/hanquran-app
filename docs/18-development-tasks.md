@@ -158,7 +158,7 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 **Total development task yang benar-benar selesai: 70**
 
-Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`).
+Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **222 test passing**).
 
 ### Phase 0 — selesai (7/7, 24 Juni 2026) ✅
 
