@@ -7,7 +7,7 @@
 [![License: HCCL v1.0](https://img.shields.io/badge/License-HCCL%20v1.0-2ea44f)](./LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000?style=flat&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Tests](https://img.shields.io/badge/tests-175%20passing-brightgreen)](./tests)
+[![Tests](https://img.shields.io/badge/tests-222%20passing-brightgreen)](./tests)
 
 Repository: [github.com/raqolbi/hanquran-app](https://github.com/raqolbi/hanquran-app)
 
@@ -53,10 +53,10 @@ Buka aplikasi → Pilih surat → Putar audio → Aktifkan repeat → Mode fokus
 | **Versi** | `0.3.0` |
 | **Scope** | MVP V1 dibekukan di [`docs/20-mvp-freeze.md`](./docs/20-mvp-freeze.md) |
 | **Implementasi** | Core MVP + Growth `0.2.0`/`0.3.0` — lihat [`RELEASE.md`](./RELEASE.md) |
-| **Pengujian** | 175 unit test (Vitest) |
+| **Pengujian** | 222 unit test (Vitest) |
 | **Deploy** | Direncanakan di [Vercel](./docs/25-deployment-vercel.md) |
 
-**Sudah diimplementasikan** (diverifikasi dari codebase): daftar 114 surat (lazy load kartu), detail surat, audio player, repeat engine + badge progress `x/y`, mode fokus, **Mode Murotal**, Media Session (lock screen), favorit surat, lanjutkan hafalan, auto follow playback, i18n UI (`id` / `en`), unduh offline per surat, Service Worker, PWA (manifest, install prompt, offline shell, splash), Vercel Analytics.
+**Sudah diimplementasikan** (diverifikasi dari codebase): daftar 114 surat (lazy load kartu), detail surat, audio player (kecepatan putar, prefetch ayat berikutnya), repeat engine + badge progress `x/y`, mode fokus, **Mode Murotal**, Media Session (lock screen), favorit surat, lanjutkan hafalan, auto follow playback, layar Tentang HanQuran, i18n UI (`id` / `en`), unduh offline per surat, Service Worker, PWA (manifest, install prompt, offline shell, splash), Vercel Analytics.
 
 **Belum selesai / di luar MVP V1** (dokumentasi resmi): word-by-word highlight, persist posisi audio, verifikasi E2E offline, error tracking produksi, seluruh kriteria rilis di [`docs/20-mvp-freeze.md`](./docs/20-mvp-freeze.md) §9.
 
@@ -85,15 +85,22 @@ Buka aplikasi → Pilih surat → Putar audio → Aktifkan repeat → Mode fokus
 
 ## Screenshot
 
-Pratinjau antarmuka HanQuran (mobile-first, UI Bahasa Indonesia).
+Pratinjau antarmuka HanQuran — mobile-first, UI Bahasa Indonesia.
 
-| Beranda — daftar surat | Detail surat |
-| :---: | :---: |
-| ![Beranda HanQuran — daftar 114 surat dengan filter dan favorit](./docs/images/Screenshot%202026-06-25%20at%2007.08.04.png) | ![Detail surat Al-Faatiha — ayat, audio player, dan opsi terjemahan](./docs/images/Screenshot%202026-06-25%20at%2007.08.23.png) |
+<p align="center">
+  <img src="./docs/images/beranda.png" alt="Beranda HanQuran — kartu Lanjutkan Hafalan, pencarian, filter favorit, dan daftar 114 surat" width="400" />
+  <br><sub><strong>Beranda</strong> — Lanjutkan Hafalan, pencarian, filter favorit, daftar surat</sub>
+</p>
 
-| Mode Fokus — repeat ayat | Pengaturan |
+| Detail surat | Mode Fokus |
 | :---: | :---: |
-| ![Mode Fokus — satu ayat, kontrol repeat, dan pemutaran audio](./docs/images/Screenshot%202026-06-25%20at%2007.08.39.png) | ![Pengaturan — bahasa, qari, ukuran teks, dan status offline](./docs/images/Screenshot%202026-06-25%20at%2007.09.05.png) |
+| <img src="./docs/images/detail-surat.png" alt="Detail surat Al-Faatiha — ayat, terjemahan, transliterasi, audio player" width="360" /> | <img src="./docs/images/mode-fokus.png" alt="Mode Fokus — satu ayat per layar dengan kontrol audio" width="360" /> |
+| <sub><strong>Detail surat</strong> — ayat, terjemahan & transliterasi, unduh offline</sub> | <sub><strong>Mode Fokus</strong> — satu ayat, minim distraksi</sub> |
+
+| Pengaturan Repeat | Pengaturan |
+| :---: | :---: |
+| <img src="./docs/images/pengaturan-repeat.png" alt="Dialog Pengaturan Repeat — jumlah dan target pengulangan" width="360" /> | <img src="./docs/images/pengaturan.png" alt="Halaman Pengaturan — bahasa, qari, playback, offline, aksesibilitas" width="360" /> |
+| <sub><strong>Repeat</strong> — jumlah (1×–∞), target ayat / range / surat</sub> | <sub><strong>Pengaturan</strong> — bahasa, qari, playback, ukuran teks, offline</sub> |
 
 ---
 
@@ -106,7 +113,8 @@ Pratinjau antarmuka HanQuran (mobile-first, UI Bahasa Indonesia).
 | **Beranda** | 114 surat, pencarian, filter favorit, kartu Lanjutkan Hafalan |
 | **Detail Surat** | Ayat Uthmani, terjemahan & transliterasi (toggle), audio, repeat, unduh offline |
 | **Mode Fokus** | Satu ayat per layar, navigasi ayat, audio & repeat (tanpa word highlight di MVP) |
-| **Pengaturan** | Bahasa UI, qari, ukuran teks Arab, kontras tinggi, animasi, status & hapus cache |
+| **Pengaturan** | Bahasa UI, qari, Auto Follow Playback, Mode Murotal, ukuran teks Arab, kontras tinggi, animasi, status & hapus cache |
+| **Tentang HanQuran** | Informasi aplikasi, filosofi, credits, repository & lisensi |
 | **Offline** | Unduh audio per surat; Service Worker cache dataset & aset |
 | **PWA** | Instal ke layar utama, splash screen, halaman fallback offline |
 
@@ -115,7 +123,7 @@ Pratinjau antarmuka HanQuran (mobile-first, UI Bahasa Indonesia).
 | Fitur | Lokasi |
 |-------|--------|
 | Service layer Quran | `services/quran/` |
-| Audio controller | `services/audio-controller.ts` |
+| Audio controller & Media Session | `services/audio-controller.ts`, `services/media-session.ts` |
 | Repeat engine | `services/repeat-engine.ts` |
 | State (Zustand) | `stores/` |
 | Persistensi pengguna (Dexie) | `services/db/` |
@@ -129,6 +137,7 @@ Pratinjau antarmuka HanQuran (mobile-first, UI Bahasa Indonesia).
 | `/surah/[id]` | Detail surat (`?ayah=` opsional) |
 | `/focus/[id]` | Mode fokus (`?ayah=` opsional) |
 | `/settings` | Pengaturan |
+| `/settings/about` | Tentang HanQuran |
 
 Spesifikasi lengkap: [`docs/14-routing-spec.md`](./docs/14-routing-spec.md).
 
@@ -268,7 +277,7 @@ Variabel khusus (mis. Sentry) dapat ditambahkan saat Phase 8 release monitoring 
 npm run test
 ```
 
-- **175 test** di `tests/` (Vitest + jsdom + fake-indexeddb)
+- **222 test** di `tests/` (Vitest + jsdom + fake-indexeddb)
 - Konfigurasi: `vitest.config.ts`, setup: `tests/setup.ts`
 
 ---
@@ -298,6 +307,9 @@ Catatan rilis: [`RELEASE.md`](./RELEASE.md).
 | [`docs/14-routing-spec.md`](./docs/14-routing-spec.md) | Spesifikasi rute |
 | [`docs/15-state-management.md`](./docs/15-state-management.md) | State & persistensi |
 | [`docs/07-api-integration.md`](./docs/07-api-integration.md) | Sumber data & integrasi |
+| [`docs/26-about-screen-spec.md`](./docs/26-about-screen-spec.md) | Layar Tentang HanQuran |
+| [`docs/27-media-session-api-spec.md`](./docs/27-media-session-api-spec.md) | Media Session API (lock screen) |
+| [`docs/28-playback-settings.md`](./docs/28-playback-settings.md) | Auto Follow Playback |
 | [`docs/analytics.md`](./docs/analytics.md) | Event Vercel Analytics |
 | [`CLAUDE.md`](./CLAUDE.md) | Konvensi penulisan kode & dokumen |
 

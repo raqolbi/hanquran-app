@@ -46,7 +46,8 @@ Dokumen ini mendefinisikan struktur folder yang direkomendasikan untuk HanQuran 
 │  │  ├─ loading.tsx
 │  │  ├─ /surah/[id]/page.tsx
 │  │  ├─ /focus/[id]/page.tsx
-│  │  └─ /settings/page.tsx
+│  │  ├─ /settings/page.tsx
+│  │  └─ /settings/about/page.tsx
 │  ├─ components/
 │  │  ├─ ui/                    # primitives (Button, Dialog, Drawer, Select, Switch)
 │  │  ├─ shared/                # shared components (Logo, Header, OfflineBadge)

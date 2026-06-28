@@ -37,7 +37,6 @@ npm install
 | `npm run build`      | Build produksi (Next.js + Turbopack)                                     |
 | `npm run start`      | Menjalankan hasil build produksi                                         |
 | `npm run lint`       | Linting dengan ESLint                                                    |
-| `npm run typecheck`  | Pemeriksaan tipe TypeScript (`tsc --noEmit`)                             |
 | `npm run test`       | Menjalankan unit & integration test (Vitest)                             |
 | `npm run test:watch` | Menjalankan test dalam mode watch                                        |
 | `npm run perf`       | Build produksi + ukur bundle (`.next/static`)                            |
@@ -74,7 +73,7 @@ Mengikuti `docs/16-folder-structure.md`:
 
 ```
 hanquran-app/
-├─ app/            — Next.js App Router (halaman: /, /surah/[id], /focus/[id], /settings)
+├─ app/            — Next.js App Router (halaman: /, /surah/[id], /focus/[id], /settings, /settings/about)
 ├─ components/
 │  ├─ ui/          — primitives (Button, Dialog, dll.)
 │  ├─ shared/      — komponen bersama (Logo, ErrorBoundary, AppBootstrap)
@@ -150,6 +149,8 @@ Jalankan:
 ```bash
 npm run test
 ```
+
+Saat ini: **222 test** (Vitest + jsdom + `fake-indexeddb`).
 
 ### Performance & Lighthouse
 
