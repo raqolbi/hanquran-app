@@ -96,6 +96,19 @@ Tambahan kategori teknologi **tidak** ditampilkan — hanya sumber data konten.
 | HanQuran Community License | tautan ke file `LICENSE` di repository |
 | Lisensi komersial | tautan ke `COMMERCIAL-LICENSE.md` (opsional di UI) |
 
+### 4.5 Kredit Pembuat (Beranda)
+
+Konstanta di `lib/app-about.ts` — dipakai oleh `HomeFooter` di Beranda (bukan di layar About):
+
+| Konstanta | Nilai |
+|-----------|-------|
+| `APP_AUTHOR_NAME` | Cenybug |
+| `APP_AUTHOR_THREADS_URL` | https://www.threads.com/@cenybug |
+| `APP_AUTHOR_X_URL` | https://x.com/cenybug |
+| `QOLCORE_URL` | https://qolcore.com |
+
+Teks UI: `messages` → `home.footer.*`
+
 ---
 
 ## 5. UI & Design System
@@ -127,6 +140,7 @@ Mengikuti pola Settings yang ada:
 | Metadata & versi | `lib/app-about.ts` |
 | Struktur credits | `data/about-credits.ts` |
 | Layar | `app/settings/about/page.tsx` |
+| Footer Beranda | `components/home-footer.tsx` |
 | Link dari Settings | `app/settings/page.tsx` |
 | Route helper | `lib/routes.ts` |
 | i18n | `messages/id.json`, `messages/en.json` → `about.*` |
@@ -148,6 +162,7 @@ Bukan P0 blocker rilis, tetapi **termasuk MVP lengkap** bersama fitur Settings l
 
 | Tanggal | Perubahan |
 |---------|-----------|
+| 10 Juli 2026 | Tambah §4.5 kredit pembuat Beranda (`HomeFooter`, konstanta `lib/app-about.ts`) |
 | 24 Juni 2026 | Dokumen awal — audit, scope, routing, konten, P1 |
 
 ---

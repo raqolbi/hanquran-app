@@ -110,6 +110,7 @@ components/
 │  ├─ action-bar.tsx              # legacy name → VerseDisplayControls (docs/22)
 │  └─ audio-player.tsx
 │  ├─ lazy-surah-card.tsx       # Beranda — mount SurahCard saat viewport
+│  └─ home-footer.tsx           # Beranda — footer kredit pembuat & Qolcore
 ├─ atoms/              # very small components (AyahWordHighlight, Chip)
 └─ index.ts            # optional barrel export
 ```

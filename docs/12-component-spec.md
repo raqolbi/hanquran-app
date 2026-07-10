@@ -107,6 +107,7 @@ Komponen di dokumen ini dipetakan ke modul pada `05-module-catalog.md`.
 | OfflineBanner         | Offline          | —                                                                       |
 | EmptyState            | Shared           | —                                                                       |
 | Logo / LogoWithText   | Shared           | Brand mark (lihat `branding/logo-guidelines.md`)                        |
+| HomeFooter            | Shared           | Footer kredit Beranda — `components/home-footer.tsx`                  |
 
 ---
 
@@ -2142,6 +2143,59 @@ Home Header        → Logo size 40
 Settings Header    → Logo size 24
 app/loading.tsx    → LogoWithText size 72
 Favicon (layout)   → /branding/logo.png
+Home Footer        → Logo size 28
+```
+
+---
+
+# 28. HomeFooter
+
+## Purpose
+
+Footer kredit di bagian bawah Beranda. Menampilkan identitas aplikasi,
+pembuat, tautan media sosial, dan organisasi induk — compact dan selaras
+dengan calm interface.
+
+---
+
+## Props
+
+Tidak ada props publik (komponen tanpa konfigurasi).
+
+---
+
+## Konten
+
+| Elemen | Sumber |
+|--------|--------|
+| Nama aplikasi | `lib/app-about.ts` (`APP_NAME`) |
+| Nama pembuat | `lib/app-about.ts` (`APP_AUTHOR_NAME`) |
+| Threads | `APP_AUTHOR_THREADS_URL` |
+| X | `APP_AUTHOR_X_URL` |
+| Qolcore | `QOLCORE_URL` |
+
+Teks UI via i18n namespace `home.footer.*`.
+
+---
+
+## Visual
+
+```text
+Layout      : Center, max-width compact
+Card        : rounded-2xl, border primary/10
+Background  : gradient halus primary → background
+Logo        : 28px
+Typography  : text-sm (judul), text-xs (kredit), text-[11px] (Qolcore)
+Links       : text-primary, underline on hover
+Animasi     : fade-in saat scroll (motion)
+```
+
+---
+
+## Integration Points
+
+```text
+app/page.tsx  → setelah grid daftar surat, di dalam <main>
 ```
 
 ---
@@ -2193,6 +2247,7 @@ Komponen sistemik dan layout dasar.
 ```text
 BottomNavigation
 BottomSheet
+HomeFooter
 OfflineStatusBadge
 ConnectionIndicator
 OfflineBanner

@@ -6,6 +6,12 @@ export const APP_NAME = 'HanQuran';
 /** URL repository GitHub resmi. */
 export const APP_REPOSITORY_URL = 'https://github.com/raqolbi/hanquran-app';
 
+/** Kredit pembuat & organisasi. */
+export const APP_AUTHOR_NAME = 'CenyBug';
+export const APP_AUTHOR_THREADS_URL = 'https://www.threads.com/@cenybug';
+export const APP_AUTHOR_X_URL = 'https://x.com/cenybug';
+export const QOLCORE_URL = 'https://qolcore.com';
+
 const LICENSE_FILE = 'LICENSE';
 const COMMERCIAL_LICENSE_FILE = 'COMMERCIAL-LICENSE.md';
 

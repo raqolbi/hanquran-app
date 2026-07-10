@@ -53,7 +53,14 @@
     "encouragement": "Terus semangat! Kamu hebat.",
     "continueReadingAria": "Lanjutkan {surah} ayat {ayah}",
     "myFavorites": "Favorit Saya",
-    "favoritesEmpty": "Tandai surat favorit untuk melihatnya di sini"
+    "favoritesEmpty": "Tandai surat favorit untuk melihatnya di sini",
+    "footer": {
+      "madeBy": "Dibuat oleh <author>{name}</author>",
+      "fromQolcore": "Sebuah karya dari <company>Qolcore</company>",
+      "threads": "Threads",
+      "x": "X",
+      "socialAriaLabel": "Media sosial pembuat"
+    }
   },
   "surah": {
     "translation": "Terjemahan",

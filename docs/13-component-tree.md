@@ -22,7 +22,8 @@ HanQuran
 │  │  ├─ ContinueReading
 │  │  ├─ SearchInput
 │  │  ├─ FilterChips
-│  │  └─ LazySurahCard (list, lazy mount)
+│  │  ├─ LazySurahCard (list, lazy mount)
+│  │  └─ HomeFooter
 │  ├─ SurahDetail (app/surah/[id]/page.tsx)
 │  │  ├─ SurahDetailHeader
 │  │  ├─ VerseDisplayControls
@@ -84,7 +85,7 @@ Semua penjelasan ditulis dalam Bahasa Indonesia dan mengikuti implementasi saat 
 - Home (app/page.tsx)
   - Tujuan: Menampilkan daftar surah, pencarian, dan kartu "Lanjutkan Hafalan".
   - Tanggung jawab: Mengelola state pencarian dan filter, memuat data surah dari `lib/surahs-data` dan merender komponen list.
-  - Dependensi utama: `Header`, `ContinueReading`, `SearchInput`, `FilterChips`, `SurahCard`, util `lib/surahs-data`.
+  - Dependensi utama: `Header`, `ContinueReading`, `SearchInput`, `FilterChips`, `SurahCard`, `HomeFooter`, util `lib/surahs-data`.
   - Reusable: Tidak (halaman spesifik).
 
 - SurahDetail (app/surah/[id]/page.tsx)

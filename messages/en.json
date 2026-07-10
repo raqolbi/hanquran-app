@@ -53,7 +53,14 @@
     "encouragement": "Keep going — you're doing great!",
     "continueReadingAria": "Continue {surah} at verse {ayah}",
     "myFavorites": "My Favorites",
-    "favoritesEmpty": "Mark surahs as favorites to see them here"
+    "favoritesEmpty": "Mark surahs as favorites to see them here",
+    "footer": {
+      "madeBy": "Made by <author>{name}</author>",
+      "fromQolcore": "A work from <company>Qolcore</company>",
+      "threads": "Threads",
+      "x": "X",
+      "socialAriaLabel": "Creator social media"
+    }
   },
   "surah": {
     "translation": "Translation",

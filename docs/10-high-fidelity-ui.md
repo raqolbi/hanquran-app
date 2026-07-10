@@ -65,6 +65,8 @@ Filter
 ↓
 Surah List
 ↓
+Home Footer
+↓
 Bottom Navigation
 ```
 
@@ -199,6 +201,36 @@ Spacing:
 ```text
 12px antar card
 ```
+
+---
+
+### Home Footer
+
+Posisi:
+
+```text
+Bagian paling bawah konten Beranda (di dalam main)
+```
+
+Visual:
+
+```text
+Card compact, radius 16px
+Border primary/10
+Gradient halus emerald → background
+Logo 28px, teks center
+```
+
+Konten:
+
+```text
+HanQuran
+Dibuat oleh Cenybug
+Threads · X (tautan eksternal)
+Sebuah karya dari Qolcore (tautan eksternal)
+```
+
+i18n: `home.footer.*` di `messages/{id,en}.json`
 
 ---
 

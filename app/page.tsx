@@ -8,6 +8,7 @@ import { ContinueReadingSection } from '@/components/continue-reading';
 import { InstallBanner } from '@/components/shared/install-banner';
 import { SearchInput } from '@/components/search-input';
 import { FilterChips } from '@/components/filter-chips';
+import { HomeFooter } from '@/components/home-footer';
 import { LazySurahCard } from '@/components/lazy-surah-card';
 import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
 import { useSurahList } from '@/hooks/use-surah-list';
@@ -109,6 +110,8 @@ export default function Home() {
             </div>
           )}
           </div>
+
+          <HomeFooter />
         </div>
       </main>
     </div>

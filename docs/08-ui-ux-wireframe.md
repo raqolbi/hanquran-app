@@ -210,6 +210,13 @@ Elemen penting lain muncul di konteks layar:
 │ │ Sapi Betina • 286 ayat          │ │
 │ └──────────────────────────────────┘ │
 │                                      │
+│ ┌──────────────────────────────────┐ │
+│ │ HanQuran                         │ │
+│ │ Dibuat oleh Cenybug              │ │
+│ │ Threads · X                      │ │
+│ │ Sebuah karya dari Qolcore        │ │
+│ └──────────────────────────────────┘ │
+│                                      │
 │ Home                     Settings    │
 └──────────────────────────────────────┘
 ```
@@ -240,6 +247,10 @@ Elemen penting lain muncul di konteks layar:
 │ ├──────────────────────────────────────────────────────────────┤ │
 │ │ ...                                                      │ │
 │ └──────────────────────────────────────────────────────────────┘ │
+│                                                                  │
+│ ┌──────────────────────────────────────────────────────────────┐ │
+│ │ HanQuran · Dibuat oleh Cenybug · Threads · X · Qolcore      │ │
+│ └──────────────────────────────────────────────────────────────┘ │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
@@ -253,6 +264,7 @@ Elemen penting lain muncul di konteks layar:
 - Filter Favorit menampilkan hanya surat yang ditandai favorit.
 - Tidak perlu section favorit terpisah pada Home.
 - Home harus tetap fokus pada Continue Reading, Search, dan Daftar Surat.
+- Footer kredit (`HomeFooter`) tampil di bagian bawah konten Beranda — compact, tidak mengganggu daftar surat; berisi nama aplikasi, pembuat, tautan sosial, dan Qolcore.
 - Tombol favorit harus tetap mudah ditekan tanpa mengganggu aksi buka surat
 - Surah card seluruhnya tappable
 - Status Online/Offline pada header menunjukkan kondisi koneksi aplikasi.
