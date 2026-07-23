@@ -26,6 +26,7 @@ describe('public/sw.js shell cache', () => {
 
   it('mendefinisikan cache shell dan precache offline.html', () => {
     expect(sw).toContain('hanquran-shell-v2');
+    expect(sw).toContain('hanquran-data-v3');
     expect(sw).toContain('/offline.html');
     expect(sw).toContain('handleNavigation');
   });

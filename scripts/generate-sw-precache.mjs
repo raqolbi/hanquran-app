@@ -76,11 +76,25 @@ const dataDir = join(publicDir, 'data');
 const dataUrls = walk(dataDir).map((p) => toUrl(p, publicDir, ''));
 const dataHash = fingerprintDataset(dataDir);
 
+const sortedData = dataUrls.sort();
+
+if (sortedData.length === 0) {
+  console.error(
+    '[sw-precache] Gagal: public/data kosong — precache dataset tidak boleh kosong.',
+  );
+  process.exit(1);
+}
+
+if (!dataHash || dataHash === 'dev' || dataHash.length < 8) {
+  console.error('[sw-precache] Gagal: dataHash tidak valid:', dataHash);
+  process.exit(1);
+}
+
 const manifest = {
   buildId: readBuildId(),
   dataHash,
   static: [...nextStatic, ...publicAssets].sort(),
-  data: dataUrls.sort(),
+  data: sortedData,
 };
 
 const banner =

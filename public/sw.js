@@ -14,10 +14,11 @@
 importScripts('/sw-helpers.js');
 importScripts('/sw-precache-manifest.js');
 
-const SW_VERSION = 'v2';
+const SW_VERSION = 'v3';
 const CACHE_STATIC = 'hanquran-static-v2';
 const CACHE_SHELL = 'hanquran-shell-v2';
-const CACHE_DATA = 'hanquran-data-v2';
+// v3: invalidate salinan dataset lama (cache-first) setelah update konten.
+const CACHE_DATA = 'hanquran-data-v3';
 const CACHE_AUDIO = 'hanquran-audio-v1';
 const KNOWN_CACHES = [CACHE_STATIC, CACHE_SHELL, CACHE_DATA, CACHE_AUDIO];
 
@@ -48,6 +49,12 @@ self.addEventListener('install', (event) => {
 
 async function precacheOnInstall() {
   const precache = self.__SW_PRECACHE__ || { static: [], data: [] };
+  const dataUrls = precache.data || [];
+  if (dataUrls.length === 0) {
+    console.warn(
+      '[HanQuran SW] __SW_PRECACHE__.data kosong — dataset tidak di-precache saat install.',
+    );
+  }
 
   const staticCache = await caches.open(CACHE_STATIC);
   const dataCache = await caches.open(CACHE_DATA);
@@ -69,7 +76,7 @@ async function precacheOnInstall() {
 
   // 1) Aset boot aplikasi (JS/CSS/font/ikon) + dataset Qur'an penuh.
   await addAll(staticCache, precache.static || []);
-  await addAll(dataCache, precache.data || []);
+  await addAll(dataCache, dataUrls);
 
   // 2) Offline fallback statis.
   await addAll(shellCache, SHELL_PRECACHE_URLS);

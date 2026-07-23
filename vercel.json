@@ -1,0 +1,4 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "node scripts/generate-sw-precache.mjs && next build && node scripts/generate-sw-precache.mjs"
+}
