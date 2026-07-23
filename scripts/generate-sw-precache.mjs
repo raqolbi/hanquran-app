@@ -6,14 +6,16 @@
  *   - `public/data/**`   → URL `/data/*` (dataset Qur'an)
  *   - aset publik wajib  → offline.html, manifest.json, ikon, branding
  *
- * Hasil ditulis ke `public/sw-precache-manifest.js` yang di-`importScripts`
- * oleh `public/sw.js` saat event `install`. Spesifikasi: `docs/30` §6.1, §6.3.
+ * Menyertakan `dataHash` (fingerprint isi `public/data/**`) agar perubahan
+ * konten dataset memicu update Service Worker → precache ulang dengan
+ * `cache: 'reload'`. Spesifikasi: `docs/30` §6.1, §6.3.
  */
 
-import { readdirSync, statSync, writeFileSync, existsSync, readFileSync } from 'node:fs';
-import { join, relative, sep } from 'node:path';
+import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { dirname } from 'node:path';
+
+import { fingerprintDataset } from './lib/dataset-fingerprint.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -72,9 +74,11 @@ for (const dir of PUBLIC_ASSET_DIRS) {
 // 3. Dataset Qur'an → /data/*
 const dataDir = join(publicDir, 'data');
 const dataUrls = walk(dataDir).map((p) => toUrl(p, publicDir, ''));
+const dataHash = fingerprintDataset(dataDir);
 
 const manifest = {
   buildId: readBuildId(),
+  dataHash,
   static: [...nextStatic, ...publicAssets].sort(),
   data: dataUrls.sort(),
 };
@@ -87,5 +91,5 @@ const outFile = join(publicDir, 'sw-precache-manifest.js');
 writeFileSync(outFile, banner + body, 'utf8');
 
 console.log(
-  `[sw-precache] buildId=${manifest.buildId} static=${manifest.static.length} data=${manifest.data.length} → public/sw-precache-manifest.js`,
+  `[sw-precache] buildId=${manifest.buildId} dataHash=${dataHash} static=${manifest.static.length} data=${manifest.data.length} → public/sw-precache-manifest.js`,
 );

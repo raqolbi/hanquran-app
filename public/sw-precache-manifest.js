@@ -2,6 +2,7 @@
 /* Placeholder default — diisi ulang saat `npm run build` (postbuild). */
 self.__SW_PRECACHE__ = {
   "buildId": "dev",
+  "dataHash": "dev",
   "static": [],
   "data": []
 };

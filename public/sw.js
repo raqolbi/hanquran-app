@@ -299,7 +299,8 @@ async function cacheSurahOfflineContent({ dataUrls, routeUrls }) {
   await runWithConcurrency(dataUrls, PRECACHE_CONCURRENCY, async (path) => {
     try {
       const url = new URL(path, self.location.origin).href;
-      const response = await fetch(url);
+      // `reload` agar tidak menaruh ulang salinan HTTP cache lama.
+      const response = await fetch(url, { cache: 'reload' });
       if (response.ok) {
         await dataCache.put(new Request(url), response.clone());
       }
