@@ -12,6 +12,7 @@ import { HomeFooter } from '@/components/home-footer';
 import { LazySurahCard } from '@/components/lazy-surah-card';
 import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
 import { useSurahList } from '@/hooks/use-surah-list';
+import { matchesSurahSearch } from '@/lib/surah-search';
 import { useUserStore } from '@/stores/userStore';
 
 export default function Home() {
@@ -27,11 +28,7 @@ export default function Home() {
 
   const filteredSurahs = useMemo(() => {
     return surahs.filter((surah) => {
-      const query = searchQuery.toLowerCase();
-      const matchesSearch =
-        surah.englishName.toLowerCase().includes(query) ||
-        surah.meaning.toLowerCase().includes(query) ||
-        surah.arabicName.includes(searchQuery);
+      const matchesSearch = matchesSurahSearch(searchQuery, surah);
       const matchesFilter =
         selectedFilter === 'all' ||
         (selectedFilter === 'favorites' && favorites.includes(surah.number));
