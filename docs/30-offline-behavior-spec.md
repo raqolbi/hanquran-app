@@ -321,6 +321,24 @@ Task implementasi: `docs/18-development-tasks.md` Phase 5.
 
 ---
 
+## 10. Addendum Capacitor Android (APK)
+
+**PWA (web)** tetap mengikuti §1–§9 (Service Worker, precache install, app-shell).
+
+**APK Capacitor** (`docs/32`) memakai jalur berbeda untuk shell, tetapi **kontrak UX offline audio** sama:
+
+| Aspek | PWA | APK |
+|-------|-----|-----|
+| Shell + teks Qur'an cold start offline | SW precache | Aset di-bundle di WebView (`out/` → assets) — **tanpa** registrasi SW |
+| Audio Simpan Offline / Auto Download | Cache Storage `hanquran-audio-v1` | Cache Storage yang sama + resolve ke `file://` untuk NativeAudio |
+| Offline tanpa unduh audio | Play disabled + toast | Sama |
+| Murotal batas offline | Stop + toast | Sama |
+| Background tilawah | Batasan browser / Media Session web | NativeAudio + notifikasi FGS (`docs/32` §10.1) |
+
+Guard: `isNativePlatform()` menonaktifkan SW & install banner di APK agar tidak double-cache shell.
+
+---
+
 ## Changelog
 
 | Tanggal | Perubahan |
@@ -328,6 +346,7 @@ Task implementasi: `docs/18-development-tasks.md` Phase 5.
 | 25 Juni 2026 | Dokumen awal — pemisahan konten baca vs audio, matriks UI, gap implementasi |
 | 25 Juni 2026 | Precache penuh dataset + shell semua route, SW `ignoreSearch` RSC, batas Murotal offline |
 | 26 Juni 2026 | **Revisi offline-first sejati**: precache app shell + `/_next/static/*` + dataset saat SW `install` (§6.1), manifest precache hasil build (§6.3), app-shell route dinamis via `useParams` (§6.2); §9 mencatat gap cold-start offline yang masih terbuka |
+| 1 Agustus 2026 | §10 Addendum perilaku native APK (Phase A5) |
 
 ---
 

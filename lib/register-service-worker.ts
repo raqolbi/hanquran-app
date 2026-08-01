@@ -1,3 +1,5 @@
+import { isNativePlatform } from '@/lib/platform';
+
 const SW_URL = '/sw.js';
 
 /**
@@ -5,9 +7,21 @@ const SW_URL = '/sw.js';
  *
  * Saat SW baru mengambil alih (dataset fingerprint berubah → install + precache),
  * halaman di-reload sekali agar cache in-memory data-loader tidak menyimpan teks lama.
+ *
+ * Di Capacitor native: SW tidak didaftarkan (shell sudah di APK). Spek docs/32 §3.4.
  */
 export async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
   if (typeof window === 'undefined' || !('serviceWorker' in navigator)) {
+    return null;
+  }
+
+  if (isNativePlatform()) {
+    try {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map((reg) => reg.unregister()));
+    } catch {
+      // ignore
+    }
     return null;
   }
 

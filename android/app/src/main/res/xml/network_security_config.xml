@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  HTTPS saja — CDN tilawah everyayah.com memakai HTTPS.
+  Cleartext (HTTP) tidak diizinkan (docs/32 A3).
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <!-- Domain CDN audio yang diizinkan (dokumentasi eksplisit untuk review store). -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">everyayah.com</domain>
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+</network-security-config>

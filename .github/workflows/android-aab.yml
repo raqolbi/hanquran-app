@@ -1,0 +1,67 @@
+# Opsional: bangun AAB untuk Internal Testing / sideload.
+# Upload ke Play Console: manual (atau tambahkan langkah setelah secret siap).
+# Spek: docs/32 Phase A5 (P2).
+name: Android AAB
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+concurrency:
+  group: android-aab-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Write keystore.properties from secrets (opsional)
+        env:
+          HANQURAN_KEYSTORE_BASE64: ${{ secrets.HANQURAN_KEYSTORE_BASE64 }}
+          HANQURAN_STORE_PASSWORD: ${{ secrets.HANQURAN_STORE_PASSWORD }}
+          HANQURAN_KEY_ALIAS: ${{ secrets.HANQURAN_KEY_ALIAS }}
+          HANQURAN_KEY_PASSWORD: ${{ secrets.HANQURAN_KEY_PASSWORD }}
+        run: |
+          if [ -z "$HANQURAN_KEYSTORE_BASE64" ]; then
+            echo "Secret keystore belum diisi — AAB mungkin unsigned (cek lokal dengan keystore.properties)."
+            exit 0
+          fi
+          echo "$HANQURAN_KEYSTORE_BASE64" | base64 -d > "$GITHUB_WORKSPACE/hanquran-release.keystore"
+          {
+            echo "storeFile=$GITHUB_WORKSPACE/hanquran-release.keystore"
+            echo "storePassword=$HANQURAN_STORE_PASSWORD"
+            echo "keyAlias=$HANQURAN_KEY_ALIAS"
+            echo "keyPassword=$HANQURAN_KEY_PASSWORD"
+          } > android/keystore.properties
+
+      - name: Build AAB
+        run: npm run android:bundle
+
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hanquran-app-release-aab
+          path: android/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error

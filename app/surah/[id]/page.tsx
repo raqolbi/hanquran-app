@@ -14,6 +14,7 @@ import { SurahDetailScrollSpacer } from '@/components/surah-detail-scroll-spacer
 import { RepeatSelector } from '@/components/repeat-selector';
 import { RepeatSettingsDialog } from '@/components/repeat-settings-dialog';
 import { parseSurahIdFromPathname, routes } from '@/lib/routes';
+import { navigateApp } from '@/lib/navigate';
 import { useSurah } from '@/hooks/use-surah';
 import { useReadingDisplay } from '@/hooks/use-reading-display';
 import { useSurahDetailBottomInset } from '@/hooks/use-surah-detail-bottom-inset';
@@ -147,7 +148,9 @@ function SurahDetailLoaded({
           onToggleTranslation={toggleTranslation}
           onToggleTransliteration={toggleTransliteration}
           onFocusMode={() =>
-            router.push(routes.focus(surahIdParam, activeAyah))
+            navigateApp(routes.focus(surahIdParam, activeAyah), (href) =>
+              router.push(href),
+            )
           }
         />
       </SurahDetailTopChrome>

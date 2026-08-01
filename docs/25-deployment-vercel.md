@@ -192,7 +192,10 @@ Dokumentasi strategi detail: task Phase 8 «Susun strategi staged rollout» di `
 | `RELEASE.md`                   | Template catatan rilis per versi |
 | `docs/20-mvp-freeze.md`        | Kriteria MVP selesai             |
 | `docs/18-development-tasks.md` | Task Phase 8                     |
+| `docs/32-capacitor-android-platform.md` | Platform Android (Capacitor); PWA tetap saluran utama |
+| `docs/33-play-store-privacy-and-data-safety.md` | Privasi & Data safety Play Console |
 
+**Catatan:** Pipeline Vercel **tidak** membangun APK/AAB. Export Android dicek di CI GitHub (`.github/workflows/android-export.yml`); rilis store mengikuti cadensi terpisah (`docs/32` §6 / Phase A5).
 
 ---
 

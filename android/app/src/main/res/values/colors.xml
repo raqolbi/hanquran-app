@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- HanQuran emerald — docs/09 + docs/32 A2 -->
+    <color name="colorPrimary">#0F766E</color>
+    <color name="colorPrimaryDark">#0D5F59</color>
+    <color name="colorAccent">#10B981</color>
+    <color name="splashBackground">#FAFAF8</color>
+    <color name="statusBarColor">#0F766E</color>
+</resources>

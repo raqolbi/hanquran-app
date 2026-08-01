@@ -1,0 +1,64 @@
+# PR check: pastikan static export Android tidak regres (tanpa Play upload).
+# Tidak mengganggu pipeline Vercel. Spek: docs/32 Phase A5.
+name: Android export
+
+on:
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'lib/**'
+      - 'services/**'
+      - 'hooks/**'
+      - 'public/**'
+      - 'scripts/**'
+      - 'android/**'
+      - 'capacitor.config.ts'
+      - 'next.config.mjs'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/android-export.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'lib/**'
+      - 'services/**'
+      - 'hooks/**'
+      - 'public/**'
+      - 'scripts/**'
+      - 'android/**'
+      - 'capacitor.config.ts'
+      - 'next.config.mjs'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/android-export.yml'
+
+jobs:
+  build-android-export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Static export (HANQURAN_TARGET=android)
+        run: npm run build:android
+
+      - name: Verify out/
+        run: |
+          test -f out/index.html
+          test -d out/surah
+          test -d out/focus
+          echo "out/ OK"

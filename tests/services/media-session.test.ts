@@ -3,6 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   bindMediaSession,
   clearMediaSession,
+  dispatchMediaSessionNextTrack,
+  dispatchMediaSessionPreviousTrack,
   isMediaSessionSupported,
   resetMediaSessionBindings,
   setMediaSessionPlaybackState,
@@ -173,6 +175,18 @@ describe('media-session', () => {
 
     mockSession.invoke('previoustrack');
     mockSession.invoke('nexttrack');
+
+    expect(onPreviousTrack).toHaveBeenCalledTimes(1);
+    expect(onNextTrack).toHaveBeenCalledTimes(1);
+  });
+
+  it('dispatchMediaSessionPreviousTrack/NextTrack memanggil handler terdaftar', () => {
+    const onPreviousTrack = vi.fn();
+    const onNextTrack = vi.fn();
+
+    setMediaSessionTrackNavigation({ onPreviousTrack, onNextTrack });
+    dispatchMediaSessionPreviousTrack();
+    dispatchMediaSessionNextTrack();
 
     expect(onPreviousTrack).toHaveBeenCalledTimes(1);
     expect(onNextTrack).toHaveBeenCalledTimes(1);

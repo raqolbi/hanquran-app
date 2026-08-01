@@ -1,10 +1,12 @@
 'use client';
 
 import { motion } from 'motion/react';
-import Link from 'next/link';
 import { Heart } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import type { ReactNode } from 'react';
 
+import { NativeAwareLink } from '@/components/native-aware-link';
+import { isAndroidBuild, isNativePlatform } from '@/lib/platform';
 import { routes } from '@/lib/routes';
 
 export interface SurahCardProps {
@@ -30,15 +32,17 @@ export function SurahCard({
   onToggleFavorite,
 }: SurahCardProps) {
   const t = useTranslations('common');
+  const href = routes.surah(number);
+  // Build Android meng-inline NEXT_PUBLIC_HANQURAN_TARGET=android.
+  const useHardNav = isAndroidBuild() || isNativePlatform();
 
-  return (
-    <Link href={routes.surah(number)}>
-      <motion.div
-        whileHover={{ scale: 1.02, y: -4 }}
-        whileTap={{ scale: 0.98 }}
-        className="w-full text-left p-5 rounded-xl bg-white border border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300 cursor-pointer"
-      >
-        <div className="flex items-start gap-4">
+  const cardBody: ReactNode = (
+    <motion.div
+      whileHover={useHardNav ? undefined : { scale: 1.02, y: -4 }}
+      whileTap={useHardNav ? undefined : { scale: 0.98 }}
+      className="w-full text-left p-5 rounded-xl bg-white border border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300 cursor-pointer"
+    >
+      <div className="flex items-start gap-4">
         <div className="flex-shrink-0">
           <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center border border-primary/10">
             <span className="text-xl font-bold text-primary">{number}</span>
@@ -73,16 +77,39 @@ export function SurahCard({
             <Heart
               size={20}
               className={`transition-all ${
-                isFavorited ? 'fill-red-500 text-red-500' : 'text-muted-foreground hover:text-foreground'
+                isFavorited
+                  ? 'fill-red-500 text-red-500'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             />
           </motion.button>
-          <svg className="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          <svg
+            className="w-5 h-5 text-muted-foreground"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
           </svg>
         </div>
-        </div>
-      </motion.div>
-    </Link>
+      </div>
+    </motion.div>
+  );
+
+  return (
+    <NativeAwareLink
+      href={href}
+      className="block"
+      aria-label={`${number} ${englishName} ${arabicName} ${meaning} ${ayahCount} ${t('ayahs')} ${
+        type === 'Meccan' ? t('meccan') : t('medinan')
+      }`}
+    >
+      {cardBody}
+    </NativeAwareLink>
   );
 }

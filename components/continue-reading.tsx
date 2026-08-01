@@ -1,9 +1,9 @@
 'use client';
 
 import { motion } from 'motion/react';
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
+import { NativeAwareLink } from '@/components/native-aware-link';
 import { routes } from '@/lib/routes';
 import { useSurahList } from '@/hooks/use-surah-list';
 import { useUserStore } from '@/stores/userStore';
@@ -31,7 +31,7 @@ export function ContinueReading({
       transition={{ duration: 0.6, delay: 0.2 }}
       className="w-full"
     >
-      <Link
+      <NativeAwareLink
         href={routes.surah(surahId, ayah)}
         className="block w-full rounded-2xl p-8 sm:p-10 text-left hover:shadow-lg transition-all duration-300"
         style={{
@@ -72,7 +72,7 @@ export function ContinueReading({
           </div>
           <div className="text-xl">→</div>
         </div>
-      </Link>
+      </NativeAwareLink>
     </motion.div>
   );
 }

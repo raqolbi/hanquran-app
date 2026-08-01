@@ -1,8 +1,12 @@
 /**
  * Media Session API — metadata lock screen & kontrol OS.
  * Spesifikasi: docs/27-media-session-api-spec.md
+ *
+ * - Web/PWA: `navigator.mediaSession` (tidak berubah).
+ * - Capacitor Android: `@capgo/capacitor-media-session` + FGS (docs/32 §10.1).
  */
 
+import { isNativePlatform } from '@/lib/platform';
 import { getReciterById, getSurahSummary } from '@/services/quran';
 import { useUserStore } from '@/stores/userStore';
 import type { AppLocale, AudioTrack } from '@/types';
@@ -48,6 +52,7 @@ function getMediaSession(): MediaSession | null {
 }
 
 export function isMediaSessionSupported(): boolean {
+  if (isNativePlatform()) return true;
   return getMediaSession() !== null;
 }
 
@@ -111,6 +116,14 @@ function applyTrackNavigationHandlers(): void {
 }
 
 export function bindMediaSession(handlers: MediaSessionHandlers): void {
+  if (isNativePlatform()) {
+    // Kontrol lock-screen/notifikasi di-handle NativeAudioPlayer (showNotification).
+    // Jangan panggil @capgo/capacitor-media-session — start FGS dari background
+    // memicu ForegroundServiceStartNotAllowedException (crash) di Android 14+.
+    boundHandlers = handlers;
+    return;
+  }
+
   if (!isMediaSessionSupported()) return;
 
   boundHandlers = handlers;
@@ -122,6 +135,12 @@ export function setMediaSessionTrackNavigation(
   handlers: MediaSessionTrackNavigationHandlers,
 ): () => void {
   trackNavigationHandlers = handlers;
+
+  if (isNativePlatform()) {
+    return () => {
+      trackNavigationHandlers = {};
+    };
+  }
 
   if (boundHandlers) {
     applyTrackNavigationHandlers();
@@ -135,7 +154,21 @@ export function setMediaSessionTrackNavigation(
   };
 }
 
+/** Dipakai NativeAudioPlayer saat tombol prev di notifikasi/headset. */
+export function dispatchMediaSessionPreviousTrack(): void {
+  trackNavigationHandlers.onPreviousTrack?.();
+}
+
+/** Dipakai NativeAudioPlayer saat tombol next di notifikasi/headset. */
+export function dispatchMediaSessionNextTrack(): void {
+  trackNavigationHandlers.onNextTrack?.();
+}
+
 export function updateMediaSessionMetadata(input: MediaSessionMetadataInput): void {
+  if (isNativePlatform()) {
+    return;
+  }
+
   const session = getMediaSession();
   if (!session || typeof MediaMetadata === 'undefined') return;
 
@@ -158,6 +191,10 @@ export function updateMediaSessionMetadata(input: MediaSessionMetadataInput): vo
 export function setMediaSessionPlaybackState(
   state: MediaSessionPlaybackState,
 ): void {
+  if (isNativePlatform()) {
+    return;
+  }
+
   const session = getMediaSession();
   if (!session) return;
   session.playbackState = state;
@@ -166,6 +203,10 @@ export function setMediaSessionPlaybackState(
 export function setMediaSessionPositionState(
   state: MediaSessionPositionState,
 ): void {
+  if (isNativePlatform()) {
+    return;
+  }
+
   const session = getMediaSession();
   if (!session || typeof session.setPositionState !== 'function') return;
 
@@ -186,6 +227,12 @@ export function setMediaSessionPositionState(
 }
 
 export function clearMediaSession(): void {
+  if (isNativePlatform()) {
+    boundHandlers = null;
+    trackNavigationHandlers = {};
+    return;
+  }
+
   const session = getMediaSession();
   if (!session) return;
 

@@ -8,6 +8,7 @@ import { useAudio, useAudioOnEnded } from '@/hooks/use-audio';
 import { useAudioPlaybackGate } from '@/hooks/use-audio-playback-gate';
 import { showAppToast } from '@/lib/app-toast';
 import { canPlayAyahOffline } from '@/lib/can-play-ayah-offline';
+import { replaceApp } from '@/lib/navigate';
 import { downloadManifestKey } from '@/services/download-manifest-key';
 import { useOfflineStore } from '@/stores/offlineStore';
 import type { PlayAyahParams } from '@/hooks/use-audio';
@@ -17,7 +18,9 @@ import {
   type RepeatCount,
 } from '@/lib/repeat-options';
 import {
+  beginCrossSurahNavigation,
   consumePendingMurotalPlay,
+  isCrossSurahNavigationCurrent,
   setPendingMurotalPlay,
 } from '@/lib/murotal-pending-play';
 import { routes } from '@/lib/routes';
@@ -148,14 +151,18 @@ export function useSurahRepeatPlayback({
           void playAyah(playParams(murotal.ayahNumber));
           break;
         case 'advance_surah': {
+          const navToken = beginCrossSurahNavigation();
           void (async () => {
             // Lintas surat saat offline: berhenti jika audio surat berikutnya
             // belum tersedia offline (docs/30 §5).
             if (!(await ensureAyahPlayable(murotal.surahId, murotal.ayahNumber))) {
+              if (!isCrossSurahNavigationCurrent(navToken)) return;
               pause();
               showAppToast(tAudio('offlineUnavailableToast'));
               return;
             }
+
+            if (!isCrossSurahNavigationCurrent(navToken)) return;
 
             trackMurotalSurahComplete({
               surahId,
@@ -169,7 +176,7 @@ export function useSurahRepeatPlayback({
               routeMode === 'surah'
                 ? routes.surah(murotal.surahId, murotal.ayahNumber)
                 : routes.focus(murotal.surahId, murotal.ayahNumber);
-            router.replace(href);
+            replaceApp(href, (next) => router.replace(next));
           })();
           break;
         }
@@ -356,21 +363,24 @@ export function useSurahRepeatPlayback({
         void useUserStore
           .getState()
           .setLastViewed(step.surahId, step.ayahNumber);
-        router.replace(href);
+        replaceApp(href, (next) => router.replace(next));
         return;
       }
 
       void (async () => {
+        const navToken = beginCrossSurahNavigation();
         if (!(await ensureAyahPlayable(step.surahId, step.ayahNumber))) {
+          if (!isCrossSurahNavigationCurrent(navToken)) return;
           pause();
           showAppToast(tAudio('offlineUnavailableToast'));
           return;
         }
+        if (!isCrossSurahNavigationCurrent(navToken)) return;
         void useUserStore
           .getState()
           .setLastViewed(step.surahId, step.ayahNumber);
         setPendingMurotalPlay(step.surahId, step.ayahNumber);
-        router.replace(href);
+        replaceApp(href, (next) => router.replace(next));
       })();
     },
     [

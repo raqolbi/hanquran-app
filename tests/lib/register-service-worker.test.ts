@@ -1,19 +1,33 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+const platformMock = vi.hoisted(() => ({
+  isNativePlatform: vi.fn(() => false),
+}));
+
+vi.mock('@/lib/platform', () => ({
+  isNativePlatform: () => platformMock.isNativePlatform(),
+}));
+
 import { registerServiceWorker } from '@/lib/register-service-worker';
 
 describe('registerServiceWorker', () => {
   const register = vi.fn();
   const addEventListener = vi.fn();
+  const getRegistrations = vi.fn();
+  const unregister = vi.fn();
 
   beforeEach(() => {
     register.mockReset();
     addEventListener.mockReset();
+    getRegistrations.mockReset();
+    unregister.mockReset();
+    platformMock.isNativePlatform.mockReturnValue(false);
     vi.stubEnv('NODE_ENV', 'production');
     vi.stubGlobal('navigator', {
       serviceWorker: {
         register,
         addEventListener,
+        getRegistrations,
         controller: null,
       },
     });
@@ -37,6 +51,19 @@ describe('registerServiceWorker', () => {
     expect(registration).toEqual({ scope: '/' });
   });
 
+  it('tidak mendaftar dan unregister SW yang ada saat native', async () => {
+    platformMock.isNativePlatform.mockReturnValue(true);
+    unregister.mockResolvedValue(true);
+    getRegistrations.mockResolvedValue([{ unregister }, { unregister }]);
+
+    const registration = await registerServiceWorker();
+
+    expect(register).not.toHaveBeenCalled();
+    expect(getRegistrations).toHaveBeenCalledTimes(1);
+    expect(unregister).toHaveBeenCalledTimes(2);
+    expect(registration).toBeNull();
+  });
+
   it('reload saat controllerchange setelah update SW', async () => {
     register.mockResolvedValue({ scope: '/' });
     const reload = vi.fn();
@@ -45,6 +72,7 @@ describe('registerServiceWorker', () => {
       serviceWorker: {
         register,
         addEventListener,
+        getRegistrations,
         controller: {},
       },
     });
@@ -66,6 +94,7 @@ describe('registerServiceWorker', () => {
       serviceWorker: {
         register,
         addEventListener,
+        getRegistrations,
         controller: null,
       },
     });

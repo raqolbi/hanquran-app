@@ -2,9 +2,9 @@
 
 import { motion } from 'motion/react';
 import { Settings } from 'lucide-react';
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
+import { NativeAwareLink } from '@/components/native-aware-link';
 import { ConnectionIndicator } from '@/components/offline-status-badge';
 import { Logo } from '@/components/shared/Logo';
 import { routes } from '@/lib/routes';
@@ -40,13 +40,13 @@ export function Header() {
               />
             </div>
           </div>
-          <Link
+          <NativeAwareLink
             href={routes.settings()}
             className="shrink-0 p-2.5 hover:bg-white/15 rounded-full transition-colors text-white inline-flex items-center justify-center"
             aria-label={tSettings('title')}
           >
             <Settings size={24} strokeWidth={1.5} />
-          </Link>
+          </NativeAwareLink>
         </div>
       </div>
     </motion.header>

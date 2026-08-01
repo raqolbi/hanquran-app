@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'motion/react';
 import { ArrowLeft, ChevronRight, Trash2 } from 'lucide-react';
@@ -13,6 +12,8 @@ import {
   textSizeToFontSize,
   type ArabicTextSize,
 } from '@/lib/arabic-text-size';
+import { NativeAwareLink } from '@/components/native-aware-link';
+import { navigateApp } from '@/lib/navigate';
 import { routes } from '@/lib/routes';
 import { formatMegabytes } from '@/lib/format-bytes';
 import { clearOfflineAudioCache } from '@/services/cache-manager';
@@ -356,13 +357,13 @@ export default function SettingsPage() {
         </SettingsSection>
 
         <nav aria-label={tAbout('navAriaLabel')}>
-          <Link
+          <NativeAwareLink
             href={routes.settingsAbout()}
             className="flex h-14 w-full items-center justify-between rounded-2xl border border-border bg-white px-4 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <span>{tAbout('navLink')}</span>
             <ChevronRight size={20} className="text-muted-foreground" aria-hidden />
-          </Link>
+          </NativeAwareLink>
         </nav>
       </main>
 
@@ -382,7 +383,7 @@ function SettingsHeader() {
   const tCommon = useTranslations('common');
 
   const handleBack = () => {
-    router.push(routes.home());
+    navigateApp(routes.home(), (href) => router.push(href));
   };
 
   return (

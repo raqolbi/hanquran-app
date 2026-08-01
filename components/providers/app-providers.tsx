@@ -8,6 +8,7 @@ import { IntlProvider } from '@/components/providers/intl-provider';
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 import { PwaSplashDismisser } from '@/components/shared/pwa-splash-dismisser';
 import { AppToastHost } from '@/components/shared/app-toast-host';
+import { NativeShellBootstrap } from '@/components/providers/native-shell-bootstrap';
 import { registerServiceWorker } from '@/lib/register-service-worker';
 
 interface AppProvidersProps {
@@ -24,6 +25,7 @@ export function AppProviders({ children }: AppProvidersProps) {
     <ErrorBoundary>
       <IntlProvider>
         <AccessibilityProvider>
+          <NativeShellBootstrap />
           <PwaSplashDismisser />
           <AppToastHost />
           {children}

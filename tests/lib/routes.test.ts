@@ -16,6 +16,8 @@ describe('parseSurahIdFromPathname', () => {
     expect(parseSurahIdFromPathname('/surah/5')).toBe('5');
     expect(parseSurahIdFromPathname('/focus/114')).toBe('114');
     expect(parseSurahIdFromPathname('/surah/5/')).toBe('5');
+    expect(parseSurahIdFromPathname('/surah/5.html')).toBe('5');
+    expect(parseSurahIdFromPathname('/focus/3.html')).toBe('3');
   });
 
   it('mengembalikan string kosong untuk path lain / null', () => {

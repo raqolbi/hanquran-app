@@ -56,8 +56,18 @@ export async function precacheSurahForOffline(surahId: number): Promise<void> {
   }
 
   try {
-    const registration = await navigator.serviceWorker.ready;
-    registration.active?.postMessage({
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    if (registrations.length === 0) {
+      return;
+    }
+
+    const registration = await Promise.race([
+      navigator.serviceWorker.ready,
+      new Promise<null>((resolve) => {
+        window.setTimeout(() => resolve(null), 1500);
+      }),
+    ]);
+    registration?.active?.postMessage({
       type: 'cache-surah-offline',
       surahId,
       dataUrls,

@@ -2,9 +2,9 @@
 
 Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi HanQuran menuju MVP. Berisi daftar pekerjaan teknis yang dapat langsung dikerjakan developer.
 
-**Terakhir diperbarui:** 25 Juni 2026
-**Status:** 🚧 Sprint 2 — Growth `0.2.0`/`0.3.0` diimplementasi di kode; uji manual perangkat & tag rilis menunggu
-**Total Development Tasks:** 97 (70 Selesai, 27 Belum)
+**Terakhir diperbarui:** 31 Juli 2026
+**Status:** 🚧 Sprint 2 — Growth `0.2.0`/`0.3.0` diimplementasi di kode; uji manual perangkat & tag rilis menunggu; Phase 9 Android (Capacitor) terdokumentasi di `docs/32`
+**Total Development Tasks:** 97 + Phase 9 Android (lihat `docs/32` §13)
 **Arsitektur data:** `docs/23-static-dataset-architecture.md`
 
 ---
@@ -69,7 +69,8 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 6         | PWA & Packaging                   | 8      | 5      | 2      | 1      | 5       | 🟡 Uji manual PWA tersisa                    |
 | 7         | Testing & Quality Assurance       | 9      | 6      | 2      | 1      | 2       | ⏳ Audio + repeat unit ✅                      |
 | 8         | Release & Monitoring              | 11     | 6      | 3      | 2      | 3       | 🟡 Error tracking & rollout belum            |
-| **TOTAL** |                                   | **97** | **48** | **31** | **18** | **70**  |                                              |
+| 9         | Platform Android (Capacitor)      | —      | —      | —      | —      | 0       | 📋 Backlog di `docs/32` §13 — PWA tetap utama |
+| **TOTAL** |                                   | **97** | **48** | **31** | **18** | **70**  | (+ Phase 9 terpisah)                         |
 
 
 > Catatan: Phase 7 (Testing & QA) berjalan **paralel** mulai Phase 1 — bukan sequential setelah Phase 6 selesai.
@@ -1156,6 +1157,50 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
   - File: GitHub config
   - Ketergantungan: Repo siap
   - Prioritas: P2
+
+---
+
+# 📱 Phase 9 — Platform Android (CapacitorJS)
+
+**Status:** 📋 Belum dimulai  
+**Spek & daftar task lengkap:** [`docs/32-capacitor-android-platform.md`](./32-capacitor-android-platform.md) §3.4 (solusi PWA-safe), §6.5 (dual pipeline), **§13 (checklist task)**
+
+**Kontrak produk:**
+
+- PWA/Vercel tetap jalur utama — **tanpa perubahan perilaku** pada build default
+- Android = saluran tambahan Play Store dari **repo yang sama**
+- Semua cabang native hanya aktif via `HANQURAN_TARGET=android` atau `Capacitor.isNativePlatform()`
+
+## Ringkasan urutan (salin dari docs/32 §13)
+
+| Sub-phase | Fokus | Gate |
+|-----------|--------|------|
+| **A0** | Spike: branch config, static export, Capacitor init, 1 ayat di emulator | `build:android` + WebView hidup |
+| **A1** | Isolasi PWA: guard Analytics, SW, InstallBanner + regressi web | PWA preview hijau |
+| **A2** | Paritas baca/settings, StatusBar, Splash, Back | Cold start offline baca OK |
+| **A3** | Audio CDN + Simpan Offline | Airplane + putar surat tersimpan |
+| **A4** | Background audio / Media Session (keputusan produk) | Ekspektasi terdokumentasi atau dimitigasi |
+| **A5** | Signing, CI AAB, Play Console | Store-ready |
+
+## Task pointer (jangan duplikasi checklist panjang di sini)
+
+Kerjakan dan centang task di **`docs/32` §13**. Di dokumen ini cukup lacak status phase:
+
+- [x] A0 Spike & fondasi selesai
+- [x] A1 Zero regression PWA selesai
+- [x] A2 Paritas baca & settings selesai
+- [x] A3 Audio & offline audio selesai
+- [x] A4 Background audio (sesuai keputusan) selesai
+- [ ] A5 CI & Play Store selesai
+
+### Task pembuka yang disarankan duluan
+
+- [ ] [NEW] `lib/platform.ts`
+- [ ] [UPDATE] `next.config.mjs` branch `HANQURAN_TARGET` (default = PWA sekarang)
+- [ ] [NEW] script `build:android`
+- [ ] [NEW] `generateStaticParams` untuk `/surah/[id]` & `/focus/[id]`
+- [ ] [NEW] Capacitor init + `android/`
+- [ ] [TEST] Regressi: `npm run build` tanpa env android tetap OK
 
 ---
 

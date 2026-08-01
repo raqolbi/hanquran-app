@@ -284,13 +284,32 @@ npm run test
 
 ## Deployment
 
-HanQuran direncanakan di-host di **Vercel**:
+### PWA (saluran utama)
+
+HanQuran di-host di **Vercel**:
 
 - **Production:** branch `main`
 - **Preview:** otomatis per PR / push branch
 - **Staging opsional:** branch `staging` + subdomain
 
 Panduan lengkap, checklist QA, dan rollback: [`docs/25-deployment-vercel.md`](./docs/25-deployment-vercel.md).
+
+### Android (APK / Play Store)
+
+Platform tambahan via **Capacitor** — sumber UI/data sama dengan PWA; tidak mengganti saluran web.
+
+```bash
+npm run android:sync          # export static + cap sync
+npm run android:bundle        # AAB release (butuh keystore — lihat di bawah)
+```
+
+| Item | Dokumen / lokasi |
+|------|------------------|
+| Spek platform & fase A0–A5 | [`docs/32-capacitor-android-platform.md`](./docs/32-capacitor-android-platform.md) |
+| Privacy / Data safety Play | [`docs/33-play-store-privacy-and-data-safety.md`](./docs/33-play-store-privacy-and-data-safety.md) |
+| Keystore lokal | `android/keystore.properties.example` → salin ke `keystore.properties` (**jangan commit**) |
+| CI export | `.github/workflows/android-export.yml` |
+| CI AAB (opsional) | `.github/workflows/android-aab.yml` (`workflow_dispatch` / tag `v*`) |
 
 Catatan rilis: [`RELEASE.md`](./RELEASE.md).
 
@@ -310,6 +329,9 @@ Catatan rilis: [`RELEASE.md`](./RELEASE.md).
 | [`docs/26-about-screen-spec.md`](./docs/26-about-screen-spec.md) | Layar Tentang HanQuran |
 | [`docs/27-media-session-api-spec.md`](./docs/27-media-session-api-spec.md) | Media Session API (lock screen) |
 | [`docs/28-playback-settings.md`](./docs/28-playback-settings.md) | Auto Follow Playback |
+| [`docs/30-offline-behavior-spec.md`](./docs/30-offline-behavior-spec.md) | Perilaku offline (+ addendum APK) |
+| [`docs/32-capacitor-android-platform.md`](./docs/32-capacitor-android-platform.md) | Platform Capacitor Android |
+| [`docs/33-play-store-privacy-and-data-safety.md`](./docs/33-play-store-privacy-and-data-safety.md) | Privasi & Data safety Play |
 | [`docs/analytics.md`](./docs/analytics.md) | Event Vercel Analytics |
 | [`CLAUDE.md`](./CLAUDE.md) | Konvensi penulisan kode & dokumen |
 

@@ -3,8 +3,11 @@ import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 
 import { AppProviders } from '@/components/providers/app-providers'
+import { isAndroidBuild } from '@/lib/platform'
 
 import './globals.css'
+
+// Analytics Vercel hanya web production — bukan bundle Android (docs/32 A1).
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
 const geistMono = Geist_Mono({
@@ -38,6 +41,9 @@ export const viewport: Viewport = {
 
 const PWA_LAUNCH_SCRIPT = `(function(){try{var m=window.matchMedia("(display-mode: standalone)");var s=m&&m.matches;var n=window.navigator;var i=n&&n.standalone;if(s||i)document.documentElement.classList.add("pwa-launching")}catch(e){}})();`;
 
+const enableVercelAnalytics =
+  process.env.NODE_ENV === 'production' && !isAndroidBuild()
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -63,7 +69,7 @@ export default function RootLayout({
           />
         </div>
         <AppProviders>{children}</AppProviders>
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        {enableVercelAnalytics && <Analytics />}
       </body>
     </html>
   )

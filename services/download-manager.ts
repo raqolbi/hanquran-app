@@ -147,8 +147,20 @@ export class DownloadManager {
       return false;
     }
     try {
-      const registration = await navigator.serviceWorker.ready;
-      return Boolean(registration.active);
+      // Di Capacitor/WebView tanpa SW, `ready` bisa menggantung selamanya.
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      if (registrations.length === 0) {
+        return false;
+      }
+
+      const registration = await Promise.race([
+        navigator.serviceWorker.ready,
+        new Promise<null>((resolve) => {
+          window.setTimeout(() => resolve(null), 1500);
+        }),
+      ]);
+
+      return Boolean(registration?.active);
     } catch {
       return false;
     }

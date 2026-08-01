@@ -10,6 +10,7 @@ import {
   type BeforeInstallPromptEvent,
   type InstallPromptOutcome,
 } from '@/lib/install-prompt';
+import { isNativePlatform } from '@/lib/platform';
 import { useIsClient } from '@/hooks/use-is-client';
 
 interface UseInstallPromptResult {
@@ -65,6 +66,8 @@ export function useInstallPrompt(): UseInstallPromptResult {
   const isIosHint = isClient && isIosSafariInstallable() && !canNativePrompt;
   const showBanner =
     ready &&
+    isClient &&
+    !isNativePlatform() &&
     !installed &&
     !dismissed &&
     (canNativePrompt || isIosHint);

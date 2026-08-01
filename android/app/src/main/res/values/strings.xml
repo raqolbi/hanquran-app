@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">HanQuran</string>
+    <string name="title_activity_main">HanQuran</string>
+    <string name="package_name">app.hanquran.android</string>
+    <string name="custom_url_scheme">app.hanquran.android</string>
+</resources>

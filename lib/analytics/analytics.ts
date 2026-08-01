@@ -12,16 +12,22 @@ import {
   type MurotalSurahCompletePayload,
   type MurotalQuranCompletePayload,
 } from '@/lib/analytics/events';
+import { isAndroidBuild, isNativePlatform } from '@/lib/platform';
 
 type AnalyticsPayload = Record<
   string,
   string | number | boolean | null | undefined
 >;
 
+/**
+ * Analytics hanya untuk PWA/web production (docs/32 §3.4).
+ * APK Capacitor dan build android tidak mengirim event.
+ */
 export function isAnalyticsEnabled(): boolean {
-  return (
-    typeof window !== 'undefined' && process.env.NODE_ENV === 'production'
-  );
+  if (typeof window === 'undefined') return false;
+  if (process.env.NODE_ENV !== 'production') return false;
+  if (isAndroidBuild() || isNativePlatform()) return false;
+  return true;
 }
 
 function sendEvent(

@@ -7,6 +7,16 @@
 /.next/
 /out/
 
+# Capacitor / Android local
+android/app/build/
+android/.gradle/
+android/local.properties
+android/keystore.properties
+android/captures/
+*.keystore
+*.jks
+.capacitor/
+
 # production
 /build
 

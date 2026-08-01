@@ -17,6 +17,8 @@ import {
   getRepositoryCommercialLicenseUrl,
   getRepositoryLicenseUrl,
 } from '@/lib/app-about';
+import { navigateApp } from '@/lib/navigate';
+import { isAndroidBuild, isNativePlatform } from '@/lib/platform';
 import { routes } from '@/lib/routes';
 
 import { Logo } from '@/components/shared/Logo';
@@ -171,10 +173,14 @@ function AboutHeader() {
 
   const handleBack = () => {
     if (typeof window !== 'undefined' && window.history.length > 1) {
+      if (isAndroidBuild() || isNativePlatform()) {
+        navigateApp(routes.settings(), (href) => router.push(href));
+        return;
+      }
       router.back();
       return;
     }
-    router.push(routes.settings());
+    navigateApp(routes.settings(), (href) => router.push(href));
   };
 
   return (

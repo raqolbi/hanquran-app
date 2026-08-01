@@ -20,6 +20,8 @@ HanQuran akan mengintegrasikan **Media Session API** (`navigator.mediaSession`) 
 
 **Batasan eksplisit:** fitur ini **tidak menjamin** audio selalu berjalan di background di semua perangkat. Perilaku bergantung pada browser, OS, dan apakah PWA terpasang di layar utama.
 
+**Capacitor Android (APK):** WebView tidak mengekspos `navigator.mediaSession` dan membekukan `HTMLAudioElement` di background. HanQuran memakai `@capgo/capacitor-native-audio` (background + notifikasi FGS) **hanya** saat `isNativePlatform()` — lihat `docs/32` §10.1. Jalur PWA/browser tetap memakai Web Media Session di bawah ini tanpa perubahan perilaku.
+
 ---
 
 ## 2. Latar Belakang & Motivasi

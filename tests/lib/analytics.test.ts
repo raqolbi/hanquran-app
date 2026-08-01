@@ -1,9 +1,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const trackMock = vi.hoisted(() => vi.fn());
+const platformMock = vi.hoisted(() => ({
+  isAndroidBuild: vi.fn(() => false),
+  isNativePlatform: vi.fn(() => false),
+}));
 
 vi.mock('@vercel/analytics', () => ({
   track: trackMock,
+}));
+
+vi.mock('@/lib/platform', () => ({
+  isAndroidBuild: () => platformMock.isAndroidBuild(),
+  isNativePlatform: () => platformMock.isNativePlatform(),
 }));
 
 import {
@@ -23,6 +32,8 @@ import {
 describe('lib/analytics', () => {
   beforeEach(() => {
     trackMock.mockClear();
+    platformMock.isAndroidBuild.mockReturnValue(false);
+    platformMock.isNativePlatform.mockReturnValue(false);
     vi.stubEnv('NODE_ENV', 'production');
   });
 
@@ -37,6 +48,22 @@ describe('lib/analytics', () => {
   it('isAnalyticsEnabled false di development', () => {
     vi.stubEnv('NODE_ENV', 'development');
     expect(isAnalyticsEnabled()).toBe(false);
+  });
+
+  it('isAnalyticsEnabled false pada build android', () => {
+    platformMock.isAndroidBuild.mockReturnValue(true);
+    expect(isAnalyticsEnabled()).toBe(false);
+  });
+
+  it('isAnalyticsEnabled false pada Capacitor native', () => {
+    platformMock.isNativePlatform.mockReturnValue(true);
+    expect(isAnalyticsEnabled()).toBe(false);
+  });
+
+  it('tidak mengirim track saat native', () => {
+    platformMock.isNativePlatform.mockReturnValue(true);
+    trackSurahOpened({ surahId: 1, surahName: 'Al-Fatihah' });
+    expect(trackMock).not.toHaveBeenCalled();
   });
 
   it('trackSurahOpened mengirim payload ke Vercel', () => {

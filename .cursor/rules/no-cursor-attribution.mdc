@@ -1,0 +1,27 @@
+---
+description: Commit dan push tanpa atribusi CursorAgent
+alwaysApply: true
+---
+
+# Commit & push tanpa CursorAgent
+
+Saat `git commit`, `git push`, atau membuat PR:
+
+- **Jangan** menambah trailer/footer atribusi Cursor, termasuk:
+  - `Co-authored-by: Cursor <cursoragent@cursor.com>`
+  - `Co-authored-by: CursorAgent`
+  - `Made-with: Cursor`
+  - variasi sejenis
+- Pesan commit hanya berisi ringkasan perubahan (gaya repo ini), tanpa co-author AI
+- Body PR jangan menyertakan “Made with Cursor” / atribusi agent
+- Jika sistem menyisipkan trailer tersebut, **hapus sebelum commit** (atau amend jika baru saja terjadi dan user meminta)
+
+Contoh commit yang diizinkan:
+
+```text
+Tambah platform Capacitor Android dengan audio latar dan fondasi rilis Play.
+
+APK memakai NativeAudio + notifikasi media (zero regression PWA).
+```
+
+Contoh yang dilarang: baris `Co-authored-by: Cursor ...` di akhir pesan.

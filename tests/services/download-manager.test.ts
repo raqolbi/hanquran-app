@@ -43,6 +43,7 @@ describe('DownloadManager', () => {
     vi.stubGlobal('navigator', {
       serviceWorker: {
         ready: Promise.resolve({ active: null }),
+        getRegistrations: vi.fn(async () => []),
         addEventListener: vi.fn(),
       },
     });
@@ -110,6 +111,22 @@ describe('DownloadManager', () => {
     });
 
     expect(openSpy).toHaveBeenCalledWith(AUDIO_CACHE_NAME);
+  });
+
+  it('menganggap SW tidak tersedia jika tidak ada registrasi (hindari hang ready)', async () => {
+    const ready = new Promise(() => {
+      /* never resolves — simulasi WebView Capacitor */
+    });
+    vi.stubGlobal('navigator', {
+      serviceWorker: {
+        ready,
+        getRegistrations: vi.fn(async () => []),
+        addEventListener: vi.fn(),
+      },
+    });
+
+    const manager = new DownloadManager();
+    await expect(manager.isServiceWorkerAvailable()).resolves.toBe(false);
   });
 
   it('meneruskan pesan selesai dari Service Worker', async () => {

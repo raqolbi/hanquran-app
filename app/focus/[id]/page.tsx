@@ -11,6 +11,7 @@ import { AudioPlayer } from '@/components/audio-player';
 import { RepeatSelector } from '@/components/repeat-selector';
 import { RepeatSettingsDialog } from '@/components/repeat-settings-dialog';
 import { parseSurahIdFromPathname, routes } from '@/lib/routes';
+import { navigateApp } from '@/lib/navigate';
 import { useArabicTextSize } from '@/hooks/use-arabic-text-size';
 import { usePreferredReciterId } from '@/hooks/use-preferred-reciter';
 import { useSurah } from '@/hooks/use-surah';
@@ -100,7 +101,9 @@ function FocusModeLoaded({
   }, [activeAyah, prefetchNextAyah]);
 
   const handleExit = () => {
-    router.push(routes.surah(surahIdParam, activeAyah));
+    navigateApp(routes.surah(surahIdParam, activeAyah), (href) =>
+      router.push(href),
+    );
   };
 
   return (
