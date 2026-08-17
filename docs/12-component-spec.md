@@ -108,6 +108,7 @@ Komponen di dokumen ini dipetakan ke modul pada `05-module-catalog.md`.
 | EmptyState            | Shared           | —                                                                       |
 | Logo / LogoWithText   | Shared           | Brand mark (lihat `branding/logo-guidelines.md`)                        |
 | HomeFooter            | Shared           | Footer kredit Beranda — `components/home-footer.tsx`                  |
+| ThreadsGate           | Shared           | Overlay sekali — `docs/34-threads-gate-spec.md`                       |
 
 ---
 
@@ -2200,6 +2201,50 @@ app/page.tsx  → setelah grid daftar surat, di dalam <main>
 
 ---
 
+# 29. ThreadsGate
+
+## Purpose
+
+Overlay sekali di peluncuran: mengajak pengguna membuka Threads pembuat, lalu lanjut ke hafalan. **Gimmick pemasaran**, bukan verifikasi follow. Spek lengkap: `docs/34-threads-gate-spec.md`.
+
+## Props
+
+Tidak ada props publik. State dari `hooks/use-threads-gate.ts`.
+
+## Konten
+
+| Elemen | Sumber |
+|--------|--------|
+| URL Threads | `lib/app-about.ts` (`APP_AUTHOR_THREADS_URL`) — sama dengan HomeFooter |
+| Teks UI | i18n `threadsGate.*` |
+| Logo | `Logo` size 40 |
+
+## Perilaku
+
+- Tampil jika `localStorage` kunci `hanquran:threads-gate-completed` kosong
+- Tombol **Buka Threads** membuka URL di konteks baru
+- Tombol **Lanjut** disabled selama **5 detik** setelah Threads diketuk, lalu aktif (tidak menunggu kembali; tanpa hitung mundur)
+- Tidak ada tombol close / dismiss backdrop
+- Mount global di `AppProviders` (semua rute)
+
+## Visual
+
+```text
+Primitive   : overlay kustom (`role="dialog"`), bukan Dialog Base UI
+Backdrop    : `bg-black/40`
+Tombol      : tinggi 44px (docs/09)
+Lanjut      : secondary, disabled 5 detik setelah Threads, lalu enabled
+```
+
+## Integration Points
+
+```text
+components/providers/app-providers.tsx  → mount di samping PwaSplashDismisser
+lib/threads-gate.ts                     → get/set localStorage
+```
+
+---
+
 # Component Priority
 
 ## Core Components
@@ -2248,6 +2293,7 @@ Komponen sistemik dan layout dasar.
 BottomNavigation
 BottomSheet
 HomeFooter
+ThreadsGate
 OfflineStatusBadge
 ConnectionIndicator
 OfflineBanner

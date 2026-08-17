@@ -27,6 +27,7 @@ Selama URL produksi belum final, gunakan dokumen ini sebagai sumber kebenaran sa
 | Jenis | Keterangan |
 |-------|------------|
 | Preferensi lokal | Bahasa UI, qari, pengaturan repeat/murotal, favorit, posisi terakhir baca — disimpan **di perangkat** (IndexedDB / penyimpanan app) |
+| Flag UI sekali | Overlay Gate Threads — `localStorage` on-device; bukan data yang dikirim ke server (`docs/34`) |
 | Cache audio | File tilawah yang Anda unduh atau putar (jika unduh otomatis aktif) — disimpan **di perangkat** |
 | Analytics (hanya PWA web) | Di build web production, page view / event anonim via Vercel Analytics. **Tidak** diaktifkan di APK Capacitor |
 
@@ -75,3 +76,4 @@ Hindari izin sensitif. Playback background memakai foreground service media sesu
 | Tanggal | Perubahan |
 |---------|-----------|
 | 1 Agustus 2026 | Dokumen awal Phase A5 |
+| 17 Agustus 2026 | Flag overlay Threads on-device (`docs/34`) — bukan data yang dikumpulkan |

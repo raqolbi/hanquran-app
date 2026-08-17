@@ -234,6 +234,29 @@ i18n: `home.footer.*` di `messages/{id,en}.json`
 
 ---
 
+### Overlay Gate Threads
+
+Overlay Dialog sekali pakai di atas semua rute (bukan bagian scroll Beranda). Spek: `docs/34-threads-gate-spec.md`.
+
+Visual:
+
+```text
+Backdrop     : hitam 40% (Dialog yang sudah ada)
+Kartu        : rounded-2xl, padding 24px, bg-card
+Logo         : 40px (sama header Beranda)
+Judul        : text-base font-semibold
+Isi          : text-sm text-muted-foreground
+Buka Threads : tombol primary 44px
+Lanjut       : tombol secondary 44px, disabled 5 detik setelah Threads diketuk (tanpa hitung mundur)
+Tanpa        : tombol X, konfeti, hitung mundur
+```
+
+URL: `APP_AUTHOR_THREADS_URL` — sama dengan tautan Threads di footer.
+
+i18n: `threadsGate.*` di `messages/{id,en}.json`
+
+---
+
 # 4. Surah Detail
 
 ## Mobile

@@ -170,6 +170,30 @@ Elemen penting lain muncul di konteks layar:
 | Focus Mode | Hafalan bebas distraksi | P1 |
 | Settings | Preference dan cache management | P1 |
 | Empty / Error / Offline State | Menjaga UX saat data belum tersedia | P0 |
+| Overlay Gate Threads | Ajak buka Threads sekali (gimmick pemasaran, bukan verifikasi follow) | P2 |
+
+Spek overlay: `docs/34-threads-gate-spec.md`. Muncul di atas semua rute sampai completed; bukan rute baru.
+
+### Overlay Gate Threads (sekali)
+
+Setelah splash, Dialog tanpa tombol tutup. Dua aksi: **Buka Threads** (primary) lalu **Lanjut** (secondary, disabled 5 detik setelah Threads diketuk).
+
+```text
+┌──────────────────────────────────────┐
+│            (backdrop)                │
+│   ┌──────────────────────────────┐   │
+│   │         [Logo]               │   │
+│   │         HanQuran             │   │
+│   │  Ikuti @cenybug di Threads   │   │
+│   │  untuk melanjutkan ke        │   │
+│   │  HanQuran.                   │   │
+│   │  [ Buka Threads ]            │   │
+│   │  [ Lanjut ]   (disabled → on)│   │
+│   └──────────────────────────────┘   │
+└──────────────────────────────────────┘
+```
+
+Lanjut menyala **5 detik** setelah Threads diketuk (tautan `APP_AUTHOR_THREADS_URL`), tanpa hitung mundur di UI. Tidak menunggu event “kembali ke app”. Funnel hafalan (§2) dimulai setelah overlay ditutup.
 
 ---
 
@@ -1520,6 +1544,19 @@ Harus:
 - Tidak terasa seperti game berlebihan
 
 Label utama bisa memakai ikon + angka.
+
+---
+
+## ThreadsGate
+
+Overlay sekali di peluncuran (`docs/34-threads-gate-spec.md`).
+
+Harus:
+
+- Tenang, bukan iklan ramai
+- Tanpa klaim “wajib follow” atau “kami cek follow”
+- Lanjut disabled sampai 5 detik setelah Threads diketuk (tanpa hitung mundur)
+- URL sama dengan footer Beranda (`APP_AUTHOR_THREADS_URL`)
 
 ---
 

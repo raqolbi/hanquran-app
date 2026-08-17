@@ -7,7 +7,7 @@ Dokumen ini mendokumentasikan struktur komponen pada proyek HanQuran. Ditujukan 
 ## Ringkasan cepat
 - Pages: Beranda, Halaman Surat (Surah detail), Mode Fokus, Pengaturan.
 - Screen Components: header, action bar, surah list/card, ayah card, audio player, repeat inline, dll.
-- Shared Components: header, bottom navigation, offline badge, audio player, repeat dialog.
+- Shared Components: header, bottom navigation, offline badge, audio player, repeat dialog, overlay Gate Threads.
 - UI Components: atoms dan primitives di `components/ui` (Button, Dialog, Drawer, SegmentedControl, Select, Switch).
 
 ---
@@ -16,6 +16,11 @@ Dokumen ini mendokumentasikan struktur komponen pada proyek HanQuran. Ditujukan 
 
 ```
 HanQuran
+├─ AppProviders
+│  ├─ NativeShellBootstrap
+│  ├─ PwaSplashDismisser
+│  ├─ ThreadsGate (overlay sekali, docs/34)
+│  └─ AppToastHost
 ├─ Pages
 │  ├─ Home (app/page.tsx)
 │  │  ├─ Header
@@ -63,7 +68,11 @@ HanQuran
 │  └─ SettingsSection / SettingsRow
 
 ├─ Shared Components (components/shared)
-│  └─ Logo / LogoWithText (brand mark)
+│  ├─ Logo / LogoWithText (brand mark)
+│  ├─ ThreadsGate (overlay Gate Threads)
+│  ├─ PwaSplashDismisser
+│  ├─ ErrorBoundary / ErrorFallback
+│  └─ InstallBanner
 │
 └─ UI Components (components/ui)
    ├─ Button
@@ -236,6 +245,12 @@ Folder khusus brand: `components/shared`
   - Tanggung jawab: Membungkus `next/image` dengan aturan ukuran minimum dan aspect ratio asli aset.
   - Dependensi utama: `next/image`, aset `public/branding/logo.png` dan `public/branding/logo-with-text.png`, `branding/logo-guidelines.md`.
   - Reusable: Ya (Home Header, Settings Header, `app/loading.tsx`, dan lokasi brand lainnya).
+
+- `ThreadsGate` (components/shared/threads-gate.tsx)
+  - Tujuan: Overlay sekali yang mengajak membuka Threads pembuat, lalu lanjut ke hafalan.
+  - Tanggung jawab: Dialog non-dismissable, delay 5 detik sebelum Lanjut, persistensi `localStorage`.
+  - Dependensi utama: `useThreadsGate`, `lib/threads-gate.ts`, `APP_AUTHOR_THREADS_URL`, Dialog, Logo.
+  - Reusable: Tidak (mount sekali di `AppProviders`). Spek: `docs/34-threads-gate-spec.md`.
 
 **Komponen UI (UI Components)**
 

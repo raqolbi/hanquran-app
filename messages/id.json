@@ -259,6 +259,13 @@
     "installIOSHint": "Di Safari: ketuk Bagikan lalu pilih \"Tambahkan ke Layar Utama\".",
     "installAriaLabel": "Saran instal aplikasi HanQuran"
   },
+  "threadsGate": {
+    "title": "Dukung HanQuran",
+    "body": "Ikuti @cenybug di Threads untuk melanjutkan ke HanQuran.",
+    "openThreads": "Buka Threads",
+    "continue": "Lanjut",
+    "openFailedHint": "Jika Threads tidak terbuka, ketuk Lanjut."
+  },
   "nav": {
     "home": "Beranda",
     "settings": "Pengaturan"

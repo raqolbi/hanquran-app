@@ -259,6 +259,13 @@
     "installIOSHint": "In Safari: tap Share, then choose \"Add to Home Screen\".",
     "installAriaLabel": "HanQuran install suggestion"
   },
+  "threadsGate": {
+    "title": "Support HanQuran",
+    "body": "Follow @cenybug on Threads to continue to HanQuran.",
+    "openThreads": "Open Threads",
+    "continue": "Continue",
+    "openFailedHint": "If Threads doesn’t open, tap Continue."
+  },
   "nav": {
     "home": "Home",
     "settings": "Settings"

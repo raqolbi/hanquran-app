@@ -279,6 +279,8 @@ Semua perubahan di bawah **harus memenuhi aturan emas §3.4** (PWA default tidak
 | Plugin audio background / foreground service | P1–P2 | Agar tilawah & murojaah tetap jalan saat layar mati |
 | `@capacitor/browser` / App Links | P2 | Buka kredit/tautan eksternal dengan aman |
 
+Overlay Gate Threads (`docs/34`) **tidak** menambah plugin ini di spek awal: origin `https://www.threads.com` keluar WebView lewat perilaku default Capacitor. Uji di APK; naikkan ke P1 hanya jika default gagal.
+
 > Jangan menambah plugin “berjaga-jaga”. Setiap plugin harus punya use case dari matriks §5.
 
 ### 6.5 Strategi dual pipeline — PWA utama + Android tambahan

@@ -307,6 +307,7 @@ npm run android:bundle        # AAB release (butuh keystore — lihat di bawah)
 |------|------------------|
 | Spek platform & fase A0–A5 | [`docs/32-capacitor-android-platform.md`](./docs/32-capacitor-android-platform.md) |
 | Privacy / Data safety Play | [`docs/33-play-store-privacy-and-data-safety.md`](./docs/33-play-store-privacy-and-data-safety.md) |
+| Overlay Gate Threads | [`docs/34-threads-gate-spec.md`](./docs/34-threads-gate-spec.md) |
 | Keystore lokal | `android/keystore.properties.example` → salin ke `keystore.properties` (**jangan commit**) |
 | CI export | `.github/workflows/android-export.yml` |
 | CI AAB (opsional) | `.github/workflows/android-aab.yml` (`workflow_dispatch` / tag `v*`) |
@@ -332,6 +333,7 @@ Catatan rilis: [`RELEASE.md`](./RELEASE.md).
 | [`docs/30-offline-behavior-spec.md`](./docs/30-offline-behavior-spec.md) | Perilaku offline (+ addendum APK) |
 | [`docs/32-capacitor-android-platform.md`](./docs/32-capacitor-android-platform.md) | Platform Capacitor Android |
 | [`docs/33-play-store-privacy-and-data-safety.md`](./docs/33-play-store-privacy-and-data-safety.md) | Privasi & Data safety Play |
+| [`docs/34-threads-gate-spec.md`](./docs/34-threads-gate-spec.md) | Overlay Gate Threads (sekali, gimmick) |
 | [`docs/analytics.md`](./docs/analytics.md) | Event Vercel Analytics |
 | [`CLAUDE.md`](./CLAUDE.md) | Konvensi penulisan kode & dokumen |
 

@@ -36,6 +36,7 @@ Semua teks antarmuka yang dibaca pengguna:
 - Empty state & error state
 - Notifikasi & pesan status
 - Onboarding (bila ada di MVP)
+- Overlay Gate Threads (`threadsGate.*`, `docs/34-threads-gate-spec.md`)
 
 ## 2.2 Yang TIDAK dilokalisasi
 
@@ -230,6 +231,7 @@ Jika di masa depan diperlukan URL ber-prefix locale (`/id/surah/2`), itu masuk C
 | `docs/06-database-schema.md` | Field `appLocale` |
 | `docs/15-state-management.md` | Persistensi preferensi bahasa |
 | `docs/04-system-architecture.md` | Lapisan i18n & tech stack |
+| `docs/34-threads-gate-spec.md` | Namespace `threadsGate` (overlay sekali) |
 
 ---
 

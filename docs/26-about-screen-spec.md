@@ -104,6 +104,8 @@ Konstanta di `lib/app-about.ts` — dipakai oleh `HomeFooter` di Beranda (bukan 
 |-----------|-------|
 | `APP_AUTHOR_NAME` | Cenybug |
 | `APP_AUTHOR_THREADS_URL` | https://www.threads.com/@cenybug |
+
+Overlay Gate Threads memakai **konstanta yang sama** — jangan duplikasi URL (`docs/34-threads-gate-spec.md`).
 | `APP_AUTHOR_X_URL` | https://x.com/cenybug |
 | `QOLCORE_URL` | https://qolcore.com |
 
@@ -162,6 +164,7 @@ Bukan P0 blocker rilis, tetapi **termasuk MVP lengkap** bersama fitur Settings l
 
 | Tanggal | Perubahan |
 |---------|-----------|
+| 17 Agustus 2026 | Overlay Gate Threads memakai `APP_AUTHOR_THREADS_URL` yang sama (`docs/34`) |
 | 10 Juli 2026 | Tambah §4.5 kredit pembuat Beranda (`HomeFooter`, konstanta `lib/app-about.ts`) |
 | 24 Juni 2026 | Dokumen awal — audit, scope, routing, konten, P1 |
 
