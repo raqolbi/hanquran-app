@@ -414,6 +414,22 @@ Aset logo di `public/branding/` — komponen [`components/shared/Logo.tsx`](./co
 
 ---
 
+## ☕ Support the Project / Dukung Pengembang
+
+If you find this project useful, consider supporting its hosting and development:  
+Jika kamu merasa projek ini bermanfaat, kamu bisa memberikan dukungan operasional server & domain lewat link berikut:
+
+<p align="left">
+  <a href="https://saweria.co/cenybug" target="_blank">
+    <img src="https://img.shields.io/badge/Donate-Saweria-orange?style=for-the-badge&logo=coffee&logoColor=white" alt="Saweria" />
+  </a>
+  <a href="https://ko-fi.com/cenybug" target="_blank">
+    <img src="https://img.shields.io/badge/Donate-Ko--fi-red?style=for-the-badge&logo=ko-fi&logoColor=white" alt="Ko-fi" />
+  </a>
+</p>
+
+---
+
 ## License
 
 HanQuran is licensed under the **[HanQuran Community License v1.0](./LICENSE)** (HCCL).
