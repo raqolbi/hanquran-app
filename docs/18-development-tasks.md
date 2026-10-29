@@ -3,7 +3,7 @@
 Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi HanQuran menuju MVP. Berisi daftar pekerjaan teknis yang dapat langsung dikerjakan developer.
 
 **Terakhir diperbarui:** 29 Oktober 2026
-**Status:** 🚧 Sprint 2 — Growth `0.2.0`/`0.3.0` diimplementasi di kode; uji manual perangkat & tag rilis menunggu; Phase 9 Android (Capacitor) terdokumentasi di `docs/32`; Phase 10 SEO ✅ selesai; Phase 10b hardening 📋 tercatat
+**Status:** 🚧 Sprint 2 — Growth `0.2.0`/`0.3.0` diimplementasi di kode; uji manual perangkat & tag rilis menunggu; Phase 9 Android (Capacitor) terdokumentasi di `docs/32`; Phase 10 SEO ✅ selesai; Phase 10b hardening ✅ selesai
 **Total Development Tasks:** 97 + Phase 9 Android (lihat `docs/32` §13) + Phase 10 SEO (lihat `docs/35-seo-spec.md` §4) + Phase 10b Hardening (lihat `docs/35` §8–§9)
 **Arsitektur data:** `docs/23-static-dataset-architecture.md`
 
@@ -71,7 +71,7 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 8         | Release & Monitoring              | 11     | 6      | 3      | 2      | 3       | 🟡 Error tracking & rollout belum            |
 | 9         | Platform Android (Capacitor)      | —      | —      | —      | —      | 0       | 📋 Backlog di `docs/32` §13 — PWA tetap utama |
 | 10        | SEO & Discoverability             | 9      | 4      | 3      | 2      | 9       | ✅ Selesai (T1–T9) — follow-up perf di luar phase |
-| 10b       | SEO Hardening (pasca-audit)       | 9      | 4      | 3      | 2      | 0       | 📋 Tercatat 29 Okt (`docs/35` §8–§9) — belum dikerjakan |
+| 10b       | SEO Hardening (pasca-audit)       | 9      | 4      | 3      | 2      | 9       | ✅ Selesai (H1–H9) — 29 Okt 2026             |
 | **TOTAL** |                                   | **97** | **48** | **31** | **18** | **70**  | (+ Phase 9; + Phase 10 SEO; + Phase 10b hardening) |
 
 
@@ -1242,7 +1242,7 @@ Ringkasan temuan audit (27 Okt 2026): konten ayat **tidak ada di HTML awal** (se
 
 # 🔧 Phase 10b — SEO Hardening (Pasca-Audit)
 
-**Status:** 📋 Tercatat 29 Okt 2026 — belum dikerjakan
+**Status:** ✅ Selesai 29 Okt 2026 — seluruh H1–H9 diimplementasi & terverifikasi (build web + export Android hijau, 399 test lulus)
 **Sumber temuan:** audit kritis atas hasil Phase 10 → [`docs/35` §8](./35-seo-spec.md) (F1–F13)
 **Rencana & urutan:** [`docs/35` §9](./35-seo-spec.md) (H1–H9)
 
@@ -1260,15 +1260,15 @@ Konteks: Phase 10 tuntas & terverifikasi (build web + Android hijau, 370 test, L
 | H8 | `dynamicParams=false` `/focus/[id]`; mitigasi `/surah/0` (redirect/404) | [FIX] | P2 | F5 |
 | H9 | Test: seed `useSurah`, reaktivitas query, XML `robots`/`sitemap`, 404 dynamic params | [TEST] | P1 | F12 |
 
-- [ ] [FIX] H1 — reaktivitas `?ayah` (P0)
-- [ ] [PERF] H2 — hilangkan refetch dataset saat seed cocok (P0)
-- [ ] [PERF] H3 — matikan prefetch RSC kartu surat (P0)
-- [ ] [FIX] H5 — fallback host produksi `SITE_URL` (P0)
-- [ ] [FIX] H4 — konten SSR terlihat tanpa JS (P1)
-- [ ] [FIX] H7 — clamp & scroll `?ayah` (P1)
-- [ ] [TEST] H9 — test hardening (P1)
-- [ ] [HARDEN] H6 — escape JSON-LD (P2)
-- [ ] [FIX] H8 — status 404 rapi `/focus/[id]` & `/surah/0` (P2)
+- [x] [FIX] H1 — reaktivitas `?ayah` (P0) — leaf `StartAyahSync` + Suspense
+- [x] [PERF] H2 — hilangkan refetch dataset saat seed cocok (P0) — 0 request dataset saat buka surat
+- [x] [PERF] H3 — matikan prefetch RSC kartu surat (P0) — `prefetch={false}`
+- [x] [FIX] H5 — fallback host produksi `SITE_URL` (P0) — `VERCEL_PROJECT_PRODUCTION_URL`
+- [x] [FIX] H4 — konten SSR terlihat tanpa JS (P1) — `initial={false}` pada header, list, `AyahCard`
+- [x] [FIX] H7 — clamp & scroll `?ayah` (P1) — `lib/ayah-param.ts` + `lib/ayah-scroll.ts`
+- [x] [TEST] H9 — test hardening (P1) — 8 file test, total 399 test
+- [x] [HARDEN] H6 — escape JSON-LD (P2) — `serializeJsonLd`
+- [x] [FIX] H8 — status 404 rapi `/focus/[id]` & `/surah/0` (P2) — `dynamicParams=false` + redirect Vercel
 
 **Urutan kerja:** H1 → H2 → H3 → H5 → H4 → H7 → H9 → H6 → H8.
 
@@ -1280,7 +1280,9 @@ Konteks: Phase 10 tuntas & terverifikasi (build web + Android hijau, 370 test, L
 - `canonical`/sitemap menunjuk domain produksi walau env hanya menyediakan `VERCEL_PROJECT_PRODUCTION_URL`.
 - Semua test lama + 4 test baru hijau; build web & export Android hijau; Lighthouse SEO tidak turun.
 
-**Backlog terpisah dari phase ini:** F8 (flash terjemahan/locale → ikut i18n routing), F10 (hapus import `React`), F11 (server-render home + CWV → kandidat Phase 11), F13 (validasi eksternal & Search Console setelah deploy).
+**Hasil verifikasi (29 Okt 2026):** seluruh DoD terpenuhi — reaktivitas query-only terbukti di browser, 0 fetch dataset pada `/surah/2` & navigasi kartu, 0 prefetch `/surah/*` dari home, teks ayat tampil dengan JS dimatikan, 399 test lulus, build web & Android hijau, Lighthouse SEO 100/100/66 (settings noindex by design), perf surah-1 73 → 87. Rincian bukti per item di [`docs/35` §9.1](./35-seo-spec.md).
+
+**Backlog terpisah dari phase ini:** F8 (flash terjemahan/locale → ikut i18n routing), F11 (server-render home + CWV → kandidat Phase 11), F13 (validasi eksternal & Search Console setelah deploy). F10 (import `React` tak terpakai) ikut beres saat H1.
 
 ---
 

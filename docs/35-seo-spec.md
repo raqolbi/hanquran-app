@@ -1,7 +1,7 @@
 # 35 — Spek SEO & Discoverability (Hasil Audit + Rencana Perbaikan)
 
 **Tanggal:** 27 Oktober 2026
-**Status:** ✅ Selesai T1–T9 — 🔧 audit lanjutan menemukan 9 item hardening (H1–H9), lihat §8–§9; Phase 10b di `docs/18`
+**Status:** ✅ Selesai — T1–T9 (Phase 10) + H1–H9 (Phase 10b hardening), terverifikasi 29 Okt 2026 — lihat §4, §8, §9
 **Mengacu:** `docs/18-development-tasks.md` (Phase 10), `docs/14-routing-spec.md`, `docs/23-static-dataset-architecture.md`, `docs/25-deployment-vercel.md`, `docs/32-capacitor-android-platform.md`
 
 ---
@@ -250,3 +250,21 @@ Urutan disarankan: **H1 → H2 → H3 → H5 → H4 → H7 → H9 → H6 → H8*
 Kontrak non-regresi: app-shell offline & SW tidak berubah; `generateStaticParams` tetap; export Android tetap hijau; Lighthouse SEO tidak turun.
 
 F8, F10, F11, F13 dicatat sebagai backlog terpisah (F11 = T10 performa/CWV, lihat `docs/18`).
+
+### 9.1 Status implementasi (29 Okt 2026) — ✅ Selesai
+
+| ID | Perubahan kode | Bukti verifikasi |
+|----|----------------|------------------|
+| **H1** | Leaf `components/start-ayah-sync.tsx` (`useSearchParams`) dirender di dalam `<Suspense fallback={null}>` dari `SurahDetailView`; pembacaan `window.location.search` dihapus | Smoke Puppeteer: `history.pushState` + `popstate` ke `?ayah=3` & `?ayah=7` → kartu aktif berpindah; `#ayah-1` tetap ada di HTML prerender |
+| **H2** | `lib/surah-seed.ts` (`isMatchingSurahSeed`, `shouldFetchSurah`) + `hooks/use-surah.ts` memakai seed tanpa fetch dan mengadopsi seed baru saat navigasi klien | Browser: buka `/surah/2` & klik kartu dari home → **0 request** `/data/quran|translations/*` (sebelumnya 272 KB) |
+| **H3** | `SurahCard` → `prefetch={false}` | Browser home + scroll: **0 prefetch** `/surah/*` (sebelumnya tiap kartu terlihat memicu RSC ±267 KB untuk Baqara) |
+| **H4** | `initial={false}` pada wrapper daftar ayat, `AyahCard`, dan header surat | HTML build: node `opacity:0` tersisa hanya audio player (chrome interaktif); dengan JS dimatikan teks ayat tetap tampil (opacity 1) |
+| **H5** | `lib/site-url.ts`: `NEXT_PUBLIC_SITE_URL` → `VERCEL_PROJECT_PRODUCTION_URL` → `VERCEL_URL` → localhost | Test `tests/lib/site-url.test.ts` (5 kasus, termasuk prioritas domain produksi) |
+| **H6** | `serializeJsonLd()` di `lib/schema-org.ts` (escape `<` → `\u003c`), dipakai `components/json-ld.tsx` | Test escape + JSON-LD 114 halaman tetap valid (`JSON.parse` di audit build) |
+| **H7** | `lib/ayah-param.ts` (parse + clamp) & `lib/ayah-scroll.ts` (scroll ke `#ayah-n` dengan inset chrome) | Browser: `/surah/1?ayah=5` → aktif + scroll; `?ayah=999` → **ayah 7** (terakhir) |
+| **H8** | `dynamicParams=false` di `app/focus/[id]/layout.tsx`; redirect `/surah/0` & `/focus/0` → `/` di `vercel.json` | `npm start`: `/surah/115`, `/focus/115`, `/surah/0`, `/focus/0` → **404** (artefak `0.html` hilang pada build baru) |
+| **H9** | 8 file test baru/diperluas: `ayah-param`, `ayah-scroll`, `surah-seed`, `start-ayah-sync`, `use-surah`, `robots`, `static-params`, `site-url`, `schema-org` | **84 file / 399 test lulus** |
+
+Regresi: build web hijau; export Android (`HANQURAN_TARGET=android`) hijau dengan `out/surah/*.html` tetap berisi konten; Lighthouse SEO **100** (home & surah-1), settings 66 (noindex by design); performa surah-1 **73 → 87**.
+
+Catatan: `?ayah` invalid diklem di state, URL tidak ditulis ulang (share link tetap apa adanya). `/surah/0` di lokal `next start` tetap 404 berkat hilangnya artefak `0.html`; redirect `vercel.json` menjadi pengaman tambahan di production. F10 (import `React` tak terpakai) ikut beres.
