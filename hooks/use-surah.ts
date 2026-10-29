@@ -4,6 +4,10 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import {
+  isMatchingSurahSeed,
+  shouldFetchSurah,
+} from '@/lib/surah-seed';
 import { getTranslationLanguage } from '@/lib/translation-language';
 import type { SurahData } from '@/services/quran';
 import { getSurah } from '@/services/quran';
@@ -23,16 +27,12 @@ export function useSurah(surahId: string, initialSurah?: SurahData | null): UseS
   // Seed dari server (docs/35 §4 T1): dipakai bila cocok dengan id URL
   // (guards app-shell offline yang melayani shell untuk id mana pun),
   // sehingga SSR konten tidak tertutup spinner saat hidrasi.
-  const [surah, setSurah] = useState<SurahData | null>(() => {
-    return initialSurah && String(initialSurah.number) === surahId
-      ? initialSurah
-      : null;
-  });
-  const [loading, setLoading] = useState(() => {
-    return !(
-      initialSurah && String(initialSurah.number) === surahId
-    );
-  });
+  const [surah, setSurah] = useState<SurahData | null>(() =>
+    isMatchingSurahSeed(initialSurah, surahId) ? initialSurah ?? null : null,
+  );
+  const [loading, setLoading] = useState(
+    () => !isMatchingSurahSeed(initialSurah, surahId),
+  );
   const [error, setError] = useState<string | null>(null);
   const [reloadToken, setReloadToken] = useState(0);
 
@@ -43,6 +43,22 @@ export function useSurah(surahId: string, initialSurah?: SurahData | null): UseS
   }, []);
 
   useEffect(() => {
+    const seedMatches = isMatchingSurahSeed(initialSurah, surahId);
+
+    // Seed sudah berisi konten + terjemahan `id` → pakai langsung, tanpa
+    // fetch dataset dari klien (docs/35 §9 H2). Juga dipakai saat navigasi
+    // klien ke surat lain yang sudah di-prerender.
+    if (
+      !shouldFetchSurah({ seedMatches, translationLanguage, reloadToken })
+    ) {
+      setSurah((current) =>
+        current === initialSurah ? current : initialSurah ?? null,
+      );
+      setError(null);
+      setLoading(false);
+      return;
+    }
+
     let cancelled = false;
     setLoading(true);
 
@@ -68,7 +84,7 @@ export function useSurah(surahId: string, initialSurah?: SurahData | null): UseS
     return () => {
       cancelled = true;
     };
-  }, [appLocale, surahId, translationLanguage, t, reloadToken]);
+  }, [appLocale, initialSurah, reloadToken, surahId, t, translationLanguage]);
 
   return { surah, loading, error, retry };
 }

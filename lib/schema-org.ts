@@ -13,6 +13,16 @@ export interface JsonLdObject {
   [key: string]: unknown;
 }
 
+/**
+ * Serialisasi aman untuk `<script type="application/ld+json">`.
+ *
+ * `<` di-escape menjadi `\u003c` supaya nilai data tidak bisa menutup tag
+ * script lebih awal (docs/35 §9 H6). `JSON.parse` tetap menerima hasilnya.
+ */
+export function serializeJsonLd(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, '\\u003c');
+}
+
 export function buildWebSiteSchema(): JsonLdObject {
   return {
     '@context': 'https://schema.org',

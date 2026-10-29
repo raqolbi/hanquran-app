@@ -2,9 +2,12 @@
  * URL dasar situs untuk metadata SEO (robots.txt, sitemap.xml, metadataBase).
  *
  * Urutan sumber:
- * 1. `NEXT_PUBLIC_SITE_URL` — diakui di build Jika dipasang di Vercel env.
- * 2. `VERCEL_URL` — otomatis diisi Vercel per deployment preview/production.
- * 3. Fallback lokal dev — `http://localhost:3000`.
+ * 1. `NEXT_PUBLIC_SITE_URL` — sumber utama; **wajib** dipasang di Vercel
+ *    Production agar canonical/sitemap menunjuk domain final.
+ * 2. `VERCEL_PROJECT_PRODUCTION_URL` — domain produksi proyek (tanpa hash
+ *    deployment), otomatis tersedia di Vercel.
+ * 3. `VERCEL_URL` — URL deployment/preview (ber-hash); hanya cadangan.
+ * 4. Fallback lokal dev — `http://localhost:3000`.
  */
 
 function normalizeUrl(raw: string): string {
@@ -20,10 +23,17 @@ function resolveSiteUrl(): string {
   if (explicit) {
     return normalizeUrl(explicit);
   }
+
+  const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  if (productionHost) {
+    return normalizeUrl(productionHost);
+  }
+
   const vercel = process.env.VERCEL_URL;
   if (vercel) {
     return normalizeUrl(vercel);
   }
+
   return 'http://localhost:3000';
 }
 

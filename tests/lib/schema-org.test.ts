@@ -66,4 +66,18 @@ describe('schema-org', () => {
       'BreadcrumbList',
     );
   });
+
+  it('serializeJsonLd meng-escape `<` agar tidak menutup tag script', async () => {
+    const { serializeJsonLd } = await loadSchema();
+    const serialized = serializeJsonLd({
+      name: '</script><script>alert("x")</script>',
+      '@type': 'Thing',
+    });
+
+    expect(serialized).not.toContain('<');
+    expect(serialized).toContain('\\u003c');
+    expect(JSON.parse(serialized).name).toBe(
+      '</script><script>alert("x")</script>',
+    );
+  });
 });

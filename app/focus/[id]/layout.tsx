@@ -1,4 +1,5 @@
-import type { Metadata, ReactNode } from 'next';
+import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 
 import { generateSurahStaticParams } from '@/lib/surah-static-params';
 
@@ -11,6 +12,10 @@ export const metadata: Metadata = {
 export function generateStaticParams() {
   return generateSurahStaticParams();
 }
+
+// Id di luar 1..114 → 404 sungguhan, bukan soft-404 dari fallback statis
+// (docs/35 §9 H8). Halaman fokus tetap `noindex`.
+export const dynamicParams = false;
 
 export default function FocusIdLayout({ children }: { children: ReactNode }) {
   return children;

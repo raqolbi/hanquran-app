@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { motion } from 'motion/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -9,6 +15,7 @@ import { AyahCard } from '@/components/ayah-card';
 import { AudioPlayer } from '@/components/audio-player';
 import { RepeatSelector } from '@/components/repeat-selector';
 import { RepeatSettingsDialog } from '@/components/repeat-settings-dialog';
+import { StartAyahSync } from '@/components/start-ayah-sync';
 import { SurahDetailHeader } from '@/components/surah-detail-header';
 import { SurahDetailScrollSpacer } from '@/components/surah-detail-scroll-spacer';
 import { SurahDetailTopChrome } from '@/components/surah-detail-top-chrome';
@@ -24,6 +31,8 @@ import { useSurahDetailBottomInset } from '@/hooks/use-surah-detail-bottom-inset
 import { useSurahOfflineReady } from '@/hooks/use-surah-offline-ready';
 import { useTrackSurahOpened } from '@/hooks/use-track-surah-opened';
 import { useSurah } from '@/hooks/use-surah';
+import { clampAyahNumber } from '@/lib/ayah-param';
+import { scrollToAyahAfterPaint } from '@/lib/ayah-scroll';
 import { parseSurahIdFromPathname, routes } from '@/lib/routes';
 import { navigateApp } from '@/lib/navigate';
 import type { SurahData } from '@/services/quran';
@@ -46,29 +55,12 @@ export default function SurahDetailClient({ initialSurah }: SurahDetailClientPro
   const pathname = usePathname();
   const surahId = parseSurahIdFromPathname(pathname);
 
-  // `?ayah=n` dibaca via window di efek klien — TANPA useSearchParams agar
-  // tidak men-suspend prerender (HTML SSR diisi konten, docs/35 §4 T1).
-  const [startAyah, setStartAyah] = useState(1);
-  useEffect(() => {
-    const raw = new URLSearchParams(window.location.search).get('ayah');
-    if (raw) {
-      const parsed = Number.parseInt(raw, 10);
-      if (Number.isInteger(parsed) && parsed >= 1) {
-        setStartAyah(parsed);
-      }
-    }
-  }, []);
-
   const { surah, loading, error, retry } = useSurah(surahId, initialSurah);
 
   // Konten tetap tampil saat refetch latar — spinner hanya bila belum ada data.
   if (surah) {
     return (
-      <SurahDetailView
-        surah={surah}
-        surahIdParam={surahId}
-        startAyah={startAyah}
-      />
+      <SurahDetailView surah={surah} surahIdParam={surahId} />
     );
   }
 
@@ -98,11 +90,9 @@ export default function SurahDetailClient({ initialSurah }: SurahDetailClientPro
 function SurahDetailView({
   surah,
   surahIdParam,
-  startAyah,
 }: {
   surah: SurahData;
   surahIdParam: string;
-  startAyah: number;
 }) {
   const router = useRouter();
   const tPlayback = useTranslations('settings.playback');
@@ -112,15 +102,11 @@ function SurahDetailView({
     toggleTranslation,
     toggleTransliteration,
   } = useReadingDisplay();
-  const [activeAyah, setActiveAyah] = useState(startAyah);
+  const [activeAyah, setActiveAyah] = useState(1);
   const [completedAyahs, setCompletedAyahs] = useState<number[]>([]);
   const [repeatSettingsOpen, setRepeatSettingsOpen] = useState(false);
   const [quranCompleteNotice, setQuranCompleteNotice] = useState(false);
 
-  // Sinkron bila klien menampilkan ?ayah=n setelah hidrasi (offline shell).
-  useEffect(() => {
-    setActiveAyah(startAyah);
-  }, [startAyah]);
   const isFavorited = useUserStore((s) => s.favorites.includes(surah.number));
   const toggleFavorite = useUserStore((s) => s.toggleFavorite);
   const autoFollowPlayback = useUserStore((s) => s.settings.autoFollowPlayback);
@@ -180,12 +166,30 @@ function SurahDetailView({
     bottomInset,
   });
 
+  // Inset audio dipakai saat deep link `?ayah` perlu di-scroll; simpan di ref
+  // agar callback tetap stabil (tidak memicu sync ulang tiap pengukuran).
+  const bottomInsetRef = useRef(bottomInset);
+  bottomInsetRef.current = bottomInset;
+
+  const handleStartAyahChange = useCallback(
+    (ayah: number) => {
+      const clamped = clampAyahNumber(ayah, surah.ayahs.length);
+      setActiveAyah(clamped);
+      scrollToAyahAfterPaint(clamped, bottomInsetRef.current);
+    },
+    [surah.number, surah.ayahs.length],
+  );
+
   useEffect(() => {
     prefetchNextAyah();
   }, [prefetchNextAyah]);
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Leaf + Suspense: konten surat di luar boundary tetap di-prerender. */}
+      <Suspense fallback={null}>
+        <StartAyahSync onChange={handleStartAyahChange} />
+      </Suspense>
       <SurahDetailTopChrome>
         <SurahDetailHeader
           surahName={surah.englishName}
@@ -223,7 +227,7 @@ function SurahDetailView({
 
       <div className="max-w-3xl mx-auto px-4 py-6 short-landscape:py-3">
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={false}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
           className="space-y-4"

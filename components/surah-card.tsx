@@ -104,6 +104,7 @@ export function SurahCard({
   return (
     <NativeAwareLink
       href={href}
+      prefetch={false}
       className="block"
       aria-label={`${number} ${englishName} ${arabicName} ${meaning} ${ayahCount} ${t('ayahs')} ${
         type === 'Meccan' ? t('meccan') : t('medinan')

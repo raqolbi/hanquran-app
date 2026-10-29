@@ -1,4 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "node scripts/generate-sw-precache.mjs && next build && node scripts/generate-sw-precache.mjs"
+  "buildCommand": "node scripts/generate-sw-precache.mjs && next build && node scripts/generate-sw-precache.mjs",
+  "redirects": [
+    { "source": "/surah/0", "destination": "/", "permanent": false },
+    { "source": "/focus/0", "destination": "/", "permanent": false }
+  ]
 }
