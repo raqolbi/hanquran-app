@@ -2,9 +2,9 @@
 
 Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi HanQuran menuju MVP. Berisi daftar pekerjaan teknis yang dapat langsung dikerjakan developer.
 
-**Terakhir diperbarui:** 31 Juli 2026
-**Status:** 🚧 Sprint 2 — Growth `0.2.0`/`0.3.0` diimplementasi di kode; uji manual perangkat & tag rilis menunggu; Phase 9 Android (Capacitor) terdokumentasi di `docs/32`
-**Total Development Tasks:** 97 + Phase 9 Android (lihat `docs/32` §13)
+**Terakhir diperbarui:** 29 Oktober 2026
+**Status:** 🚧 Sprint 2 — Growth `0.2.0`/`0.3.0` diimplementasi di kode; uji manual perangkat & tag rilis menunggu; Phase 9 Android (Capacitor) terdokumentasi di `docs/32`; Phase 10 SEO ✅ selesai; Phase 10b hardening 📋 tercatat
+**Total Development Tasks:** 97 + Phase 9 Android (lihat `docs/32` §13) + Phase 10 SEO (lihat `docs/35-seo-spec.md` §4) + Phase 10b Hardening (lihat `docs/35` §8–§9)
 **Arsitektur data:** `docs/23-static-dataset-architecture.md`
 
 ---
@@ -70,7 +70,9 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 7         | Testing & Quality Assurance       | 9      | 6      | 2      | 1      | 2       | ⏳ Audio + repeat unit ✅                      |
 | 8         | Release & Monitoring              | 11     | 6      | 3      | 2      | 3       | 🟡 Error tracking & rollout belum            |
 | 9         | Platform Android (Capacitor)      | —      | —      | —      | —      | 0       | 📋 Backlog di `docs/32` §13 — PWA tetap utama |
-| **TOTAL** |                                   | **97** | **48** | **31** | **18** | **70**  | (+ Phase 9 terpisah)                         |
+| 10        | SEO & Discoverability             | 9      | 4      | 3      | 2      | 9       | ✅ Selesai (T1–T9) — follow-up perf di luar phase |
+| 10b       | SEO Hardening (pasca-audit)       | 9      | 4      | 3      | 2      | 0       | 📋 Tercatat 29 Okt (`docs/35` §8–§9) — belum dikerjakan |
+| **TOTAL** |                                   | **97** | **48** | **31** | **18** | **70**  | (+ Phase 9; + Phase 10 SEO; + Phase 10b hardening) |
 
 
 > Catatan: Phase 7 (Testing & QA) berjalan **paralel** mulai Phase 1 — bukan sequential setelah Phase 6 selesai.
@@ -1201,6 +1203,84 @@ Kerjakan dan centang task di **`docs/32` §13**. Di dokumen ini cukup lacak stat
 - [ ] [NEW] `generateStaticParams` untuk `/surah/[id]` & `/focus/[id]`
 - [ ] [NEW] Capacitor init + `android/`
 - [ ] [TEST] Regressi: `npm run build` tanpa env android tetap OK
+
+---
+
+# 🔍 Phase 10 — SEO & Discoverability
+
+**Status:** ✅ Selesai — T1–T9 terimplementasi & terverifikasi (27–29 Okt 2026); follow-up performa home dicatat di `docs/35` §4 T9  
+**Spek lengkap & hasil audit:** [`docs/35-seo-spec.md`](./35-seo-spec.md)  
+**Prioritas konten:** T2+T3+T7 (discovery) → T1 (server-render surat = nilai terbesar) → T4+T6 → T9 → T5+T8
+
+Ringkasan temuan audit (27 Okt 2026): konten ayat **tidak ada di HTML awal** (semua halaman CSR), tidak ada `sitemap.xml`/`robots.txt`, metadata identik di semua halaman, tanpa OG/Twitter/JSON-LD, dan `/focus`+`/settings` belum `noindex`. Detail + bukti di `docs/35` §2.
+
+| ID | Task | Tipe | Prioritas | Ref |
+|----|------|------|-----------|-----|
+| T1 | Server-render konten Surah Detail + `generateMetadata` per surat (split ke `surah-detail-client.tsx`) | [REFACTOR] | P0 | `docs/35` §4 T1 |
+| T2 | `app/robots.ts` — allow `/`, disallow `/focus`, `/settings` | [NEW] | P0 | `docs/35` §4 T2 |
+| T3 | `app/sitemap.ts` — `/` + 114 surat, `lastmod` dari `dataHash` | [NEW] | P0 | `docs/35` §4 T3 |
+| T4 | Metadata root: `metadataBase`, OG, Twitter Card, template title, hapus `generator: 'v0.app'` | [UPDATE] | P1 | `docs/35` §4 T4 |
+| T5 | OG image 1200×630 (`public/og/og-default.png`) | [NEW] | P2 | `docs/35` §4 T5 |
+| T6 | JSON-LD `WebSite` + `ContentPage`/`BreadcrumbList` per surat | [NEW] | P1 | `docs/35` §4 T6 |
+| T7 | `noindex, follow` untuk `/focus/[id]` & `/settings/*` | [UPDATE] | P0 | `docs/35` §4 T7 |
+| T8 | Hygiene: favicon App Router, risiko `images.unoptimized` dicatat | [UPDATE] | P2 | `docs/35` §4 T8 |
+| T9 | Verifikasi curl + Rich Results Test + regressi `build:android` & unit test | [TEST] | P0 | `docs/35` §4 T9 |
+
+- [x] [DOC] Spek & audit SEO — `docs/35-seo-spec.md` (27 Okt 2026)
+- [x] [NEW] `app/robots.ts` + `noindex` focus/settings (T2+T7) — selesai 27 Okt 2026, terverifikasi build
+- [x] [NEW] `app/sitemap.ts` (T3) — selesai 27 Okt 2026, 115 URL + `lastmod` tersedia di XML
+- [x] [REFACTOR] Server-render Surah Detail + `generateMetadata` per surat (T1) — selesai 27 Okt 2026, konten ayat terverifikasi di HTML
+- [x] [UPDATE] `app/layout.tsx` — `metadataBase` + OG/Twitter + template title (T4) — selesai 29 Okt 2026, OG/Twitter per surat terverifikasi di HTML
+- [x] [NEW] JSON-LD structured data (T6) — `lib/schema-org.ts` + `components/json-ld.tsx`, `tests/lib/schema-org.test.ts`
+- [x] [TEST] Verifikasi SEO menyeluruh + regressi web & Android (T9) — selesai 29 Okt 2026; Lighthouse SEO 100/100/66 (settings noindex by design)
+- [x] [NEW] OG image 1200×630 (T5) — `public/og/og-default.png`, generator `npm run gen:og`
+- [x] [UPDATE] Favicon & catatan optimizer (T8) — selesai 29 Okt 2026, `app/icon.png` + `app/apple-icon.png`, `npm run gen:favicon`
+
+> Kontrak non-regresi: `generateStaticParams` di `app/surah/[id]/layout.tsx` tetap ada; pipeline `output: 'export'` Android & app-shell offline (`docs/30`, `docs/32`) tidak berubah. Detail dampak di `docs/35` §3.
+
+---
+
+# 🔧 Phase 10b — SEO Hardening (Pasca-Audit)
+
+**Status:** 📋 Tercatat 29 Okt 2026 — belum dikerjakan
+**Sumber temuan:** audit kritis atas hasil Phase 10 → [`docs/35` §8](./35-seo-spec.md) (F1–F13)
+**Rencana & urutan:** [`docs/35` §9](./35-seo-spec.md) (H1–H9)
+
+Konteks: Phase 10 tuntas & terverifikasi (build web + Android hijau, 370 test, Lighthouse SEO 100), tetapi audit lanjutan menemukan 4 isu berprioritas tinggi yang perlu dibereskan sebelum rilis produksi: reaktivitas `?ayah` (regresi), payload ganda (SSR + refetch + prefetch), konten SSR tak terlihat sebelum hidrasi, dan fallback host canonical/sitemap.
+
+| ID | Task | Tipe | Prioritas | Ref |
+|----|------|------|-----------|-----|
+| H1 | `?ayah` reaktif kembali: leaf `<StartAyahSync />` + `useSearchParams` di dalam `<Suspense fallback={null}>` (konten di luar boundary tetap prerendered) | [FIX] | P0 | F1 |
+| H2 | `useSurah`: skip refetch bila seed cocok & bahasa terjemahan `id` | [PERF] | P0 | F2 |
+| H3 | `SurahCard`/`NativeAwareLink`: `prefetch={false}` (atau hover-only) untuk halaman surat | [PERF] | P0 | F2 |
+| H4 | Wrapper daftar ayat `initial={false}` / fade CSS default-visible | [FIX] | P1 | F3 |
+| H5 | `lib/site-url.ts`: fallback `VERCEL_PROJECT_PRODUCTION_URL` + wajib `NEXT_PUBLIC_SITE_URL` di Vercel Production | [FIX] | P0 | F4 |
+| H6 | Escape `<` → `\u003c` pada inject JSON-LD | [HARDEN] | P2 | F6 |
+| H7 | Clamp `?ayah` ke `1..ayahCount` + scroll ke ayat aktif setelah sync | [FIX] | P1 | F7, F9 |
+| H8 | `dynamicParams=false` `/focus/[id]`; mitigasi `/surah/0` (redirect/404) | [FIX] | P2 | F5 |
+| H9 | Test: seed `useSurah`, reaktivitas query, XML `robots`/`sitemap`, 404 dynamic params | [TEST] | P1 | F12 |
+
+- [ ] [FIX] H1 — reaktivitas `?ayah` (P0)
+- [ ] [PERF] H2 — hilangkan refetch dataset saat seed cocok (P0)
+- [ ] [PERF] H3 — matikan prefetch RSC kartu surat (P0)
+- [ ] [FIX] H5 — fallback host produksi `SITE_URL` (P0)
+- [ ] [FIX] H4 — konten SSR terlihat tanpa JS (P1)
+- [ ] [FIX] H7 — clamp & scroll `?ayah` (P1)
+- [ ] [TEST] H9 — test hardening (P1)
+- [ ] [HARDEN] H6 — escape JSON-LD (P2)
+- [ ] [FIX] H8 — status 404 rapi `/focus/[id]` & `/surah/0` (P2)
+
+**Urutan kerja:** H1 → H2 → H3 → H5 → H4 → H7 → H9 → H6 → H8.
+
+**DoD Phase 10b:**
+
+- Navigasi back/forward antar `?ayah` memperbarui ayat aktif & highlight.
+- Buka `/surah/2`: tanpa refetch JSON duplikat (kecuali locale ≠ `id`), tanpa prefetch kartu yang memboroskan.
+- Dengan JS dimatikan, teks ayat tetap terlihat.
+- `canonical`/sitemap menunjuk domain produksi walau env hanya menyediakan `VERCEL_PROJECT_PRODUCTION_URL`.
+- Semua test lama + 4 test baru hijau; build web & export Android hijau; Lighthouse SEO tidak turun.
+
+**Backlog terpisah dari phase ini:** F8 (flash terjemahan/locale → ikut i18n routing), F10 (hapus import `React`), F11 (server-render home + CWV → kandidat Phase 11), F13 (validasi eksternal & Search Console setelah deploy).
 
 ---
 
