@@ -16,12 +16,23 @@ interface UseSurahResult {
   retry: () => void;
 }
 
-export function useSurah(surahId: string): UseSurahResult {
+export function useSurah(surahId: string, initialSurah?: SurahData | null): UseSurahResult {
   const t = useTranslations('errors');
   const appLocale = useUserStore((s) => s.settings.appLocale);
   const translationLanguage = getTranslationLanguage(appLocale);
-  const [surah, setSurah] = useState<SurahData | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Seed dari server (docs/35 §4 T1): dipakai bila cocok dengan id URL
+  // (guards app-shell offline yang melayani shell untuk id mana pun),
+  // sehingga SSR konten tidak tertutup spinner saat hidrasi.
+  const [surah, setSurah] = useState<SurahData | null>(() => {
+    return initialSurah && String(initialSurah.number) === surahId
+      ? initialSurah
+      : null;
+  });
+  const [loading, setLoading] = useState(() => {
+    return !(
+      initialSurah && String(initialSurah.number) === surahId
+    );
+  });
   const [error, setError] = useState<string | null>(null);
   const [reloadToken, setReloadToken] = useState(0);
 

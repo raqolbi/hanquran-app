@@ -8,6 +8,9 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
+    // Tetap unoptimized GLOBAL (docs/35 §4 T8): SW precache + Capacitor
+    // mengandalkan URL aset apa adanya (`/branding/*.png`), bukan `/_next/image`.
+    // Logo satu-satunya `next/image` dan kecil — optimasi belum sepadan risikonya.
     unoptimized: true,
   },
   // Profil Android (Capacitor): static export ke `out/`.

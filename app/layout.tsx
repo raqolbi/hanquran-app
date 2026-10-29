@@ -3,7 +3,10 @@ import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 
 import { AppProviders } from '@/components/providers/app-providers'
+import { JsonLd } from '@/components/json-ld'
+import { buildWebSiteSchema } from '@/lib/schema-org'
 import { isAndroidBuild } from '@/lib/platform'
+import { SITE_URL } from '@/lib/site-url'
 
 import './globals.css'
 
@@ -16,15 +19,33 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'HanQuran',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: 'HanQuran — Aplikasi Hafalan Al-Qur\'an',
+    template: '%s | HanQuran',
+  },
   description:
     "Aplikasi hafalan Al-Qur'an — audio per ayat, repeat, Mode Murotal, mode fokus, dan dukungan offline. Tanpa akun.",
   applicationName: 'HanQuran',
   manifest: '/manifest.json',
-  generator: 'v0.app',
-  icons: {
-    icon: [{ url: '/branding/logo.png', type: 'image/png' }],
-    apple: '/icons/icon-192.png',
+  // Favicon via file convention App Router: `app/icon.png` + `app/apple-icon.png`
+  // (docs/35 §4 T8) — jangan ditimpa `icons` manual di sini.
+  openGraph: {
+    type: 'website',
+    siteName: 'HanQuran',
+    locale: 'id_ID',
+    url: '/',
+    title: "HanQuran — Aplikasi Hafalan Al-Qur'an",
+    description:
+      "Audio per ayat, repeat, Mode Murotal, mode fokus, dan dukungan offline. Tanpa akun.",
+    images: [{ url: '/og/og-default.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "HanQuran — Aplikasi Hafalan Al-Qur'an",
+    description:
+      "Audio per ayat, repeat, Mode Murotal, mode fokus, dan dukungan offline. Tanpa akun.",
+    images: ['/og/og-default.png'],
   },
   appleWebApp: {
     capable: true,
@@ -57,6 +78,7 @@ export default function RootLayout({
         <link rel="prefetch" href="/offline.html" as="document" />
       </head>
       <body className="font-sans antialiased">
+        <JsonLd data={buildWebSiteSchema()} />
         <div id="pwa-splash" className="pwa-splash" aria-hidden="true">
           <img
             src="/branding/logo-with-text.png"
