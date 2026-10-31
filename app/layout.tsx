@@ -7,6 +7,7 @@ import { JsonLd } from '@/components/json-ld'
 import { buildWebSiteSchema } from '@/lib/schema-org'
 import { isAndroidBuild } from '@/lib/platform'
 import { SITE_URL } from '@/lib/site-url'
+import { buildThreadsGateInitScript } from '@/lib/threads-gate'
 
 import './globals.css'
 
@@ -62,6 +63,8 @@ export const viewport: Viewport = {
 
 const PWA_LAUNCH_SCRIPT = `(function(){try{var m=window.matchMedia("(display-mode: standalone)");var s=m&&m.matches;var n=window.navigator;var i=n&&n.standalone;if(s||i)document.documentElement.classList.add("pwa-launching")}catch(e){}})();`;
 
+const THREADS_GATE_SCRIPT = buildThreadsGateInitScript();
+
 const enableVercelAnalytics =
   process.env.NODE_ENV === 'production' && !isAndroidBuild()
 
@@ -74,6 +77,11 @@ export default function RootLayout({
     <html lang="id" className={`${geistSans.variable} ${geistMono.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: PWA_LAUNCH_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: THREADS_GATE_SCRIPT }} />
+        <noscript>
+          {/* Tanpa JS gate tidak bisa ditutup — jangan blokir konten. */}
+          <style>{`[data-threads-gate-overlay]{display:none!important}`}</style>
+        </noscript>
         <link rel="preload" href="/branding/logo-with-text.png" as="image" />
         <link rel="prefetch" href="/offline.html" as="document" />
       </head>

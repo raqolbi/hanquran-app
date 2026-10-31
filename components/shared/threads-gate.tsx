@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 
 import { Logo } from '@/components/shared/Logo';
 import { useThreadsGate } from '@/hooks/use-threads-gate';
+import { THREADS_GATE_COMPLETED_ATTRIBUTE } from '@/lib/threads-gate';
 
 const primaryButtonClassName =
   'inline-flex h-11 w-full items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
@@ -36,6 +37,14 @@ export function ThreadsGate() {
       return;
     }
 
+    // Pengguna lama: overlay sudah disembunyikan CSS pra-paint. Jangan kunci
+    // scroll/fokus walau status React belum sempat berubah ke `completed`.
+    if (
+      document.documentElement.hasAttribute(THREADS_GATE_COMPLETED_ATTRIBUTE)
+    ) {
+      return;
+    }
+
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     threadsLinkRef.current?.focus();
@@ -50,7 +59,10 @@ export function ThreadsGate() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div
+      data-threads-gate-overlay=""
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+    >
       <div className="absolute inset-0 bg-black/40" aria-hidden="true" />
       <div
         role="dialog"

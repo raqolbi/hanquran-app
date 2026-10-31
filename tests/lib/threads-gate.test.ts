@@ -1,7 +1,10 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
 import {
+  THREADS_GATE_COMPLETED_ATTRIBUTE,
   THREADS_GATE_CONTINUE_DELAY_MS,
+  THREADS_GATE_STORAGE_KEY,
+  buildThreadsGateInitScript,
   clearThreadsGateCompletion,
   completeThreadsGate,
   isThreadsGateCompleted,
@@ -11,6 +14,7 @@ import {
 describe('lib/threads-gate', () => {
   afterEach(() => {
     clearThreadsGateCompletion();
+    document.documentElement.removeAttribute(THREADS_GATE_COMPLETED_ATTRIBUTE);
   });
 
   it('menganggap belum completed jika flag kosong', () => {
@@ -47,5 +51,57 @@ describe('lib/threads-gate', () => {
         clickedAt + THREADS_GATE_CONTINUE_DELAY_MS,
       ),
     ).toBe(true);
+  });
+});
+
+describe('buildThreadsGateInitScript', () => {
+  const runScript = () => {
+    new Function(buildThreadsGateInitScript())();
+  };
+
+  afterEach(() => {
+    clearThreadsGateCompletion();
+    document.documentElement.removeAttribute(THREADS_GATE_COMPLETED_ATTRIBUTE);
+  });
+
+  it('menandai <html> sebelum paint bila gate sudah selesai', () => {
+    completeThreadsGate(1_700_000_000_000);
+
+    runScript();
+
+    expect(
+      document.documentElement.getAttribute(THREADS_GATE_COMPLETED_ATTRIBUTE),
+    ).toBe('true');
+  });
+
+  it('tidak menandai apa pun bila flag kosong atau rusak', () => {
+    runScript();
+    expect(
+      document.documentElement.hasAttribute(THREADS_GATE_COMPLETED_ATTRIBUTE),
+    ).toBe(false);
+
+    window.localStorage.setItem(THREADS_GATE_STORAGE_KEY, '{');
+    runScript();
+    expect(
+      document.documentElement.hasAttribute(THREADS_GATE_COMPLETED_ATTRIBUTE),
+    ).toBe(false);
+
+    window.localStorage.setItem(
+      THREADS_GATE_STORAGE_KEY,
+      JSON.stringify({ completedAt: 'kemarin' }),
+    );
+    runScript();
+    expect(
+      document.documentElement.hasAttribute(THREADS_GATE_COMPLETED_ATTRIBUTE),
+    ).toBe(false);
+  });
+
+  it('hanya membaca localStorage, tidak menulis', () => {
+    completeThreadsGate();
+    const before = window.localStorage.getItem(THREADS_GATE_STORAGE_KEY);
+
+    runScript();
+
+    expect(window.localStorage.getItem(THREADS_GATE_STORAGE_KEY)).toBe(before);
   });
 });

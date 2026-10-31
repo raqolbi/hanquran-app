@@ -28,11 +28,13 @@ function remainingDelayMs(clickedAt: number, now = Date.now()): number {
 
 /**
  * Overlay Gate Threads sekali pakai — `docs/34-threads-gate-spec.md`.
- * Overlay hanya setelah mount (useEffect) agar HTML SSR = hidrasi klien.
+ * Status awal selalu `pending` agar HTML SSR = render pertama klien; overlay
+ * ikut terkirim di HTML awal (LCP). Pengguna yang sudah menyelesaikan gate
+ * disembunyikan sebelum paint oleh skrip inline + CSS (docs/34 §14), lalu
+ * status diubah ke `completed` setelah mount.
  */
 export function useThreadsGate(): UseThreadsGateResult {
   const [status, setStatus] = useState<ThreadsGateStatus>('pending');
-  const [storageReady, setStorageReady] = useState(false);
   const [openFailed, setOpenFailed] = useState(false);
   const clickedAtRef = useRef<number | null>(null);
   const timeoutRef = useRef<number | null>(null);
@@ -50,7 +52,6 @@ export function useThreadsGate(): UseThreadsGateResult {
     if (isThreadsGateCompleted()) {
       setStatus('completed');
     }
-    setStorageReady(true);
   }, []);
 
   useEffect(() => {
@@ -126,7 +127,7 @@ export function useThreadsGate(): UseThreadsGateResult {
 
   return {
     status,
-    showOverlay: storageReady && status !== 'completed',
+    showOverlay: status !== 'completed',
     isContinueEnabled: status === 'ready',
     showOpenFailedHint: status === 'ready' && openFailed,
     threadsUrl: APP_AUTHOR_THREADS_URL,
