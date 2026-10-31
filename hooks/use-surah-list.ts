@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { shouldFetchSurah } from '@/lib/surah-seed';
 import type { SurahSummary } from '@/services/quran';
 import { getSurahList } from '@/services/quran';
 import { useUserStore } from '@/stores/userStore';
@@ -15,11 +16,17 @@ interface UseSurahListResult {
   retry: () => void;
 }
 
-export function useSurahList(): UseSurahListResult {
+export function useSurahList(
+  initialSurahs?: SurahSummary[],
+): UseSurahListResult {
   const t = useTranslations('errors');
   const appLocale = useUserStore((s) => s.settings.appLocale);
-  const [surahs, setSurahs] = useState<SurahSummary[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Seed dari server (docs/36 §3): beranda di-SSG agar HTML awal berisi
+  // daftar surat. Seed hanya berisi locale `id`.
+  const [surahs, setSurahs] = useState<SurahSummary[]>(
+    () => initialSurahs ?? [],
+  );
+  const [loading, setLoading] = useState(() => !initialSurahs?.length);
   const [error, setError] = useState<string | null>(null);
   const [reloadToken, setReloadToken] = useState(0);
 
@@ -30,7 +37,25 @@ export function useSurahList(): UseSurahListResult {
   }, []);
 
   useEffect(() => {
+    const seedMatches = Boolean(initialSurahs?.length);
+
+    if (
+      !shouldFetchSurah({
+        seedMatches,
+        translationLanguage: appLocale,
+        reloadToken,
+      })
+    ) {
+      setSurahs((current) =>
+        current === initialSurahs ? current : initialSurahs ?? [],
+      );
+      setError(null);
+      setLoading(false);
+      return;
+    }
+
     let cancelled = false;
+    setLoading(true);
 
     getSurahList(appLocale)
       .then((data) => {
@@ -54,7 +79,7 @@ export function useSurahList(): UseSurahListResult {
     return () => {
       cancelled = true;
     };
-  }, [appLocale, t, reloadToken]);
+  }, [appLocale, initialSurahs, reloadToken, t]);
 
   return { surahs, loading, error, retry };
 }

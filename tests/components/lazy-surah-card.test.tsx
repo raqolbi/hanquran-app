@@ -1,5 +1,5 @@
-import { act, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
+import { act, cleanup, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { LazySurahCard } from '@/components/lazy-surah-card';
 
@@ -19,45 +19,34 @@ const baseProps = {
 };
 
 describe('LazySurahCard', () => {
-  let observerCallback: IntersectionObserverCallback | null = null;
-
-  beforeEach(() => {
-    observerCallback = null;
-
-    class MockIntersectionObserver {
-      constructor(callback: IntersectionObserverCallback) {
-        observerCallback = callback;
-      }
-      observe = vi.fn();
-      disconnect = vi.fn();
-      unobserve = vi.fn();
-    }
-
-    vi.stubGlobal('IntersectionObserver', MockIntersectionObserver);
-  });
-
   afterEach(() => {
+    cleanup();
     vi.unstubAllGlobals();
   });
 
-  it('menampilkan placeholder sebelum kartu terlihat', () => {
+  it('merender kartu langsung di HTML (SSR/SEO) tanpa placeholder', () => {
     const { container } = render(<LazySurahCard {...baseProps} />);
 
-    expect(screen.queryByText('Al-Faatiha')).toBeNull();
-    expect(container.querySelector('[aria-hidden="true"]')).not.toBeNull();
+    expect(screen.getByText('Al-Faatiha')).not.toBeNull();
+    expect(screen.getByRole('link').getAttribute('href')).toBe('/surah/1');
+    expect(container.querySelector('[aria-hidden="true"]')).toBeNull();
   });
 
-  it('merender SurahCard setelah memasuki viewport', async () => {
-    render(<LazySurahCard {...baseProps} />);
+  it('memakai content-visibility agar kartu di luar viewport tidak dirender berat', () => {
+    const { container } = render(<LazySurahCard {...baseProps} />);
+    const wrapper = container.firstElementChild as HTMLElement;
+
+    expect(wrapper.style.contentVisibility).toBe('auto');
+    expect(wrapper.style.containIntrinsicSize).toBe('auto 7.5rem');
+  });
+
+  it('tidak bergantung pada IntersectionObserver untuk menampilkan isi', async () => {
+    vi.stubGlobal('IntersectionObserver', undefined);
 
     await act(async () => {
-      observerCallback?.(
-        [{ isIntersecting: true } as IntersectionObserverEntry],
-        {} as IntersectionObserver,
-      );
+      render(<LazySurahCard {...baseProps} />);
     });
 
-    expect(screen.getByRole('link').getAttribute('href')).toBe('/surah/1');
     expect(screen.getByText('Al-Faatiha')).not.toBeNull();
   });
 });

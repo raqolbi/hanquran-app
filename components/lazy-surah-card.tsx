@@ -1,59 +1,27 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-
 import { SurahCard, type SurahCardProps } from '@/components/surah-card';
 
-/** Perkiraan tinggi kartu — menjaga layout stabil sebelum konten dimuat. */
-const CARD_MIN_HEIGHT = '7.5rem';
-
-/** Jarak prefetch sebelum kartu masuk viewport. */
-const VIEWPORT_ROOT_MARGIN = '240px 0px';
+/**
+ * Kartu surat dengan `content-visibility: auto`.
+ *
+ * Berbeda dari versi lama (placeholder sampai IntersectionObserver), kartu
+ * kini selalu ada di HTML agar daftar surat ikut ter-SSR (docs/36 §3).
+ * Browser melewati render/paint kartu di luar viewport; `contain-intrinsic-size`
+ * menjaga tinggi perkiraan agar scrollbar tidak melompat.
+ */
+const CARD_INTRINSIC_SIZE = 'auto 7.5rem';
 
 export function LazySurahCard(props: SurahCardProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const element = containerRef.current;
-    if (!element || isVisible) {
-      return;
-    }
-
-    if (typeof IntersectionObserver === 'undefined') {
-      setIsVisible(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry?.isIntersecting) {
-          return;
-        }
-        setIsVisible(true);
-        observer.disconnect();
-      },
-      { rootMargin: VIEWPORT_ROOT_MARGIN, threshold: 0 },
-    );
-
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [isVisible]);
-
   return (
     <div
-      ref={containerRef}
       className="relative"
-      style={{ minHeight: CARD_MIN_HEIGHT }}
+      style={{
+        contentVisibility: 'auto',
+        containIntrinsicSize: CARD_INTRINSIC_SIZE,
+      }}
     >
-      {isVisible ? (
-        <SurahCard {...props} />
-      ) : (
-        <div
-          aria-hidden
-          className="h-[7.5rem] rounded-xl border border-border bg-muted/40"
-        />
-      )}
+      <SurahCard {...props} />
     </div>
   );
 }

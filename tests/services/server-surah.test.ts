@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { readSurahForServer } from '@/services/quran/server-surah';
+import {
+  readSurahForServer,
+  readSurahListForServer,
+} from '@/services/quran/server-surah';
 
 describe('readSurahForServer', () => {
   it('memuat surat + terjemahan default id dari public/data', async () => {
@@ -25,4 +28,33 @@ describe('readSurahForServer', () => {
     expect(surah.ayahs).toHaveLength(6);
     expect(surah.ayahs[0]!.arabic.length).toBeGreaterThan(0);
   }, 15000);
+});
+
+describe('readSurahListForServer', () => {
+  it('memuat 114 ringkasan surat berurutan dari public/data', async () => {
+    const surahs = await readSurahListForServer();
+
+    expect(surahs).toHaveLength(114);
+    expect(surahs[0]).toMatchObject({
+      number: 1,
+      englishName: 'Al-Faatiha',
+      ayahCount: 7,
+      type: 'Meccan',
+    });
+    expect(surahs.at(-1)).toMatchObject({ number: 114, ayahCount: 6 });
+    expect(surahs.map((s) => s.number)).toEqual(
+      Array.from({ length: 114 }, (_, i) => i + 1),
+    );
+    // Ringkasan tidak membawa ayat — payload halaman tetap ringan.
+    expect(surahs[0]).not.toHaveProperty('ayahs');
+  }, 20000);
+
+  it('memakai arti bahasa Inggris untuk locale en', async () => {
+    const [first] = await readSurahListForServer('en');
+
+    expect(first).toBeDefined();
+    expect(first!.meaning).not.toBe(
+      (await readSurahListForServer('id'))[0]!.meaning,
+    );
+  }, 20000);
 });

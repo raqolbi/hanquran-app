@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 
 import { NativeAwareLink } from '@/components/native-aware-link';
 import { routes } from '@/lib/routes';
-import { useSurahList } from '@/hooks/use-surah-list';
+import type { SurahSummary } from '@/services/quran';
 import { useUserStore } from '@/stores/userStore';
 
 interface ContinueReadingProps {
@@ -78,10 +78,13 @@ export function ContinueReading({
 }
 
 /** Kartu Lanjutkan Hafalan — hanya tampil jika `lastRead` tersedia di Dexie. */
-export function ContinueReadingSection() {
+export function ContinueReadingSection({
+  surahs,
+}: {
+  surahs: SurahSummary[];
+}) {
   const lastViewed = useUserStore((s) => s.lastViewed);
   const initialized = useUserStore((s) => s.initialized);
-  const { surahs } = useSurahList();
 
   if (!initialized || !lastViewed) {
     return null;

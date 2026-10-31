@@ -19,7 +19,7 @@ export function Header() {
 
   return (
     <motion.header
-      initial={{ opacity: 0, y: -10 }}
+      initial={false}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       className="sticky top-0 z-40"

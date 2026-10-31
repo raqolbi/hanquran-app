@@ -3,12 +3,9 @@ import path from 'node:path';
 
 import type { AppLocale } from '@/types';
 
-import type { SurahData } from './app-types';
-import type {
-  DatasetSurahFile,
-  DatasetTranslationFile,
-} from './dataset-types';
-import { DEFAULT_LANGUAGE, mapSurahToDetail } from './mappers';
+import type { DatasetManifest, DatasetSurahFile, DatasetTranslationFile } from './dataset-types';
+import type { SurahData, SurahSummary } from './app-types';
+import { DEFAULT_LANGUAGE, mapSurahToDetail, mapSurahToSummary } from './mappers';
 import { formatSurahId, translationPath } from './paths';
 
 /**
@@ -66,4 +63,24 @@ export async function readSurahForServer(
     DEFAULT_LANGUAGE,
   );
   return mapSurahToDetail(surahFile, translationFile, locale);
+}
+
+/**
+ * Muat ringkasan seluruh surat untuk halaman beranda yang di-SSG
+ * (docs/36 §3). Hanya metadata surat — tanpa ayat/terjemahan.
+ */
+export async function readSurahListForServer(
+  locale: AppLocale = 'id',
+): Promise<SurahSummary[]> {
+  const manifest = await readPublicJson<DatasetManifest>('data/manifest.json');
+  const surahNumbers = Array.from(
+    { length: manifest.surahs },
+    (_, index) => index + 1,
+  );
+
+  const files = await Promise.all(surahNumbers.map((n) => readSurahFile(n)));
+
+  return files
+    .filter((file): file is DatasetSurahFile => file !== null)
+    .map((file) => mapSurahToSummary(file, locale));
 }
