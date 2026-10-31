@@ -219,7 +219,7 @@ Audit kritis terhadap hasil T1–T9 (bukan audit SEO awal). Semua temuan **tidak
 | F8 | UX | Flash terjemahan & locale | Seed server selalu terjemahan `id` | Pengguna `en` melihat flash Indonesia sebelum refetch | P2 |
 | F9 | UX | Deep link `?ayah=n` tidak scroll | Tidak ada `scrollIntoView` (perilaku lama) | Pengguna mendarat di atas halaman | P1 |
 | F10 | Higiene | Import `React` tak terpakai | `components/surah-detail-client.tsx:3` | Lint noise | P3 |
-| F11 | SEO | Home masih CSR | `app/page.tsx` `'use client'`; Lighthouse perf 53 | Konten home tipis untuk crawler; CWV | P1 (follow-up terpisah) |
+| F11 | SEO | Home masih CSR | `app/page.tsx` `'use client'`; Lighthouse perf 53 | Konten home tipis untuk crawler; CWV | ✅ Selesai — Phase 11 (`docs/36`) |
 | F12 | Test | Coverage seed/XML/query belum ada | — | Regresi tidak terdeteksi otomatis | P1 |
 | F13 | Operasional | Validasi eksternal & Search Console belum | Butuh deploy production | — | P1 (setelah deploy) |
 
@@ -249,7 +249,7 @@ Urutan disarankan: **H1 → H2 → H3 → H5 → H4 → H7 → H9 → H6 → H8*
 
 Kontrak non-regresi: app-shell offline & SW tidak berubah; `generateStaticParams` tetap; export Android tetap hijau; Lighthouse SEO tidak turun.
 
-F8, F10, F11, F13 dicatat sebagai backlog terpisah (F11 = T10 performa/CWV, lihat `docs/18`).
+F8, F10, F13 dicatat sebagai backlog terpisah; F10 sudah ikut beres saat H1. **F11** dikerjakan sebagai **Phase 11 — Performa Beranda & CWV** (`docs/36-performance-cwv.md`), lihat §9.2.
 
 ### 9.1 Status implementasi (29 Okt 2026) — ✅ Selesai
 
@@ -268,3 +268,18 @@ F8, F10, F11, F13 dicatat sebagai backlog terpisah (F11 = T10 performa/CWV, liha
 Regresi: build web hijau; export Android (`HANQURAN_TARGET=android`) hijau dengan `out/surah/*.html` tetap berisi konten; Lighthouse SEO **100** (home & surah-1), settings 66 (noindex by design); performa surah-1 **73 → 87**.
 
 Catatan: `?ayah` invalid diklem di state, URL tidak ditulis ulang (share link tetap apa adanya). `/surah/0` di lokal `next start` tetap 404 berkat hilangnya artefak `0.html`; redirect `vercel.json` menjadi pengaman tambahan di production. F10 (import `React` tak terpakai) ikut beres.
+
+### 9.2 Tindak lanjut F11 — Phase 11 (✅ 29 Okt 2026)
+
+F11 dikerjakan sebagai phase terpisah (**Phase 11 — Performa Beranda & CWV**) agar hardening SEO tetap fokus pada H1–H9. Spek hasil lengkap: [`docs/36-performance-cwv.md`](./36-performance-cwv.md).
+
+| Perubahan | File | Bukti |
+|-----------|------|-------|
+| Loader server ringkasan 114 surat | `services/quran/server-surah.ts` → `readSurahListForServer()` | Test `tests/services/server-surah.test.ts` |
+| Beranda server component (SSG) + canonical `/`; UI pindah ke `HomeClient` | `app/page.tsx`, `components/home-client.tsx` | HTML build: 114 tautan `/surah/*`, nama surat ada, canonical `/` |
+| Seed daftar surat di klien; skip fetch dataset locale `id` | `hooks/use-surah-list.ts`, `lib/surah-seed.ts` | Test `tests/hooks/use-surah-list.test.tsx`; browser: **0 request** `/data/*` saat buka beranda |
+| Kartu surat selalu di HTML + `content-visibility` | `components/lazy-surah-card.tsx` | Test `tests/components/lazy-surah-card.test.tsx`; CLS **0** |
+| Animasi masuk tidak menyembunyikan konten | `components/header.tsx`, `search-input.tsx`, `filter-chips.tsx` | HTML build: node `opacity:0` hanya tersisa di footer (below fold) |
+| Satu sumber daftar surat | `components/continue-reading.tsx` | Tidak ada fetch daftar kedua di klien |
+
+Hasil: Lighthouse mobile beranda **performance 59 → 85**, TBT **680 → 200 ms**, CLS **0,239 → 0**, Speed Index 1,9 → 1,4 s, SEO tetap **100**; seluruh suite **85 file / 406 test**; build web & export Android hijau. LCP first-visit masih 3,9 s karena paragraf **Threads Gate** yang sengaja dirender setelah hidrasi (`docs/34`) — dicatat sebagai backlog terpisah, bukan regresi beranda. F8 (flash terjemahan locale `en`) dan F13 (validasi eksternal) tetap terbuka.

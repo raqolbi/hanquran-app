@@ -3,8 +3,8 @@
 Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi HanQuran menuju MVP. Berisi daftar pekerjaan teknis yang dapat langsung dikerjakan developer.
 
 **Terakhir diperbarui:** 29 Oktober 2026
-**Status:** 🚧 Sprint 2 — Growth `0.2.0`/`0.3.0` diimplementasi di kode; uji manual perangkat & tag rilis menunggu; Phase 9 Android (Capacitor) terdokumentasi di `docs/32`; Phase 10 SEO ✅ selesai; Phase 10b hardening ✅ selesai
-**Total Development Tasks:** 97 + Phase 9 Android (lihat `docs/32` §13) + Phase 10 SEO (lihat `docs/35-seo-spec.md` §4) + Phase 10b Hardening (lihat `docs/35` §8–§9)
+**Status:** 🚧 Sprint 2 — Growth `0.2.0`/`0.3.0` diimplementasi di kode; uji manual perangkat & tag rilis menunggu; Phase 9 Android (Capacitor) terdokumentasi di `docs/32`; Phase 10 SEO ✅ selesai; Phase 10b hardening ✅ selesai; Phase 11 performa beranda ✅ selesai
+**Total Development Tasks:** 97 + Phase 9 Android (lihat `docs/32` §13) + Phase 10 SEO (lihat `docs/35-seo-spec.md` §4) + Phase 10b Hardening (lihat `docs/35` §8–§9) + Phase 11 Performa Beranda (lihat `docs/36-performance-cwv.md`)
 **Arsitektur data:** `docs/23-static-dataset-architecture.md`
 
 ---
@@ -70,9 +70,10 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 7         | Testing & Quality Assurance       | 9      | 6      | 2      | 1      | 2       | ⏳ Audio + repeat unit ✅                      |
 | 8         | Release & Monitoring              | 11     | 6      | 3      | 2      | 3       | 🟡 Error tracking & rollout belum            |
 | 9         | Platform Android (Capacitor)      | —      | —      | —      | —      | 0       | 📋 Backlog di `docs/32` §13 — PWA tetap utama |
-| 10        | SEO & Discoverability             | 9      | 4      | 3      | 2      | 9       | ✅ Selesai (T1–T9) — follow-up perf di luar phase |
+| 10        | SEO & Discoverability             | 9      | 4      | 3      | 2      | 9       | ✅ Selesai (T1–T9) — follow-up perf → Phase 11 ✅ |
 | 10b       | SEO Hardening (pasca-audit)       | 9      | 4      | 3      | 2      | 9       | ✅ Selesai (H1–H9) — 29 Okt 2026             |
-| **TOTAL** |                                   | **97** | **48** | **31** | **18** | **70**  | (+ Phase 9; + Phase 10 SEO; + Phase 10b hardening) |
+| 11        | Performa Beranda & CWV            | 6      | 2      | 3      | 1      | 6       | ✅ Selesai (P11-1–P11-6) — 29 Okt 2026       |
+| **TOTAL** |                                   | **103** | **50** | **34** | **19** | **76**  | (+ Phase 9; + Phase 10 SEO; + Phase 10b hardening; + Phase 11 CWV) |
 
 
 > Catatan: Phase 7 (Testing & QA) berjalan **paralel** mulai Phase 1 — bukan sequential setelah Phase 6 selesai.
@@ -1208,7 +1209,7 @@ Kerjakan dan centang task di **`docs/32` §13**. Di dokumen ini cukup lacak stat
 
 # 🔍 Phase 10 — SEO & Discoverability
 
-**Status:** ✅ Selesai — T1–T9 terimplementasi & terverifikasi (27–29 Okt 2026); follow-up performa home dicatat di `docs/35` §4 T9  
+**Status:** ✅ Selesai — T1–T9 terimplementasi & terverifikasi (27–29 Okt 2026); follow-up performa home diselesaikan di Phase 11 (`docs/36`)  
 **Spek lengkap & hasil audit:** [`docs/35-seo-spec.md`](./35-seo-spec.md)  
 **Prioritas konten:** T2+T3+T7 (discovery) → T1 (server-render surat = nilai terbesar) → T4+T6 → T9 → T5+T8
 
@@ -1282,7 +1283,44 @@ Konteks: Phase 10 tuntas & terverifikasi (build web + Android hijau, 370 test, L
 
 **Hasil verifikasi (29 Okt 2026):** seluruh DoD terpenuhi — reaktivitas query-only terbukti di browser, 0 fetch dataset pada `/surah/2` & navigasi kartu, 0 prefetch `/surah/*` dari home, teks ayat tampil dengan JS dimatikan, 399 test lulus, build web & Android hijau, Lighthouse SEO 100/100/66 (settings noindex by design), perf surah-1 73 → 87. Rincian bukti per item di [`docs/35` §9.1](./35-seo-spec.md).
 
-**Backlog terpisah dari phase ini:** F8 (flash terjemahan/locale → ikut i18n routing), F11 (server-render home + CWV → kandidat Phase 11), F13 (validasi eksternal & Search Console setelah deploy). F10 (import `React` tak terpakai) ikut beres saat H1.
+**Backlog terpisah dari phase ini:** F8 (flash terjemahan/locale → ikut i18n routing), F11 (server-render home + CWV → Phase 11 ✅), F13 (validasi eksternal & Search Console setelah deploy). F10 (import `React` tak terpakai) ikut beres saat H1.
+
+---
+
+# ⚡ Phase 11 — Performa Beranda & Core Web Vitals
+
+**Status:** ✅ Selesai 29 Okt 2026 — beranda di-SSG, daftar 114 surat ada di HTML awal (build web + export Android hijau, 406 test lulus)  
+**Sumber temuan:** audit SEO [`docs/35` §8 F11](./35-seo-spec.md)  
+**Bukti, angka sebelum/sesudah & backlog:** [`docs/36-performance-cwv.md`](./36-performance-cwv.md)
+
+Konteks: Phase 10 sudah men-server-render halaman surat, tetapi beranda masih `'use client'` — HTML awal hanya berisi shell + "Memuat daftar surat", lalu klien mengunduh 114 file JSON. Lighthouse mobile mencatat performance **59**, TBT 680 ms, CLS 0,239 (placeholder `LazySurahCard` berganti kartu).
+
+| ID | Task | Tipe | Prioritas | Ref |
+|----|------|------|-----------|-----|
+| P11-1 | `readSurahListForServer()` — loader server ringkasan 114 surat (metadata saja) | [NEW] | P0 | `docs/36` §2 |
+| P11-2 | `app/page.tsx` jadi server component (SSG) + canonical `/`; UI interaktif pindah ke `HomeClient` | [REFACTOR] | P0 | `docs/36` §2 |
+| P11-3 | `useSurahList(initialSurahs)` memakai seed server; skip fetch dataset untuk locale `id`, tetap fetch untuk locale lain/retry | [PERF] | P1 | `docs/36` §2 |
+| P11-4 | `LazySurahCard` selalu render kartu + `content-visibility: auto` & `contain-intrinsic-size` | [PERF] | P1 | `docs/36` §2 |
+| P11-5 | Chrome beranda default-visible (`initial={false}`) pada header, search, filter | [FIX] | P1 | `docs/36` §2 |
+| P11-6 | `ContinueReadingSection` menerima daftar surat dari induk (hapus fetch daftar kedua) | [REFACTOR] | P2 | `docs/36` §2 |
+
+- [x] [NEW] P11-1 — loader server ringkasan surat (P0) — `readSurahListForServer`
+- [x] [REFACTOR] P11-2 — beranda SSG + `HomeClient` (P0) — 114 tautan surat di HTML awal
+- [x] [PERF] P11-3 — seed daftar surat tanpa fetch dataset locale `id` (P1) — 0 request dataset
+- [x] [PERF] P11-4 — kartu surat SSR-visible + `content-visibility` (P1) — CLS 0
+- [x] [FIX] P11-5 — animasi masuk tidak menyembunyikan konten pra-hidrasi (P1)
+- [x] [REFACTOR] P11-6 — satu sumber daftar surat untuk kartu Lanjutkan Hafalan (P2)
+
+**Urutan kerja:** P11-1 → P11-2 → P11-3 → P11-4 → P11-5 → P11-6.
+
+**DoD Phase 11:**
+
+- HTML awal beranda berisi tautan & nama 114 surat; dengan JS dimatikan daftar tetap terlihat.
+- Locale `id` tidak mengunduh dataset JSON saat membuka beranda; locale `en` tetap berperilaku seperti sebelumnya.
+- CLS tidak naik dan animasi masuk tidak menunda konten yang sudah di-SSR.
+- Build web & export Android hijau; seluruh test hijau; Lighthouse SEO tidak turun.
+
+**Hasil verifikasi (29 Okt 2026):** seluruh DoD terpenuhi — performance home 59 → **85**, TBT 680 → 200 ms, CLS 0,239 → **0**, Speed Index 1,9 → 1,4 s, SEO tetap 100; 114 tautan surat di HTML (264 KB raw / 17,3 KB gzip), 0 request dataset locale `id`, 85 file / 406 test lulus, build web & export Android hijau. LCP first-visit masih 3,9 s karena overlay Threads Gate yang dirender setelah hidrasi — dicatat sebagai backlog `docs/34`, bukan regresi beranda. Rincian di [`docs/36`](./36-performance-cwv.md).
 
 ---
 
