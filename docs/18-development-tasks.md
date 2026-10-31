@@ -3,8 +3,8 @@
 Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi HanQuran menuju MVP. Berisi daftar pekerjaan teknis yang dapat langsung dikerjakan developer.
 
 **Terakhir diperbarui:** 29 Oktober 2026
-**Status:** 🚧 Sprint 2 — Growth `0.2.0`/`0.3.0` diimplementasi di kode; uji manual perangkat & tag rilis menunggu; Phase 9 Android (Capacitor) terdokumentasi di `docs/32`; Phase 10 SEO ✅ selesai; Phase 10b hardening ✅ selesai; Phase 11 performa beranda ✅ selesai
-**Total Development Tasks:** 97 + Phase 9 Android (lihat `docs/32` §13) + Phase 10 SEO (lihat `docs/35-seo-spec.md` §4) + Phase 10b Hardening (lihat `docs/35` §8–§9) + Phase 11 Performa Beranda (lihat `docs/36-performance-cwv.md`)
+**Status:** 🚧 Sprint 2 — Growth `0.2.0`/`0.3.0` diimplementasi di kode; uji manual perangkat & tag rilis menunggu; Phase 9 Android (Capacitor) terdokumentasi di `docs/32`; Phase 10 SEO ✅ selesai; Phase 10b hardening ✅ selesai; Phase 11 performa beranda ✅ selesai; Phase 11b LCP Threads Gate ✅ selesai
+**Total Development Tasks:** 97 + Phase 9 Android (lihat `docs/32` §13) + Phase 10 SEO (lihat `docs/35-seo-spec.md` §4) + Phase 10b Hardening (lihat `docs/35` §8–§9) + Phase 11 Performa Beranda (lihat `docs/36-performance-cwv.md`) + Phase 11b LCP Threads Gate (lihat `docs/34` §8)
 **Arsitektur data:** `docs/23-static-dataset-architecture.md`
 
 ---
@@ -73,7 +73,8 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 10        | SEO & Discoverability             | 9      | 4      | 3      | 2      | 9       | ✅ Selesai (T1–T9) — follow-up perf → Phase 11 ✅ |
 | 10b       | SEO Hardening (pasca-audit)       | 9      | 4      | 3      | 2      | 9       | ✅ Selesai (H1–H9) — 29 Okt 2026             |
 | 11        | Performa Beranda & CWV            | 6      | 2      | 3      | 1      | 6       | ✅ Selesai (P11-1–P11-6) — 29 Okt 2026       |
-| **TOTAL** |                                   | **103** | **50** | **34** | **19** | **76**  | (+ Phase 9; + Phase 10 SEO; + Phase 10b hardening; + Phase 11 CWV) |
+| 11b       | LCP Threads Gate (SSR pra-paint)  | 3      | 0      | 3      | 0      | 3       | ✅ Selesai (P11b-1–P11b-3) — 31 Okt 2026     |
+| **TOTAL** |                                   | **106** | **50** | **37** | **19** | **79**  | (+ Phase 9; + Phase 10 SEO; + Phase 10b hardening; + Phase 11 CWV; + Phase 11b LCP gate) |
 
 
 > Catatan: Phase 7 (Testing & QA) berjalan **paralel** mulai Phase 1 — bukan sequential setelah Phase 6 selesai.
@@ -1321,6 +1322,34 @@ Konteks: Phase 10 sudah men-server-render halaman surat, tetapi beranda masih `'
 - Build web & export Android hijau; seluruh test hijau; Lighthouse SEO tidak turun.
 
 **Hasil verifikasi (29 Okt 2026):** seluruh DoD terpenuhi — performance home 59 → **85**, TBT 680 → 200 ms, CLS 0,239 → **0**, Speed Index 1,9 → 1,4 s, SEO tetap 100; 114 tautan surat di HTML (264 KB raw / 17,3 KB gzip), 0 request dataset locale `id`, 85 file / 406 test lulus, build web & export Android hijau. LCP first-visit masih 3,9 s karena overlay Threads Gate yang dirender setelah hidrasi — dicatat sebagai backlog `docs/34`, bukan regresi beranda. Rincian di [`docs/36`](./36-performance-cwv.md).
+
+## 11b — LCP Threads Gate (SSR pra-paint)
+
+**Status:** ✅ Selesai 31 Okt 2026 — overlay Threads Gate ikut HTML awal; pengguna yang sudah menyelesaikan gate tidak melihat kedipan overlay  
+**Spek perilaku:** [`docs/34` §8](./34-threads-gate-spec.md)  
+**Temuan asal:** `docs/36` §3.3 (LCP first-visit = paragraf gate yang baru muncul setelah hidrasi)
+
+Konteks: Phase 11 menurunkan LCP beranda, tetapi pengunjung **baru** tetap mendapat LCP ±3,9 s karena overlay gate baru di-mount setelah hidrasi. Solusinya bukan menghapus gate, melainkan mengirim overlay di HTML awal dan mengatur visibilitasnya **sebelum paint** lewat skrip inline + atribut `<html>`.
+
+| ID | Task | Tipe | Prioritas | Ref |
+|----|------|------|-----------|-----|
+| P11b-1 | Overlay gate dirender di HTML awal; status awal selalu `pending` agar SSR = render pertama klien | [REFACTOR] | P1 | `docs/34` §8 |
+| P11b-2 | Skrip inline pra-paint membaca flag `completed` dan menandai `<html>`; CSS menyembunyikan overlay; `<noscript>` menghindari gate mati tanpa JS | [NEW] | P1 | `docs/34` §8 |
+| P11b-3 | Test skrip init (valid/rusak/kosong, read-only) + smoke fresh/returning/no-JS + Lighthouse | [TEST] | P1 | `docs/36` §3.3 |
+
+- [x] [REFACTOR] P11b-1 — overlay gate di HTML awal (P1)
+- [x] [NEW] P11b-2 — skrip pra-paint + CSS + `noscript` (P1)
+- [x] [TEST] P11b-3 — 3 test skrip init + smoke + Lighthouse (P1)
+
+**DoD Phase 11b:**
+
+- Pengunjung baru melihat gate pada paint pertama (tidak ada pop-in setelah hidrasi) dan alur Threads → 5 detik → Lanjut tetap sama.
+- Pengunjung yang sudah menyelesaikan gate tidak pernah melihat overlay, termasuk sebelum hidrasi.
+- Tanpa JS, gate disembunyikan dan konten/daftar surat tetap dapat dibaca.
+- Tidak ada hydration mismatch; scroll lock & fokus hanya aktif saat overlay benar-benar tampil.
+- Build web & export Android hijau; test hijau; Lighthouse SEO tidak turun.
+
+**Hasil verifikasi (31 Okt 2026):** observed LCP first-visit **±3,9 s → 0,10–0,15 s** (PerformanceObserver/Lighthouse trace); skor performance Lighthouse 82–92 pada tiga run (variasi TBT mesin), tetap ≥80; SEO 100, CLS 0. Gate terverifikasi di `domcontentloaded` (fresh: `display:flex`; returning: `display:none` + atribut `<html>`), alur 5 detik + Lanjut menutup overlay dan menyimpan flag, `noscript` menyembunyikan gate, 85 file / **409 test** lulus, build web & export Android hijau (114 tautan surat utuh). Catatan: LCP **simulasi** Lantern masih ±3,0–3,3 s karena model main-thread, berbeda dari observed LCP; angka observed dipakai untuk menilai dampak nyata. Rincian di [`docs/36` §3.3](./36-performance-cwv.md).
 
 ---
 

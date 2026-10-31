@@ -242,10 +242,11 @@ Menulis flag saat **Lanjut** diketuk. Jika app ditutup setelah Threads tetapi se
 
 | Lapisan | File rencana | Peran |
 |---------|--------------|--------|
-| Helper | `lib/threads-gate.ts` | get/set flag, `THREADS_GATE_CONTINUE_DELAY_MS`, guard `window` |
-| Hook | `hooks/use-threads-gate.ts` | state `pending` / `waiting` / `ready` / `completed`, deadline wall-clock, mount via `useEffect` |
-| UI | `components/shared/threads-gate.tsx` | Overlay kustom, dua tombol, i18n |
+| Helper | `lib/threads-gate.ts` | get/set flag, `THREADS_GATE_CONTINUE_DELAY_MS`, skrip init pra-paint, guard `window` |
+| Hook | `hooks/use-threads-gate.ts` | state `pending` / `waiting` / `ready` / `completed`, deadline wall-clock; status awal `pending` agar SSR = render pertama |
+| UI | `components/shared/threads-gate.tsx` | Overlay kustom, dua tombol, i18n, penanda `data-threads-gate-overlay` |
 | Mount | `components/providers/app-providers.tsx` | Global, semua rute |
+| Pra-paint | `app/layout.tsx`, `app/globals.css` | Skrip inline menandai `<html>`; CSS menyembunyikan overlay untuk pengguna lama; `<noscript>` kill-switch |
 | URL | `lib/app-about.ts` | `APP_AUTHOR_THREADS_URL` saja |
 | i18n | `messages/id.json`, `messages/en.json` | namespace `threadsGate` |
 | Tes | `tests/lib/threads-gate.test.ts`, `tests/hooks/use-threads-gate.test.ts` | pola `install-prompt` |
@@ -291,8 +292,8 @@ Namespace: `threadsGate`. Semua label Indonesia kecuali proper noun.
 
 ## 12. Tes (saat implementasi)
 
-- Flag kosong → overlay tampil setelah klien siap
-- Flag ada → overlay tidak tampil
+- Flag kosong → overlay tampil di HTML awal (SSR)
+- Flag ada → overlay disembunyikan sebelum paint dan tidak tampil
 - Ketuk Threads → `waiting`, Lanjut masih disabled, URL = `APP_AUTHOR_THREADS_URL`
 - 4,9 detik setelah ketuk → Lanjut masih disabled
 - 5,0 detik (wall-clock) setelah ketuk → `ready`, Lanjut enabled
@@ -301,7 +302,9 @@ Namespace: `threadsGate`. Semua label Indonesia kecuali proper noun.
 - Ketuk Lanjut sebelum `ready` → tidak menutup (disabled)
 - Ketuk Lanjut setelah `ready` → `localStorage` terisi, overlay hilang
 - JSON rusak di storage → overlay tampil (fail-open ke pending)
-- SSR / `useIsClient` false → tidak akses `localStorage`, tidak hydration mismatch
+- Skrip init hanya membaca `localStorage`; flag valid → `<html data-threads-gate-completed="true">`
+- Tanpa JS (`<noscript>`) → overlay disembunyikan, konten tetap terbaca
+- SSR → status awal `pending`, tidak ada hydration mismatch
 
 ---
 
@@ -320,9 +323,33 @@ Namespace: `threadsGate`. Semua label Indonesia kecuali proper noun.
 
 ---
 
+## 14. SSR & pra-paint (pembaruan 31 Oktober 2026)
+
+**Latar:** `docs/36` §3.3 menemukan LCP first-visit ±3,9 s karena overlay baru di-mount setelah hidrasi. Perbaikannya bukan menghapus gate, melainkan mengirim overlay di HTML awal dan mengatur visibilitasnya sebelum paint.
+
+Alur:
+
+1. Server merender overlay dengan status awal `pending`.
+2. Skrip inline di `<head>` (`buildThreadsGateInitScript`) membaca flag `localStorage`. Jika record valid → `<html data-threads-gate-completed="true">`.
+3. CSS di luar `@layer` menyembunyikan `[data-threads-gate-overlay]` untuk atribut tersebut, sehingga pengguna lama tidak melihat overlay walau markup-nya ada di HTML.
+4. Saat hidrasi, status awal klien juga `pending` (cocok dengan SSR). `useEffect` membaca flag dan mengubah status ke `completed`, lalu overlay di-unmount.
+5. Tanpa JS, `<noscript>` menyembunyikan overlay agar konten tidak terkunci.
+
+Invariant:
+
+- Skrip init **hanya membaca** `localStorage`; tidak menulis dan tidak menyentuh data pengguna.
+- Scroll lock & fokus dilewati bila atribut `completed` sudah ada (menghindari kedipan pada pengguna lama).
+- Gate tetap sekali pakai; `completeThreadsGate()` dan format record tidak berubah.
+- App-shell offline, service worker, dan export Android tidak berubah.
+
+Hasil: observed LCP first-visit **±3,9 s → 0,10–0,15 s**; Lighthouse performance 82–92 (variasi TBT mesin), SEO 100, CLS 0. Catatan: LCP simulasi Lantern masih ±3,0–3,3 s karena model main-thread; angka observed yang menilai dampak nyata.
+
+---
+
 ## Changelog
 
 | Tanggal | Perubahan |
 |---------|-----------|
 | 17 Agustus 2026 | Spek awal — gimmick sekali, Lanjut aktif 5 detik setelah Threads diketuk |
 | 17 Agustus 2026 | Implementasi client-side (`lib/threads-gate.ts`, overlay di `AppProviders`) |
+| 31 Oktober 2026 | Overlay di-SSR + skrip pra-paint & `<noscript>`; observed LCP ±3,9 s → 0,10–0,15 s (§14) |
