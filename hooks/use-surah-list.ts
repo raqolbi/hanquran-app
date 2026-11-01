@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { shouldFetchSurah } from '@/lib/surah-seed';
 import type { SurahSummary } from '@/services/quran';
 import { getSurahList } from '@/services/quran';
 import { useUserStore } from '@/stores/userStore';
@@ -22,7 +21,8 @@ export function useSurahList(
   const t = useTranslations('errors');
   const appLocale = useUserStore((s) => s.settings.appLocale);
   // Seed dari server (docs/36 §3): beranda di-SSG agar HTML awal berisi
-  // daftar surat. Seed hanya berisi locale `id`.
+  // daftar surat. Seed membawa arti `id` + `en` (`meaningTranslations`), jadi
+  // tidak perlu refetch saat locale `en` (docs/21 §6.1 F8).
   const [surahs, setSurahs] = useState<SurahSummary[]>(
     () => initialSurahs ?? [],
   );
@@ -39,13 +39,7 @@ export function useSurahList(
   useEffect(() => {
     const seedMatches = Boolean(initialSurahs?.length);
 
-    if (
-      !shouldFetchSurah({
-        seedMatches,
-        translationLanguage: appLocale,
-        reloadToken,
-      })
-    ) {
+    if (seedMatches && reloadToken === 0) {
       setSurahs((current) =>
         current === initialSurahs ? current : initialSurahs ?? [],
       );

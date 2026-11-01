@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { db } from '@/services/db/db';
 import { useUserStore } from '@/stores/userStore';
 import { getDefaultReciterId } from '@/services/quran';
+import { APP_LOCALE_STORAGE_KEY } from '@/lib/app-locale';
 import { DEFAULT_ARABIC_FONT_SIZE_PX } from '@/lib/arabic-text-size';
 
 describe('useUserStore — reciterId', () => {
@@ -363,5 +364,54 @@ describe('useUserStore — favorites', () => {
     await useUserStore.getState().init();
 
     expect(useUserStore.getState().favorites).toEqual([1, 36]);
+  });
+});
+
+describe('useUserStore — cache locale pra-paint (F8)', () => {
+  beforeEach(async () => {
+    await db.delete();
+    await db.open();
+    window.localStorage.clear();
+    useUserStore.setState({
+      favorites: [],
+      settings: {
+        id: 'default',
+        appLocale: 'id',
+        fontSize: DEFAULT_ARABIC_FONT_SIZE_PX,
+        translationVisible: false,
+        transliterationVisible: false,
+        contrastMode: 'default',
+        smoothAnimation: true,
+        autoFollowPlayback: true,
+        murotalEnabled: false,
+        autoDownloadOnPlay: false,
+        reciterId: getDefaultReciterId(),
+        translationResourceId: 33,
+        updatedAt: 0,
+      },
+      lastViewed: null,
+      initialized: false,
+    });
+  });
+
+  it('menulis cache dari settings Dexie saat init', async () => {
+    await db.settings.put({
+      ...useUserStore.getState().settings,
+      appLocale: 'en',
+    });
+
+    await useUserStore.getState().init();
+
+    expect(window.localStorage.getItem(APP_LOCALE_STORAGE_KEY)).toBe('en');
+  });
+
+  it('menulis cache saat appLocale diubah, tanpa menghapusnya saat setelan lain berubah', async () => {
+    await useUserStore.getState().init();
+
+    await useUserStore.getState().updateSettings({ appLocale: 'en' });
+    expect(window.localStorage.getItem(APP_LOCALE_STORAGE_KEY)).toBe('en');
+
+    await useUserStore.getState().updateSettings({ fontSize: 32 });
+    expect(window.localStorage.getItem(APP_LOCALE_STORAGE_KEY)).toBe('en');
   });
 });

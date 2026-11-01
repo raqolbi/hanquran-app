@@ -47,6 +47,11 @@ describe('readSurahListForServer', () => {
     );
     // Ringkasan tidak membawa ayat — payload halaman tetap ringan.
     expect(surahs[0]).not.toHaveProperty('ayahs');
+    // Arti kedua bahasa ikut seed agar locale `en` tidak perlu refetch (F8).
+    expect(surahs[0]!.meaningTranslations).toEqual({
+      id: 'Pembukaan',
+      en: 'The Opening',
+    });
   }, 20000);
 
   it('memakai arti bahasa Inggris untuk locale en', async () => {

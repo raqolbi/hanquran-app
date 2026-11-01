@@ -27,6 +27,15 @@ describe('surah mappers — locale', () => {
     expect(mapSurahToSummary(sampleSurah, 'id').meaning).toBe('Pembukaan');
   });
 
+  it('membawa arti id + en untuk paint pertama (F8)', () => {
+    const summary = mapSurahToSummary(sampleSurah, 'id');
+
+    expect(summary.meaningTranslations).toEqual({
+      id: 'Pembukaan',
+      en: 'The Opening',
+    });
+  });
+
   it('mengembalikan arti Inggris untuk locale en', () => {
     expect(getSurahMeaning(sampleSurah, 'en')).toBe('The Opening');
     expect(mapSurahToSummary(sampleSurah, 'en').meaning).toBe('The Opening');

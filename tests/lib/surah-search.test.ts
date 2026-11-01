@@ -45,6 +45,16 @@ describe('matchesSurahSearch', () => {
     expect(matchesSurahSearch('pembukaan', alFaatiha)).toBe(true);
   });
 
+  it('mencocokkan arti kedua bahasa walau locale aktif id (F8)', () => {
+    const surah = {
+      ...alFaatiha,
+      meaningTranslations: { id: 'Pembukaan', en: 'The Opening' },
+    };
+
+    expect(matchesSurahSearch('the opening', surah)).toBe(true);
+    expect(matchesSurahSearch('pembukaan', surah)).toBe(true);
+  });
+
   it('mencocokkan nomor surat', () => {
     expect(matchesSurahSearch('1', alFaatiha)).toBe(true);
     expect(matchesSurahSearch('6', alAnaam)).toBe(true);

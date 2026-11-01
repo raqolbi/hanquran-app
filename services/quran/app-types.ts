@@ -12,6 +12,8 @@ export interface SurahSummary {
   arabicName: string;
   englishName: string;
   meaning: string;
+  /** Arti dalam kedua bahasa UI — dipakai paint pertama (docs/21 F8). */
+  meaningTranslations?: { id: string; en: string };
   ayahCount: number;
   type: RevelationType;
 }

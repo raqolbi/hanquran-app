@@ -162,3 +162,26 @@
 html[data-threads-gate-completed='true'] [data-threads-gate-overlay] {
   display: none !important;
 }
+
+/*
+ * Locale swap pra-paint (docs/21 §6.1, F8). Skrip inline di `app/layout.tsx`
+ * menetapkan `data-app-locale` dari cache sebelum paint. Tanpa atribut
+ * (SSR / JS mati) teks `id` yang tampil, sesuai HTML server.
+ */
+html:not([data-app-locale='en']) [data-locale='en'] {
+  display: none;
+}
+
+html[data-app-locale='en'] [data-locale='id'] {
+  display: none;
+}
+
+/*
+ * Terjemahan ayat mengikuti bahasa konten. Selama data locale aktif belum
+ * siap (mis. pengguna `en` baru memuat terjemahan), teks `id` disembunyikan
+ * tetapi ruangnya dipertahankan agar tidak ada layout shift.
+ */
+html[data-app-locale='en'] [data-content-locale='id'],
+html[data-app-locale='id'] [data-content-locale='en'] {
+  visibility: hidden;
+}

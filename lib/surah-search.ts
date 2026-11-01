@@ -19,6 +19,7 @@ export function matchesSurahSearch(
   surah: {
     englishName: string;
     meaning: string;
+    meaningTranslations?: { id: string; en: string };
     arabicName: string;
     number?: number;
   },
@@ -29,6 +30,12 @@ export function matchesSurahSearch(
   const fields = [
     normalizeSearchText(surah.englishName),
     normalizeSearchText(surah.meaning),
+    ...(surah.meaningTranslations
+      ? [
+          normalizeSearchText(surah.meaningTranslations.id),
+          normalizeSearchText(surah.meaningTranslations.en),
+        ]
+      : []),
     normalizeSearchText(surah.arabicName),
   ];
 

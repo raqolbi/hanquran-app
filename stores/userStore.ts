@@ -10,6 +10,7 @@ import { create } from 'zustand';
 import { db, defaultSettings } from '@/services/db/db';
 import { detectAppLocale } from '@/i18n/detection';
 import { trackBookmarkCreated, trackLastReadUpdated } from '@/lib/analytics';
+import { writeCachedAppLocale } from '@/lib/app-locale';
 import { normalizeArabicFontSize } from '@/lib/arabic-text-size';
 import { normalizeReciterId } from '@/lib/reciter-preference';
 import type { SettingsRecord, LastReadRecord } from '@/types';
@@ -128,6 +129,10 @@ export const useUserStore = create<UserState & UserActions>()((set, get) => ({
         : null,
       initialized: true,
     });
+
+    // Segarkan cache pra-paint agar paint berikutnya memakai locale Dexie
+    // (docs/21 §6.1). Menutup kasus cache basi / pengguna lama tanpa cache.
+    writeCachedAppLocale(settings.appLocale);
   },
 
   toggleFavorite: async (surahId, options) => {
@@ -174,6 +179,10 @@ export const useUserStore = create<UserState & UserActions>()((set, get) => ({
     };
     await db.settings.put(next);
     set({ settings: next });
+
+    if (normalizedPatch.appLocale !== undefined) {
+      writeCachedAppLocale(next.appLocale);
+    }
   },
 
   setLastViewed: async (surahId, ayahNumber) => {

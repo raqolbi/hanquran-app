@@ -91,6 +91,7 @@ export function HomeClient({ initialSurahs }: HomeClientProps) {
                     arabicName={surah.arabicName}
                     englishName={surah.englishName}
                     meaning={surah.meaning}
+                    meaningTranslations={surah.meaningTranslations}
                     ayahCount={surah.ayahCount}
                     type={surah.type}
                     isFavorited={surah.isFavorited}

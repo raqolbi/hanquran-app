@@ -37,6 +37,7 @@ import { parseSurahIdFromPathname, routes } from '@/lib/routes';
 import { navigateApp } from '@/lib/navigate';
 import type { SurahData } from '@/services/quran';
 import { useUserStore } from '@/stores/userStore';
+import type { AppLocale } from '@/types';
 
 /**
  * Klien Surah Detail — dipisah dari `app/surah/[id]/page.tsx` agar konten
@@ -55,12 +56,16 @@ export default function SurahDetailClient({ initialSurah }: SurahDetailClientPro
   const pathname = usePathname();
   const surahId = parseSurahIdFromPathname(pathname);
 
-  const { surah, loading, error, retry } = useSurah(surahId, initialSurah);
+  const { surah, contentLocale, loading, error, retry } = useSurah(surahId, initialSurah);
 
   // Konten tetap tampil saat refetch latar — spinner hanya bila belum ada data.
   if (surah) {
     return (
-      <SurahDetailView surah={surah} surahIdParam={surahId} />
+      <SurahDetailView
+        surah={surah}
+        surahIdParam={surahId}
+        contentLocale={contentLocale}
+      />
     );
   }
 
@@ -90,9 +95,11 @@ export default function SurahDetailClient({ initialSurah }: SurahDetailClientPro
 function SurahDetailView({
   surah,
   surahIdParam,
+  contentLocale,
 }: {
   surah: SurahData;
   surahIdParam: string;
+  contentLocale: AppLocale | null;
 }) {
   const router = useRouter();
   const tPlayback = useTranslations('settings.playback');
@@ -239,6 +246,7 @@ function SurahDetailView({
               arabic={ayah.arabic}
               transliteration={ayah.transliteration}
               translation={ayah.translation}
+              translationLocale={contentLocale ?? undefined}
               isActive={activeAyah === ayah.number}
               isCompleted={completedAyahs.includes(ayah.number)}
               showTransliteration={showTransliteration}

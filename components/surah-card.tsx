@@ -6,7 +6,9 @@ import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 
 import { NativeAwareLink } from '@/components/native-aware-link';
+import { LocaleText } from '@/components/shared/locale-text';
 import { isAndroidBuild, isNativePlatform } from '@/lib/platform';
+import { getLocalePair, type LocalePair } from '@/lib/locale-text';
 import { routes } from '@/lib/routes';
 
 export interface SurahCardProps {
@@ -14,6 +16,8 @@ export interface SurahCardProps {
   arabicName: string;
   englishName: string;
   meaning: string;
+  /** Arti `id` + `en` untuk paint pertama (docs/21 F8). */
+  meaningTranslations?: LocalePair;
   ayahCount: number;
   type: 'Meccan' | 'Medinan';
   isFavorited?: boolean;
@@ -21,11 +25,16 @@ export interface SurahCardProps {
   onClick?: () => void;
 }
 
+const AYAHS_LABEL = getLocalePair('common', 'ayahs');
+const MECCAN_LABEL = getLocalePair('common', 'meccan');
+const MEDINAN_LABEL = getLocalePair('common', 'medinan');
+
 export function SurahCard({
   number,
   arabicName,
   englishName,
   meaning,
+  meaningTranslations,
   ayahCount,
   type,
   isFavorited = false,
@@ -35,6 +44,8 @@ export function SurahCard({
   const href = routes.surah(number);
   // Build Android meng-inline NEXT_PUBLIC_HANQURAN_TARGET=android.
   const useHardNav = isAndroidBuild() || isNativePlatform();
+  const meaningPair =
+    meaningTranslations ?? ({ id: meaning, en: meaning } satisfies LocalePair);
 
   const cardBody: ReactNode = (
     <motion.div
@@ -53,13 +64,17 @@ export function SurahCard({
             <h3 className="text-lg font-bold text-foreground">{englishName}</h3>
             <span className="text-sm text-muted-foreground">{arabicName}</span>
           </div>
-          <p className="text-sm text-muted-foreground mb-2">{meaning}</p>
+          <p className="text-sm text-muted-foreground mb-2">
+            <LocaleText pair={meaningPair} />
+          </p>
           <div className="flex items-center gap-3 flex-wrap">
             <span className="text-xs px-2.5 py-1 rounded-full bg-accent/10 text-accent-foreground font-medium">
-              {ayahCount} {t('ayahs')}
+              {ayahCount} <LocaleText pair={AYAHS_LABEL} />
             </span>
             <span className="text-xs px-2.5 py-1 rounded-full border border-border text-muted-foreground">
-              {type === 'Meccan' ? t('meccan') : t('medinan')}
+              <LocaleText
+                pair={type === 'Meccan' ? MECCAN_LABEL : MEDINAN_LABEL}
+              />
             </span>
           </div>
         </div>
@@ -106,9 +121,6 @@ export function SurahCard({
       href={href}
       prefetch={false}
       className="block"
-      aria-label={`${number} ${englishName} ${arabicName} ${meaning} ${ayahCount} ${t('ayahs')} ${
-        type === 'Meccan' ? t('meccan') : t('medinan')
-      }`}
     >
       {cardBody}
     </NativeAwareLink>

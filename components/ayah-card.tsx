@@ -9,12 +9,15 @@ import {
   SURAH_DETAIL_MIN_SCROLL_INSET,
   SURAH_DETAIL_READING_CONTROLS_HEIGHT,
 } from '@/lib/surah-detail-chrome';
+import type { AppLocale } from '@/types';
 
 interface AyahCardProps {
   number: number;
   arabic: string;
   transliteration?: string;
   translation?: string;
+  /** Bahasa teks terjemahan — dipakai CSS pra-paint (docs/21 F8). */
+  translationLocale?: AppLocale;
   isActive?: boolean;
   isCompleted?: boolean;
   showTransliteration?: boolean;
@@ -27,6 +30,7 @@ export function AyahCard({
   arabic,
   transliteration,
   translation,
+  translationLocale,
   isActive = false,
   isCompleted = false,
   showTransliteration = false,
@@ -90,7 +94,10 @@ export function AyahCard({
                 : undefined
             }
           >
-            <p className="text-sm text-muted-foreground leading-relaxed text-center">
+            <p
+              data-content-locale={translationLocale}
+              className="text-sm text-muted-foreground leading-relaxed text-center"
+            >
               {translation}
             </p>
           </div>

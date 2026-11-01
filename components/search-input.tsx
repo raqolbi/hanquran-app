@@ -1,15 +1,22 @@
 'use client';
 
 import { motion } from 'motion/react';
-import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useId, useState } from 'react';
+
+import { LocaleText } from '@/components/shared/locale-text';
+import { getLocalePair } from '@/lib/locale-text';
 
 interface SearchInputProps {
   onSearch?: (query: string) => void;
 }
 
+// Label bilingual pra-paint (docs/21 §6.1 F8): placeholder asli tidak bisa
+// di-swap CSS, jadi hint dirender sebagai elemen terpisah.
+const SEARCH_PLACEHOLDER = getLocalePair('home', 'searchPlaceholder');
+const SEARCH_LABEL = getLocalePair('home', 'searchAriaLabel');
+
 export function SearchInput({ onSearch }: SearchInputProps) {
-  const t = useTranslations('home');
+  const inputId = useId();
   const [value, setValue] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,6 +33,9 @@ export function SearchInput({ onSearch }: SearchInputProps) {
       className="w-full"
     >
       <div className="relative w-full">
+        <label htmlFor={inputId} className="sr-only">
+          <LocaleText pair={SEARCH_LABEL} />
+        </label>
         <svg
           className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground"
           fill="none"
@@ -40,13 +50,20 @@ export function SearchInput({ onSearch }: SearchInputProps) {
           />
         </svg>
         <input
+          id={inputId}
           type="text"
           value={value}
           onChange={handleChange}
-          placeholder={t('searchPlaceholder')}
-          className="w-full pl-12 pr-4 py-3 rounded-lg bg-secondary border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-          aria-label={t('searchAriaLabel')}
+          className="w-full pl-12 pr-4 py-3 rounded-lg bg-secondary border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
         />
+        {value === '' ? (
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute left-12 top-1/2 -translate-y-1/2 text-muted-foreground"
+          >
+            <LocaleText pair={SEARCH_PLACEHOLDER} />
+          </span>
+        ) : null}
       </div>
     </motion.div>
   );

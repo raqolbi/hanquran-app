@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 
 import { AppProviders } from '@/components/providers/app-providers'
 import { JsonLd } from '@/components/json-ld'
+import { buildAppLocaleInitScript } from '@/lib/app-locale'
 import { buildWebSiteSchema } from '@/lib/schema-org'
 import { isAndroidBuild } from '@/lib/platform'
 import { SITE_URL } from '@/lib/site-url'
@@ -65,6 +66,11 @@ const PWA_LAUNCH_SCRIPT = `(function(){try{var m=window.matchMedia("(display-mod
 
 const THREADS_GATE_SCRIPT = buildThreadsGateInitScript();
 
+// Skrip locale pra-paint (docs/21 §6.1): menetapkan `<html lang>` +
+// `data-app-locale` dari cache localStorage sebelum paint, sehingga teks
+// bilingual & terjemahan tidak berkedip `id` untuk pengguna `en`.
+const APP_LOCALE_SCRIPT = buildAppLocaleInitScript();
+
 const enableVercelAnalytics =
   process.env.NODE_ENV === 'production' && !isAndroidBuild()
 
@@ -74,8 +80,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="id" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html
+      lang="id"
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable}`}
+    >
       <head>
+        <script dangerouslySetInnerHTML={{ __html: APP_LOCALE_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: PWA_LAUNCH_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: THREADS_GATE_SCRIPT }} />
         <noscript>

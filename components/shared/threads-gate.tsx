@@ -1,11 +1,19 @@
 'use client';
 
 import { useEffect, useId, useRef } from 'react';
-import { useTranslations } from 'next-intl';
 
+import { LocaleText } from '@/components/shared/locale-text';
 import { Logo } from '@/components/shared/Logo';
 import { useThreadsGate } from '@/hooks/use-threads-gate';
+import { getLocalePair } from '@/lib/locale-text';
 import { THREADS_GATE_COMPLETED_ATTRIBUTE } from '@/lib/threads-gate';
+
+const TITLE = getLocalePair('threadsGate', 'title');
+const BODY = getLocalePair('threadsGate', 'body');
+const OPEN_THREADS = getLocalePair('threadsGate', 'openThreads');
+const CONTINUE = getLocalePair('threadsGate', 'continue');
+const OPEN_FAILED_HINT = getLocalePair('threadsGate', 'openFailedHint');
+const OPENS_IN_NEW_TAB = getLocalePair('about.credits', 'opensInNewTab');
 
 const primaryButtonClassName =
   'inline-flex h-11 w-full items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
@@ -18,8 +26,6 @@ const secondaryButtonClassName =
  * Dialog menandai sibling `data-base-ui-inert` dan memicu hydration mismatch.
  */
 export function ThreadsGate() {
-  const t = useTranslations('threadsGate');
-  const tAbout = useTranslations('about.credits');
   const titleId = useId();
   const bodyId = useId();
   const threadsLinkRef = useRef<HTMLAnchorElement>(null);
@@ -74,10 +80,10 @@ export function ThreadsGate() {
         <div className="mb-4 flex flex-col items-center gap-1.5">
           <Logo size={40} alt="" />
           <h2 id={titleId} className="text-lg font-semibold leading-tight text-foreground">
-            {t('title')}
+            <LocaleText pair={TITLE} />
           </h2>
           <p id={bodyId} className="text-sm text-muted-foreground">
-            {t('body')}
+            <LocaleText pair={BODY} />
           </p>
         </div>
 
@@ -90,8 +96,10 @@ export function ThreadsGate() {
             className={primaryButtonClassName}
             onClick={openThreads}
           >
-            {t('openThreads')}
-            <span className="sr-only">{tAbout('opensInNewTab')}</span>
+            <LocaleText pair={OPEN_THREADS} />
+            <span className="sr-only">
+              <LocaleText pair={OPENS_IN_NEW_TAB} />
+            </span>
           </a>
 
           <button
@@ -101,12 +109,14 @@ export function ThreadsGate() {
             aria-disabled={!isContinueEnabled}
             onClick={continueToApp}
           >
-            {t('continue')}
+            <LocaleText pair={CONTINUE} />
           </button>
         </div>
 
         {showOpenFailedHint ? (
-          <p className="mt-3 text-xs text-muted-foreground">{t('openFailedHint')}</p>
+          <p className="mt-3 text-xs text-muted-foreground">
+            <LocaleText pair={OPEN_FAILED_HINT} />
+          </p>
         ) : null}
       </div>
     </div>

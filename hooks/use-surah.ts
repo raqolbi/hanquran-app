@@ -12,9 +12,12 @@ import { getTranslationLanguage } from '@/lib/translation-language';
 import type { SurahData } from '@/services/quran';
 import { getSurah } from '@/services/quran';
 import { useUserStore } from '@/stores/userStore';
+import type { AppLocale } from '@/types';
 
 interface UseSurahResult {
   surah: SurahData | null;
+  /** Bahasa terjemahan yang sedang dirender (`id` untuk seed server). */
+  contentLocale: AppLocale | null;
   loading: boolean;
   error: string | null;
   retry: () => void;
@@ -29,6 +32,12 @@ export function useSurah(surahId: string, initialSurah?: SurahData | null): UseS
   // sehingga SSR konten tidak tertutup spinner saat hidrasi.
   const [surah, setSurah] = useState<SurahData | null>(() =>
     isMatchingSurahSeed(initialSurah, surahId) ? initialSurah ?? null : null,
+  );
+  // Seed server selalu berbahasa `id`; setelah fetch, terjemahan mengikuti
+  // locale aktif (docs/21 §6.1 F8). Dipakai CSS untuk menyembunyikan
+  // terjemahan yang tidak cocok sampai data locale aktif siap.
+  const [contentLocale, setContentLocale] = useState<AppLocale | null>(() =>
+    isMatchingSurahSeed(initialSurah, surahId) ? 'id' : null,
   );
   const [loading, setLoading] = useState(
     () => !isMatchingSurahSeed(initialSurah, surahId),
@@ -54,6 +63,7 @@ export function useSurah(surahId: string, initialSurah?: SurahData | null): UseS
       setSurah((current) =>
         current === initialSurah ? current : initialSurah ?? null,
       );
+      setContentLocale('id');
       setError(null);
       setLoading(false);
       return;
@@ -66,12 +76,14 @@ export function useSurah(surahId: string, initialSurah?: SurahData | null): UseS
       .then((data) => {
         if (!cancelled) {
           setSurah(data);
+          setContentLocale(translationLanguage);
           setError(null);
         }
       })
       .catch(() => {
         if (!cancelled) {
           setSurah(null);
+          setContentLocale(null);
           setError(t('loadSurahFailed'));
         }
       })
@@ -86,5 +98,5 @@ export function useSurah(surahId: string, initialSurah?: SurahData | null): UseS
     };
   }, [appLocale, initialSurah, reloadToken, surahId, t, translationLanguage]);
 
-  return { surah, loading, error, retry };
+  return { surah, contentLocale, loading, error, retry };
 }

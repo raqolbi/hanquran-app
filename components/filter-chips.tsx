@@ -2,20 +2,21 @@
 
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+
+import { LocaleText } from '@/components/shared/locale-text';
+import { getLocalePair } from '@/lib/locale-text';
 
 interface FilterChipsProps {
   onFilterChange?: (filterId: string) => void;
 }
 
-export function FilterChips({ onFilterChange }: FilterChipsProps) {
-  const t = useTranslations('common');
-  const [selected, setSelected] = useState('all');
+const FILTER_OPTIONS = [
+  { id: 'all', label: getLocalePair('common', 'all') },
+  { id: 'favorites', label: getLocalePair('common', 'favorites') },
+];
 
-  const filterOptions = [
-    { id: 'all', label: t('all') },
-    { id: 'favorites', label: t('favorites') },
-  ];
+export function FilterChips({ onFilterChange }: FilterChipsProps) {
+  const [selected, setSelected] = useState('all');
 
   const handleSelect = (id: string) => {
     setSelected(id);
@@ -30,7 +31,7 @@ export function FilterChips({ onFilterChange }: FilterChipsProps) {
       className="w-full"
     >
       <div className="flex gap-2">
-        {filterOptions.map((option) => (
+        {FILTER_OPTIONS.map((option) => (
           <motion.button
             key={option.id}
             whileTap={{ scale: 0.95 }}
@@ -42,7 +43,7 @@ export function FilterChips({ onFilterChange }: FilterChipsProps) {
             }`}
             aria-pressed={selected === option.id}
           >
-            {option.label}
+            <LocaleText pair={option.label} />
           </motion.button>
         ))}
       </div>

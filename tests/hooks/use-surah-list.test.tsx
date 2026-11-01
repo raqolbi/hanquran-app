@@ -1,4 +1,4 @@
-import { act, renderHook, waitFor } from '@testing-library/react';
+import { act, cleanup, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useSurahList } from '@/hooks/use-surah-list';
@@ -40,6 +40,7 @@ describe('useSurahList — seed SSR beranda (docs/36 §3)', () => {
   });
 
   afterEach(() => {
+    cleanup();
     setLocale('id');
   });
 
@@ -63,16 +64,14 @@ describe('useSurahList — seed SSR beranda (docs/36 §3)', () => {
     expect(result.current.loading).toBe(false);
   });
 
-  it('fetch locale non-id walau seed tersedia', async () => {
+  it('memakai seed tanpa fetch saat locale en (arti bilingual di seed)', () => {
     setLocale('en');
 
     const { result } = renderHook(() => useSurahList(seed));
 
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    });
-
-    expect(getSurahList).toHaveBeenCalledWith('en');
+    expect(getSurahList).not.toHaveBeenCalled();
+    expect(result.current.surahs).toBe(seed);
+    expect(result.current.loading).toBe(false);
   });
 
   it('retry memaksa fetch ulang', async () => {

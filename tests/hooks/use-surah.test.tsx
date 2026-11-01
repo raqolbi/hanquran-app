@@ -1,4 +1,4 @@
-import { act, renderHook, waitFor } from '@testing-library/react';
+import { act, cleanup, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useSurah } from '@/hooks/use-surah';
@@ -39,6 +39,7 @@ describe('useSurah — seed SSR (docs/35 §9 H2)', () => {
   });
 
   afterEach(() => {
+    cleanup();
     setLocale('id');
   });
 
@@ -47,6 +48,7 @@ describe('useSurah — seed SSR (docs/35 §9 H2)', () => {
 
     expect(getSurah).not.toHaveBeenCalled();
     expect(result.current.surah).toBe(seed);
+    expect(result.current.contentLocale).toBe('id');
     expect(result.current.loading).toBe(false);
     expect(result.current.error).toBeNull();
   });
@@ -68,11 +70,14 @@ describe('useSurah — seed SSR (docs/35 §9 H2)', () => {
 
     const { result } = renderHook(() => useSurah('2', seed));
 
+    expect(result.current.contentLocale).toBe('id');
     expect(getSurah).toHaveBeenCalledWith('2', 'en', 'en');
 
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
     });
+
+    expect(result.current.contentLocale).toBe('en');
   });
 
   it('retry memaksa fetch ulang', async () => {

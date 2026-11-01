@@ -24,6 +24,7 @@ export function mapSurahToSummary(
     arabicName: surah.name_ar,
     englishName: surah.name_simple,
     meaning: getSurahMeaning(surah, locale),
+    meaningTranslations: { id: surah.meaning, en: surah.name_en },
     ayahCount: surah.ayah_count,
     type: toRevelationType(surah.revelation_place),
   };

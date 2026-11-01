@@ -4,11 +4,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ThreadsGate } from '@/components/shared/threads-gate';
 import { APP_AUTHOR_THREADS_URL } from '@/lib/app-about';
 
-vi.mock('next-intl', () => ({
-  useTranslations: (namespace?: string) => (key: string) =>
-    namespace ? `${namespace}.${key}` : key,
-}));
-
 vi.mock('@/components/shared/Logo', () => ({
   Logo: () => <span data-testid="threads-gate-logo" />,
 }));
@@ -40,25 +35,23 @@ describe('ThreadsGate', () => {
     cleanup();
   });
 
-  it('menampilkan overlay dengan tautan Threads resmi', () => {
+  it('menampilkan overlay dengan tautan Threads resmi (teks bilingual)', () => {
     render(<ThreadsGate />);
 
     expect(screen.getByRole('dialog')).toBeTruthy();
-    expect(screen.getByText('threadsGate.title')).toBeTruthy();
-    const threadsLink = screen.getByRole('link', {
-      name: /threadsGate\.openThreads/,
-    });
+    // Kedua bahasa dirender; CSS memilih sesuai `<html data-app-locale>`.
+    expect(screen.getByText('Dukung HanQuran')).toBeTruthy();
+    expect(screen.getByText('Support HanQuran')).toBeTruthy();
+    const threadsLink = screen.getByRole('link', { name: /Buka Threads/ });
     expect(threadsLink.getAttribute('href')).toBe(APP_AUTHOR_THREADS_URL);
     expect(threadsLink.getAttribute('target')).toBe('_blank');
-    expect(screen.getByRole('button', { name: 'threadsGate.continue' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Lanjut/ })).toBeTruthy();
   });
 
   it('menonaktifkan Lanjut sebelum delay selesai', () => {
     render(<ThreadsGate />);
 
-    const continueButton = screen.getByRole('button', {
-      name: 'threadsGate.continue',
-    });
+    const continueButton = screen.getByRole('button', { name: /Lanjut/ });
     expect(continueButton).toHaveProperty('disabled', true);
 
     continueButton.click();
@@ -68,7 +61,7 @@ describe('ThreadsGate', () => {
   it('memanggil openThreads saat tautan diketuk', () => {
     render(<ThreadsGate />);
 
-    screen.getByRole('link', { name: /threadsGate\.openThreads/ }).click();
+    screen.getByRole('link', { name: /Buka Threads/ }).click();
     expect(gateState.openThreads).toHaveBeenCalledTimes(1);
   });
 
@@ -77,7 +70,7 @@ describe('ThreadsGate', () => {
 
     render(<ThreadsGate />);
 
-    screen.getByRole('button', { name: 'threadsGate.continue' }).click();
+    screen.getByRole('button', { name: /Lanjut/ }).click();
     expect(gateState.continueToApp).toHaveBeenCalledTimes(1);
   });
 
@@ -86,6 +79,6 @@ describe('ThreadsGate', () => {
 
     render(<ThreadsGate />);
 
-    expect(screen.queryByText('threadsGate.title')).toBeNull();
+    expect(screen.queryByText('Dukung HanQuran')).toBeNull();
   });
 });
