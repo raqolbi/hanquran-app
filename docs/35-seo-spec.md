@@ -216,7 +216,7 @@ Audit kritis terhadap hasil T1–T9 (bukan audit SEO awal). Semua temuan **tidak
 | F5 | Kecil | `/surah/0` & `/focus/<id invalid>` masih 200 | Artefak fallback Next | Soft-404 (noindex/robots memitigasi) | P2 |
 | F6 | Keamanan | JSON-LD tanpa escape `<` | `components/json-ld.tsx` → `JSON.stringify` di `dangerouslySetInnerHTML` | Dataset lokal (trusted); hardening | P2 |
 | F7 | Logika | `?ayah=999` tidak diklem | `startAyah` dipakai apa adanya | Ayat aktif di luar rentang | P1 |
-| F8 | UX | Flash terjemahan & locale | Seed server selalu terjemahan `id` | Pengguna `en` melihat flash Indonesia sebelum refetch | P2 |
+| F8 | UX | Flash terjemahan & locale | Seed server selalu terjemahan `id` | Pengguna `en` melihat flash Indonesia sebelum refetch | ✅ Selesai — Phase 12 (`docs/21` §5.6) |
 | F9 | UX | Deep link `?ayah=n` tidak scroll | Tidak ada `scrollIntoView` (perilaku lama) | Pengguna mendarat di atas halaman | P1 |
 | F10 | Higiene | Import `React` tak terpakai | `components/surah-detail-client.tsx:3` | Lint noise | P3 |
 | F11 | SEO | Home masih CSR | `app/page.tsx` `'use client'`; Lighthouse perf 53 | Konten home tipis untuk crawler; CWV | ✅ Selesai — Phase 11 (`docs/36`) |
@@ -282,4 +282,18 @@ F11 dikerjakan sebagai phase terpisah (**Phase 11 — Performa Beranda & CWV**) 
 | Animasi masuk tidak menyembunyikan konten | `components/header.tsx`, `search-input.tsx`, `filter-chips.tsx` | HTML build: node `opacity:0` hanya tersisa di footer (below fold) |
 | Satu sumber daftar surat | `components/continue-reading.tsx` | Tidak ada fetch daftar kedua di klien |
 
-Hasil: Lighthouse mobile beranda **performance 59 → 85**, TBT **680 → 200 ms**, CLS **0,239 → 0**, Speed Index 1,9 → 1,4 s, SEO tetap **100**; seluruh suite **85 file / 406 test**; build web & export Android hijau. LCP first-visit saat itu masih 3,9 s karena paragraf **Threads Gate** yang sengaja dirender setelah hidrasi (`docs/34`) — lalu **ditindaklanjuti Phase 11b (31 Okt 2026)**: overlay di-SSR + skrip pra-paint, observed LCP **±3,9 s → 0,10–0,15 s** (`docs/34` §14, `docs/36` §3.3). F8 (flash terjemahan locale `en`) dan F13 (validasi eksternal) tetap terbuka.
+Hasil: Lighthouse mobile beranda **performance 59 → 85**, TBT **680 → 200 ms**, CLS **0,239 → 0**, Speed Index 1,9 → 1,4 s, SEO tetap **100**; seluruh suite **85 file / 406 test**; build web & export Android hijau. LCP first-visit saat itu masih 3,9 s karena paragraf **Threads Gate** yang sengaja dirender setelah hidrasi (`docs/34`) — lalu **ditindaklanjuti Phase 11b (31 Okt 2026)**: overlay di-SSR + skrip pra-paint, observed LCP **±3,9 s → 0,10–0,15 s** (`docs/34` §14, `docs/36` §3.3). F8 ditindaklanjuti **Phase 12 (1 Nov 2026)** — lihat §9.3. F13 (validasi eksternal) tetap terbuka.
+
+### 9.3 Tindak lanjut F8 — Phase 12: Locale Paint Pertama (✅ 1 Nov 2026)
+
+F8 (flash Indonesia untuk pengguna `en`) dikerjakan sebagai phase terpisah **Phase 12** tanpa mengubah routing URL atau SSG. Spek mekanisme lengkap: [`docs/21` §5.6](./21-i18n-and-locale.md).
+
+| Perubahan | File | Bukti |
+|-----------|------|-------|
+| Cache locale sinkron + skrip inline pra-paint (`<html data-app-locale>` + `lang`) | `lib/app-locale.ts`, `app/layout.tsx` | Test `tests/lib/app-locale.test.ts` (cache, deteksi, read-only) |
+| Cache disegarkan saat `init()`/ganti bahasa; atribut disinkronkan setelah Dexie siap | `stores/userStore.ts`, `components/providers/intl-provider.tsx` | Test `tests/stores/userStore.test.ts`; browser: `data-app-locale="en"` di `domcontentloaded` |
+| Teks bilingual pra-paint (arti kartu, label ayat/tipe, placeholder, filter, gate) | `components/shared/locale-text.tsx`, `lib/locale-text.ts`, `components/surah-card.tsx`, `search-input.tsx`, `filter-chips.tsx`, `threads-gate.tsx` | Test `tests/lib/locale-text.test.ts`, `tests/components/threads-gate.test.tsx`; browser: kartu 1 = `The Opening` / `verses` / `Meccan` |
+| Seed beranda membawa arti `id` + `en`; locale `en` tanpa refetch; pencarian dua bahasa | `services/quran/mappers.ts`, `services/quran/app-types.ts`, `hooks/use-surah-list.ts`, `lib/surah-search.ts` | Test mapper, hook, `surah-search`; browser: 0 request daftar saat `en` |
+| Terjemahan ayat yang tidak cocok disembunyikan sampai data locale aktif siap | `hooks/use-surah.ts`, `components/ayah-card.tsx`, `app/globals.css` | Browser: fetch `en` ditahan → `data-content-locale="id"` `visibility:hidden`; setelah data tiba `en` terlihat |
+
+Hasil: pada `domcontentloaded` pengguna `en` sudah melihat teks Inggris (sebelumnya flash ±100–386 ms); pengguna `id` tidak berubah; tanpa JS teks `id` tetap tampil. 87 file / **424 test** lulus; build web & export Android hijau; Lighthouse home performance **91**, SEO **100**, CLS **0**. HTML beranda 267 → 298 KB raw (+1,9 KB gzip). Residual: label shell yang belum dual-render (kartu Lanjutkan Hafalan, footer, banner install, header surat) masih dapat berkedip pada kunjungan pertama pengguna lama tanpa cache.

@@ -2,9 +2,9 @@
 
 Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi HanQuran menuju MVP. Berisi daftar pekerjaan teknis yang dapat langsung dikerjakan developer.
 
-**Terakhir diperbarui:** 29 Oktober 2026
-**Status:** 🚧 Sprint 2 — Growth `0.2.0`/`0.3.0` diimplementasi di kode; uji manual perangkat & tag rilis menunggu; Phase 9 Android (Capacitor) terdokumentasi di `docs/32`; Phase 10 SEO ✅ selesai; Phase 10b hardening ✅ selesai; Phase 11 performa beranda ✅ selesai; Phase 11b LCP Threads Gate ✅ selesai
-**Total Development Tasks:** 97 + Phase 9 Android (lihat `docs/32` §13) + Phase 10 SEO (lihat `docs/35-seo-spec.md` §4) + Phase 10b Hardening (lihat `docs/35` §8–§9) + Phase 11 Performa Beranda (lihat `docs/36-performance-cwv.md`) + Phase 11b LCP Threads Gate (lihat `docs/34` §8)
+**Terakhir diperbarui:** 1 November 2026
+**Status:** 🚧 Sprint 2 — Growth `0.2.0`/`0.3.0` diimplementasi di kode; uji manual perangkat & tag rilis menunggu; Phase 9 Android (Capacitor) terdokumentasi di `docs/32`; Phase 10 SEO ✅ selesai; Phase 10b hardening ✅ selesai; Phase 11 performa beranda ✅ selesai; Phase 11b LCP Threads Gate ✅ selesai; Phase 12 locale paint pertama (F8) ✅ selesai
+**Total Development Tasks:** 97 + Phase 9 Android (lihat `docs/32` §13) + Phase 10 SEO (lihat `docs/35-seo-spec.md` §4) + Phase 10b Hardening (lihat `docs/35` §8–§9) + Phase 11 Performa Beranda (lihat `docs/36-performance-cwv.md`) + Phase 11b LCP Threads Gate (lihat `docs/34` §8) + Phase 12 Locale Paint Pertama (lihat `docs/21` §5.6)
 **Arsitektur data:** `docs/23-static-dataset-architecture.md`
 
 ---
@@ -74,7 +74,8 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 10b       | SEO Hardening (pasca-audit)       | 9      | 4      | 3      | 2      | 9       | ✅ Selesai (H1–H9) — 29 Okt 2026             |
 | 11        | Performa Beranda & CWV            | 6      | 2      | 3      | 1      | 6       | ✅ Selesai (P11-1–P11-6) — 29 Okt 2026       |
 | 11b       | LCP Threads Gate (SSR pra-paint)  | 3      | 0      | 3      | 0      | 3       | ✅ Selesai (P11b-1–P11b-3) — 31 Okt 2026     |
-| **TOTAL** |                                   | **106** | **50** | **37** | **19** | **79**  | (+ Phase 9; + Phase 10 SEO; + Phase 10b hardening; + Phase 11 CWV; + Phase 11b LCP gate) |
+| 12        | Locale Paint Pertama (F8)         | 4      | 0      | 0      | 4      | 4       | ✅ Selesai (P12-1–P12-4) — 1 Nov 2026        |
+| **TOTAL** |                                   | **110** | **50** | **37** | **23** | **83**  | (+ Phase 9; + Phase 10 SEO; + Phase 10b hardening; + Phase 11 CWV; + Phase 11b LCP gate; + Phase 12 F8) |
 
 
 > Catatan: Phase 7 (Testing & QA) berjalan **paralel** mulai Phase 1 — bukan sequential setelah Phase 6 selesai.
@@ -1350,6 +1351,38 @@ Konteks: Phase 11 menurunkan LCP beranda, tetapi pengunjung **baru** tetap menda
 - Build web & export Android hijau; test hijau; Lighthouse SEO tidak turun.
 
 **Hasil verifikasi (31 Okt 2026):** observed LCP first-visit **±3,9 s → 0,10–0,15 s** (PerformanceObserver/Lighthouse trace); skor performance Lighthouse 82–92 pada tiga run (variasi TBT mesin), tetap ≥80; SEO 100, CLS 0. Gate terverifikasi di `domcontentloaded` (fresh: `display:flex`; returning: `display:none` + atribut `<html>`), alur 5 detik + Lanjut menutup overlay dan menyimpan flag, `noscript` menyembunyikan gate, 85 file / **409 test** lulus, build web & export Android hijau (114 tautan surat utuh). Catatan: LCP **simulasi** Lantern masih ±3,0–3,3 s karena model main-thread, berbeda dari observed LCP; angka observed dipakai untuk menilai dampak nyata. Rincian di [`docs/36` §3.3](./36-performance-cwv.md).
+
+---
+
+# 🎨 Phase 12 — Locale Paint Pertama (F8)
+
+**Status:** ✅ Selesai 1 November 2026 — pengguna `en` tidak lagi melihat teks `id` pada paint pertama  
+**Spek mekanisme:** [`docs/21` §5.6](./21-i18n-and-locale.md)  
+**Temuan asal:** `docs/35` §8.1 (F8 — seed server selalu terjemahan `id`)
+
+Konteks: `next-intl` baru memakai locale tersimpan setelah Dexie selesai dibaca, sehingga pengguna `en` melihat arti surat, placeholder, dan label filter berbahasa Indonesia selama ±100–386 ms. Routing locale/cookie SSR tidak dipakai karena akan merusak SSG/export Android. Solusinya: cache locale sinkron untuk skrip pra-paint + konten bilingual yang dipilih CSS.
+
+| ID | Task | Tipe | Prioritas | Ref |
+|----|------|------|-----------|-----|
+| P12-1 | Cache locale `localStorage` + skrip inline pra-paint (<html data-app-locale> + lang); sinkron dari `userStore.init()`/`updateSettings` | [NEW] | P2 | `docs/21` §5.6 |
+| P12-2 | Teks bilingual pra-paint: arti kartu, label ayat/Makkiyah, placeholder pencarian, filter, overlay gate | [NEW] | P2 | F8 |
+| P12-3 | Seed `meaningTranslations {id,en}` + skip refetch daftar saat `en`; sembunyikan terjemahan ayat yang tidak cocok via `data-content-locale` | [REFACTOR] | P2 | F8 |
+| P12-4 | Test helper locale/skrip init, mapper, hook daftar/surat, pencarian dua bahasa, gate, cache store | [TEST] | P2 | F8 |
+
+- [x] [NEW] P12-1 — cache + skrip pra-paint + sinkronisasi store/provider (P2)
+- [x] [NEW] P12-2 — komponen `LocaleText` + label bilingual (P2)
+- [x] [REFACTOR] P12-3 — seed bilingual + `data-content-locale` (P2)
+- [x] [TEST] P12-4 — 13 test baru (P2)
+
+**DoD Phase 12:**
+
+- Pengguna `en` melihat arti kartu, placeholder, filter, dan gate dalam bahasa Inggris sejak paint pertama (sebelum Dexie selesai).
+- Terjemahan ayat `id` tidak terlihat selama locale `en` menunggu data `en`; tidak ada layout shift.
+- Pengguna `id` dan pengguna tanpa cache tetap melihat perilaku lama; tanpa JS teks `id` tetap tampil.
+- Tidak ada hydration mismatch; routing URL tidak berubah; app-shell offline/SW dan export Android tidak berubah.
+- Build web & Android hijau; seluruh test hijau; Lighthouse SEO tidak turun.
+
+**Hasil verifikasi (1 Nov 2026):** pada `domcontentloaded`, `<html data-app-locale="en">` dan kartu surat 1 menampilkan `The Opening` / `verses` / `Meccan`, placeholder `Search surahs...`; tidak ada teks `id` yang terlihat. Surah 1: saat fetch terjemahan `en` ditahan, paragraf `data-content-locale="id"` berstatus `visibility:hidden`; setelah data tiba, `en` tampil. Kembali ke `id`: kartu menampilkan `Pembukaan` / `ayat` / `Makkiyah`. Tidak ada pesan hydration mismatch. 87 file / **424 test** lulus; build web & export Android hijau (114 tautan, atribut+skrip locale ada); Lighthouse home performance **91**, SEO **100**, CLS **0**. HTML beranda 267 → 298 KB raw (+1,9 KB gzip) karena teks bilingual. Residual: label shell yang belum dual-render masih dapat berkedip pada kunjungan pertama pengguna lama tanpa cache.
 
 ---
 

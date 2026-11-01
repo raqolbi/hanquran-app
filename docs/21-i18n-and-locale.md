@@ -1,6 +1,6 @@
 # 21 — Internasionalisasi & Bahasa Aplikasi
 
-**Status:** ✅ Spesifikasi produk & arsitektur — implementasi MVP selesai (24 Juni 2026)  
+**Status:** ✅ Spesifikasi produk & arsitektur — implementasi MVP selesai (24 Juni 2026); hardening paint pertama/F8 selesai (1 November 2026)  
 **Berlaku untuk:** MVP V1  
 **Framework:** `next-intl`
 
@@ -145,8 +145,13 @@ hanquran-app/
 │  ├─ config.ts        # locales yang didukung: id, en
 │  ├─ request.ts       # Resolusi locale per request (baca Dexie / default)
 │  └─ detection.ts     # Algoritma first-launch (Bagian 3)
+├─ lib/
+│  ├─ app-locale.ts    # Cache localStorage + skrip init pra-paint
+│  └─ locale-text.ts   # Pasangan teks id/en untuk paint pertama
+├─ components/shared/
+│  └─ locale-text.tsx  # Render bilingual yang dipilih CSS
 └─ app/
-   └─ layout.tsx       # NextIntlClientProvider
+   └─ layout.tsx       # NextIntlClientProvider + skrip locale
 ```
 
 ## 5.3 Alur runtime
@@ -154,7 +159,10 @@ hanquran-app/
 ```text
 App start
   │
-  ├─ settings.appLocale ada?
+  ├─ Skrip inline pra-paint: cache `hanquran:app-locale`
+  │     └─ set <html data-app-locale> + lang (cache → deteksi → id)
+  │
+  ├─ settings.appLocale ada di Dexie?
   │     ├─ Ya  → gunakan nilai tersimpan
   │     └─ Tidak → detectLocale() → simpan ke Dexie
   │
@@ -183,6 +191,45 @@ Field ini:
 - **Persisten:** `useUserStore.updateSettings({ appLocale })` → Dexie `settings`.
 - **Runtime:** `next-intl` context menyediakan string terjemahan ke komponen.
 - Komponen **tidak** memuat file `messages/*.json` secara langsung.
+
+**Pengecualian (F8):** label kecil yang tampil di atas lipatan dan harus benar
+sebelum Dexie selesai dibaca memakai `lib/locale-text.ts`, yang membaca
+`messages/id.json` + `messages/en.json` untuk merender **kedua** bahasa
+sekaligus. Kedua berkas itu sudah ada di bundle klien lewat `IntlProvider`,
+jadi tidak menambah unduhan baru. CSS memilih bahasa yang tampil berdasarkan
+`<html data-app-locale>`.
+
+## 5.6 Paint pertama & cache locale (F8)
+
+Dexie hanya bisa dibaca setelah hidrasi; sebelum itu `next-intl` memakai `id`
+agar render klien = HTML server (tanpa hydration mismatch). Supaya pengguna
+`en` tidak melihat kedipan Indonesia, locale dipindahkan ke jalur **pra-paint**:
+
+| Lapisan | File | Peran |
+|---------|------|-------|
+| Cache | `lib/app-locale.ts` (`hanquran:app-locale`) | Salinan sinkron `settings.appLocale` di `localStorage` |
+| Skrip init | `buildAppLocaleInitScript()` di `app/layout.tsx` | Baca cache → deteksi → set `<html data-app-locale>` + `lang` sebelum paint; hanya membaca |
+| Sinkronisasi | `stores/userStore.ts`, `components/providers/intl-provider.tsx` | Tulis cache saat `init()`/ganti bahasa; set atribut setelah `initialized` |
+| Teks bilingual | `components/shared/locale-text.tsx` | Render `<span data-locale="id|en">`; CSS menyembunyikan yang tidak aktif |
+| Konten ayat | `hooks/use-surah.ts` → `data-content-locale` | Terjemahan seed `id` disembunyikan (`visibility:hidden`) sampai terjemahan locale aktif siap |
+
+Aturan CSS (`app/globals.css`):
+
+```css
+html:not([data-app-locale='en']) [data-locale='en'] { display: none; }
+html[data-app-locale='en'] [data-locale='id'] { display: none; }
+html[data-app-locale='en'] [data-content-locale='id'],
+html[data-app-locale='id'] [data-content-locale='en'] { visibility: hidden; }
+```
+
+Tanpa atribut (SSR tanpa JS) teks `id` tetap tampil. Seed beranda membawa
+`meaningTranslations { id, en }`, sehingga locale `en` tidak perlu refetch
+daftar surat. Pencarian mencocokkan kedua bahasa.
+
+**Batasan yang diketahui:** label shell yang belum dual-render (kartu Lanjutkan
+Hafalan, footer, banner install, header surat) masih dapat berkedip ±200 ms
+pada kunjungan pertama pengguna lama tanpa cache. Setelah cache tertulis,
+paint berikutnya benar. Ini residual, bukan blocker.
 
 ---
 
@@ -216,6 +263,8 @@ Jika di masa depan diperlukan URL ber-prefix locale (`/id/surah/2`), itu masuk C
 - [x] `appLocale` persisten di Dexie
 - [x] Teks Arab ayat & audio tidak berubah saat ganti bahasa UI
 - [x] Arti surat (`meaning` / `name_en`) & terjemahan ayat mengikuti `appLocale`
+- [x] Tidak ada flash `id` pada paint pertama untuk pengguna `en` (arti kartu, placeholder, filter, gate)
+- [x] Terjemahan ayat `id` tidak terlihat selama locale `en` menunggu data `en`
 - [x] Tidak ada referensi ke `i18next` / `react-i18next` di implementasi MVP
 - [ ] Verifikasi aksesibilitas label per locale (P2)
 
