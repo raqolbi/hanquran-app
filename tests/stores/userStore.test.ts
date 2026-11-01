@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { db } from '@/services/db/db';
 import { useUserStore } from '@/stores/userStore';
 import { getDefaultReciterId } from '@/services/quran';
-import { APP_LOCALE_STORAGE_KEY } from '@/lib/app-locale';
+import { APP_LOCALE_ATTRIBUTE, APP_LOCALE_STORAGE_KEY } from '@/lib/app-locale';
 import { DEFAULT_ARABIC_FONT_SIZE_PX } from '@/lib/arabic-text-size';
 
 describe('useUserStore — reciterId', () => {
@@ -403,6 +403,9 @@ describe('useUserStore — cache locale pra-paint (F8)', () => {
     await useUserStore.getState().init();
 
     expect(window.localStorage.getItem(APP_LOCALE_STORAGE_KEY)).toBe('en');
+    expect(
+      document.documentElement.getAttribute(APP_LOCALE_ATTRIBUTE),
+    ).toBe('en');
   });
 
   it('menulis cache saat appLocale diubah, tanpa menghapusnya saat setelan lain berubah', async () => {
@@ -410,8 +413,14 @@ describe('useUserStore — cache locale pra-paint (F8)', () => {
 
     await useUserStore.getState().updateSettings({ appLocale: 'en' });
     expect(window.localStorage.getItem(APP_LOCALE_STORAGE_KEY)).toBe('en');
+    expect(
+      document.documentElement.getAttribute(APP_LOCALE_ATTRIBUTE),
+    ).toBe('en');
 
     await useUserStore.getState().updateSettings({ fontSize: 32 });
     expect(window.localStorage.getItem(APP_LOCALE_STORAGE_KEY)).toBe('en');
+    expect(
+      document.documentElement.getAttribute(APP_LOCALE_ATTRIBUTE),
+    ).toBe('en');
   });
 });

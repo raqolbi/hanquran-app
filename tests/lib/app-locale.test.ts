@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
+  applyAppLocaleToDocument,
   APP_LOCALE_ATTRIBUTE,
   APP_LOCALE_STORAGE_KEY,
   buildAppLocaleInitScript,
@@ -65,6 +66,22 @@ describe('lib/app-locale', () => {
     setNavigatorLanguages(['en-US']);
 
     expect(resolveInitialAppLocale()).toBe('id');
+  });
+
+  it('menerapkan locale ke <html> (atribut + lang) secara sinkron', () => {
+    applyAppLocaleToDocument('en');
+
+    expect(document.documentElement.getAttribute(APP_LOCALE_ATTRIBUTE)).toBe(
+      'en',
+    );
+    expect(document.documentElement.lang).toBe('en');
+
+    applyAppLocaleToDocument('id');
+
+    expect(document.documentElement.getAttribute(APP_LOCALE_ATTRIBUTE)).toBe(
+      'id',
+    );
+    expect(document.documentElement.lang).toBe('id');
   });
 });
 

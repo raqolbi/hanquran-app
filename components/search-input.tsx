@@ -10,7 +10,7 @@ interface SearchInputProps {
   onSearch?: (query: string) => void;
 }
 
-// Label bilingual pra-paint (docs/21 §6.1 F8): placeholder asli tidak bisa
+// Label bilingual pra-paint (docs/21 §5.6 F8): placeholder asli tidak bisa
 // di-swap CSS, jadi hint dirender sebagai elemen terpisah.
 const SEARCH_PLACEHOLDER = getLocalePair('home', 'searchPlaceholder');
 const SEARCH_LABEL = getLocalePair('home', 'searchAriaLabel');

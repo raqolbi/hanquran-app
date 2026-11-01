@@ -10,7 +10,10 @@ import { create } from 'zustand';
 import { db, defaultSettings } from '@/services/db/db';
 import { detectAppLocale } from '@/i18n/detection';
 import { trackBookmarkCreated, trackLastReadUpdated } from '@/lib/analytics';
-import { writeCachedAppLocale } from '@/lib/app-locale';
+import {
+  applyAppLocaleToDocument,
+  writeCachedAppLocale,
+} from '@/lib/app-locale';
 import { normalizeArabicFontSize } from '@/lib/arabic-text-size';
 import { normalizeReciterId } from '@/lib/reciter-preference';
 import type { SettingsRecord, LastReadRecord } from '@/types';
@@ -131,8 +134,11 @@ export const useUserStore = create<UserState & UserActions>()((set, get) => ({
     });
 
     // Segarkan cache pra-paint agar paint berikutnya memakai locale Dexie
-    // (docs/21 §6.1). Menutup kasus cache basi / pengguna lama tanpa cache.
+    // (docs/21 §5.6). Menutup kasus cache basi / pengguna lama tanpa cache.
     writeCachedAppLocale(settings.appLocale);
+    // Terapkan atribut sebelum React render ulang, agar cache basi tidak
+    // menghasilkan satu frame campuran bahasa.
+    applyAppLocaleToDocument(settings.appLocale);
   },
 
   toggleFavorite: async (surahId, options) => {
@@ -178,11 +184,15 @@ export const useUserStore = create<UserState & UserActions>()((set, get) => ({
       updatedAt: Date.now(),
     };
     await db.settings.put(next);
-    set({ settings: next });
 
     if (normalizedPatch.appLocale !== undefined) {
+      // Terapkan ke `<html>` sebelum `set`, agar teks bilingual dan teks
+      // `next-intl` berganti dalam frame yang sama (docs/21 §5.6).
+      applyAppLocaleToDocument(next.appLocale);
       writeCachedAppLocale(next.appLocale);
     }
+
+    set({ settings: next });
   },
 
   setLastViewed: async (surahId, ayahNumber) => {

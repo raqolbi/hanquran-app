@@ -66,7 +66,7 @@ const PWA_LAUNCH_SCRIPT = `(function(){try{var m=window.matchMedia("(display-mod
 
 const THREADS_GATE_SCRIPT = buildThreadsGateInitScript();
 
-// Skrip locale pra-paint (docs/21 §6.1): menetapkan `<html lang>` +
+// Skrip locale pra-paint (docs/21 §5.6): menetapkan `<html lang>` +
 // `data-app-locale` dari cache localStorage sebelum paint, sehingga teks
 // bilingual & terjemahan tidak berkedip `id` untuk pengguna `en`.
 const APP_LOCALE_SCRIPT = buildAppLocaleInitScript();

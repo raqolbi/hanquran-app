@@ -4,7 +4,7 @@ import idMessages from '@/messages/id.json';
 import enMessages from '@/messages/en.json';
 
 /**
- * Teks bilingual untuk **paint pertama** (docs/21 §6.1, F8).
+ * Teks bilingual untuk **paint pertama** (docs/21 §5.6, F8).
  *
  * `next-intl` baru memakai locale tersimpan setelah Dexie selesai dibaca,
  * sehingga label yang hanya dirender dengan locale aktif akan berkedip

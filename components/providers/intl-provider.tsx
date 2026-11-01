@@ -3,7 +3,10 @@
 import { useEffect } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 
-import { APP_LOCALE_ATTRIBUTE, writeCachedAppLocale } from '@/lib/app-locale';
+import {
+  applyAppLocaleToDocument,
+  writeCachedAppLocale,
+} from '@/lib/app-locale';
 import { useUserStore } from '@/stores/userStore';
 import type { AppLocale } from '@/types';
 
@@ -25,15 +28,13 @@ export function IntlProvider({ children }: IntlProviderProps) {
 
   // Jangan sentuh atribut pra-paint sebelum Dexie selesai: skrip inline di
   // `app/layout.tsx` sudah memilih locale dari cache. Setelah `initialized`,
-  // Dexie menjadi sumber kebenaran dan cache disegarkan (docs/21 §6.1).
+  // Dexie menjadi sumber kebenaran dan cache disegarkan (docs/21 §5.6).
   useEffect(() => {
     if (!initialized) {
       return;
     }
 
-    const root = document.documentElement;
-    root.setAttribute(APP_LOCALE_ATTRIBUTE, locale);
-    root.lang = locale;
+    applyAppLocaleToDocument(locale);
     writeCachedAppLocale(locale);
   }, [initialized, locale]);
 

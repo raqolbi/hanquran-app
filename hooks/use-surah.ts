@@ -34,7 +34,7 @@ export function useSurah(surahId: string, initialSurah?: SurahData | null): UseS
     isMatchingSurahSeed(initialSurah, surahId) ? initialSurah ?? null : null,
   );
   // Seed server selalu berbahasa `id`; setelah fetch, terjemahan mengikuti
-  // locale aktif (docs/21 §6.1 F8). Dipakai CSS untuk menyembunyikan
+  // locale aktif (docs/21 §5.6 F8). Dipakai CSS untuk menyembunyikan
   // terjemahan yang tidak cocok sampai data locale aktif siap.
   const [contentLocale, setContentLocale] = useState<AppLocale | null>(() =>
     isMatchingSurahSeed(initialSurah, surahId) ? 'id' : null,

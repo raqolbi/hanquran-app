@@ -22,7 +22,7 @@ export function useSurahList(
   const appLocale = useUserStore((s) => s.settings.appLocale);
   // Seed dari server (docs/36 §3): beranda di-SSG agar HTML awal berisi
   // daftar surat. Seed membawa arti `id` + `en` (`meaningTranslations`), jadi
-  // tidak perlu refetch saat locale `en` (docs/21 §6.1 F8).
+  // tidak perlu refetch saat locale `en` (docs/21 §5.6 F8).
   const [surahs, setSurahs] = useState<SurahSummary[]>(
     () => initialSurahs ?? [],
   );

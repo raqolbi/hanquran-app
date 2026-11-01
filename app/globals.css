@@ -164,7 +164,7 @@ html[data-threads-gate-completed='true'] [data-threads-gate-overlay] {
 }
 
 /*
- * Locale swap pra-paint (docs/21 §6.1, F8). Skrip inline di `app/layout.tsx`
+ * Locale swap pra-paint (docs/21 §5.6, F8). Skrip inline di `app/layout.tsx`
  * menetapkan `data-app-locale` dari cache sebelum paint. Tanpa atribut
  * (SSR / JS mati) teks `id` yang tampil, sesuai HTML server.
  */

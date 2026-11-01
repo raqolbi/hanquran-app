@@ -2,7 +2,7 @@ import { detectAppLocale } from '@/i18n/detection';
 import type { AppLocale } from '@/types';
 
 /**
- * Cache locale untuk **paint pertama** (docs/21 §6.1, F8).
+ * Cache locale untuk **paint pertama** (docs/21 §5.6, F8).
  *
  * `settings.appLocale` tetap sumber kebenaran di Dexie, tetapi Dexie baru
  * selesai dibaca setelah hidrasi. Cache sinkron ini dipakai skrip inline
@@ -46,6 +46,23 @@ export function writeCachedAppLocale(locale: AppLocale): void {
   } catch {
     // Mode privat / storage penuh — abaikan, fallback ke id.
   }
+}
+
+/**
+ * Terapkan locale ke `<html>` (`data-app-locale` + `lang`).
+ *
+ * Dipanggil **sinkron** dari store tepat saat locale berubah — sebelum React
+ * sempat render ulang — supaya teks `next-intl` dan teks bilingual
+ * (`LocaleText`) tidak sempat tampil dengan bahasa berbeda dalam satu frame.
+ */
+export function applyAppLocaleToDocument(locale: AppLocale): void {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  const root = document.documentElement;
+  root.setAttribute(APP_LOCALE_ATTRIBUTE, locale);
+  root.lang = locale;
 }
 
 /** Locale untuk paint pertama: cache → deteksi browser → `id`. */
