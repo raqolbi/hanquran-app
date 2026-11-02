@@ -49,7 +49,6 @@ interface SurahDetailClientProps {
 }
 
 export default function SurahDetailClient({ initialSurah }: SurahDetailClientProps) {
-  const router = useRouter();
   const t = useTranslations('errors');
   const tLoading = useTranslations('loading');
   // Baca id dari URL (bukan params HTML) agar app-shell offline melayani id apa pun.
@@ -110,7 +109,6 @@ function SurahDetailView({
     toggleTransliteration,
   } = useReadingDisplay();
   const [activeAyah, setActiveAyah] = useState(1);
-  const [completedAyahs, setCompletedAyahs] = useState<number[]>([]);
   const [repeatSettingsOpen, setRepeatSettingsOpen] = useState(false);
   const [quranCompleteNotice, setQuranCompleteNotice] = useState(false);
 
@@ -183,7 +181,9 @@ function SurahDetailView({
   // Inset audio dipakai saat deep link `?ayah` perlu di-scroll; simpan di ref
   // agar callback tetap stabil (tidak memicu sync ulang tiap pengukuran).
   const bottomInsetRef = useRef(bottomInset);
-  bottomInsetRef.current = bottomInset;
+  useEffect(() => {
+    bottomInsetRef.current = bottomInset;
+  }, [bottomInset]);
 
   const handleStartAyahChange = useCallback(
     (ayah: number) => {
@@ -191,7 +191,7 @@ function SurahDetailView({
       setActiveAyah(clamped);
       scrollToAyahAfterPaint(clamped, bottomInsetRef.current);
     },
-    [surah.number, surah.ayahs.length],
+    [surah.ayahs.length],
   );
 
   useEffect(() => {
@@ -260,7 +260,6 @@ function SurahDetailView({
                 reciterId,
                 enabled: wordHighlight,
               }}
-              isCompleted={completedAyahs.includes(ayah.number)}
               showTransliteration={showTransliteration}
               showTranslation={showTranslation}
               onClick={() => {

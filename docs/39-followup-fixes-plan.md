@@ -84,6 +84,8 @@ Prioritas: **P1** = berdampak langsung ke pengguna/CI · **P2** = kualitas & aks
 
 ### C2. Lint tidak berfungsi — P2
 
+✅ **Selesai 2 Nov 2026** — ESLint 9 + `eslint-config-next` 16.2.6 (flat config `eslint.config.mjs`), langkah CI "Lint". 0 error; 13 peringatan `react-hooks/set-state-in-effect` (pola sinkronisasi state di effect) dibiarkan sebagai peringatan untuk refactor bertahap. Tetap ESLint 9 karena plugin react/import/jsx-a11y belum mendukung ESLint 10. Kedua lockfile diperbarui dan diverifikasi (`npm ci`, `pnpm install --frozen-lockfile`).
+
 **Masalah:** skrip `npm run lint` ada, tetapi ESLint tidak terpasang dan tidak ada konfigurasi.
 
 **Usulan:** pasang `eslint` + `eslint-config-next` (flat config), aturan minimal (`react-hooks`, `@next/next`), jalankan di CI. Perbarui **kedua** lockfile.

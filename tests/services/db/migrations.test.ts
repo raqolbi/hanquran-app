@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { SCHEMA_V1, SCHEMA_V2, SCHEMA_V3 } from '@/services/db/migrations';
+import { SCHEMA_V2, SCHEMA_V3 } from '@/services/db/migrations';
 
 describe('services/db/migrations', () => {
   it('schema v2 tidak menyertakan tabel konten Quran', () => {

@@ -1518,7 +1518,7 @@ Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan de
 - [ ] [FIX] P14-4 — Range 206 audio iOS (P1) — kode ✅, uji iPhone ⏳
 - [x] [FIX] P14-5 — TypeScript bersih + CI (P1)
 - [x] [A11Y] P14-6 — gerbang Threads (P2)
-- [ ] [NEW] P14-7 — ESLint (P2)
+- [x] [NEW] P14-7 — ESLint (P2)
 - [ ] [TEST] P14-8 — 15 test jsdom (P2)
 - [ ] [FIX] P14-9 — celah kecil (P2)
 - [ ] [TEST] P14-10 — kebersihan test (P3)

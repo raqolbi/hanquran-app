@@ -99,6 +99,8 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <JsonLd data={buildWebSiteSchema()} />
         <div id="pwa-splash" className="pwa-splash" aria-hidden="true">
+          {/* Splash statis sebelum hidrasi — sengaja <img> biasa (bukan next/image). */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/branding/logo-with-text.png"
             alt="HanQuran"

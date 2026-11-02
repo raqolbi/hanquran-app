@@ -25,7 +25,8 @@ export function toStaticExportHref(href: string): string {
     return href;
   }
 
-  let [, path = '', query = '', hash = ''] = match;
+  const [, rawPath = '', query = '', hash = ''] = match;
+  let path = rawPath;
   if (!path || path === '/') {
     return `${path}${query}${hash}`;
   }

@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 /**
  * HanQuran Service Worker (Phase 5).
  *

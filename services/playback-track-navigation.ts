@@ -30,7 +30,6 @@ function resolvePreviousStep(
     surahId,
     currentAyah,
     murotalEnabled,
-    totalSurahs = TOTAL_SURAHS,
     getSurahAyahCount: getAyahCount = getSurahAyahCount,
   } = params;
 

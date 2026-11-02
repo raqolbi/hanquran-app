@@ -42,7 +42,7 @@ cp .env.example .env.local   # opsional — semua env bersifat opsional
 | `npm run dev`        | Menjalankan dev server di [http://localhost:3000](http://localhost:3000) |
 | `npm run build`      | Build produksi (Next.js + Turbopack)                                     |
 | `npm run start`      | Menjalankan hasil build produksi                                         |
-| `npm run lint`       | ⚠️ Belum berfungsi — ESLint bukan dependency & belum ada konfigurasi (task P14-7) |
+| `npm run lint`       | ESLint (`eslint.config.mjs`, aturan Next.js + TypeScript) — juga di CI |
 | `npm run typecheck`  | Cek tipe TypeScript (`tsc --noEmit`) — juga dijalankan `next build` & CI |
 | `npm run test`       | Menjalankan unit & integration test (Vitest)                             |
 | `npm run test:watch` | Menjalankan test dalam mode watch                                        |
