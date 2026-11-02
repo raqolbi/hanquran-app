@@ -19,7 +19,7 @@ HanQuran memisahkan **dua lapisan offline** yang tidak boleh dicampur:
 | Lapisan | Apa yang di-cache | Kapan tersedia offline | Aksi pengguna |
 |---------|-------------------|------------------------|---------------|
 | **Aplikasi + Konten baca** (shell HTML/JS/CSS, route, teks Arab, transliterasi, terjemahan, metadata surat) | App shell + seluruh `public/data/*`, **di-precache saat SW `install`** | **Sejak SW terpasang** — tidak perlu pernah membuka surat saat online | **Tidak ada** — otomatis tersedia |
-| **Audio tilawah** | File MP3 CDN di `hanquran-audio-v1` | (a) **Simpan Offline** penuh surat+qari (`downloadManifest.status === 'ready'`), atau (b) ayat per ayat yang pernah diputar saat **Auto Download Audio** ON (`docs/31`) | (a) Unduh eksplisit per surat, atau (b) opt-in per ayat saat play |
+| **Audio tilawah** | File MP3 CDN di `hanquran-audio-v1` | (a) **Simpan Offline** penuh surat+qari (`downloadManifest.status === 'ready'`), atau (b) ayat per ayat yang pernah diputar saat **Unduh Audio Otomatis** ON (`docs/31`) | (a) Unduh eksplisit per surat, atau (b) opt-in per ayat saat play |
 
 **Kesimpulan bagi pengguna:**
 
@@ -71,7 +71,7 @@ Dexie downloadManifest (metadata: surahId + reciterId, status ready)
 ```
 
 - Unduhan eksplisit via **Simpan Offline** di Surah Detail (seluruh ayat surat + qari).
-- **Auto Download Audio** (opt-in, default OFF): saat play ayat online, cache file MP3 ayat tersebut ke `hanquran-audio-v1` — lihat `docs/31-auto-download-audio-spec.md`.
+- **Unduh Audio Otomatis** (opt-in, default OFF): saat play ayat online, cache file MP3 ayat tersebut ke `hanquran-audio-v1` — lihat `docs/31-auto-download-audio-spec.md`.
 - Saat Simpan Offline selesai, precache juga shell route `/surah/[id]` + data JSON surat tersebut (`services/offline-surah-precache.ts`).
 
 ### 2.3 Preferensi pengguna
@@ -199,7 +199,7 @@ Pengguna offline → buka surat yang pernah Simpan Offline penuh
 ### 5.4 Mendengarkan offline (auto download per ayat)
 
 ```text
-Pengaturan Auto Download Audio ON (pernah online)
+Pengaturan Unduh Audio Otomatis ON (pernah online)
   → pengguna play ayat 1, 3, 5 → file tersimpan di cache
 Pengguna offline → buka surat yang sama
   → Play ayat 1/3/5 → aktif dari cache

@@ -71,7 +71,7 @@ Pengaturan — app/settings/page.tsx (client)
 ├─ SettingsHeader
 ├─ pemberitahuan "Data tidak dapat disimpan" (degraded mode, docs/15 §12.5)
 ├─ SettingsSection × n                   (Bahasa, Qari + ReciterBadges, Playback, Ukuran Teks + TextSizePreview,
-│                                         Offline & Cache + OfflineStatusBadge, Aksesibilitas)
+│                                         Offline & Penyimpanan + OfflineStatusBadge, Aksesibilitas)
 │  └─ SettingsRow + Select / Switch / SegmentedControl
 ├─ ClearCacheDialog
 └─ tautan → Tentang

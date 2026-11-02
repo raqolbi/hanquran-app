@@ -46,7 +46,7 @@ Mode Murotal **bukan** pengganti Repeat — keduanya dapat aktif bersamaan denga
 
 ### 4.1 UI
 
-Ditambahkan di section **Playback** (`/settings`), di bawah **Auto Follow Playback**:
+Ditambahkan di section **Playback** (`/settings`), di bawah **Ikuti Ayat yang Diputar**:
 
 ```text
 Mode Murotal                    [ON / OFF]

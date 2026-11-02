@@ -167,7 +167,7 @@ Cache: **in-memory** (`Map` di `data-loader.ts`, variabel modul di `quran-servic
 
 ---
 
-## 7. Offline & Cache — Offline First
+## 7. Offline & Penyimpanan — Offline First
 
 Prinsip: **seluruh aplikasi + dataset Qur'an di-precache sebagai aset offline saat
 Service Worker `install`**, sehingga app berfungsi penuh tanpa jaringan sejak
@@ -177,11 +177,11 @@ terpasang. Jaringan hanya untuk **stream audio** atau **Simpan Offline audio**.
 |------------|--------------|------------------|
 | App shell + `/_next/static/*` | Precache saat SW `install` (daftar di-generate `postbuild`) | App **boot tanpa jaringan** (cold start PWA) |
 | Konten Quran `public/data/*` | Precache penuh saat SW `install` (`hanquran-data-v3`) | **Baca surat mana pun** tanpa pernah online membukanya |
-| Audio | CDN + SW `hanquran-audio-v1` + Dexie `downloadManifest` | **Putar offline** setelah **Simpan Offline** penuh surat+qari, **atau** ayat per ayat jika **Auto Download Audio** ON (`docs/31`) |
+| Audio | CDN + SW `hanquran-audio-v1` + Dexie `downloadManifest` | **Putar offline** setelah **Simpan Offline** penuh surat+qari, **atau** ayat per ayat jika **Unduh Audio Otomatis** ON (`docs/31`) |
 | Preferensi pengguna | Dexie | Selalu lokal |
 
 Konten Quran **tidak** di-seed ke IndexedDB — tersimpan sebagai aset Cache Storage.
-Yang diunduh pengguna hanya **audio** — bukan teks ayat. Cara unduh: (1) **Simpan Offline** eksplisit per surat, atau (2) **Auto Download Audio** opt-in saat play (`docs/31`).
+Yang diunduh pengguna hanya **audio** — bukan teks ayat. Cara unduh: (1) **Simpan Offline** eksplisit per surat, atau (2) **Unduh Audio Otomatis** opt-in saat play (`docs/31`).
 
 Spesifikasi lengkap (precache install, app-shell route dinamis, manifest build,
 Play disabled/toast): **`docs/30-offline-behavior-spec.md`**.

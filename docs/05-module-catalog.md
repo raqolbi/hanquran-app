@@ -273,7 +273,7 @@ Repeat / fokus hafalan
 
 - Font size
 - Application language (`id` / `en` via `next-intl`)
-- Playback preferences (Auto Follow Playback)
+- Playback preferences (Ikuti Ayat yang Diputar)
 - High contrast mode
 - Cache management trigger
 - Settings screen state

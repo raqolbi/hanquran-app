@@ -176,13 +176,13 @@ Kontrol berikut **tetap** di lokasi masing-masing dan **tidak** dipindah ke bari
 
 | Fitur | Lokasi |
 |-------|--------|
-| Pengaturan Repeat | `RepeatSettingsDialog` — dibuka dari ⚙ di `RepeatSelector` inline pada `AudioPlayer` |
+| Pengaturan Pengulangan | `RepeatSettingsDialog` — dibuka dari ⚙ di `RepeatSelector` inline pada `AudioPlayer` |
 | Pilih jumlah repeat cepat | `RepeatSelector variant="inline"` di baris transport `AudioPlayer` |
 | Audio play/pause, next/prev | `AudioPlayer` fixed bawah |
 | Ukuran teks Arab | Pengaturan (`/settings`) |
 | Bahasa aplikasi (UI shell) | Pengaturan (`/settings`) |
 | Qari / reciter | Pengaturan (`/settings`) |
-| Auto Follow Playback | Pengaturan (`/settings`) → Playback — `docs/28-playback-settings.md` |
+| Ikuti Ayat yang Diputar | Pengaturan (`/settings`) → Playback — `docs/28-playback-settings.md` |
 | Mode Murotal | Pengaturan (`/settings`) → Playback — `docs/29-murotal-mode-spec.md` |
 | Progress repeat (x/y) | `RepeatProgressBadge` di `RepeatSelector` inline pada `AudioPlayer` |
 

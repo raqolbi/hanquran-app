@@ -1299,7 +1299,7 @@ Urutan field mengikuti wireframe:
 ### Ayah Range
 
 ```text
-○ Range Ayat
+○ Rentang Ayat
 ```
 
 Field tambahan (muncul saat Range dipilih):
@@ -1411,7 +1411,7 @@ Sedang di Ayat 3
 ### Range
 
 ```text
-🟢 Range Ayat 1-5                1/2
+🟢 Rentang Ayat 1-5                1/2
 Sedang di Ayat 3
 ```
 
@@ -1629,7 +1629,7 @@ Mengikuti urutan wireframe:
 3. Playback
 4. Ukuran Teks Arab
 5. Kontras Tinggi
-6. Offline & Cache
+6. Offline & Penyimpanan
 7. Aksesibilitas
 8. Navigasi Tentang HanQuran  →  `/settings/about`
 ```
@@ -1670,7 +1670,7 @@ ReciterSelector
 ### Playback
 
 ```text
-Auto Follow Playback    [ON / OFF]
+Ikuti Ayat yang Diputar    [ON / OFF]
 Mode Murotal            [ON / OFF]
 ```
 
@@ -1684,20 +1684,20 @@ Mode Murotal            [ON / OFF]
 [ON / OFF]
 ```
 
-### Offline & Cache
+### Offline & Penyimpanan
 
 ```text
 Status offline / siap offline
 Audio tersimpan : 24 MB
 Data Quran      : Cached
 
-Auto Download Audio    [ON / OFF]
+Unduh Audio Otomatis    [ON / OFF]
 Simpan otomatis audio ayat yang Anda putar.
 
 [Bersihkan Cache]
 ```
 
-- Toggle **Auto Download Audio**: `settings.autoDownloadOnPlay` (default: `false`)
+- Toggle **Unduh Audio Otomatis**: `settings.autoDownloadOnPlay` (default: `false`)
 - Spesifikasi perilaku: `docs/31-auto-download-audio-spec.md`
 
 ---

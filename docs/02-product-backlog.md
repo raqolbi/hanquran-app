@@ -227,7 +227,7 @@ User dapat memilih target dan jumlah pengulangan untuk keperluan hafalan.
 
 - [x] Belum dikerjakan
 - [ ] Repeat Ayat
-- [ ] Repeat Range Ayat
+- [ ] Repeat Rentang Ayat
 - [ ] Repeat Surat
 - [ ] Repeat 1x
 - [ ] Repeat 5x
@@ -368,7 +368,7 @@ Data surat, ayat, dan audio yang pernah dibuka tetap tersedia tanpa internet.
 
 - [x] Belum dikerjakan
 - [ ] Ayat yang pernah dibuka tersedia offline
-- [ ] Audio yang pernah diputar tersedia offline — via **Auto Download Audio** (opt-in, default OFF); spesifikasi `docs/31-auto-download-audio-spec.md`
+- [ ] Audio yang pernah diputar tersedia offline — via **Unduh Audio Otomatis** (opt-in, default OFF); spesifikasi `docs/31-auto-download-audio-spec.md`
 - [ ] Word timing yang pernah diakses tersedia offline
 - [ ] Indikator status offline di UI
 - [ ] Cache strategy: Cache First

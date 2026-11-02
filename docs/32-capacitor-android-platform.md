@@ -67,7 +67,7 @@ Dokumen ini **bukan** izin mengubah scope MVP Freeze (`docs/20`) tanpa Change Co
 | Modul | Fitur |
 |-------|--------|
 | Quran | Daftar 114 surat, detail surat, terjemahan, transliterasi, favorit, pencarian |
-| Audio | Putar per ayat, kecepatan, prefetch, Auto Download Audio |
+| Audio | Putar per ayat, kecepatan, prefetch, Unduh Audio Otomatis |
 | Hafalan | Repeat, Mode Fokus, Mode Murotal, Auto Follow |
 | Resume | Last read / Lanjutkan Hafalan |
 | Offline | Precache dataset + Simpan Offline audio per surat |
@@ -178,11 +178,11 @@ Legenda:
 | Mode Fokus | ✅ | Client routing; butuh static paths |
 | Repeat (ayat / range / surat) | ✅ | Logika JS; BroadcastChannel lintas-tab ➖ di native (satu WebView) |
 | Mode Murotal | ✅ | Sama seperti web; tergantung audio tersedia |
-| Auto Follow Playback | ✅ | Scroll/DOM — uji gesture & keyboard inset |
+| Ikuti Ayat yang Diputar | ✅ | Scroll/DOM — uji gesture & keyboard inset |
 | Audio per ayat (HTML5) | ⚠️ | Izinkan HTTPS ke CDN; uji autoplay policy WebView |
 | Prefetch ayat berikutnya | ⚠️ | Sama; pastikan CORS/CDN tetap OK dari WebView |
 | Simpan Offline audio | ⚠️ | Cache Storage di WebView; pantau kuota & clear data OS |
-| Auto Download Audio | ⚠️ | Sama seperti Simpan Offline |
+| Unduh Audio Otomatis | ⚠️ | Sama seperti Simpan Offline |
 | Precache dataset via SW install | ⚠️ | SW didukung di Android WebView modern **jika** origin aman (`https://localhost` Capacitor); tetap uji cold start offline |
 | Cold start offline penuh (shell + baca) | ⚠️ | Ideal: aset app sudah di APK → kurang bergantung SW untuk shell; SW tetap untuk audio cache |
 | Media Session (lock screen) | ⚠️ | Sering **lebih lemah** di WebView vs Chrome; fallback graceful sudah ada |

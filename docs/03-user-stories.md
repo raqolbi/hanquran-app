@@ -227,7 +227,7 @@ P0 — Must Have
 
 1. User dapat memilih target:
    - Ayat
-   - Range Ayat
+   - Rentang Ayat
    - Surat
 2. Pilihan repeat: 1x, 5x, 10x, 25x, 50x, Infinite (♾️)
 3. UI ramah anak menggunakan ikon:
@@ -349,7 +349,7 @@ P2 — Nice to Have
 ### Acceptance Criteria
 
 1. Surat dan ayat yang pernah dibuka tetap tampil saat offline
-2. Audio yang pernah diputar tetap bisa diputar saat offline — jika **Auto Download Audio** diaktifkan di Pengaturan (`docs/31-auto-download-audio-spec.md`); default OFF
+2. Audio yang pernah diputar tetap bisa diputar saat offline — jika **Unduh Audio Otomatis** diaktifkan di Pengaturan (`docs/31-auto-download-audio-spec.md`); default OFF
 3. Word timing tetap berfungsi saat offline
 4. Indikator status offline terlihat di UI
 5. Tidak ada error atau blank screen saat offline

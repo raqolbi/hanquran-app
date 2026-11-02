@@ -83,7 +83,11 @@ export function AyahCard({
     >
       <div className="flex items-center gap-3 mb-4">
         {isActive && (
-          <div className="text-lg" aria-hidden="true">▶</div>
+          // Penanda ayat aktif — sengaja bukan ikon ▶ agar tidak dikira tombol putar.
+          <span
+            aria-hidden="true"
+            className="h-2.5 w-2.5 shrink-0 rounded-full bg-primary ring-4 ring-primary/20"
+          />
         )}
         {isCompleted && !isActive && (
           <div className="text-lg text-primary" aria-hidden="true">✓</div>

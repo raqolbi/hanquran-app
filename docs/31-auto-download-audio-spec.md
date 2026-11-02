@@ -1,18 +1,18 @@
-# 31 — Auto Download Audio Saat Putar
+# 31 — Unduh Audio Otomatis Saat Putar
 
 **Tanggal:** 26 Juni 2026  
 **Status:** ✅ Diimplementasi — dirilis `0.5.0`  
-**Lokasi UI:** `/settings` — bagian **Offline & Cache**
+**Lokasi UI:** `/settings` — bagian **Offline & Penyimpanan**
 
 ---
 
 ## 1. Ringkasan
 
-Fitur **Auto Download Audio** mengunduh file MP3 ayat ke Cache Storage (`hanquran-audio-v1`) secara otomatis **saat pengguna memutar audio tilawah**, hanya jika pengaturan diaktifkan dan perangkat **online**.
+Fitur **Unduh Audio Otomatis** mengunduh file MP3 ayat ke Cache Storage (`hanquran-audio-v1`) secara otomatis **saat pengguna memutar audio tilawah**, hanya jika pengaturan diaktifkan dan perangkat **online**.
 
 | Pengaturan | Default | Persistensi | Status |
 |------------|---------|-------------|--------|
-| Auto Download Audio | **OFF** (`false`) | `settings.autoDownloadOnPlay` | 📋 Belum diimplementasi |
+| Unduh Audio Otomatis | **OFF** (`false`) | `settings.autoDownloadOnPlay` | 📋 Belum diimplementasi |
 
 > **Bukan fitur ini:** unduh seluruh surat via tombol **Simpan Offline** di Surah Detail — tetap unduhan eksplisit per surat+qari. Lihat `docs/30-offline-behavior-spec.md` §5.1.
 
@@ -36,14 +36,14 @@ Spesifikasi ini **menyelesaikan gap** di atas dengan prinsip **opt-in** (default
 
 ## 3. Posisi di Halaman Pengaturan
 
-Toggle berada di section **Offline & Cache** (bukan Playback):
+Toggle berada di section **Offline & Penyimpanan** (bukan Playback):
 
 ```text
 1. Bahasa Aplikasi
 2. Reciter (Qari)
 3. Playback
 4. Ukuran Teks Arab
-5. Offline & Cache              ← toggle di sini
+5. Offline & Penyimpanan              ← toggle di sini
 6. Aksesibilitas
 7. Tentang HanQuran  →  `/settings/about`
 ```
@@ -54,18 +54,18 @@ Wireframe & visual: `docs/08-ui-ux-wireframe.md` (Bagian 9), `docs/12-component-
 
 ## 4. Kontrol UI
 
-Satu baris toggle dalam card Offline & Cache, pola `SettingsRow` + `Switch`:
+Satu baris toggle dalam card Offline & Penyimpanan, pola `SettingsRow` + `Switch`:
 
 ```text
-Auto Download Audio           [ON / OFF]
+Unduh Audio Otomatis           [ON / OFF]
 Simpan otomatis audio ayat yang Anda putar
 agar bisa didengar offline nanti.
 ```
 
 | Field UI | Nilai |
 |----------|-------|
-| Nama (ID) | Auto Download Audio |
-| Nama (EN) | Auto Download Audio |
+| Nama (ID) | Unduh Audio Otomatis |
+| Nama (EN) | Unduh Audio Otomatis |
 | Deskripsi (ID) | Simpan otomatis audio ayat yang Anda putar agar bisa didengar offline nanti. |
 | Deskripsi (EN) | Automatically save audio for verses you play so you can listen offline later. |
 | Default | **OFF** |
@@ -163,7 +163,7 @@ Gate pemutaran (`audioPlaybackBlocked`) sudah memeriksa `caches.match(audioUrl)`
 
 | Field | Tipe | Default | Tabel Dexie | Kontrol UI |
 |-------|------|---------|-------------|------------|
-| `autoDownloadOnPlay` | `boolean` | `false` | `settings` | `/settings` → Offline & Cache |
+| `autoDownloadOnPlay` | `boolean` | `false` | `settings` | `/settings` → Offline & Penyimpanan |
 
 Pola persistensi: `useUserStore.updateSettings()` — lihat `docs/15-state-management.md` (Bagian 6).
 
@@ -175,13 +175,13 @@ Implementasi unduh background disarankan di layer service (mis. hook pemutaran a
 
 ```text
 ┌──────────────────────────────────┐
-│ Offline & Cache                  │
+│ Offline & Penyimpanan                  │
 │                                  │
 │ Status: Online                   │
 │ Audio tersimpan: 24 MB           │
 │ Data Quran     : Cached          │
 │                                  │
-│ Auto Download Audio    [OFF]     │
+│ Unduh Audio Otomatis    [OFF]     │
 │ Simpan otomatis audio ayat yang  │
 │ Anda putar agar bisa didengar    │
 │ offline nanti.                   │
@@ -215,7 +215,7 @@ Implementasi unduh background disarankan di layer service (mis. hook pemutaran a
 | `docs/06-database-schema.md` | `SettingsRecord.autoDownloadOnPlay` |
 | `docs/07-api-integration.md` | Performance — opt-in unduh |
 | `docs/08-ui-ux-wireframe.md` | Wireframe Pengaturan |
-| `docs/12-component-spec.md` | Section Offline & Cache |
+| `docs/12-component-spec.md` | Section Offline & Penyimpanan |
 | `docs/02-product-backlog.md` | PB-010 acceptance criteria |
 | `docs/03-user-stories.md` | US-010 |
 | `docs/18-development-tasks.md` | Task implementasi |

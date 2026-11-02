@@ -81,7 +81,7 @@ File audio biner ayat per ayat disimpan di `Cache Storage` (`hanquran-audio-v1`,
 
 * **Service Worker** — Simpan Offline per surat (`prefetch-surah`) dan runtime caching.
 * **Main thread** — Auto Download saat putar (`services/audio-play-cache.ts`) dan fallback `download-manager` bila SW tidak tersedia.
-* Penghapusan lewat **Hapus Cache** (`services/cache-manager.ts`).
+* Penghapusan lewat **Hapus Audio Tersimpan** (`services/cache-manager.ts`).
 
 Nama cache lain (`hanquran-static-v2`, `hanquran-shell-v2`, `hanquran-rsc-v1`, `hanquran-data-v3`) dikelola SW — lihat `docs/06` §6.
 
@@ -180,14 +180,14 @@ Catatan implementasi:
 ## 5.2 Persistent State (Dexie)
 
 * Lahir: saat user pertama berinteraksi (mis. menandai favorit, mengubah pengaturan).
-* Hidup: bertahan tanpa batas hingga user menghapus data situs atau menekan **Hapus Cache** di Pengaturan.
+* Hidup: bertahan tanpa batas hingga user menghapus data situs atau menekan **Hapus Audio Tersimpan** di Pengaturan.
 * Sinkronisasi: perubahan di-broadcast ke tab lain (lihat Bagian 9).
 * Migrasi: dijaga oleh Dexie `db.version(N)`. Setting yang belum ada nilainya memakai default deklaratif: `normalizeStoredSettings()` di `userStore.init()` melengkapi **semua** field yang hilang sekaligus dari `defaultSettings` (`transliterationVisible`, `autoFollowPlayback`, `murotalEnabled`, `autoDownloadOnPlay`), menormalkan `reciterId`/`fontSize`, menghapus `qariId` legacy, lalu menulis sekali ke Dexie bila ada perubahan. (Sebelum 2 Nov 2026 memakai rantai `else if` yang hanya memperbaiki satu field per init.)
 
 ## 5.3 Audio Files (Cache Storage)
 
 * Lahir: ketika Service Worker menerima permintaan prefetch (mis. user menekan **Simpan Offline**) atau saat audio diputar pertama kali dengan strategi runtime caching.
-* Hidup: hingga manifest mengeluarkannya atau user **Hapus Cache**.
+* Hidup: hingga manifest mengeluarkannya atau user **Hapus Audio Tersimpan**.
 * Pengukuran: ukuran cache di-ringkas oleh Service Worker dan dipublikasikan ke `useOfflineStore` via `postMessage`.
 
 ## 5.4 Route State (URL Parameter)
@@ -268,9 +268,9 @@ const useUserStore = create<UserState>()((set, get) => ({
 
 > Tabel konten Quran (`surahs`, `ayahs`, dll.) **dihapus** dari schema Dexie v2.
 
-## 6.4 Hapus Cache
+## 6.4 Hapus Audio Tersimpan
 
-Aksi **Hapus Cache** di Pengaturan harus menghapus:
+Aksi **Hapus Audio Tersimpan** di Pengaturan harus menghapus:
 
 1. Seluruh entri di Cache Storage `hanquran-audio-v1` (via Service Worker).
 2. Tabel `downloadManifest` di Dexie.
@@ -369,7 +369,7 @@ Tabel ini adalah daftar lengkap state pada MVP. Setiap penambahan state wajib me
 | Kontras tinggi                     | IndexedDB          | Ya        | Dexie (`settings`) |
 | Animasi halus                      | IndexedDB          | Ya        | Dexie (`settings`) |
 | Mode Murotal (`murotalEnabled`)    | IndexedDB          | Ya        | Dexie (`settings`) |
-| Auto Follow Playback               | IndexedDB          | Ya        | Dexie (`settings.autoFollowPlayback`) |
+| Ikuti Ayat yang Diputar               | IndexedDB          | Ya        | Dexie (`settings.autoFollowPlayback`) |
 | Auto Download saat putar           | IndexedDB          | Ya        | Dexie (`settings.autoDownloadOnPlay`) |
 | Sorot kata (`wordHighlight`)       | IndexedDB          | Ya        | Dexie (`settings.wordHighlight`) |
 | Data waktu per kata                | `public/data/word-timings/*` via `services/quran/word-timings.ts` | Tidak (fetch + memori) | Static files (`docs/37`) |
@@ -522,7 +522,7 @@ Service Worker `install` → berfungsi penuh tanpa jaringan sejak terpasang
 2. **Data Al-Qur'an** (teks, terjemahan, metadata) — seluruh `public/data/*` **di-precache saat SW `install`** (`hanquran-data-v3`, cache-first). **Bukan** Dexie — lihat `docs/23`, `docs/30` §2.1.
 3. **File audio** — di `hanquran-audio-v1` melalui:
    - **Simpan Offline** (unduh eksplisit seluruh surat+qari → `downloadManifest.status === 'ready'`), atau
-   - **Auto Download Audio** saat play (opt-in, default OFF — lihat `docs/31-auto-download-audio-spec.md`).
+   - **Unduh Audio Otomatis** saat play (opt-in, default OFF — lihat `docs/31-auto-download-audio-spec.md`).
    Tanpa salah satu dari dua cara di atas, play online hanya stream CDN tanpa persist cache.
 4. **Preferensi pengguna & progres** — Dexie; selalu tersedia offline.
 
@@ -632,7 +632,7 @@ Jika ada perbedaan antar dokumen tentang state, dokumen ini menjadi acuan final.
 * [x] Tambah `BroadcastChannel('hanquran:audio')` untuk sinkronisasi lintas tab audio (`services/audio-tab-sync.ts`).
 * [x] Tambah `BroadcastChannel('hanquran:repeat')` untuk sinkronisasi lintas tab repeat.
 * [x] Hubungkan komponen `AudioPlayer`, `RepeatStatus`, `OfflineStatusBadge` ke selector store.
-* [x] Implementasi aksi **Hapus Cache** sesuai aturan Bagian 6.4 — `services/cache-manager.ts`, Settings UI.
+* [x] Implementasi aksi **Hapus Audio Tersimpan** sesuai aturan Bagian 6.4 — `services/cache-manager.ts`, Settings UI.
 * [x] Tulis unit test untuk action store dan integrasi `audio-controller` ↔ store.
 
 ---

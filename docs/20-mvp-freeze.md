@@ -209,9 +209,9 @@ Counter menampilkan target aktif dan jumlah tersisa. Repeat berjalan otomatis ta
 - Hapus cache ✅ — `services/cache-manager.ts`, konfirmasi di Settings
 - Status offline ✅
 - Aksesibilitas dasar — kontras tinggi & animasi halus persisten (`contrastMode`, `smoothAnimation`); diterapkan global via `AccessibilityProvider` ✅
-- **Playback** — Auto Follow Playback (`settings.autoFollowPlayback`, default ON) ✅ — `docs/28-playback-settings.md`
+- **Playback** — Ikuti Ayat yang Diputar (`settings.autoFollowPlayback`, default ON) ✅ — `docs/28-playback-settings.md`
 - **Mode Murotal** — tilawah berkelanjutan (`settings.murotalEnabled`, default OFF) ✅ — `docs/29-murotal-mode-spec.md` (v0.3.0)
-- **Auto Download Audio** — cache ayat saat play (`settings.autoDownloadOnPlay`, default OFF) ✅ — `docs/31-auto-download-audio-spec.md` (v0.5.0)
+- **Unduh Audio Otomatis** — cache ayat saat play (`settings.autoDownloadOnPlay`, default OFF) ✅ — `docs/31-auto-download-audio-spec.md` (v0.5.0)
 - **Progress repeat** — badge `x/y` di audio bar saat sesi repeat aktif ✅
 - **Tentang HanQuran** ✅ — `/settings/about`; informasi aplikasi, filosofi, credits, repository & lisensi (`docs/26-about-screen-spec.md`)
 
@@ -663,7 +663,7 @@ Dokumen ini disimpan di `docs/20-mvp-freeze.md` dan tidak boleh diperbarui kecua
 | 24 Juni 2026 | Konten Qur'an dari dataset statis `public/data/*`, bukan Dexie | `docs/23` |
 | 24 Juni 2026 | Word-by-word highlight dipindah ke Post-MVP | `docs/24` |
 | 24 Juni 2026 | Bahasa aplikasi `id`/`en` (`next-intl`), layar Tentang | `docs/21`, `docs/26` |
-| 25–26 Juni 2026 | Media Session, Playback Settings, Mode Murotal, offline-first penuh, Auto Download Audio | `docs/27`–`docs/31` |
+| 25–26 Juni 2026 | Media Session, Playback Settings, Mode Murotal, offline-first penuh, Unduh Audio Otomatis | `docs/27`–`docs/31` |
 | Agustus 2026 | Platform Android (Capacitor) & Gerbang Threads | `docs/32`, `docs/34` |
 | Oktober–November 2026 | SEO (SSG), performa beranda, locale paint pertama, audit bug | `docs/35`, `docs/36`, `docs/21` §5.6, `docs/18` Phase 12b |
 | 2 November 2026 | Sorot kata (PB-005) diaktifkan kembali untuk 3 qari dengan data quran-align | `docs/37` |

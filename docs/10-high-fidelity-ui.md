@@ -570,7 +570,7 @@ Ayat 1 • 4x tersisa
 atau:
 
 ```text
-🟢 Range Ayat 1-5
+🟢 Rentang Ayat 1-5
 
 Siklus 2 / 5
 Sedang di Ayat 3
@@ -623,7 +623,7 @@ Playback
 ↓
 Kontras
 ↓
-Offline & Cache
+Offline & Penyimpanan
 ↓
 Aksesibilitas
 ↓
@@ -632,7 +632,7 @@ Tentang HanQuran  →  `/settings/about`
 
 > Terjemahan dan Transliterasi dikontrol di Verse Display Controls (Surah Detail), bukan di Pengaturan.
 
-> **Playback:** Auto Follow Playback & Mode Murotal — `docs/28-playback-settings.md`, `docs/29-murotal-mode-spec.md`.
+> **Playback:** Ikuti Ayat yang Diputar & Mode Murotal — `docs/28-playback-settings.md`, `docs/29-murotal-mode-spec.md`.
 
 Layar **Tentang HanQuran**: informasi aplikasi, filosofi, credits, repository & lisensi — `docs/26-about-screen-spec.md`.
 

@@ -2,7 +2,7 @@
 
 **Tanggal:** 25 Juni 2026  
 **Status:** ✅ Diimplementasi (MVP V1)  
-**Lokasi UI:** `/settings` — bagian **Playback**
+**Lokasi UI:** `/settings` — bagian **Pemutaran** (label UI id; sebelumnya "Playback")
 
 ---
 
@@ -14,12 +14,14 @@ Pada MVP V1, bagian ini berisi pengaturan playback. **Mode Murotal** tersedia se
 
 | Pengaturan | Default | Persistensi | Status |
 |------------|---------|-------------|--------|
-| Auto Follow Playback | ON (`true`) | `settings.autoFollowPlayback` | ✅ Diimplementasi |
+| Ikuti Ayat yang Diputar | ON (`true`) | `settings.autoFollowPlayback` | ✅ Diimplementasi |
 | Mode Murotal | OFF (`false`) | `settings.murotalEnabled` | ✅ Diimplementasi |
+
+> **Label UI (2 Nov 2026):** label Bahasa Indonesia diganti agar tidak campur Inggris — "Auto Follow Playback" → **Ikuti Ayat yang Diputar**, "Auto Download Audio" → **Unduh Audio Otomatis**, "Playback" → **Pemutaran**, "Offline & Cache" → **Offline & Penyimpanan**, "Hapus Cache" → **Hapus Audio Tersimpan**, "Repeat" → **Pengulangan**, "Range Ayat" → **Rentang Ayat**, "Infinite" → **Tanpa batas**. Nama field (`autoFollowPlayback`, dll.) tidak berubah.
 
 > **Bukan bagian Playback Settings:** pengaturan repeat (`RepeatSettingsDialog`), play/pause, navigasi ayat — tetap di kontrol audio pada Surah Detail. Lihat `docs/22-verse-display-controls.md` (Bagian 6).
 
-> **Bukan bagian Playback Settings:** **Auto Download Audio** — toggle di section **Offline & Cache**. Lihat `docs/31-auto-download-audio-spec.md`.
+> **Bukan bagian Playback Settings:** **Unduh Audio Otomatis** — toggle di section **Offline & Penyimpanan**. Lihat `docs/31-auto-download-audio-spec.md`.
 
 ---
 
@@ -32,7 +34,7 @@ Urutan section di `/settings` (setelah Qari, sebelum Ukuran Teks Arab):
 2. Reciter (Qari)
 3. Playback                    ← baru
 4. Ukuran Teks Arab
-5. Offline & Cache
+5. Offline & Penyimpanan
 6. Aksesibilitas
 7. Tentang HanQuran  →  `/settings/about`
 ```
@@ -56,13 +58,13 @@ Label section dilokalisasi via `next-intl` (namespace `settings.playback`).
 Satu baris toggle dalam card, pola sama dengan baris di section Aksesibilitas (`SettingsRow` + `Switch`):
 
 ```text
-Auto Follow Playback          [ON / OFF]
+Ikuti Ayat yang Diputar          [ON / OFF]
 Otomatis menggulir layar agar ayat yang sedang diputar tetap terlihat.
 ```
 
 | Field UI | Nilai |
 |----------|-------|
-| Nama | Auto Follow Playback |
+| Nama | Ikuti Ayat yang Diputar |
 | Deskripsi | Otomatis menggulir layar agar ayat yang sedang diputar tampil penuh dan di tengah area baca. |
 | Default | ON |
 | Kontrol | `Switch` |
@@ -86,7 +88,7 @@ berikutnya atau surat berikutnya hingga Anda berhenti.
 
 ---
 
-## 4. Auto Follow Playback — Perilaku
+## 4. Ikuti Ayat yang Diputar — Perilaku
 
 Berlaku saat audio tilawah aktif di Surah Detail dan `settings.autoFollowPlayback === true`.
 
@@ -119,7 +121,7 @@ Berlaku saat audio tilawah aktif di Surah Detail dan `settings.autoFollowPlaybac
 
 ### 4.5 Cakupan layar
 
-| Layar | Auto Follow Playback |
+| Layar | Ikuti Ayat yang Diputar |
 |-------|----------------------|
 | Surah Detail (`/surah/[id]`) | ✅ Berlaku |
 | Focus Mode (`/focus/[id]`) | ❌ Tidak berlaku — satu ayat per layar, tidak ada daftar scroll |
@@ -140,7 +142,7 @@ Berlaku di Surah Detail dan Focus Mode.
 
 ## 5. Saat Dimatikan (OFF)
 
-Jika pengguna mematikan Auto Follow Playback:
+Jika pengguna mematikan Ikuti Ayat yang Diputar:
 
 - Audio tilawah tetap berjalan normal.
 - Highlight ayat aktif tetap berpindah mengikuti playback.
@@ -173,7 +175,7 @@ Runtime sementara (tidak dipersist):
 ┌──────────────────────────────────┐
 │ Playback                         │
 │                                  │
-│ Auto Follow Playback    [ON/OFF] │
+│ Ikuti Ayat yang Diputar    [ON/OFF] │
 │ Otomatis menggulir layar agar    │
 │ ayat yang sedang diputar tetap   │
 │ terlihat.                        │
@@ -197,4 +199,4 @@ Runtime sementara (tidak dipersist):
 | `docs/22-verse-display-controls.md` | Kontrol baca vs kontrol playback |
 | `docs/14-routing-spec.md` | Route Surah Detail & Pengaturan |
 | `docs/29-murotal-mode-spec.md` | Mode Murotal — pemutaran berkelanjutan |
-| `docs/31-auto-download-audio-spec.md` | Auto Download Audio — cache saat play (Offline & Cache) |
+| `docs/31-auto-download-audio-spec.md` | Unduh Audio Otomatis — cache saat play (Offline & Penyimpanan) |

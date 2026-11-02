@@ -19,6 +19,7 @@ import { useSurah } from '@/hooks/use-surah';
 import { useReadingDisplay } from '@/hooks/use-reading-display';
 import { useSurahDetailBottomInset } from '@/hooks/use-surah-detail-bottom-inset';
 import { useSurahRepeatPlayback } from '@/hooks/use-surah-repeat-playback';
+import { useFocusKeyboardShortcuts } from '@/hooks/use-focus-keyboard-shortcuts';
 import { usePersistLastViewed } from '@/hooks/use-persist-last-viewed';
 import { useTrackSurahOpened } from '@/hooks/use-track-surah-opened';
 import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
@@ -110,6 +111,15 @@ function FocusModeLoaded({
     () => surah.ayahs.find((a) => a.number === activeAyah) ?? surah.ayahs[0],
     [surah.ayahs, activeAyah],
   );
+
+  useFocusKeyboardShortcuts({
+    enabled: !settingsOpen,
+    onPrevious: goToPreviousTrack,
+    onNext: goToNextTrack,
+    onTogglePlay: () => void togglePlayback(),
+    isPreviousDisabled,
+    isNextDisabled,
+  });
 
   useEffect(() => {
     prefetchNextAyah();

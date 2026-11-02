@@ -550,7 +550,7 @@ Dokumen HTML dan payload RSC **wajib** di cache terpisah: di cache yang sama, `p
 
 - Key = **URL lengkap** MP3, mis. `https://everyayah.com/data/{reciterId}/{SSSAAA}.mp3` (`services/quran/audio-service.ts`).
 - Ditulis oleh: Service Worker (Simpan Offline, `prefetch-surah`), dan main thread untuk **Auto Download saat putar** (`services/audio-play-cache.ts`) serta fallback `download-manager` saat SW tidak tersedia.
-- Tidak ada eviction otomatis; dihapus lewat **Hapus Cache** di Pengaturan.
+- Tidak ada eviction otomatis; dihapus lewat **Hapus Audio Tersimpan** di Pengaturan.
 - Metadata unduhan per surat + qari ada di tabel Dexie `downloadManifest`.
 
 ## 6.2 `hanquran-data-v3`

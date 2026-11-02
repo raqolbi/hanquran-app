@@ -404,7 +404,7 @@ Saat repeat berjalan, badge **`[2/5]`** muncul di antara select jumlah dan tombo
 
 ---
 
-### Repeat Range Ayat
+### Repeat Rentang Ayat
 
 Misal user memilih:
 
@@ -494,7 +494,7 @@ sesuai timing audio.
 Contoh saat Range 1-5 aktif:
 
 ```text
-Range Ayat 1-5
+Rentang Ayat 1-5
 Siklus 2 / 5
 Sedang di Ayat 3
 ```
@@ -538,11 +538,11 @@ Ayat 4
 
 ---
 
-## Bottom Sheet - Pengaturan Repeat
+## Bottom Sheet - Pengaturan Pengulangan
 
 ```text
 ┌─────────────────────────────┐
-│ Pengaturan Repeat           │
+│ Pengaturan Pengulangan           │
 ├─────────────────────────────┤
 │ Repeat Count               │
 │                             │
@@ -556,7 +556,7 @@ Ayat 4
 │ Target                     │
 │                             │
 │ ● Ayat Aktif               │
-│ ○ Range Ayat               │
+│ ○ Rentang Ayat               │
 │ ○ Surat Ini                │
 │                             │
 │ [ Terapkan ]               │
@@ -692,7 +692,7 @@ Ayat 4
 │ Target Repeat                 │
 ├───────────────────────────────┤
 │ ● Ayat Aktif                  │
-│ ○ Range Ayat                  │
+│ ○ Rentang Ayat                  │
 │ ○ Surat Ini                   │
 └───────────────────────────────┘
 ```
@@ -724,12 +724,12 @@ Notes:
 * Mode Fokus mempertahankan state Terjemahan dan Transliterasi; hanya mengubah layout baca.
 * Urutan render ayat: Arab → Transliterasi → Terjemahan (konsisten di Surah Detail dan Focus Mode).
 * Repeat default menggunakan target "Ayat Aktif".
-* Tap Repeat Selector membuka Bottom Sheet Pengaturan Repeat.
+* Tap Repeat Selector membuka Bottom Sheet Pengaturan Pengulangan.
 * Target repeat lanjutan tersedia melalui bottom sheet pengaturan repeat.
 * Repeat status hanya muncul saat repeat sedang aktif.
 * Offline status harus terlihat jelas tetapi tidak mengganggu fokus membaca.
 * Saat target adalah Ayat Aktif, playback berhenti setelah jumlah repeat selesai.
-* Saat target adalah Range Ayat atau Surat Ini, playback berjalan otomatis sampai satu siklus selesai sebelum mengurangi counter repeat.
+* Saat target adalah Rentang Ayat atau Surat Ini, playback berjalan otomatis sampai satu siklus selesai sebelum mengurangi counter repeat.
 * Offline Ready menunjukkan surat dan audio sudah tersedia untuk penggunaan tanpa koneksi internet.
 
 ---
@@ -772,7 +772,7 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 
 > **Navigasi ayat:** `⏮` / `⏭` berada di baris kontrol audio (`AudioPlayer`), **bukan** tombol teks terpisah — layout **identik** dengan Surah Detail (`docs/12-component-spec.md` §11).
 
-### Repeat Range Ayat
+### Repeat Rentang Ayat
 
 ```text
 ┌──────────────────────────────────────┐
@@ -830,7 +830,7 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 └──────────────────────────────────────────────────────────────────┘
 ```
 
-### Repeat Range Ayat
+### Repeat Rentang Ayat
 
 ```text
 ┌──────────────────────────────────────────────────────────────────┐
@@ -918,7 +918,7 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │                                      │
 │ ┌──────────────────────────────────┐ │
 │ │ Playback                         │ │
-│ │ Auto Follow Playback  [On/Off]   │ │
+│ │ Ikuti Ayat yang Diputar  [On/Off]   │ │
 │ │ Otomatis menggulir layar agar    │ │
 │ │ ayat yang sedang diputar tetap   │ │
 │ │ terlihat.                        │ │
@@ -933,12 +933,12 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │ └──────────────────────────────────┘ │
 │                                      │
 │ ┌──────────────────────────────────┐ │
-│ │ Offline & Cache                  │ │
+│ │ Offline & Penyimpanan                  │ │
 │ │ Status: Online                   │ │
 │ │ Audio tersimpan: 24 MB           │ │
 │ │ Data Quran     : Cached          │ │
 │ │                                  │ │
-│ │ Auto Download Audio   [Off]      │ │
+│ │ Unduh Audio Otomatis   [Off]      │ │
 │ │ Simpan otomatis audio ayat yang  │ │
 │ │ Anda putar agar bisa didengar    │ │
 │ │ offline nanti.                   │ │
@@ -976,7 +976,7 @@ Urutan render (jika semua aktif): Arab → Transliterasi → Terjemahan. Lihat `
 │ └─────────────────────┘   └─────────────────────┘               │
 │                                                                  │
 │ ┌─────────────────────┐   ┌─────────────────────┐               │
-│ │ Offline & Cache     │   │                     │               │
+│ │ Offline & Penyimpanan     │   │                     │               │
 │ │ Audio: 24 MB        │   │                     │               │
 │ │ Auto Download [OFF] │   │                     │               │
 │ │ [ Bersihkan Cache ] │   │ Tentang HanQuran →  │               │
@@ -1024,7 +1024,7 @@ Spesifikasi lengkap: `docs/26-about-screen-spec.md`.
 - `Clear cache` perlu konfirmasi
 - Bahasa setting harus ramah non-teknis
 - Label UI mengikuti `settings.appLocale` (`id` | `en`) via `next-intl` — lihat `docs/21-i18n-and-locale.md`
-- **Playback:** toggle Auto Follow Playback & Mode Murotal — `docs/28-playback-settings.md`, `docs/29-murotal-mode-spec.md`
+- **Playback:** toggle Ikuti Ayat yang Diputar & Mode Murotal — `docs/28-playback-settings.md`, `docs/29-murotal-mode-spec.md`
 
 ---
 

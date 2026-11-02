@@ -97,9 +97,9 @@ Pratinjau antarmuka HanQuran — mobile-first, UI Bahasa Indonesia.
 | <img src="./docs/images/detail-surat.png" alt="Detail surat Al-Faatiha — ayat, terjemahan, transliterasi, audio player" width="360" /> | <img src="./docs/images/mode-fokus.png" alt="Mode Fokus — satu ayat per layar dengan kontrol audio" width="360" /> |
 | <sub><strong>Detail surat</strong> — ayat, terjemahan & transliterasi, unduh offline</sub> | <sub><strong>Mode Fokus</strong> — satu ayat, minim distraksi</sub> |
 
-| Pengaturan Repeat | Pengaturan |
+| Pengaturan Pengulangan | Pengaturan |
 | :---: | :---: |
-| <img src="./docs/images/pengaturan-repeat.png" alt="Dialog Pengaturan Repeat — jumlah dan target pengulangan" width="360" /> | <img src="./docs/images/pengaturan.png" alt="Halaman Pengaturan — bahasa, qari, playback, offline, aksesibilitas" width="360" /> |
+| <img src="./docs/images/pengaturan-repeat.png" alt="Dialog Pengaturan Pengulangan — jumlah dan target pengulangan" width="360" /> | <img src="./docs/images/pengaturan.png" alt="Halaman Pengaturan — bahasa, qari, playback, offline, aksesibilitas" width="360" /> |
 | <sub><strong>Repeat</strong> — jumlah (1×–∞), target ayat / range / surat</sub> | <sub><strong>Pengaturan</strong> — bahasa, qari, playback, ukuran teks, offline</sub> |
 
 ---
@@ -113,7 +113,7 @@ Pratinjau antarmuka HanQuran — mobile-first, UI Bahasa Indonesia.
 | **Beranda** | 114 surat, pencarian, filter favorit, kartu Lanjutkan Hafalan |
 | **Detail Surat** | Ayat rasm Utsmani (font Amiri Quran), **sorot kata saat tilawah** (12 dari 14 qari), terjemahan & transliterasi (toggle), audio, repeat, unduh offline |
 | **Mode Fokus** | Satu ayat per layar, navigasi ayat, audio & repeat, sorot kata |
-| **Pengaturan** | Bahasa UI, qari, Auto Follow Playback, Mode Murotal, Auto Download Audio, ukuran teks Arab, kontras tinggi, animasi, status & hapus cache |
+| **Pengaturan** | Bahasa UI, qari, Ikuti Ayat yang Diputar, Mode Murotal, Unduh Audio Otomatis, ukuran teks Arab, kontras tinggi, animasi, status & hapus audio tersimpan |
 | **Tentang HanQuran** | Informasi aplikasi, filosofi, credits, repository & lisensi |
 | **Offline** | Unduh audio per surat; Service Worker cache dataset & aset |
 | **PWA** | Instal ke layar utama, splash screen, halaman fallback offline |
@@ -344,7 +344,7 @@ Catatan rilis: [`RELEASE.md`](./RELEASE.md).
 | [`docs/07-api-integration.md`](./docs/07-api-integration.md) | Sumber data & integrasi |
 | [`docs/26-about-screen-spec.md`](./docs/26-about-screen-spec.md) | Layar Tentang HanQuran |
 | [`docs/27-media-session-api-spec.md`](./docs/27-media-session-api-spec.md) | Media Session API (lock screen) |
-| [`docs/28-playback-settings.md`](./docs/28-playback-settings.md) | Auto Follow Playback |
+| [`docs/28-playback-settings.md`](./docs/28-playback-settings.md) | Ikuti Ayat yang Diputar |
 | [`docs/30-offline-behavior-spec.md`](./docs/30-offline-behavior-spec.md) | Perilaku offline (+ addendum APK) |
 | [`docs/32-capacitor-android-platform.md`](./docs/32-capacitor-android-platform.md) | Platform Capacitor Android |
 | [`docs/33-play-store-privacy-and-data-safety.md`](./docs/33-play-store-privacy-and-data-safety.md) | Privasi & Data safety Play |

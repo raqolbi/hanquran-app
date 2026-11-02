@@ -31,7 +31,7 @@ Semua teks antarmuka yang dibaca pengguna:
 
 - Menu & navigasi
 - Halaman Pengaturan
-- Dialog & bottom sheet (mis. Pengaturan Repeat, Hapus Cache)
+- Dialog & bottom sheet (mis. Pengaturan Pengulangan, Hapus Audio Tersimpan)
 - Label, tombol, placeholder
 - Empty state & error state
 - Notifikasi & pesan status
@@ -184,7 +184,7 @@ appLocale: 'id' | 'en';
 Field ini:
 
 - Diisi saat first launch (deteksi) atau saat user mengubah di Pengaturan.
-- **Tidak** dihapus saat aksi **Hapus Cache** (sama seperti preferensi lain di `settings`).
+- **Tidak** dihapus saat aksi **Hapus Audio Tersimpan** (sama seperti preferensi lain di `settings`).
 
 ## 5.5 State management
 

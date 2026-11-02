@@ -452,7 +452,7 @@ Menampilkan:
 - Font size
 - Bahasa aplikasi (UI shell)
 - Reciter / qari
-- Playback (Auto Follow Playback, Mode Murotal)
+- Playback (Ikuti Ayat yang Diputar, Mode Murotal)
 - High contrast mode
 - Cache management
 - Offline settings

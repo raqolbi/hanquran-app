@@ -114,7 +114,7 @@ Memungkinkan penggunaan offline setelah data diunduh.
 Repeat Target:
 
 - Repeat Ayat
-- Repeat Range Ayat
+- Repeat Rentang Ayat
 - Repeat Surat
 
 Repeat Count:
@@ -283,7 +283,7 @@ Acceptance:
 - Counter tampil
 - User dapat memilih target repeat:
   - Ayat
-  - Range Ayat
+  - Rentang Ayat
   - Surat
 - Repeat berjalan otomatis sesuai target
 - Counter tampil
