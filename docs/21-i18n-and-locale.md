@@ -212,6 +212,8 @@ agar render klien = HTML server (tanpa hydration mismatch). Supaya pengguna
 | Sinkronisasi | `stores/userStore.ts`, `components/providers/intl-provider.tsx` | Tulis cache saat `init()`/ganti bahasa; terapkan atribut (`applyAppLocaleToDocument()`) **sebelum** `set()` agar atribut dan teks `next-intl` berganti dalam frame yang sama |
 | Teks bilingual | `components/shared/locale-text.tsx` | Render `<span data-locale="id|en">`; CSS menyembunyikan yang tidak aktif |
 | Konten ayat | `hooks/use-surah.ts` → `data-content-locale` | Terjemahan seed `id` disembunyikan (`visibility:hidden`) sampai terjemahan locale aktif siap; dipakai juga oleh [`app/focus/[id]/page.tsx`](../app/focus/%5Bid%5D/page.tsx) |
+| Prefetch terjemahan | `prefetchSurahTranslation()` (`services/quran/quran-service.ts`) + `warmTranslationFile()` (`data-loader.ts`) | Setelah surat tampil, terjemahan bahasa lain diisi ke cache memori saat idle agar ganti bahasa tidak menunggu jaringan |
+| Resync | `IntlProvider` (`pageshow` persisted + event `storage`) | Halaman dari bfcache / tab lain memuat ulang locale dari Dexie |
 
 Aturan CSS (`app/globals.css`):
 
@@ -235,10 +237,28 @@ sempat tampil dengan bahasa berbeda dalam satu frame. `IntlProvider` tetap
 memanggil helper yang sama sebagai jaring pengaman untuk perubahan locale di
 luar alur store.
 
-**Batasan yang diketahui:** label shell yang belum dual-render (kartu Lanjutkan
-Hafalan, footer, banner install, header surat) masih dapat berkedip ±200 ms
-pada kunjungan pertama pengguna lama tanpa cache. Setelah cache tertulis,
-paint berikutnya benar. Ini residual, bukan blocker.
+**Prefetch & ganti bahasa.** Saat locale berganti (mis. setelah kembali dari
+`/settings` lewat tombol back), terjemahan lama disembunyikan sampai data
+locale baru siap. Supaya jeda itu tidak terasa, `useSurah` memanggil
+`prefetchSurahTranslation()` setelah konten tampil; berkas terjemahan bahasa
+lain biasanya sudah ada di cache SW sehingga permintaan berikutnya selesai
+dalam satu microtask. Prefetch dijadwalkan idle (`requestIdleCallback`, fallback
+`setTimeout` 1,2 s) dan tidak memblokir render.
+
+**Resync bfcache & multi-tab.** Halaman yang dipulihkan dari bfcache membawa
+state React lama, dan perubahan bahasa di tab lain tidak terlihat di tab ini.
+`IntlProvider` mendengarkan `pageshow` (`persisted === true`) dan event
+`storage` untuk kunci locale, lalu memanggil `init()` agar Dexie kembali
+menjadi sumber kebenaran.
+
+**Batasan yang diketahui:** konten yang tampil pada paint pertama sudah
+dual-render (kartu surat, kontrol baca surat, header surat, tombol unduh
+offline, banner install, gate, pencarian, filter). Sisa yang belum dual-render
+adalah teks di bawah lipatan (footer) dan komponen yang baru dirender setelah
+Dexie siap (kartu Lanjutkan Hafalan, pesan kosong favorit), sehingga tidak
+terlihat berkedip. Nama aksesibel (`aria-label`) masih mengikuti `next-intl`
+dan bisa berbahasa `id` sebelum inisialisasi selesai — dampaknya hanya pada
+screen reader, bukan tampilan. Ini residual, bukan blocker.
 
 ---
 

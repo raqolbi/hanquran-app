@@ -1369,12 +1369,14 @@ Konteks: `next-intl` baru memakai locale tersimpan setelah Dexie selesai dibaca,
 | P12-3 | Seed `meaningTranslations {id,en}` + skip refetch daftar saat `en`; sembunyikan terjemahan ayat yang tidak cocok via `data-content-locale` | [REFACTOR] | P2 | F8 |
 | P12-4 | Test helper locale/skrip init, mapper, hook daftar/surat, pencarian dua bahasa, gate, cache store | [TEST] | P2 | F8 |
 | P12-5 | Tindak lanjut audit: atribut `<html>` diterapkan sinkron dari store; mode fokus ikut `data-content-locale` | [REFACTOR] | P2 | F8 |
+| P12-6 | Label pra-paint di atas lipatan (kontrol baca, header surat, unduh offline, banner install) + prefetch terjemahan + resync bfcache/multi-tab | [REFACTOR] | P2 | F8 |
 
 - [x] [NEW] P12-1 — cache + skrip pra-paint + sinkronisasi store/provider (P2)
 - [x] [NEW] P12-2 — komponen `LocaleText` + label bilingual (P2)
 - [x] [REFACTOR] P12-3 — seed bilingual + `data-content-locale` (P2)
 - [x] [TEST] P12-4 — 13 test baru (P2)
 - [x] [REFACTOR] P12-5 — sinkronisasi atribut sebelum render + mode fokus (P2)
+- [x] [REFACTOR] P12-6 — label atas lipatan, prefetch terjemahan, resync locale (P2)
 
 **DoD Phase 12:**
 
@@ -1384,9 +1386,13 @@ Konteks: `next-intl` baru memakai locale tersimpan setelah Dexie selesai dibaca,
 - Tidak ada hydration mismatch; routing URL tidak berubah; app-shell offline/SW dan export Android tidak berubah.
 - Build web & Android hijau; seluruh test hijau; Lighthouse SEO tidak turun.
 
-**Hasil verifikasi (1 Nov 2026):** pada `domcontentloaded`, `<html data-app-locale="en">` dan kartu surat 1 menampilkan `The Opening` / `verses` / `Meccan`, placeholder `Search surahs...`; tidak ada teks `id` yang terlihat. Surah 1: saat fetch terjemahan `en` ditahan, paragraf `data-content-locale="id"` berstatus `visibility:hidden`; setelah data tiba, `en` tampil. Kembali ke `id`: kartu menampilkan `Pembukaan` / `ayat` / `Makkiyah`. Tidak ada pesan hydration mismatch. 87 file / **425 test** lulus; build web & export Android hijau (114 tautan, atribut+skrip locale ada); Lighthouse home performance **91**, SEO **100**, CLS **0**. HTML beranda 267 → 298 KB raw (+1,9 KB gzip) karena teks bilingual. Residual: label shell yang belum dual-render masih dapat berkedip pada kunjungan pertama pengguna lama tanpa cache.
+**Hasil verifikasi (1 Nov 2026):** pada `domcontentloaded`, `<html data-app-locale="en">` dan kartu surat 1 menampilkan `The Opening` / `verses` / `Meccan`, placeholder `Search surahs...`; tidak ada teks `id` yang terlihat. Surah 1: saat fetch terjemahan `en` ditahan, paragraf `data-content-locale="id"` berstatus `visibility:hidden`; setelah data tiba, `en` tampil. Kembali ke `id`: kartu menampilkan `Pembukaan` / `ayat` / `Makkiyah`. Tidak ada pesan hydration mismatch. 89 file / **435 test** lulus; build web & export Android hijau (114 tautan, atribut+skrip locale ada); Lighthouse home performance **91**, SEO **100**, CLS **0**. HTML beranda 267 → 298 KB raw (+1,9 KB gzip) karena teks bilingual. Residual: label di bawah lipatan (footer) dan komponen yang baru dirender setelah Dexie siap (kartu Lanjutkan Hafalan) belum dual-render tetapi tidak tampil pada paint pertama; `aria-label` masih mengikuti `next-intl`.
 
-**Tindak lanjut (2 Nov 2026):** audit pasca-rilis menemukan dua celah kecil yang sudah diperbaiki — (1) atribut `<html>` sebelumnya baru diperbarui di `useEffect` setelah paint, sehingga pada toggle bahasa atau cache basi ada satu frame campuran bahasa; kini `applyAppLocaleToDocument()` dipanggil sinkron dari `userStore.init()`/`updateSettings()` **sebelum** `set()`; (2) mode fokus belum memakai `data-content-locale`, sehingga terjemahan bahasa lama masih tampil saat locale berganti di tengah sesi. Verifikasi browser: dengan request terjemahan `en` ditahan, **286/286** paragraf terjemahan surah 2 berstatus `visibility:hidden` dan tidak ada teks `id` yang terlihat; cache `en` + Dexie `id` terkoreksi ke `id` setelah `init()` tanpa sisa teks `en`. Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan dependency repo (gap lama, bukan regresi); verifikasi memakai `tsc --noEmit` + suite test.
+**Tindak lanjut (2 Nov 2026):** audit pasca-rilis menemukan lima celah kecil yang sudah diperbaiki — (1) atribut `<html>` sebelumnya baru diperbarui di `useEffect` setelah paint, sehingga pada toggle bahasa atau cache basi ada satu frame campuran bahasa; kini `applyAppLocaleToDocument()` dipanggil sinkron dari `userStore.init()`/`updateSettings()` **sebelum** `set()`; (2) mode fokus belum memakai `data-content-locale`, sehingga terjemahan bahasa lama masih tampil saat locale berganti di tengah sesi; (3) label di atas lipatan (kontrol baca, `ayat`/`Makkiyah`, `Siap Offline`, Simpan Offline, banner install) belum dual-render sehingga masih berkedip; kini memakai `LocaleText`, dan `getLocalePair` mendukung interpolasi `{token}`; (4) ganti bahasa di Surah Detail sempat menampilkan area terjemahan kosong menunggu jaringan; kini terjemahan bahasa lain dipanaskan di latar (`prefetchSurahTranslation`, idle) sehingga selesai dalam satu microtask; (5) halaman yang dipulihkan dari bfcache atau tab yang bahasanya diubah di tab lain membawa locale lama; `IntlProvider` kini memuat ulang locale lewat `pageshow` (`persisted`) dan event `storage`.
+
+Verifikasi browser: dengan request terjemahan `en` ditahan, **286/286** paragraf terjemahan surah 2 berstatus `visibility:hidden` dan tidak ada teks `id` yang terlihat; cache `en` + Dexie `id` terkoreksi ke `id` setelah `init()` tanpa sisa teks `en`; pengguna `en` di `domcontentloaded` melihat `7 verses`, `Meccan`, `Save Offline`, `Translation`, `Transliteration`, `Focus`; setelah surah tampil, `translations/id/001.json` diminta di latar; kembali dari `/settings` setelah ganti ke `id` (restore bfcache) menghasilkan `data-app-locale="id"` dan terjemahan `id` tanpa jeda kosong.
+
+Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan dependency repo (gap lama, bukan regresi); verifikasi memakai `tsc --noEmit` + suite test.
 
 ---
 
