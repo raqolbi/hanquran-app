@@ -77,9 +77,9 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 12        | Locale Paint Pertama (F8)         | 4      | 0      | 0      | 4      | 4       | ✅ Selesai (P12-1–P12-4) — 1 Nov 2026        |
 | 12b       | Audit Bug & Hardening             | 13     | 3      | 7      | 3      | 13      | ✅ Selesai (P12b-1–P12b-13) — 2 Nov 2026     |
 | 13        | Sorot Kata (quran-align)          | 10     | 0      | 8      | 2      | 10      | ✅ Selesai (P13-1–P13-10) — 2 Nov 2026       |
-| 14        | Perbaikan Lanjutan Audit          | 10     | 0      | 5      | 5      | 3       | 🚧 Berjalan (`docs/39`)                       |
-| 15        | Ulang Kata (Hafalan per Kata)     | 12     | 0      | 10     | 2      | 0       | 📋 Belum dimulai (`docs/38`)                  |
-| **TOTAL** |                                   | **110** | **50** | **37** | **23** | **83**  | (+ Phase 9; + Phase 10 SEO; + Phase 10b hardening; + Phase 11 CWV; + Phase 11b LCP gate; + Phase 12 F8; + Phase 12b audit) |
+| 14        | Perbaikan Lanjutan Audit          | 10     | 0      | 5      | 5      | 9       | ✅ Kode selesai — uji iPhone P14-4 ⏳ (`docs/39`) |
+| 15        | Ulang Kata (Hafalan per Kata)     | 12     | 0      | 10     | 2      | 11      | ✅ Web selesai — uji iOS/Android P15-12 ⏳ (`docs/38`) |
+| **TOTAL** |                                   | **110** | **50** | **37** | **23** | **100** | (+ Phase 9; + Phase 10 SEO; + Phase 10b hardening; + Phase 11 CWV; + Phase 11b LCP gate; + Phase 12 F8; + Phase 12b audit) |
 
 
 > Catatan: Phase 7 (Testing & QA) berjalan **paralel** mulai Phase 1 — bukan sequential setelah Phase 6 selesai.
@@ -1206,12 +1206,12 @@ Kerjakan dan centang task di **`docs/32` §13**. Di dokumen ini cukup lacak stat
 
 ### Task pembuka yang disarankan duluan
 
-- [ ] [NEW] `lib/platform.ts`
-- [ ] [UPDATE] `next.config.mjs` branch `HANQURAN_TARGET` (default = PWA sekarang)
-- [ ] [NEW] script `build:android`
-- [ ] [NEW] `generateStaticParams` untuk `/surah/[id]` & `/focus/[id]`
-- [ ] [NEW] Capacitor init + `android/`
-- [ ] [TEST] Regressi: `npm run build` tanpa env android tetap OK
+- [x] [NEW] `lib/platform.ts`
+- [x] [UPDATE] `next.config.mjs` branch `HANQURAN_TARGET` (default = PWA sekarang)
+- [x] [NEW] script `build:android`
+- [x] [NEW] `generateStaticParams` untuk `/surah/[id]` & `/focus/[id]`
+- [x] [NEW] Capacitor init + `android/`
+- [x] [TEST] Regressi: `npm run build` tanpa env android tetap OK
 
 ---
 

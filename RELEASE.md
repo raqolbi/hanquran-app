@@ -77,9 +77,12 @@ Rilis gabungan sejak 0.5.0: aplikasi Android (Capacitor), Gerbang Threads, SEO &
 - **Bahasa sejak paint pertama:** pengguna `en` tidak lagi melihat kedipan teks Indonesia (`docs/21` §5.6)
 - **Tautan pembuat via env** `NEXT_PUBLIC_AUTHOR_*` / `NEXT_PUBLIC_ORGANIZATION_URL` — dikosongkan/`-` = disembunyikan (`docs/26` §4.5)
 - **Pemberitahuan penyimpanan** di Pengaturan bila browser tidak mengizinkan penyimpanan data (mode privat)
-- **Sorot kata saat tilawah** di Surah Detail & Mode Fokus untuk 12 qari — data waktu dari quran-align (CC BY 4.0); bisa dimatikan di Pengaturan → Playback → Sorot Kata (`docs/37`)
+- **Sorot kata saat tilawah** di Surah Detail & Mode Fokus untuk 12 qari — data waktu dari quran-align (CC BY 4.0); bisa dimatikan di Pengaturan → Pemutaran → Sorot Kata (`docs/37`)
 - **9 qari baru:** Abdul Basit (Murattal & Mujawwad), Abdurrahman As-Sudais, Saud Ash-Shuraim, Al-Husary (Muallim — untuk hafalan), Al-Minshawi (Murattal), Abu Bakr Ash-Shatri, Hani Ar-Rifai, Mohamed Al-Tablawi
 - **Tanda qari** di Pengaturan: Untuk hafalan, Sorot kata
+- **Ulang Kata** untuk hafalan per kata: ketuk kata di ayat aktif → diulang terus; tekan lama lalu seret → ulang rentang kata; **Jeda Menirukan** 0–3 dtk di Pengaturan → Pemutaran (`docs/38`)
+- **Keyboard Mode Fokus:** ← / → pindah ayat, Spasi putar/jeda
+- **Label Bahasa Indonesia** tidak lagi campur Inggris (mis. Pengulangan, Tanpa batas, Rentang Ayat, Ikuti Ayat yang Diputar, Unduh Audio Otomatis, Hapus Audio Tersimpan — `docs/28` §1)
 
 #### Perbaikan
 
@@ -92,7 +95,9 @@ Rilis gabungan sejak 0.5.0: aplikasi Android (Capacitor), Gerbang Threads, SEO &
 - Hydration mismatch di ikon favorit Beranda dan tombol Simpan Offline
 - Tombol favorit kartu surat tidak lagi bersarang di dalam tautan (aksesibilitas keyboard & HTML valid)
 - Mode Fokus: `?ayah` tidak valid tidak lagi menampilkan "NaN"
-- Gerbang Threads tidak lagi bisa mengunci pengguna saat penyimpanan browser diblokir
+- Gerbang Threads tidak lagi bisa mengunci pengguna saat penyimpanan browser diblokir; kini dengan focus trap & latar `inert`
+- Kartu ayat bisa dipilih dengan keyboard; judul tab khusus untuk Mode Fokus, Pengaturan, dan Tentang
+- Gagal menyimpan favorit kini menampilkan pesan, bukan diam-diam gagal
 - Pengaturan pengguna lama dilengkapi sekaligus (mis. Auto Follow kembali aktif sesuai default)
 - Pencarian surat lebih longgar; Bismillah di data ayat 1 dirapikan
 - Cache dataset Qur'an lokal ikut terbarui saat data berubah (fingerprint dataset)
@@ -113,15 +118,15 @@ Rilis gabungan sejak 0.5.0: aplikasi Android (Capacitor), Gerbang Threads, SEO &
 
 #### Masalah yang diketahui
 
-- Gerbang Threads belum punya focus trap / tombol Esc
-- Membuka surat apa pun menimpa posisi "Lanjutkan Hafalan" ke ayat 1
-- Sorot kata belum tersedia untuk Al-Juhaynee dan Ibrahim Al Dosary (Warsh)
-- Rincian lengkap: `docs/18` Phase 12b — residual
+- Sorot kata & Ulang Kata belum tersedia untuk Al-Juhaynee dan Ibrahim Al Dosary (Warsh)
+- Ulang Kata & audio offline (Range 206) belum diuji di iPhone dan APK Android (`docs/18` P14-4, P15-12)
+- Gerbang Threads sengaja tidak bisa ditutup dengan Esc (`docs/34`)
 
 #### Uji sebelum rilis
 
 - [x] Build web hijau; 0 hydration mismatch di Beranda & Surah Detail (verifikasi Playwright)
-- [ ] Unit test penuh di mesin lokal
+- [x] Unit test penuh (499 test) — lokal ±2 menit sejak environment default `node` (P14-10)
+- [x] `npm run typecheck` & `npm run lint` bersih (CI)
 - [ ] Build Android (`npm run build:android`) + uji APK
 - [ ] Preview / staging diuji
 - [ ] Production deploy
