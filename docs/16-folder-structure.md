@@ -83,7 +83,7 @@ components/
 ├─ surah-detail-client.tsx            # Surah Detail interaktif
 ├─ surah-detail-header.tsx, surah-detail-top-chrome.tsx, surah-detail-scroll-spacer.tsx
 ├─ start-ayah-sync.tsx                # sinkron ?ayah (di dalam Suspense)
-├─ verse-display-controls.tsx, ayah-card.tsx, surah-offline-download.tsx
+├─ verse-display-controls.tsx, ayah-card.tsx, quran-ayah-text.tsx, surah-offline-download.tsx
 ├─ audio-player.tsx, repeat-selector.tsx, repeat-settings-dialog.tsx,
 ├─ repeat-status.tsx, repeat-progress-badge.tsx, offline-status-badge.tsx
 │
@@ -93,6 +93,7 @@ components/
    action-bar.tsx, ayah-word-highlight.tsx, bottom-navigation.tsx,
    focus-mode-player.tsx, favorites.tsx
 ```
+
 
 Catatan:
 
@@ -111,6 +112,7 @@ Semua hook client-side, nama file `use-*.ts`. Kelompok utama:
 | Audio & repeat | `use-audio`, `use-ayah-audio`, `use-surah-repeat-playback`, `use-audio-playback-gate`, `use-auto-follow-playback` |
 | Offline | `use-surah-offline-download`, `use-surah-offline-ready` |
 | Tampilan | `use-reading-display`, `use-arabic-text-size`, `use-surah-detail-bottom-inset`, `use-media-query`, `use-is-client` |
+| Sorot kata | `use-active-word-range` (`docs/37`) |
 | Lain-lain | `use-persist-last-viewed`, `use-track-surah-opened`, `use-install-prompt`, `use-threads-gate` |
 
 ---
@@ -128,6 +130,7 @@ services/
 ├─ quran/                       # satu-satunya jalur konten Qur'an (public/data/*)
 │  ├─ quran-service.ts, data-loader.ts, mappers.ts, paths.ts
 │  ├─ server-surah.ts           # baca dataset saat build/SSG
+│  ├─ word-timings.ts           # data waktu per kata (quran-align, docs/37)
 │  ├─ audio-service.ts, audio-config.ts   # URL MP3 CDN everyayah.com
 │  └─ app-types.ts, dataset-types.ts, index.ts
 ├─ db/
@@ -169,7 +172,7 @@ Rincian: `docs/15-state-management.md`.
 - `types/index.ts` — satu file untuk tipe bersama (`SettingsRecord`, `DownloadManifestRecord`, `RepeatConfig`, `ConnectionStatus`, …). Tipe dataset/konten ada di `services/quran/*-types.ts`.
 - `i18n/config.ts`, `i18n/detection.ts` — locale `id`/`en` client-side (tanpa prefix URL). `docs/21`.
 - `messages/id.json`, `messages/en.json` — seluruh teks UI.
-- `data/reciters.json` — daftar qari; `data/about-credits.ts` — sumber data di layar Tentang.
+- `data/reciters.json` — daftar qari; `data/word-timing-reciters.json` — qari yang punya data sorot kata; `data/about-credits.ts` — sumber data di layar Tentang.
 
 ---
 
@@ -177,7 +180,8 @@ Rincian: `docs/15-state-management.md`.
 
 ```
 public/
-├─ data/                 # dataset Qur'an: manifest.json, quran/NNN.json, translations/{id,en}/NNN.json
+├─ data/                 # dataset Qur'an: manifest.json, quran/NNN.json, translations/{id,en}/NNN.json,
+│                        # word-timings/v1/{reciterId}/NNN.json (docs/37)
 ├─ branding/, icons/, og/
 ├─ manifest.json         # PWA manifest
 ├─ offline.html
@@ -194,6 +198,7 @@ public/
 | `build-android.mjs`, `build-android-bundle.mjs`, `prepare-capacitor-assets.mjs`, `apply-native-audio-complete-patch.mjs`, `patches/` | Pipeline Android (`docs/32`) |
 | `measure-bundle.mjs`, `run-lighthouse.mjs`, `validate-pwa.mjs` | Audit performa/PWA (`npm run perf*`) |
 | `generate-og-image.mjs`, `generate-favicons.mjs` | Aset SEO/ikon |
+| `build-word-timings.mjs` | Bangun data sorot kata dari rilis quran-align (dijalankan manual, `docs/37` §4) |
 
 ---
 
@@ -226,3 +231,4 @@ Dipisah per lapisan, mengikuti struktur sumber: `tests/app`, `components`, `hook
 |---------|-----------|
 | Juni 2026 | Dokumen awal — struktur rekomendasi |
 | 2 November 2026 | Ditulis ulang mengikuti struktur aktual repo; folder rekomendasi yang tidak pernah dibuat dihapus; komponen tidak terpakai ditandai |
+| 2 November 2026 | Tambah file sorot kata (`docs/37`) |

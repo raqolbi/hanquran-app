@@ -41,5 +41,7 @@ describe('scripts/generate-sw-precache.mjs', () => {
     expect(manifest.data.length).toBeGreaterThan(100);
     expect(manifest.data).toContain('/data/quran/036.json');
     expect(manifest.data).toContain('/data/manifest.json');
+    // Data waktu per kata dimuat saat dipakai, bukan saat install SW.
+    expect(manifest.data.some((url) => url.startsWith('/data/word-timings/'))).toBe(false);
   });
 });

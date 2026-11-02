@@ -24,7 +24,8 @@ import { useTrackSurahOpened } from '@/hooks/use-track-surah-opened';
 import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
 import type { SurahData } from '@/services/quran';
 import type { AppLocale } from '@/types';
-import { quranFont } from '@/lib/quran-font';
+import { LiveQuranAyahText } from '@/components/quran-ayah-text';
+import { useUserStore } from '@/stores/userStore';
 
 interface FocusModePageProps {
   params: Promise<{ id: string }>;
@@ -49,6 +50,7 @@ function FocusModeLoaded({
   const { showTranslation, showTransliteration } = useReadingDisplay();
   const { focusArabicStyle } = useArabicTextSize();
   const reciterId = usePreferredReciterId();
+  const wordHighlight = useUserStore((s) => s.settings.wordHighlight);
 
   const [activeAyah, setActiveAyah] = useState(() =>
     clampAyahNumber(startAyah, surah.ayahs.length),
@@ -152,13 +154,14 @@ function FocusModeLoaded({
             transition={{ duration: 0.2, ease: 'easeOut' }}
             className="w-full max-w-3xl text-center space-y-6"
           >
-            <p
-              dir="rtl"
-              className={`${quranFont.className} text-foreground`}
+            <LiveQuranAyahText
+              text={currentAyah.arabic}
               style={focusArabicStyle}
-            >
-              {currentAyah.arabic}
-            </p>
+              surahId={surah.number}
+              ayahNumber={currentAyah.number}
+              reciterId={reciterId}
+              enabled={wordHighlight}
+            />
 
             {showTransliteration && currentAyah.transliteration && (
               <p className="text-base sm:text-lg italic text-muted-foreground leading-relaxed px-2">

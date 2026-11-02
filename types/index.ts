@@ -19,6 +19,8 @@ export interface SettingsRecord {
   murotalEnabled: boolean;
   /** Cache audio ayat saat diputar (online). Default: false. */
   autoDownloadOnPlay: boolean;
+  /** Sorot kata yang sedang dibaca qari (bila data waktu tersedia). Default: true. */
+  wordHighlight: boolean;
   /** Slug qari dari `data/reciters.json` (mis. `Alafasy_128kbps`). */
   reciterId: string;
   /** Konfigurasi repeat hafalan — persisten di Dexie. */

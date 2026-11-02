@@ -66,6 +66,7 @@ Preferensi pengguna dan data yang harus bertahan antar sesi atau saat offline. D
 * Toggle transliterasi — tabel `settings` (`transliterationVisible`); kontrol UI di `VerseDisplayControls`.
 * Aksesibilitas (`contrastMode`, `smoothAnimation`) — tabel `settings`; diterapkan via `AccessibilityProvider`.
 * Auto Download saat putar (`autoDownloadOnPlay`) — tabel `settings`. Lihat `docs/31-auto-download-audio-spec.md`.
+* Sorot kata (`wordHighlight`, default `true`) — tabel `settings`. Lihat `docs/37-word-highlight-spec.md`.
 * Playback (`autoFollowPlayback`, `murotalEnabled`) — tabel `settings`; auto scroll ayat aktif & tilawah berkelanjutan. Lihat `docs/28-playback-settings.md`, `docs/29-murotal-mode-spec.md`.
 * Konfigurasi repeat (`count`, `target`, `range`) — tabel `settings`.
 * Penanda Lanjutkan Hafalan (`lastViewed`) — tabel `lastRead`.
@@ -370,6 +371,9 @@ Tabel ini adalah daftar lengkap state pada MVP. Setiap penambahan state wajib me
 | Mode Murotal (`murotalEnabled`)    | IndexedDB          | Ya        | Dexie (`settings`) |
 | Auto Follow Playback               | IndexedDB          | Ya        | Dexie (`settings.autoFollowPlayback`) |
 | Auto Download saat putar           | IndexedDB          | Ya        | Dexie (`settings.autoDownloadOnPlay`) |
+| Sorot kata (`wordHighlight`)       | IndexedDB          | Ya        | Dexie (`settings.wordHighlight`) |
+| Data waktu per kata                | `public/data/word-timings/*` via `services/quran/word-timings.ts` | Tidak (fetch + memori) | Static files (`docs/37`) |
+| Rentang kata aktif                 | React Local State (`useActiveWordRange`) | Tidak | React Local State |
 | Penyimpanan tersedia (`persistenceAvailable`) | Zustand | Tidak | Zustand |
 | Cache locale paint pertama         | localStorage       | Ya        | `hanquran:app-locale` |
 | Gerbang Threads selesai            | localStorage       | Ya        | `hanquran:threads-gate-completed` |

@@ -68,6 +68,7 @@ function normalizeStoredSettings(stored: SettingsRecord): {
     'autoFollowPlayback',
     'murotalEnabled',
     'autoDownloadOnPlay',
+    'wordHighlight',
   ] as const;
   for (const key of defaultableKeys) {
     if (next[key] === undefined) {

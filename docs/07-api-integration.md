@@ -116,6 +116,8 @@ Metadata qari dari `data/reciters.json` — bukan Dexie.
 
 ## Offline Friendly
 
+**Data sorot kata:** `public/data/word-timings/v1/{reciterId}/{NNN}.json` (quran-align, CC BY 4.0) via `services/quran/word-timings.ts` — hanya untuk qari di `data/word-timing-reciters.json`. Lihat `docs/37`.
+
 Konten Quran tersedia offline setelah Service Worker meng-cache aset `public/data/*` (`hanquran-data-v3`), atau setelah browser HTTP cache terisi. **Bukan** via IndexedDB.
 
 **Pemisahan penting:**

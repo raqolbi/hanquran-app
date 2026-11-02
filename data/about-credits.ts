@@ -4,7 +4,7 @@
  */
 
 export type AboutDataSourceCredit = {
-  id: 'quranText' | 'quranDataset' | 'transliteration' | 'audioMurottal';
+  id: 'quranText' | 'quranDataset' | 'transliteration' | 'audioMurottal' | 'wordTimings';
   labelKey: string;
   sourceKey: string;
   href?: string;
@@ -34,5 +34,12 @@ export const ABOUT_DATA_SOURCE_CREDITS: readonly AboutDataSourceCredit[] = [
     id: 'audioMurottal',
     labelKey: 'dataSources.audioMurottal.label',
     sourceKey: 'dataSources.audioMurottal.source',
+  },
+  {
+    // Wajib atribusi — data berlisensi CC BY 4.0.
+    id: 'wordTimings',
+    labelKey: 'dataSources.wordTimings.label',
+    sourceKey: 'dataSources.wordTimings.source',
+    href: 'https://github.com/cpfair/quran-align',
   },
 ] as const;

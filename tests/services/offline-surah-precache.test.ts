@@ -15,6 +15,15 @@ describe('offline-surah-precache', () => {
     ]);
   });
 
+  it('menyertakan data waktu per kata bila qari mendukung', () => {
+    expect(buildSurahOfflineDataUrls(1, 'Alafasy_128kbps')).toContain(
+      '/data/word-timings/v1/Alafasy_128kbps/001.json',
+    );
+    expect(
+      buildSurahOfflineDataUrls(1, 'Abdullaah_3awwaad_Al-Juhaynee_128kbps'),
+    ).toHaveLength(3);
+  });
+
   it('membangun URL shell surah detail dan focus', () => {
     expect(buildSurahOfflineRouteUrls(2)).toEqual([
       routes.surah(2),

@@ -32,7 +32,7 @@ Dokumen ini adalah laporan audit komprehensif terhadap seluruh dokumentasi proye
 | `18-development-tasks` | ✅ Sinkron | Status Phase 9 Android & header diperbarui |
 | `19-document-audit` | ✅ Dokumen ini | |
 | `20-mvp-freeze` | 🔒 Beku | Ditambah §12 Change Log pasca-freeze (isi freeze tidak diubah) |
-| `21`–`31`, `33`–`36` | ✅ Spek fitur | Nama cache di `23`, `30` diperbarui |
+| `21`–`31`, `33`–`37` | ✅ Spek fitur | Nama cache di `23`, `30` diperbarui; `37` sorot kata (baru) |
 | `32-capacitor-android-platform` | ✅ Diperbarui | Status: diimplementasi; path `android/app/build.gradle` |
 | `SETUP` | ✅ Sinkron | Node 22, dua lockfile, perintah Android, Dexie v5, `npm run lint` belum berfungsi |
 | `analytics` | ✅ | |

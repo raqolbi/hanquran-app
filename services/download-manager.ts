@@ -250,7 +250,7 @@ export class DownloadManager {
       await putManifestReady(surahId, reciterId, ayahCount, sizeBytes);
       useOfflineStore.getState().setDownloadStatus(surahId, reciterId, 'ready');
       await useOfflineStore.getState().refreshManifest();
-      await precacheSurahForOffline(surahId);
+      await precacheSurahForOffline(surahId, reciterId);
 
       return { surahId, sizeBytes, ayahsCount: ayahCount };
     } catch (error) {
@@ -295,7 +295,7 @@ export class DownloadManager {
             .getState()
             .setDownloadStatus(message.surahId, reciterId, 'ready');
           await useOfflineStore.getState().refreshManifest();
-          await precacheSurahForOffline(message.surahId);
+          await precacheSurahForOffline(message.surahId, reciterId);
           pending?.resolve({
             surahId: message.surahId,
             sizeBytes: message.sizeBytes,

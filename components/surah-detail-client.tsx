@@ -118,6 +118,7 @@ function SurahDetailView({
   const toggleFavorite = useUserStore((s) => s.toggleFavorite);
   const autoFollowPlayback = useUserStore((s) => s.settings.autoFollowPlayback);
   const smoothAnimation = useUserStore((s) => s.settings.smoothAnimation);
+  const wordHighlight = useUserStore((s) => s.settings.wordHighlight);
 
   usePersistLastViewed(surah.number, activeAyah);
   useTrackSurahOpened(surah);
@@ -248,6 +249,11 @@ function SurahDetailView({
               translation={ayah.translation}
               translationLocale={contentLocale ?? undefined}
               isActive={activeAyah === ayah.number}
+              wordTiming={{
+                surahId: surah.number,
+                reciterId,
+                enabled: wordHighlight,
+              }}
               isCompleted={completedAyahs.includes(ayah.number)}
               showTransliteration={showTransliteration}
               showTranslation={showTranslation}

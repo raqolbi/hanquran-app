@@ -58,7 +58,7 @@ Buka aplikasi → Pilih surat → Putar audio → Aktifkan repeat → Mode fokus
 
 **Sudah diimplementasikan** (diverifikasi dari codebase): daftar 114 surat (di-SSG, ada di HTML awal), detail surat (SSG + SEO), audio player (kecepatan putar, prefetch ayat berikutnya), repeat engine + badge progress `x/y`, mode fokus, **Mode Murotal**, Media Session (lock screen), favorit surat, lanjutkan hafalan, auto follow playback, layar Tentang HanQuran, i18n UI (`id` / `en`), unduh offline per surat, Service Worker, PWA (manifest, install prompt, offline shell, splash), Vercel Analytics, aplikasi Android (Capacitor), Gerbang Threads, font Amiri Quran untuk rasm Utsmani.
 
-**Belum selesai / di luar MVP V1** (dokumentasi resmi): word-by-word highlight, persist posisi audio, verifikasi E2E offline, error tracking produksi, seluruh kriteria rilis di [`docs/20-mvp-freeze.md`](./docs/20-mvp-freeze.md) §9.
+**Belum selesai / di luar MVP V1** (dokumentasi resmi): sorot kata untuk qari selain Alafasy/Husary/Minshawi, persist posisi audio, verifikasi E2E offline, error tracking produksi, seluruh kriteria rilis di [`docs/20-mvp-freeze.md`](./docs/20-mvp-freeze.md) §9.
 
 ---
 
@@ -111,8 +111,8 @@ Pratinjau antarmuka HanQuran — mobile-first, UI Bahasa Indonesia.
 | Fitur | Deskripsi |
 |-------|-----------|
 | **Beranda** | 114 surat, pencarian, filter favorit, kartu Lanjutkan Hafalan |
-| **Detail Surat** | Ayat rasm Utsmani (font Amiri Quran), terjemahan & transliterasi (toggle), audio, repeat, unduh offline |
-| **Mode Fokus** | Satu ayat per layar, navigasi ayat, audio & repeat (tanpa word highlight di MVP) |
+| **Detail Surat** | Ayat rasm Utsmani (font Amiri Quran), **sorot kata saat tilawah** (Alafasy, Husary, Minshawi), terjemahan & transliterasi (toggle), audio, repeat, unduh offline |
+| **Mode Fokus** | Satu ayat per layar, navigasi ayat, audio & repeat, sorot kata |
 | **Pengaturan** | Bahasa UI, qari, Auto Follow Playback, Mode Murotal, Auto Download Audio, ukuran teks Arab, kontras tinggi, animasi, status & hapus cache |
 | **Tentang HanQuran** | Informasi aplikasi, filosofi, credits, repository & lisensi |
 | **Offline** | Unduh audio per surat; Service Worker cache dataset & aset |
@@ -351,6 +351,7 @@ Catatan rilis: [`RELEASE.md`](./RELEASE.md).
 | [`docs/34-threads-gate-spec.md`](./docs/34-threads-gate-spec.md) | Overlay Gate Threads (sekali, gimmick) |
 | [`docs/35-seo-spec.md`](./docs/35-seo-spec.md) | SEO & discoverability |
 | [`docs/36-performance-cwv.md`](./docs/36-performance-cwv.md) | Performa beranda & Core Web Vitals |
+| [`docs/37-word-highlight-spec.md`](./docs/37-word-highlight-spec.md) | Sorot kata saat tilawah (data quran-align) |
 | [`docs/19-document-audit.md`](./docs/19-document-audit.md) | Audit dokumentasi & status tiap dokumen |
 | [`docs/analytics.md`](./docs/analytics.md) | Event Vercel Analytics |
 | [`CLAUDE.md`](./CLAUDE.md) | Konvensi penulisan kode & dokumen |

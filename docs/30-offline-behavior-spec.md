@@ -56,6 +56,10 @@ In-memory Map (per sesi tab)
 - **Di-precache saat SW `install`** (lihat §6.1): seluruh dataset (`manifest.json`, 114 file quran, terjemahan `id` + `en`) langsung tersimpan di `hanquran-data-v3` sebagai aset offline — **tanpa** menunggu pengguna membuka surat.
 - Runtime (cache-first) tetap mengisi entri apa pun yang belum sempat ter-precache.
 
+### 2.1b Data sorot kata (`docs/37`)
+
+`public/data/word-timings/v1/{reciterId}/{NNN}.json` **tidak** di-precache saat install. File dimuat saat surat dibuka dengan qari yang didukung (cache-first `hanquran-data-v3`) dan ikut disimpan saat **Simpan Offline**. Tanpa file → sorotan tidak tampil, fungsi lain normal.
+
 ### 2.2 Audio tilawah (CDN)
 
 ```text

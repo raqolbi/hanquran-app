@@ -90,6 +90,7 @@ describe('useUserStore — reciterId', () => {
     expect(settings.autoFollowPlayback).toBe(true);
     expect(settings.murotalEnabled).toBe(false);
     expect(settings.autoDownloadOnPlay).toBe(false);
+    expect(settings.wordHighlight).toBe(true);
 
     const stored = await db.settings.get('default');
     expect(stored?.autoFollowPlayback).toBe(true);

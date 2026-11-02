@@ -77,9 +77,11 @@ Rilis gabungan sejak 0.5.0: aplikasi Android (Capacitor), Gerbang Threads, SEO &
 - **Bahasa sejak paint pertama:** pengguna `en` tidak lagi melihat kedipan teks Indonesia (`docs/21` §5.6)
 - **Tautan pembuat via env** `NEXT_PUBLIC_AUTHOR_*` / `NEXT_PUBLIC_ORGANIZATION_URL` — dikosongkan/`-` = disembunyikan (`docs/26` §4.5)
 - **Pemberitahuan penyimpanan** di Pengaturan bila browser tidak mengizinkan penyimpanan data (mode privat)
+- **Sorot kata saat tilawah** di Surah Detail & Mode Fokus untuk qari Alafasy, Husary, dan Minshawi — data waktu dari quran-align (CC BY 4.0); bisa dimatikan di Pengaturan → Playback → Sorot Kata (`docs/37`)
 
 #### Perbaikan
 
+- Surat yang sudah "Simpan Offline" tidak lagi di-precache ulang setiap aplikasi dibuka (nama cache shell lama)
 - Teks ayat tidak lagi tampil sebagai kotak: font **Amiri Quran** dibundel untuk rasm Utsmani (alif wasla, tanda waqaf)
 - Hydration mismatch di ikon favorit Beranda dan tombol Simpan Offline
 - Tombol favorit kartu surat tidak lagi bersarang di dalam tautan (aksesibilitas keyboard & HTML valid)
@@ -106,6 +108,7 @@ Rilis gabungan sejak 0.5.0: aplikasi Android (Capacitor), Gerbang Threads, SEO &
 - 15 unit test Cache Storage gagal karena lingkungan jsdom (bukan kode aplikasi)
 - Gerbang Threads belum punya focus trap / tombol Esc
 - Membuka surat apa pun menimpa posisi "Lanjutkan Hafalan" ke ayat 1
+- Sorot kata belum tersedia untuk qari default (Al-Juhaynee) dan Ibrahim Al Dosary (Warsh)
 - Rincian lengkap: `docs/18` Phase 12b — residual
 
 #### Uji sebelum rilis

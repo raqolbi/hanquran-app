@@ -1,0 +1,19 @@
+{
+  "version": "v1",
+  "source": "https://github.com/cpfair/quran-align (release-2016-11-24)",
+  "license": "CC BY 4.0 — Collin Fair",
+  "reciters": [
+    {
+      "reciterId": "Alafasy_128kbps",
+      "source": "Alafasy_128kbps"
+    },
+    {
+      "reciterId": "Husary_128kbps",
+      "source": "Husary_64kbps"
+    },
+    {
+      "reciterId": "Minshawy_Mujawwad_192kbps",
+      "source": "Minshawy_Mujawwad_192kbps"
+    }
+  ]
+}

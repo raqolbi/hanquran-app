@@ -6,18 +6,34 @@
 import { routes } from '@/lib/routes';
 import { db } from '@/services/db/db';
 import { formatSurahId, surahPath, translationPath } from '@/services/quran/paths';
+import { hasWordTimings, wordTimingsPath } from '@/services/quran/word-timings';
 
-const SHELL_CACHE_NAME = 'hanquran-shell-v1';
+/**
+ * Harus sama dengan `CACHE_SHELL` di `public/sw.js`. Sebelumnya masih
+ * `-v1` (sudah dihapus SW saat aktivasi) sehingga pengecekan selalu gagal
+ * dan semua surat "siap offline" di-precache ulang di setiap pembukaan app.
+ */
+const SHELL_CACHE_NAME = 'hanquran-shell-v2';
 
 const SUPPORTED_TRANSLATION_LANGS = ['id', 'en'] as const;
 
-/** URL dataset statis yang dibutuhkan halaman Surah Detail offline. */
-export function buildSurahOfflineDataUrls(surahId: number): string[] {
+/**
+ * URL dataset statis yang dibutuhkan halaman Surah Detail offline.
+ * Bila `reciterId` punya data waktu per kata, file itu ikut disimpan agar
+ * sorot kata tetap berjalan offline.
+ */
+export function buildSurahOfflineDataUrls(
+  surahId: number,
+  reciterId?: string,
+): string[] {
   return [
     surahPath(surahId),
     ...SUPPORTED_TRANSLATION_LANGS.map((lang) =>
       translationPath(surahId, lang),
     ),
+    ...(reciterId && hasWordTimings(reciterId)
+      ? [wordTimingsPath(reciterId, surahId)]
+      : []),
   ];
 }
 
@@ -38,8 +54,11 @@ async function fetchSameOrigin(url: string, init?: RequestInit): Promise<void> {
  * Muat data surat + shell halaman ke Cache Storage (via Service Worker).
  * Panggil saat pengguna masih online, setelah audio surat selesai diunduh.
  */
-export async function precacheSurahForOffline(surahId: number): Promise<void> {
-  const dataUrls = buildSurahOfflineDataUrls(surahId);
+export async function precacheSurahForOffline(
+  surahId: number,
+  reciterId?: string,
+): Promise<void> {
+  const dataUrls = buildSurahOfflineDataUrls(surahId, reciterId);
   const routeUrls = buildSurahOfflineRouteUrls(surahId);
 
   await Promise.all([
@@ -106,11 +125,10 @@ export async function repairOfflineSurahCachesIfNeeded(): Promise<void> {
   }
 
   const ready = await db.downloadManifest.where('status').equals('ready').toArray();
-  const surahIds = [...new Set(ready.map((record) => record.surahId))];
 
-  for (const surahId of surahIds) {
-    if (!(await isSurahShellCached(surahId))) {
-      await precacheSurahForOffline(surahId);
+  for (const record of ready) {
+    if (!(await isSurahShellCached(record.surahId))) {
+      await precacheSurahForOffline(record.surahId, record.reciterId);
     }
   }
 }

@@ -53,6 +53,7 @@ Surah Detail — app/surah/[id]/page.tsx (server, SSG)
       │  ├─ SurahOfflineDownload         (Simpan Offline + progres)
       │  └─ VerseDisplayControls         (Terjemahan / Transliterasi / Fokus)
       ├─ AyahCard × n                    (font Amiri Quran)
+      │  └─ QuranAyahText / LiveQuranAyahText (ayat aktif: sorot kata, docs/37)
       ├─ SurahDetailScrollSpacer
       ├─ AudioPlayer (fixed bawah)
       │  └─ toolbarStart: RepeatSelector (inline) → RepeatProgressBadge
@@ -62,7 +63,7 @@ Surah Detail — app/surah/[id]/page.tsx (server, SSG)
 Mode Fokus — app/focus/[id]/page.tsx (client)
 └─ FocusModePage → FocusModeLoaded
    ├─ header: tombol Keluar + penghitung ayat
-   ├─ ayat aktif (AnimatePresence; Arab + transliterasi/terjemahan opsional)
+   ├─ ayat aktif (AnimatePresence) → LiveQuranAyahText (sorot kata) + transliterasi/terjemahan
    ├─ AudioPlayer → RepeatSelector (inline)
    └─ RepeatSettingsDialog
 
@@ -107,6 +108,7 @@ Tentang — app/settings/about/page.tsx (client)
 | `SurahOfflineDownload` | Tombol Simpan Offline; aktif hanya setelah hidrasi bila Cache Storage tersedia |
 | `VerseDisplayControls` | Toggle terjemahan/transliterasi + masuk Mode Fokus (`docs/22`) |
 | `AyahCard` | Satu ayat; status aktif; klik memilih ayat |
+| `QuranAyahText` / `LiveQuranAyahText` | Teks Arab berfont Al-Qur'an; varian Live menyorot kata yang sedang dibaca (`useActiveWordRange`, `docs/37`) |
 | `AudioPlayer` | Chrome audio bawah: progres, play/pause, prev/next, slot `toolbarStart` |
 | `RepeatSelector`, `RepeatProgressBadge`, `RepeatStatus`, `RepeatSettingsDialog` | UI repeat (`docs/12`, `lib/repeat-*.ts`) |
 | `OfflineStatusBadge` (+ `ConnectionIndicator`) | Varian status koneksi/cache |
@@ -141,7 +143,7 @@ File berikut masih ada tetapi **tidak di-import** di mana pun (dicek 2 Nov 2026)
 | `components/favorites.tsx` | Daftar favorit lama; diganti filter chip "Favorit" |
 | `components/bottom-navigation.tsx` | Navigasi bawah tidak dipakai di MVP |
 | `components/focus-mode-player.tsx` | Digantikan `AudioPlayer` di Mode Fokus |
-| `components/ayah-word-highlight.tsx` | Word highlight Post-MVP (`docs/24`) |
+| `components/ayah-word-highlight.tsx` | Stub lama — sorot kata kini di `quran-ayah-text.tsx` (`docs/37`) |
 
 ---
 

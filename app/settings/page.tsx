@@ -52,6 +52,7 @@ import {
 } from '@/components/settings-section';
 
 import { useReciters } from '@/hooks/use-reciters';
+import { hasWordTimings } from '@/services/quran/word-timings';
 import { useIsClient } from '@/hooks/use-is-client';
 import { quranFont } from '@/lib/quran-font';
 
@@ -74,11 +75,16 @@ export default function SettingsPage() {
   const textSize = fontSizeToTextSize(fontSize);
 
   const { reciters } = useReciters();
+  const wordTimingReciterNames = reciters
+    .filter((reciter) => hasWordTimings(reciter.id))
+    .map((reciter) => reciter.name)
+    .join(', ');
   const contrastMode = useUserStore((s) => s.settings.contrastMode);
   const smoothAnimation = useUserStore((s) => s.settings.smoothAnimation);
   const autoFollowPlayback = useUserStore((s) => s.settings.autoFollowPlayback);
   const murotalEnabled = useUserStore((s) => s.settings.murotalEnabled);
   const autoDownloadOnPlay = useUserStore((s) => s.settings.autoDownloadOnPlay);
+  const wordHighlight = useUserStore((s) => s.settings.wordHighlight);
 
   const badgeStatus = useOfflineStore(selectBadgeVariant);
   const totalSizeBytes = useOfflineStore((s) => s.manifestSummary.totalSizeBytes);
@@ -178,6 +184,10 @@ export default function SettingsPage() {
     void updateSettings({ murotalEnabled: enabled });
   };
 
+  const handleWordHighlightChange = (enabled: boolean) => {
+    void updateSettings({ wordHighlight: enabled });
+  };
+
   const handleAutoDownloadOnPlayChange = (enabled: boolean) => {
     void updateSettings({ autoDownloadOnPlay: enabled });
   };
@@ -247,6 +257,21 @@ export default function SettingsPage() {
                     checked={autoFollowPlayback}
                     onCheckedChange={handleAutoFollowPlaybackChange}
                     aria-label={t('playback.autoFollowAriaLabel')}
+                  />
+                }
+              />
+            </div>
+            <div className="py-4">
+              <SettingsRow
+                label={t('playback.wordHighlight')}
+                description={t('playback.wordHighlightDescription', {
+                  reciters: wordTimingReciterNames,
+                })}
+                control={
+                  <Switch
+                    checked={wordHighlight}
+                    onCheckedChange={handleWordHighlightChange}
+                    aria-label={t('playback.wordHighlightAriaLabel')}
                   />
                 }
               />

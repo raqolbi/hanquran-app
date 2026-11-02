@@ -666,6 +666,7 @@ Dokumen ini disimpan di `docs/20-mvp-freeze.md` dan tidak boleh diperbarui kecua
 | 25–26 Juni 2026 | Media Session, Playback Settings, Mode Murotal, offline-first penuh, Auto Download Audio | `docs/27`–`docs/31` |
 | Agustus 2026 | Platform Android (Capacitor) & Gerbang Threads | `docs/32`, `docs/34` |
 | Oktober–November 2026 | SEO (SSG), performa beranda, locale paint pertama, audit bug | `docs/35`, `docs/36`, `docs/21` §5.6, `docs/18` Phase 12b |
+| 2 November 2026 | Sorot kata (PB-005) diaktifkan kembali untuk 3 qari dengan data quran-align | `docs/37` |
 
 Pembaruan tabel **Architecture Freeze** di atas:
 

@@ -73,7 +73,13 @@ for (const dir of PUBLIC_ASSET_DIRS) {
 
 // 3. Dataset Qur'an → /data/*
 const dataDir = join(publicDir, 'data');
-const dataUrls = walk(dataDir).map((p) => toUrl(p, publicDir, ''));
+// Data waktu per kata (±5 MB untuk 3 qari) TIDAK di-precache saat install:
+// diunduh per surat saat dipakai (cache-first `hanquran-data-v3`) atau saat
+// Simpan Offline (`services/offline-surah-precache.ts`).
+const LAZY_DATA_PREFIXES = ['/data/word-timings/'];
+const dataUrls = walk(dataDir)
+  .map((p) => toUrl(p, publicDir, ''))
+  .filter((url) => !LAZY_DATA_PREFIXES.some((prefix) => url.startsWith(prefix)));
 const dataHash = fingerprintDataset(dataDir);
 
 const sortedData = dataUrls.sort();

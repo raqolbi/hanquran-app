@@ -53,6 +53,7 @@ cp .env.example .env.local   # opsional — semua env bersifat opsional
 | `npm run android:sync` | `build:android` + patch audio native + `cap sync android`             |
 | `npm run android:bundle` | Build AAB rilis (butuh keystore, lihat `docs/32`)                  |
 | `npm run cap:open`   | Buka proyek Android di Android Studio                                     |
+| `node scripts/build-word-timings.mjs <dir>` | Regenerasi data sorot kata dari rilis quran-align (jarang; `docs/37` §4) |
 
 Catatan: `npm run build` menjalankan `scripts/generate-sw-precache.mjs` sebelum & sesudah `next build` untuk mengisi `public/sw-precache-manifest.js`. Jangan commit hasil placeholder `"buildId": "dev"` dari dev/test.
 

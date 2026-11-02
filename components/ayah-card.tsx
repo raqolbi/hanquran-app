@@ -10,7 +10,7 @@ import {
   SURAH_DETAIL_READING_CONTROLS_HEIGHT,
 } from '@/lib/surah-detail-chrome';
 import type { AppLocale } from '@/types';
-import { quranFont } from '@/lib/quran-font';
+import { LiveQuranAyahText, QuranAyahText } from '@/components/quran-ayah-text';
 
 interface AyahCardProps {
   number: number;
@@ -21,6 +21,11 @@ interface AyahCardProps {
   translationLocale?: AppLocale;
   isActive?: boolean;
   isCompleted?: boolean;
+  /**
+   * Sorot kata saat tilawah (data quran-align). Hanya berlaku saat
+   * `isActive`; ayat lain dirender sebagai teks utuh.
+   */
+  wordTiming?: { surahId: number; reciterId: string; enabled: boolean };
   showTransliteration?: boolean;
   showTranslation?: boolean;
   onClick?: () => void;
@@ -34,6 +39,7 @@ export function AyahCard({
   translationLocale,
   isActive = false,
   isCompleted = false,
+  wordTiming,
   showTransliteration = false,
   showTranslation = false,
   onClick,
@@ -73,13 +79,23 @@ export function AyahCard({
       </div>
 
       <div className="space-y-4">
-        <p
-          className={`${quranFont.className} text-foreground leading-relaxed text-center`}
-          style={arabicStyle}
-          dir="rtl"
-        >
-          {arabic}
-        </p>
+        {isActive && wordTiming ? (
+          <LiveQuranAyahText
+            text={arabic}
+            className="leading-relaxed text-center"
+            style={arabicStyle}
+            surahId={wordTiming.surahId}
+            ayahNumber={number}
+            reciterId={wordTiming.reciterId}
+            enabled={wordTiming.enabled}
+          />
+        ) : (
+          <QuranAyahText
+            text={arabic}
+            className="leading-relaxed text-center"
+            style={arabicStyle}
+          />
+        )}
 
         {showTransliteration && transliteration && (
           <p className="text-center text-sm italic text-muted-foreground leading-relaxed">

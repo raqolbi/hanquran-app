@@ -1,7 +1,7 @@
 # 24 — Scope Mode Fokus MVP (Keputusan Word-by-Word)
 
 **Tanggal:** 24 Juni 2026  
-**Status:** ✅ Keputusan final MVP  
+**Status:** ✅ Keputusan final MVP — **diperbarui 2 Nov 2026:** sorot kata kini diimplementasi dengan data quran-align untuk 3 qari (`docs/37-word-highlight-spec.md`). Bagian di bawah dipertahankan sebagai latar keputusan MVP.  
 **Mengacu:** `docs/20-mvp-freeze.md`, `docs/23-static-dataset-architecture.md`, `docs/18-development-tasks.md`
 
 ---
@@ -75,7 +75,9 @@ Kriteria pengganti:
 
 ---
 
-## 6. Jalur Post-MVP (Referensi)
+## 6. Jalur Post-MVP (Referensi) — ✅ dikerjakan
+
+> Dikerjakan 2 November 2026 dengan sumber timing eksternal (quran-align), bukan field `word_by_word`. Komponen yang dipakai `QuranAyahText`/`LiveQuranAyahText`, bukan stub `AyahWordHighlight`. Rincian: `docs/37`.
 
 Saat data timing tersedia:
 

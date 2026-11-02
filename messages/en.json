@@ -110,6 +110,9 @@
       "autoFollow": "Auto Follow Playback",
       "autoFollowDescription": "Automatically scroll so the playing verse stays visible.",
       "autoFollowAriaLabel": "Enable auto follow playback",
+      "wordHighlight": "Word Highlight",
+      "wordHighlightDescription": "Highlights the word being recited during playback. Available for: {reciters}.",
+      "wordHighlightAriaLabel": "Enable word highlight",
       "murotalEnabled": "Murotal Mode",
       "murotalEnabledDescription": "Play tilawah continuously: advance to the next verse or surah until you stop.",
       "murotalEnabledAriaLabel": "Enable murotal mode",
@@ -213,6 +216,10 @@
         "audioMurottal": {
           "label": "Recitation Audio",
           "source": "The reciters and audio providers used by HanQuran"
+        },
+        "wordTimings": {
+          "label": "Word timings (word highlight)",
+          "source": "quran-align by Collin Fair — CC BY 4.0 license"
         }
       }
     },

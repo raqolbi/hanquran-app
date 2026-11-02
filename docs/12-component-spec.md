@@ -21,7 +21,7 @@
 | 7 | VerseDisplayControls | `components/verse-display-controls.tsx` | ✅ Ada |
 | 8, 8b, 8c | TranslationToggle, TransliterationToggle, FocusModeButton | tombol di dalam `VerseDisplayControls` | ⚪ Bukan komponen terpisah |
 | 9 | AyahCard | `components/ayah-card.tsx` | ✅ Ada |
-| 10 | AyahWordHighlight | `components/ayah-word-highlight.tsx` | ⏸️ Post-MVP — file ada, tidak dipakai (`docs/24`) |
+| 10 | AyahWordHighlight | sorot kata di `components/quran-ayah-text.tsx` (`docs/37`) | ✅ Diimplementasi dengan nama lain; `ayah-word-highlight.tsx` lama tidak dipakai |
 | 11 | AudioPlayer | `components/audio-player.tsx` | ✅ Ada |
 | 12 | RepeatSelector | `components/repeat-selector.tsx` | ✅ Ada |
 | 13 | RepeatSettingsDialog | `components/repeat-settings-dialog.tsx` | ✅ Ada |
@@ -872,7 +872,7 @@ Play Audio dari ayat tersebut
 
 ---
 
-# 10. AyahWordHighlight — ⏸️ Post-MVP (tidak dipakai)
+# 10. AyahWordHighlight — ❌ digantikan `QuranAyahText` / `LiveQuranAyahText` (`docs/37`)
 
 ## Purpose
 

@@ -318,6 +318,8 @@ interface SettingsRecord {
   murotalEnabled: boolean;
   /** Cache audio ayat saat diputar (online). Default: false. Lihat docs/31. */
   autoDownloadOnPlay: boolean;
+  /** Sorot kata saat tilawah (docs/37). Default: true. */
+  wordHighlight: boolean;
   /** Slug qari dari `data/reciters.json` (mis. `Alafasy_128kbps`). */
   reciterId: string;
   /** Konfigurasi repeat hafalan (dikelola `useRepeatStore`). */
@@ -538,7 +540,7 @@ Nama cache aktif (sumber: `public/sw.js`, `SW_VERSION = 'v4'`). Saat aktivasi SW
 |-------|-----|----------|
 | `hanquran-static-v2` | JS/CSS/font ber-hash (`/_next/static/*`), ikon, `manifest.json`, `offline.html` | Precache saat install + stale-while-revalidate |
 | `hanquran-shell-v2` | Dokumen HTML + payload RSC rute (`/`, `/settings`, `/surah/1` sebagai app-shell, dst.) | Network-first untuk navigasi; app-shell untuk id surat apa pun saat offline |
-| `hanquran-data-v3` | Dataset `public/data/*` | Precache saat install + cache-first |
+| `hanquran-data-v3` | Dataset `public/data/*` (kecuali `word-timings/` yang dimuat saat dipakai) | Precache saat install + cache-first |
 | `hanquran-audio-v1` | MP3 per ayat dari CDN `everyayah.com` | Cache-first |
 
 ## 6.1 `hanquran-audio-v1`

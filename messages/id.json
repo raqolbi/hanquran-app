@@ -110,6 +110,9 @@
       "autoFollow": "Auto Follow Playback",
       "autoFollowDescription": "Otomatis menggulir layar agar ayat yang sedang diputar tetap terlihat.",
       "autoFollowAriaLabel": "Aktifkan auto follow playback",
+      "wordHighlight": "Sorot Kata",
+      "wordHighlightDescription": "Menyorot kata yang sedang dibaca saat tilawah diputar. Tersedia untuk qari: {reciters}.",
+      "wordHighlightAriaLabel": "Aktifkan sorot kata",
       "murotalEnabled": "Mode Murotal",
       "murotalEnabledDescription": "Putar tilawah secara berkelanjutan: lanjut ke ayat berikutnya atau surat berikutnya hingga Anda berhenti.",
       "murotalEnabledAriaLabel": "Aktifkan mode murotal",
@@ -213,6 +216,10 @@
         "audioMurottal": {
           "label": "Audio Murottal",
           "source": "Para qari dan penyedia audio yang digunakan oleh HanQuran"
+        },
+        "wordTimings": {
+          "label": "Waktu per kata (sorot kata)",
+          "source": "quran-align oleh Collin Fair — lisensi CC BY 4.0"
         }
       }
     },

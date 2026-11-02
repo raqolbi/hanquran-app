@@ -3,8 +3,8 @@
 Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi HanQuran menuju MVP. Berisi daftar pekerjaan teknis yang dapat langsung dikerjakan developer.
 
 **Terakhir diperbarui:** 2 November 2026
-**Status:** 🚧 Menuju rilis `0.6.0` (lihat `RELEASE.md`) — `0.2.0`–`0.5.0` sudah diimplementasi; uji manual perangkat & tag Git belum dibuat; Phase 9 Android (Capacitor) ✅ diimplementasi (checklist `docs/32` §13); Phase 10 SEO ✅ selesai; Phase 10b hardening ✅ selesai; Phase 11 performa beranda ✅ selesai; Phase 11b LCP Threads Gate ✅ selesai; Phase 12 locale paint pertama (F8) ✅ selesai; Phase 12b audit bug & hardening ✅ selesai
-**Total Development Tasks:** 97 + Phase 9 Android (lihat `docs/32` §13) + Phase 10 SEO (lihat `docs/35-seo-spec.md` §4) + Phase 10b Hardening (lihat `docs/35` §8–§9) + Phase 11 Performa Beranda (lihat `docs/36-performance-cwv.md`) + Phase 11b LCP Threads Gate (lihat `docs/34` §8) + Phase 12 Locale Paint Pertama (lihat `docs/21` §5.6) + Phase 12b Audit Bug & Hardening
+**Status:** 🚧 Menuju rilis `0.6.0` (lihat `RELEASE.md`) — `0.2.0`–`0.5.0` sudah diimplementasi; uji manual perangkat & tag Git belum dibuat; Phase 9 Android (Capacitor) ✅ diimplementasi (checklist `docs/32` §13); Phase 10 SEO ✅ selesai; Phase 10b hardening ✅ selesai; Phase 11 performa beranda ✅ selesai; Phase 11b LCP Threads Gate ✅ selesai; Phase 12 locale paint pertama (F8) ✅ selesai; Phase 12b audit bug & hardening ✅ selesai; Phase 13 sorot kata ✅ selesai
+**Total Development Tasks:** 97 + Phase 9 Android (lihat `docs/32` §13) + Phase 10 SEO (lihat `docs/35-seo-spec.md` §4) + Phase 10b Hardening (lihat `docs/35` §8–§9) + Phase 11 Performa Beranda (lihat `docs/36-performance-cwv.md`) + Phase 11b LCP Threads Gate (lihat `docs/34` §8) + Phase 12 Locale Paint Pertama (lihat `docs/21` §5.6) + Phase 12b Audit Bug & Hardening + Phase 13 Sorot Kata (lihat `docs/37`)
 **Arsitektur data:** `docs/23-static-dataset-architecture.md`
 
 ---
@@ -64,7 +64,7 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 2b        | Media Session API                 | 5      | 0      | 4      | 1      | 4       | ✅ Implementasi selesai (uji manual tersisa)  |
 | 2c        | Mode Murotal                      | 8      | 0      | 6      | 2      | 7       | ✅ Implementasi selesai (uji manual tersisa)  |
 | 3         | Repeat Engine & Configuration     | 9      | 6      | 2      | 1      | 6       | 🟡 Keyboard shortcuts berikutnya             |
-| 4         | Word Highlight (Focus Mode)       | 8      | 0      | 0      | 8      | 3       | ⏸️ Post-MVP — MVP fokus (audio/repeat/nav) ✅ |
+| 4         | Word Highlight (Focus Mode)       | 8      | 0      | 0      | 8      | 3       | ✅ Diganti Phase 13 (sorot kata, `docs/37`) |
 | 5         | Implementasi Strategi Offline     | 11     | 7      | 3      | 1      | 9       | 🟡 E2E offline playback belum                |
 | 6         | PWA & Packaging                   | 8      | 5      | 2      | 1      | 5       | 🟡 Uji manual PWA tersisa                    |
 | 7         | Testing & Quality Assurance       | 9      | 6      | 2      | 1      | 2       | ⏳ Audio + repeat unit ✅                      |
@@ -76,6 +76,7 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 11b       | LCP Threads Gate (SSR pra-paint)  | 3      | 0      | 3      | 0      | 3       | ✅ Selesai (P11b-1–P11b-3) — 31 Okt 2026     |
 | 12        | Locale Paint Pertama (F8)         | 4      | 0      | 0      | 4      | 4       | ✅ Selesai (P12-1–P12-4) — 1 Nov 2026        |
 | 12b       | Audit Bug & Hardening             | 13     | 3      | 7      | 3      | 13      | ✅ Selesai (P12b-1–P12b-13) — 2 Nov 2026     |
+| 13        | Sorot Kata (quran-align)          | 7      | 0      | 6      | 1      | 7       | ✅ Selesai (P13-1–P13-7) — 2 Nov 2026        |
 | **TOTAL** |                                   | **110** | **50** | **37** | **23** | **83**  | (+ Phase 9; + Phase 10 SEO; + Phase 10b hardening; + Phase 11 CWV; + Phase 11b LCP gate; + Phase 12 F8; + Phase 12b audit) |
 
 
@@ -800,6 +801,8 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
 
 ## Phase 4 — Word Highlight (Post-MVP)
 
+> ✅ **Diimplementasi 2 Nov 2026 lewat Phase 13** dengan data quran-align (`docs/37`). Task di bawah adalah rencana lama dan tidak dikerjakan apa adanya.
+
 **Total: 8 tasks | Status: ⏸️ Ditunda — bukan blocker MVP V1**
 
 > **Keputusan 24 Juni 2026:** `docs/24-focus-mode-mvp-scope.md`. Dataset `word_by_word` kosong; simulasi interval dihapus dari kode. Mode Fokus MVP = layar baca bebas distraksi tanpa highlight kata.
@@ -1446,6 +1449,35 @@ Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan de
 - Membuka surat apa pun langsung menimpa posisi "Lanjutkan Hafalan" ke ayat 1; label "dihafal" menyesatkan.
 - SW: cache navigasi tak terbatas (tiap `?ayah` jadi entri), RSC cache-first bisa basi setelah deploy, audio cache dilayani 200 untuk permintaan Range (risiko iOS).
 - Kode mati: `components/favorites.tsx`, state `completedAyahs` di Surah Detail.
+
+---
+
+# 🔤 Phase 13 — Sorot Kata saat Tilawah (2 Nov 2026)
+
+**Status:** ✅ Selesai 2 November 2026
+**Spek:** [`docs/37-word-highlight-spec.md`](./37-word-highlight-spec.md)
+
+| ID | Task | Tipe | Prioritas | Ref |
+|----|------|------|-----------|-----|
+| P13-1 | Skrip `scripts/build-word-timings.mjs`: data quran-align → `public/data/word-timings/v1/{reciterId}/NNN.json`, validasi indeks kata terhadap dataset | [NEW] | P1 | §4 |
+| P13-2 | Verifikasi file audio EveryAyah identik (durasi vs segmen terakhir) — Alafasy, Minshawi, Husary 128 (pakai data 64 kbps) | [TEST] | P1 | §2 |
+| P13-3 | `services/quran/word-timings.ts` + `hooks/use-active-word-range.ts` (interpolasi rAF, web & Android) | [NEW] | P1 | §6 |
+| P13-4 | `QuranAyahText` / `LiveQuranAyahText` di `AyahCard` (ayat aktif saja) & Mode Fokus | [NEW] | P1 | §6 |
+| P13-5 | Pengaturan **Sorot Kata** (`settings.wordHighlight`, default ON) + atribusi CC BY 4.0 di layar Tentang | [NEW] | P1 | §1 |
+| P13-6 | Offline: dikecualikan dari precache install; ikut **Simpan Offline**; perbaiki `SHELL_CACHE_NAME` `-v1` → `-v2` (repair precache berjalan tiap buka app) | [FIX] | P1 | §5 |
+| P13-7 | Test: tokenizer = skrip di seluruh dataset, validitas semua file waktu, pencarian rentang, loader, URL Simpan Offline | [TEST] | P2 | — |
+
+- [x] [NEW] P13-1 — skrip data (P1)
+- [x] [TEST] P13-2 — verifikasi audio (P1)
+- [x] [NEW] P13-3 — service + hook (P1)
+- [x] [NEW] P13-4 — komponen teks ayat (P1)
+- [x] [NEW] P13-5 — pengaturan + atribusi (P1)
+- [x] [FIX] P13-6 — offline + perbaikan nama cache shell (P1)
+- [x] [TEST] P13-7 — test (P2)
+
+**Hasil verifikasi (2 Nov 2026):** Playwright dengan audio CDN diganti file uji — qari Alafasy, 1:1 menyorot `بِسْمِ` → `ٱللَّهِ` → `ٱلرَّحْمَٰنِ` → `ٱلرَّحِيمِ` sesuai waktu data; Mode Fokus Husary 2:2 menyorot kata 0→1→2 (7 kata, tanda waqaf ikut kata sebelumnya); qari default Al-Juhaynee tidak memecah teks (0 span kata). 0 error konsol. Suite test **445 lulus / 15 gagal (460)** — 15 kegagalan lama (jsdom).
+
+**Residual:** qari default & Warsh belum didukung; ketuk kata untuk memutar dari kata itu belum ada.
 ---
 
 # 🏁 6. MVP Checklist

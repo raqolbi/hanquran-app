@@ -85,6 +85,7 @@ Kelompok **Sumber Data** (struktur di `data/about-credits.ts`, label via i18n):
 | Dataset JSON Al-Qur'an | [HanQuran Data Generator](https://github.com/raqolbi/hanquran-data-generator) |
 | Transliterasi | [eQuran.id](https://equran.id/) |
 | Audio Murottal | Para qari dan penyedia audio yang digunakan HanQuran |
+| Waktu per kata (sorot kata) | [quran-align](https://github.com/cpfair/quran-align) — Collin Fair, **CC BY 4.0** (atribusi wajib, `docs/37`) |
 
 Tambahan kategori teknologi **tidak** ditampilkan — hanya sumber data konten.
 
@@ -182,6 +183,7 @@ Bukan P0 blocker rilis, tetapi **termasuk MVP lengkap** bersama fitur Settings l
 
 | Tanggal | Perubahan |
 |---------|-----------|
+| 2 November 2026 | §4.3: kredit quran-align (CC BY 4.0) untuk sorot kata |
 | 2 November 2026 | §4.5: tabel konstanta dirapikan; tautan pembuat dapat diganti env `NEXT_PUBLIC_*` (tidak dipasang → bawaan, dikosongkan/`-` → disembunyikan); ditegaskan bahwa layar Tentang tidak menampilkan tautan pembuat |
 | 17 Agustus 2026 | Overlay Gate Threads memakai `APP_AUTHOR_THREADS_URL` yang sama (`docs/34`) |
 | 10 Juli 2026 | Tambah §4.5 kredit pembuat Beranda (`HomeFooter`, konstanta `lib/app-about.ts`) |
