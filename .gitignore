@@ -59,6 +59,7 @@ Thumbs.db
 # alat AI lokal (worktree & konfigurasi per mesin)
 .kilo/
 .kilocode/
+.cursor/
 
 # kunci & sertifikat
 *.pem
