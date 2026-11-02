@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { X } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import { WordLoopStatus } from '@/components/word-loop-status';
 import { AudioPlayer } from '@/components/audio-player';
 import { RepeatSelector } from '@/components/repeat-selector';
 import { RepeatSettingsDialog } from '@/components/repeat-settings-dialog';
@@ -20,6 +21,7 @@ import { useReadingDisplay } from '@/hooks/use-reading-display';
 import { useSurahDetailBottomInset } from '@/hooks/use-surah-detail-bottom-inset';
 import { useSurahRepeatPlayback } from '@/hooks/use-surah-repeat-playback';
 import { useFocusKeyboardShortcuts } from '@/hooks/use-focus-keyboard-shortcuts';
+import { useWordLoopControls } from '@/hooks/use-word-loop-controls';
 import { usePersistLastViewed } from '@/hooks/use-persist-last-viewed';
 import { useTrackSurahOpened } from '@/hooks/use-track-surah-opened';
 import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
@@ -112,6 +114,14 @@ function FocusModeLoaded({
     [surah.ayahs, activeAyah],
   );
 
+  const wordLoop = useWordLoopControls({
+    surahId: surah.number,
+    surahName: surah.englishName,
+    activeAyah,
+    reciterId,
+    notifyIfPlaybackBlocked,
+  });
+
   useFocusKeyboardShortcuts({
     enabled: !settingsOpen,
     onPrevious: goToPreviousTrack,
@@ -183,6 +193,7 @@ function FocusModeLoaded({
               ayahNumber={currentAyah.number}
               reciterId={reciterId}
               enabled={wordHighlight}
+              wordLoop={wordLoop}
             />
 
             {showTransliteration && currentAyah.transliteration && (
@@ -232,6 +243,8 @@ function FocusModeLoaded({
           />
         }
       />
+
+      <WordLoopStatus surahId={surah.number} bottomOffset={audioChromeHeight} />
 
       {quranCompleteNotice ? (
         <p

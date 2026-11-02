@@ -11,6 +11,7 @@ import { motion } from 'motion/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
+import { WordLoopStatus } from '@/components/word-loop-status';
 import { AyahCard } from '@/components/ayah-card';
 import { AudioPlayer } from '@/components/audio-player';
 import { RepeatSelector } from '@/components/repeat-selector';
@@ -24,6 +25,7 @@ import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
 import { VerseDisplayControls } from '@/components/verse-display-controls';
 import { useSurahRepeatPlayback } from '@/hooks/use-surah-repeat-playback';
 import { useAutoFollowPlayback } from '@/hooks/use-auto-follow-playback';
+import { useWordLoopControls } from '@/hooks/use-word-loop-controls';
 import { usePersistLastViewed } from '@/hooks/use-persist-last-viewed';
 import { useReadingDisplay } from '@/hooks/use-reading-display';
 import { usePreferredReciterId } from '@/hooks/use-preferred-reciter';
@@ -172,6 +174,14 @@ function SurahDetailView({
     if (isPlaying) setEngaged(true);
   }, [isPlaying]);
 
+  const wordLoop = useWordLoopControls({
+    surahId: surah.number,
+    surahName: surah.englishName,
+    activeAyah,
+    reciterId,
+    notifyIfPlaybackBlocked,
+  });
+
   useAutoFollowPlayback({
     activeAyah,
     isPlaying,
@@ -264,6 +274,7 @@ function SurahDetailView({
                 reciterId,
                 enabled: wordHighlight,
               }}
+              wordLoop={activeAyah === ayah.number ? wordLoop : undefined}
               showTransliteration={showTransliteration}
               showTranslation={showTranslation}
               onClick={() => {
@@ -303,6 +314,8 @@ function SurahDetailView({
           />
         }
       />
+
+      <WordLoopStatus surahId={surah.number} bottomOffset={audioChromeHeight} />
 
       {quranCompleteNotice ? (
         <p

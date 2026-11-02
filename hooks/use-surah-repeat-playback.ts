@@ -45,6 +45,8 @@ import { setMediaSessionTrackNavigation } from '@/services/media-session';
 import { useAudioStore } from '@/stores/audioStore';
 import { useRepeatStore } from '@/stores/repeatStore';
 import { useUserStore } from '@/stores/userStore';
+import { isWordLoopActive } from '@/stores/wordLoopStore';
+import { stopWordLoop, toggleWordLoopPause } from '@/services/word-loop-engine';
 import type { RepeatStatusProps } from '@/components/repeat-status';
 
 function toRepeatCountValue(count: number): RepeatCount {
@@ -207,6 +209,9 @@ export function useSurahRepeatPlayback({
   );
 
   const handleAyahEnded = useCallback(() => {
+    // Ulang Kata menangguhkan Repeat ayat & Murotal (docs/38 §4.4).
+    if (isWordLoopActive()) return;
+
     const state = useRepeatStore.getState();
     const murotalEnabled = useUserStore.getState().settings.murotalEnabled;
 
@@ -283,6 +288,12 @@ export function useSurahRepeatPlayback({
       return;
     }
 
+    // Play/Pause saat Ulang Kata aktif: jeda/lanjut siklus, mode tetap aktif.
+    if (isWordLoopActive()) {
+      toggleWordLoopPause();
+      return;
+    }
+
     const track = useAudioStore.getState().currentTrack;
     const currentTrackMatchesAyah =
       track?.surahId === surahId && track?.ayahNumber === activeAyah;
@@ -345,9 +356,18 @@ export function useSurahRepeatPlayback({
         return;
       }
 
+      // ⏮/⏭ menghentikan Ulang Kata lalu berperilaku normal (docs/38 §4.4).
+      const wasLooping = isWordLoopActive();
+      stopWordLoop('navigation');
       resetRuntime();
 
       if (step.type === 'same_surah') {
+        if (wasLooping) {
+          // Sedang jeda menirukan (audio diam) — tetap lanjut memutar.
+          setActiveAyah(step.ayahNumber);
+          void playAyah(playParams(step.ayahNumber));
+          return;
+        }
         navigateAyah(step.ayahNumber);
         return;
       }
@@ -359,7 +379,7 @@ export function useSurahRepeatPlayback({
 
       // Berpindah surat untuk dibaca selalu boleh (teks tersedia offline).
       // Hanya saat sedang memutar audio kita cek ketersediaan offline.
-      if (!isPlaying) {
+      if (!isPlaying && !wasLooping) {
         void useUserStore
           .getState()
           .setLastViewed(step.surahId, step.ayahNumber);
@@ -386,6 +406,9 @@ export function useSurahRepeatPlayback({
     [
       resetRuntime,
       navigateAyah,
+      setActiveAyah,
+      playAyah,
+      playParams,
       isPlaying,
       routeMode,
       router,

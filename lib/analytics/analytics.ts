@@ -11,6 +11,8 @@ import {
   type MurotalEnabledPayload,
   type MurotalSurahCompletePayload,
   type MurotalQuranCompletePayload,
+  type WordLoopStartedPayload,
+  type WordLoopStoppedPayload,
 } from '@/lib/analytics/events';
 import { isAndroidBuild, isNativePlatform } from '@/lib/platform';
 
@@ -81,4 +83,12 @@ export function trackMurotalQuranComplete(
   payload: MurotalQuranCompletePayload,
 ): void {
   sendEvent(ANALYTICS_EVENTS.MUROTAL_QURAN_COMPLETE, payload);
+}
+
+export function trackWordLoopStarted(payload: WordLoopStartedPayload): void {
+  sendEvent(ANALYTICS_EVENTS.WORD_LOOP_STARTED, payload);
+}
+
+export function trackWordLoopStopped(payload: WordLoopStoppedPayload): void {
+  sendEvent(ANALYTICS_EVENTS.WORD_LOOP_STOPPED, payload);
 }

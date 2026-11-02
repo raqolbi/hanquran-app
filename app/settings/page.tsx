@@ -84,6 +84,7 @@ export default function SettingsPage() {
   const murotalEnabled = useUserStore((s) => s.settings.murotalEnabled);
   const autoDownloadOnPlay = useUserStore((s) => s.settings.autoDownloadOnPlay);
   const wordHighlight = useUserStore((s) => s.settings.wordHighlight);
+  const wordLoopGapMs = useUserStore((s) => s.settings.wordLoopGapMs);
 
   const badgeStatus = useOfflineStore(selectBadgeVariant);
   const totalSizeBytes = useOfflineStore((s) => s.manifestSummary.totalSizeBytes);
@@ -126,6 +127,16 @@ export default function SettingsPage() {
     { value: 'medium', label: t('textSize.medium') },
     { value: 'large', label: t('textSize.large') },
   ];
+
+  const wordLoopGapOptions: ReadonlyArray<SegmentedOption<string>> = (
+    [0, 1000, 2000, 3000] as const
+  ).map((ms) => ({
+    value: String(ms),
+    label:
+      ms === 0
+        ? t('playback.wordLoopGapOff')
+        : t('playback.wordLoopGapSeconds', { count: ms / 1000 }),
+  }));
 
   const localeOptions = LOCALE_OPTIONS.map((option) => ({
     ...option,
@@ -188,6 +199,13 @@ export default function SettingsPage() {
 
   const handleWordHighlightChange = (enabled: boolean) => {
     void updateSettings({ wordHighlight: enabled });
+  };
+
+  const handleWordLoopGapChange = (value: string) => {
+    const ms = Number(value);
+    if (ms === 0 || ms === 1000 || ms === 2000 || ms === 3000) {
+      void updateSettings({ wordLoopGapMs: ms });
+    }
   };
 
   const handleAutoDownloadOnPlayChange = (enabled: boolean) => {
@@ -294,6 +312,18 @@ export default function SettingsPage() {
                     aria-label={t('playback.wordHighlightAriaLabel')}
                   />
                 }
+              />
+            </div>
+            <div className="space-y-3 py-4">
+              <SettingsRow
+                label={t('playback.wordLoopGap')}
+                description={t('playback.wordLoopGapDescription')}
+              />
+              <SegmentedControl
+                value={String(wordLoopGapMs ?? 1000)}
+                onChange={handleWordLoopGapChange}
+                options={wordLoopGapOptions}
+                ariaLabel={t('playback.wordLoopGapAriaLabel')}
               />
             </div>
             <div className="pt-4">

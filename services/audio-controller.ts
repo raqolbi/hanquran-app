@@ -75,6 +75,9 @@ export class AudioController {
   /** URL logika trek (CDN), bukan blob: / file://. */
   private activeTrackUrl: string | null = null;
 
+  /** Posisi terakhir dari plugin native (event ±100 ms) + waktu terimanya. */
+  private nativePositionAnchor = { seconds: 0, at: 0 };
+
   private revokeObjectUrl: (() => void) | null = null;
 
   private readonly handleTimeUpdate = (): void => {
@@ -146,6 +149,7 @@ export class AudioController {
     if (this.nativePlayer) {
       this.nativePlayer.setHandlers({
         onTimeUpdate: (currentTime, duration) => {
+          this.nativePositionAnchor = { seconds: currentTime, at: performance.now() };
           useAudioStore.getState().setCurrentTime(currentTime);
           if (duration > 0) {
             useAudioStore.getState().setDuration(duration);
@@ -285,6 +289,44 @@ export class AudioController {
     });
   }
 
+  /**
+   * Posisi pemutaran (detik) seakurat mungkin — dipakai Ulang Kata
+   * (docs/38 §4.3).
+   *
+   * - Web: langsung dari elemen audio.
+   * - Android: event `currentTime` plugin hanya tiap ±100 ms → diinterpolasi
+   *   dengan `playbackRate` sejak event terakhir (maks. 250 ms).
+   */
+  getPosition(): number {
+    if (!this.nativePlayer) {
+      return this.audio.currentTime;
+    }
+
+    const store = useAudioStore.getState();
+    const anchor = this.nativePositionAnchor;
+    if (!store.isPlaying || anchor.at === 0) {
+      return store.currentTime;
+    }
+    const elapsed = Math.min(performance.now() - anchor.at, 250);
+    return anchor.seconds + (elapsed / 1000) * store.playbackRate;
+  }
+
+  /** Interpolasi native dimulai ulang dari posisi store sekarang. */
+  private resetNativePositionAnchor(): void {
+    this.nativePositionAnchor = {
+      seconds: useAudioStore.getState().currentTime,
+      at: performance.now(),
+    };
+  }
+
+  /** Durasi trek aktif (detik), 0 bila belum diketahui. */
+  getDuration(): number {
+    const duration = this.nativePlayer
+      ? this.nativePlayer.getDuration() || useAudioStore.getState().duration
+      : this.audio.duration;
+    return Number.isFinite(duration) && duration > 0 ? duration : 0;
+  }
+
   /** Elemen audio yang dikelola (untuk pengujian / debugging). */
   get element(): HTMLAudioElement {
     return this.audio;
@@ -402,6 +444,8 @@ export class AudioController {
         await player.applyRate(store.playbackRate);
       }
 
+      this.resetNativePositionAnchor();
+
       if (isNewTrack) {
         trackAudioPlay({
           surahId: track.surahId,
@@ -468,6 +512,7 @@ export class AudioController {
       if (this.nativePlayer) {
         await this.nativePlayer.resume();
         await this.nativePlayer.applyRate(store.playbackRate);
+        this.resetNativePositionAnchor();
       } else {
         await this.audio.play();
       }
@@ -509,6 +554,7 @@ export class AudioController {
           ? Math.min(Math.max(seconds, 0), duration)
           : Math.max(seconds, 0);
       void this.nativePlayer.seek(clamped);
+      this.nativePositionAnchor = { seconds: clamped, at: performance.now() };
       useAudioStore.getState().setCurrentTime(clamped);
       this.tabSync?.notifySeek(clamped);
       this.syncMediaSessionPosition();
@@ -571,6 +617,7 @@ export class AudioController {
   private pauseFromRemote(): void {
     if (this.nativePlayer) {
       void this.nativePlayer.pause();
+      this.resetNativePositionAnchor();
     } else {
       this.audio.pause();
     }

@@ -50,7 +50,7 @@ export function SettingsSection({
 interface SettingsRowProps {
   label: string;
   description?: string;
-  control: React.ReactNode;
+  control?: React.ReactNode;
 }
 
 /**
@@ -66,7 +66,7 @@ export function SettingsRow({ label, description, control }: SettingsRowProps) {
           <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
         )}
       </div>
-      <div className="shrink-0">{control}</div>
+      {control ? <div className="shrink-0">{control}</div> : null}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 # 38 — Ulang Kata (Word Loop) untuk Hafalan per Kata
 
 **Tanggal:** 2 November 2026
-**Status:** 📝 Spesifikasi — belum diimplementasi (task: `docs/18` Phase 15)
+**Status:** ✅ Diimplementasi (web) — uji perangkat iOS/Android menunggu (task: `docs/18` Phase 15). Lihat §8 untuk keputusan & perbedaan dari rancangan awal.
 **Bergantung pada:** `docs/37-word-highlight-spec.md` (data waktu per kata quran-align)
 **Mengacu:** `docs/29-murotal-mode-spec.md`, `docs/12-component-spec.md` (Repeat), `docs/15-state-management.md`
 
@@ -125,7 +125,7 @@ interface WordLoopState {
 }
 ```
 
-Pemilik: store runtime baru `useWordLoopStore` **atau** slice di `useRepeatStore` (diputuskan di P15-2; `docs/15` §3 mewajibkan keputusan eksplisit untuk store baru).
+Pemilik: store runtime baru **`useWordLoopStore`** (`stores/wordLoopStore.ts`) — diputuskan di P15-2 dan dicatat di `docs/15` §3. `phase` memakai `'playing' | 'gap' | 'paused'` (`gap` = jeda menirukan, `paused` = dijeda pengguna).
 
 Pengaturan baru (persist Dexie `settings`): `wordLoopGapMs: 0 | 1000 | 2000 | 3000` (default 1000).
 
@@ -163,8 +163,46 @@ Tambahkan ke `docs/analytics.md` saat implementasi.
 
 ---
 
+## 8. Implementasi (2 November 2026)
+
+| Lapisan | File | Peran |
+|---------|------|-------|
+| Potongan | `services/quran/word-clip.ts` | `resolveWordClip` (rentang → `{ range, startMs, endMs }`, perluasan segmen gabungan, bantalan −60/+120 ms), `normalizeWordRange` |
+| Mesin | `services/word-loop-engine.ts` | `startWordLoop` / `stopWordLoop` / `toggleWordLoopPause`; siklus di atas `AudioController` yang sama |
+| State | `stores/wordLoopStore.ts` | `useWordLoopStore`, `isWordLoopActive()` |
+| Posisi | `AudioController.getPosition()` / `getDuration()` | Web: elemen audio. Android: event `currentTime` (±100 ms) diinterpolasi × `playbackRate` (maks. 250 ms) |
+| Gestur | `hooks/use-word-gestures.ts` | Ketuk, tekan lama 350 ms + seret (sentuh), tekan + seret (mouse), Shift, Enter/Spasi — event delegation pada teks ayat |
+| Penghubung UI | `hooks/use-word-loop-controls.ts` | Ketuk/ketuk ulang/Shift/rentang → mesin; berhenti saat ayat aktif, qari, atau halaman berganti |
+| Tampilan | `components/quran-ayah-text.tsx`, `components/word-loop-status.tsx`, `app/globals.css` | Bingkai amber `data-loop`, pilihan `data-selecting`, chip status + Berhenti, `aria-live` |
+| Integrasi | `hooks/use-surah-repeat-playback.ts` | `ended` diabaikan saat aktif (Repeat & Murotal ditangguhkan); Play/Pause → `toggleWordLoopPause`; ⏮/⏭ menghentikan lalu lanjut normal (tetap memutar walau sedang jeda menirukan) |
+| Pengaturan | `settings.wordLoopGapMs` | Pengaturan → Pemutaran → **Jeda Menirukan** (0/1/2/3 dtk, default 1). Deskripsinya sekaligus memuat petunjuk cara pakai |
+
+### 8.1 Keputusan & perbedaan dari rancangan
+
+- **Kata hanya bisa diketuk di ayat aktif.** Ayat non-aktif tetap dirender sebagai satu string (beban render daftar 286 ayat, `docs/37` §6). Ketukan di ayat lain memilih ayat itu (perilaku kartu biasa); ketukan berikutnya pada kata memulai Ulang Kata. Di Mode Fokus hanya ada satu ayat, jadi tidak ada perbedaan.
+- **Qari tanpa data waktu:** kata tidak menjadi tombol (bukan toast), sama seperti Sorot Kata. Qari yang mendukung tetap bertanda "Sorot kata" di Pengaturan. Ayat tanpa segmen (10:1, 13:1) → toast "Ulang kata belum tersedia untuk ayat ini."
+- **Tidak bergantung pada pengaturan Sorot Kata** — Ulang Kata tetap tersedia walau sorotan dimatikan.
+- **Kemunculan pertama:** bila qari mengulang frasa, potongan hanya memakai kemunculan pertama rentang (tidak ikut pengulangan qari).
+- **Penjaga akhir file:** akhir potongan dibatasi `durasi − 80 ms` agar event `ended` (Repeat/Murotal, stop sesi native) tidak terpicu. Bila tetap terpicu (durasi belum diketahui), mesin langsung memutar ulang dari awal potongan tanpa jeda.
+- **Sorotan kata dibatasi ke rentang** yang diulang — bantalan +120 ms bisa menyentuh kata berikutnya, tetapi pil hijau tidak berpindah keluar rentang.
+- **Chip** menampilkan hitungan mulai 1× (bukan 0×) serta keterangan "jeda"/"dijeda". `aria-live` hanya mengumumkan mulai/ganti rentang/berhenti.
+- **Esc** menghentikan Ulang Kata kecuali sedang ada dialog terbuka. Di Mode Fokus, Spasi = Play/Pause siklus dan ←/→ = pindah ayat (menghentikan Ulang Kata).
+- **Kartu ayat aktif** tidak lagi ber-`role="button"` agar kata-kata di dalamnya (tombol) tidak bersarang dalam tombol.
+- **Seek butuh dukungan Range** dari sumber audio: CDN EveryAyah, Cache Storage SW (206 sejak P14-3), atau `blob:` offline. Sumber tanpa Range akan kembali ke 0 saat seek.
+
+### 8.2 Hasil spike presisi (P15-1)
+
+| Platform | Metode | Hasil |
+|----------|--------|-------|
+| Web (Chromium, build produksi, Playwright, 4 siklus kata 2:2#3) | rAF + `audio.currentTime` | Jeda terjadi di 2,250–2,281 dtk untuk target 2,250 dtk → **meleset ≤ 31 ms** (target ≤ 80 ms). Jeda menirukan 1 dtk terukur 1.020–1.025 ms |
+| Android (plugin native) | Interpolasi event `currentTime` 100 ms | ⏳ Belum diuji di perangkat — perkiraan meleset ≤ 50 ms (latensi bridge). Bila melebihi target, tambahkan `setTimeout` berbasis sisa durasi + konfirmasi `getCurrentTime()` |
+| Safari iOS | rAF + `audio.currentTime` | ⏳ Belum diuji di perangkat |
+
+---
+
 ## Riwayat
 
 | Tanggal | Perubahan |
 |---------|-----------|
 | 2 November 2026 | Dokumen awal — spesifikasi ketuk kata & seret rentang |
+| 2 November 2026 | Implementasi web (Phase 15) — §8 keputusan, hasil spike, perbedaan dari rancangan |

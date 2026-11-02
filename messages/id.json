@@ -116,7 +116,12 @@
       "murotalEnabled": "Mode Murotal",
       "murotalEnabledDescription": "Putar tilawah secara berkelanjutan: lanjut ke ayat berikutnya atau surat berikutnya hingga Anda berhenti.",
       "murotalEnabledAriaLabel": "Aktifkan mode murotal",
-      "quranComplete": "Anda telah mencapai akhir Al-Qur'an."
+      "quranComplete": "Anda telah mencapai akhir Al-Qur'an.",
+      "wordLoopGap": "Jeda Menirukan",
+      "wordLoopGapDescription": "Ketuk kata pada ayat aktif untuk mengulangnya; tekan lama lalu seret untuk beberapa kata. Jeda ini memberi waktu menirukan di antara pengulangan.",
+      "wordLoopGapAriaLabel": "Jeda menirukan",
+      "wordLoopGapOff": "0 dtk",
+      "wordLoopGapSeconds": "{count} dtk"
     },
     "textSize": {
       "title": "Ukuran Teks",
@@ -264,5 +269,19 @@
     "openThreads": "Buka Threads",
     "continue": "Lanjut",
     "openFailedHint": "Jika Threads tidak terbuka, ketuk Lanjut."
+  },
+  "wordLoop": {
+    "wordAriaLabel": "ulang kata ke-{number}",
+    "statusSingle": "Mengulang kata {word}",
+    "statusRange": "Mengulang kata {from}–{to}",
+    "cycles": "{count}×",
+    "phaseGap": "jeda",
+    "phasePaused": "dijeda",
+    "stop": "Berhenti",
+    "stopAriaLabel": "Berhenti mengulang kata",
+    "stopped": "Berhenti mengulang kata",
+    "unavailableAyah": "Ulang kata belum tersedia untuk ayat ini.",
+    "loadFailed": "Data waktu kata belum bisa dimuat. Periksa koneksi lalu coba lagi.",
+    "playFailed": "Audio tidak bisa diputar."
   }
 }

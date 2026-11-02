@@ -112,8 +112,9 @@ Pratinjau antarmuka HanQuran — mobile-first, UI Bahasa Indonesia.
 |-------|-----------|
 | **Beranda** | 114 surat, pencarian, filter favorit, kartu Lanjutkan Hafalan |
 | **Detail Surat** | Ayat rasm Utsmani (font Amiri Quran), **sorot kata saat tilawah** (12 dari 14 qari), terjemahan & transliterasi (toggle), audio, repeat, unduh offline |
-| **Mode Fokus** | Satu ayat per layar, navigasi ayat, audio & repeat, sorot kata |
-| **Pengaturan** | Bahasa UI, qari, Ikuti Ayat yang Diputar, Mode Murotal, Unduh Audio Otomatis, ukuran teks Arab, kontras tinggi, animasi, status & hapus audio tersimpan |
+| **Ulang Kata** | Ketuk kata di ayat aktif → diulang terus; tekan lama lalu seret → ulang rentang kata; jeda menirukan 0–3 dtk |
+| **Mode Fokus** | Satu ayat per layar, navigasi ayat (juga ← / → dan Spasi di keyboard), audio & repeat, sorot kata, ulang kata |
+| **Pengaturan** | Bahasa UI, qari, Ikuti Ayat yang Diputar, Sorot Kata, Jeda Menirukan, Mode Murotal, Unduh Audio Otomatis, ukuran teks Arab, kontras tinggi, animasi, status & hapus audio tersimpan |
 | **Tentang HanQuran** | Informasi aplikasi, filosofi, credits, repository & lisensi |
 | **Offline** | Unduh audio per surat; Service Worker cache dataset & aset |
 | **PWA** | Instal ke layar utama, splash screen, halaman fallback offline |
@@ -352,7 +353,7 @@ Catatan rilis: [`RELEASE.md`](./RELEASE.md).
 | [`docs/35-seo-spec.md`](./docs/35-seo-spec.md) | SEO & discoverability |
 | [`docs/36-performance-cwv.md`](./docs/36-performance-cwv.md) | Performa beranda & Core Web Vitals |
 | [`docs/37-word-highlight-spec.md`](./docs/37-word-highlight-spec.md) | Sorot kata saat tilawah (data quran-align) |
-| [`docs/38-word-loop-spec.md`](./docs/38-word-loop-spec.md) | Rencana: ulang kata / rentang kata untuk hafalan |
+| [`docs/38-word-loop-spec.md`](./docs/38-word-loop-spec.md) | Ulang kata / rentang kata untuk hafalan |
 | [`docs/39-followup-fixes-plan.md`](./docs/39-followup-fixes-plan.md) | Rencana perbaikan lanjutan (sisa audit) |
 | [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md) | Atribusi & lisensi pihak ketiga |
 | [`docs/19-document-audit.md`](./docs/19-document-audit.md) | Audit dokumentasi & status tiap dokumen |

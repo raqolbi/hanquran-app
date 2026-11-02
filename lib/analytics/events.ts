@@ -10,6 +10,8 @@ export const ANALYTICS_EVENTS = {
   MUROTAL_ENABLED: 'murotal_enabled',
   MUROTAL_SURAH_COMPLETE: 'murotal_surah_complete',
   MUROTAL_QURAN_COMPLETE: 'murotal_quran_complete',
+  WORD_LOOP_STARTED: 'word_loop_started',
+  WORD_LOOP_STOPPED: 'word_loop_stopped',
 } as const;
 
 export type AnalyticsEventName =
@@ -53,6 +55,17 @@ export interface MurotalSurahCompletePayload {
 
 export interface MurotalQuranCompletePayload {
   surahId: number;
+}
+
+export interface WordLoopStartedPayload {
+  surahId: number;
+  ayahNumber: number;
+  reciterId: string;
+  wordCount: number;
+}
+
+export interface WordLoopStoppedPayload {
+  cycles: number;
 }
 
 export function repeatTargetToAnalyticsMode(

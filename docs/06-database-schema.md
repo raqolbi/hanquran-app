@@ -320,6 +320,8 @@ interface SettingsRecord {
   autoDownloadOnPlay: boolean;
   /** Sorot kata saat tilawah (docs/37). Default: true. */
   wordHighlight: boolean;
+  /** Jeda menirukan Ulang Kata (docs/38): 0 | 1000 | 2000 | 3000 ms. Default: 1000. */
+  wordLoopGapMs: 0 | 1000 | 2000 | 3000;
   /** Slug qari dari `data/reciters.json` (mis. `Alafasy_128kbps`). */
   reciterId: string;
   /** Konfigurasi repeat hafalan (dikelola `useRepeatStore`). */

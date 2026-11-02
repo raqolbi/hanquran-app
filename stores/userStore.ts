@@ -77,6 +77,11 @@ function normalizeStoredSettings(stored: SettingsRecord): {
     }
   }
 
+  if (![0, 1000, 2000, 3000].includes(next.wordLoopGapMs)) {
+    next.wordLoopGapMs = defaultSettings.wordLoopGapMs;
+    changed = true;
+  }
+
   const reciterId = normalizeReciterId(next.reciterId);
   if (reciterId !== next.reciterId) {
     next.reciterId = reciterId;

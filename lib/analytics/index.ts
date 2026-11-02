@@ -7,6 +7,8 @@ export {
   trackMurotalEnabled,
   trackMurotalSurahComplete,
   trackMurotalQuranComplete,
+  trackWordLoopStarted,
+  trackWordLoopStopped,
   isAnalyticsEnabled,
 } from '@/lib/analytics/analytics';
 
@@ -23,4 +25,6 @@ export {
   type MurotalEnabledPayload,
   type MurotalSurahCompletePayload,
   type MurotalQuranCompletePayload,
+  type WordLoopStartedPayload,
+  type WordLoopStoppedPayload,
 } from '@/lib/analytics/events';

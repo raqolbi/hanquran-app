@@ -1531,7 +1531,7 @@ Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan de
 
 # 🔁 Phase 15 — Ulang Kata (Hafalan per Kata)
 
-**Status:** 📋 Belum dimulai
+**Status:** ✅ Selesai di web (2 Nov 2026) — uji perangkat iOS/Android menunggu (P15-12)
 **Spek:** [`docs/38-word-loop-spec.md`](./38-word-loop-spec.md)
 **Bergantung pada:** Phase 13 (data waktu per kata)
 
@@ -1550,18 +1550,18 @@ Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan de
 | P15-11 | Event `word_loop_started` / `word_loop_stopped` | [NEW] | P3 | §6 |
 | P15-12 | Test unit (potongan, siklus, interaksi) + uji perangkat web/iOS/Android | [TEST] | P1 | §7 |
 
-- [ ] [SPIKE] P15-1 — presisi berhenti (P1)
-- [ ] [DOC] P15-2 — pemilik state (P1)
-- [ ] [NEW] P15-3 — potongan (P1)
-- [ ] [NEW] P15-4 — mesin siklus (P1)
-- [ ] [NEW] P15-5 — ketuk kata (P1)
-- [ ] [NEW] P15-6 — seret rentang (P1)
-- [ ] [NEW] P15-7 — interaksi fitur lain (P1)
-- [ ] [NEW] P15-8 — tampilan (P1)
-- [ ] [NEW] P15-9 — jeda menirukan (P2)
-- [ ] [A11Y] P15-10 — aksesibilitas (P1)
-- [ ] [NEW] P15-11 — analytics (P3)
-- [ ] [TEST] P15-12 — test & uji perangkat (P1)
+- [x] [SPIKE] P15-1 — presisi berhenti (P1) — web ≤ 31 ms; Android: interpolasi event 100 ms (uji perangkat di P15-12), lihat `docs/38` §8.2
+- [x] [DOC] P15-2 — pemilik state (P1)
+- [x] [NEW] P15-3 — potongan (P1)
+- [x] [NEW] P15-4 — mesin siklus (P1)
+- [x] [NEW] P15-5 — ketuk kata (P1)
+- [x] [NEW] P15-6 — seret rentang (P1)
+- [x] [NEW] P15-7 — interaksi fitur lain (P1)
+- [x] [NEW] P15-8 — tampilan (P1)
+- [x] [NEW] P15-9 — jeda menirukan (P2)
+- [x] [A11Y] P15-10 — aksesibilitas (P1)
+- [x] [NEW] P15-11 — analytics (P3)
+- [ ] [TEST] P15-12 — test & uji perangkat (P1) — unit test ✅ (`word-clip`, `word-loop-engine`), uji web Playwright ✅ (meleset ≤ 31 ms); uji iPhone & APK Android ⏳
 ---
 
 # 🏁 6. MVP Checklist

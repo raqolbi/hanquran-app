@@ -116,7 +116,12 @@
       "murotalEnabled": "Murotal Mode",
       "murotalEnabledDescription": "Play tilawah continuously: advance to the next verse or surah until you stop.",
       "murotalEnabledAriaLabel": "Enable murotal mode",
-      "quranComplete": "You have reached the end of the Quran."
+      "quranComplete": "You have reached the end of the Quran.",
+      "wordLoopGap": "Imitation Pause",
+      "wordLoopGapDescription": "Tap a word in the active verse to repeat it; long-press and drag to select several words. This pause gives you time to imitate between repeats.",
+      "wordLoopGapAriaLabel": "Imitation pause",
+      "wordLoopGapOff": "0 s",
+      "wordLoopGapSeconds": "{count} s"
     },
     "textSize": {
       "title": "Text Size",
@@ -264,5 +269,19 @@
     "openThreads": "Open Threads",
     "continue": "Continue",
     "openFailedHint": "If Threads doesn’t open, tap Continue."
+  },
+  "wordLoop": {
+    "wordAriaLabel": "repeat word {number}",
+    "statusSingle": "Repeating word {word}",
+    "statusRange": "Repeating words {from}–{to}",
+    "cycles": "{count}×",
+    "phaseGap": "pause",
+    "phasePaused": "paused",
+    "stop": "Stop",
+    "stopAriaLabel": "Stop repeating words",
+    "stopped": "Stopped repeating words",
+    "unavailableAyah": "Word repeat is not available for this verse yet.",
+    "loadFailed": "Word timing data could not be loaded. Check your connection and try again.",
+    "playFailed": "Audio could not be played."
   }
 }

@@ -21,6 +21,8 @@ Jangan memanggil `track()` dari `@vercel/analytics` langsung di komponen. Gunaka
 | `murotal_enabled` | `trackMurotalEnabled()` | Pengguna mengaktifkan Mode Murotal (OFF→ON) |
 | `murotal_surah_complete` | `trackMurotalSurahComplete()` | Murotal selesai satu surat dan lanjut ke surat berikutnya |
 | `murotal_quran_complete` | `trackMurotalQuranComplete()` | Mencapai akhir An-Nas dalam sesi murotal |
+| `word_loop_started` | `trackWordLoopStarted()` | Ulang Kata dimulai (bukan saat pindah ke kata/rentang lain selama mode aktif) |
+| `word_loop_stopped` | `trackWordLoopStopped()` | Ulang Kata berakhir (tombol Berhenti, ketuk ulang, Esc, pindah ayat/trek/halaman) |
 
 ---
 
@@ -96,6 +98,25 @@ Jangan memanggil `track()` dari `@vercel/analytics` langsung di komponen. Gunaka
 }
 ```
 
+### `word_loop_started`
+
+```ts
+{
+  surahId: number;
+  ayahNumber: number;
+  reciterId: string;
+  wordCount: number; // jumlah kata dalam rentang yang terdengar
+}
+```
+
+### `word_loop_stopped`
+
+```ts
+{
+  cycles: number; // pengulangan yang selesai
+}
+```
+
 ---
 
 ## Lokasi implementasi
@@ -107,6 +128,7 @@ Jangan memanggil `track()` dari `@vercel/analytics` langsung di komponen. Gunaka
 | Vercel `<Analytics />` | `app/layout.tsx` |
 | Buka surat | `hooks/use-track-surah-opened.ts` → `app/surah/[id]/page.tsx`, `app/focus/[id]/page.tsx` |
 | Putar audio | `services/audio-controller.ts` — method `play()` saat URL trek berubah |
+| Ulang Kata | `services/word-loop-engine.ts` — `startWordLoop()` / `stopWordLoop()` |
 | Favorit / bookmark | `stores/userStore.ts` — `toggleFavorite()` setelah `db.favorites.put` |
 | Last read | `stores/userStore.ts` — `setLastViewed()` setelah perubahan |
 | Repeat | `stores/repeatStore.ts` — `applyConfig()` setelah persist |

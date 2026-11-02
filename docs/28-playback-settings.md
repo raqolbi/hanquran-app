@@ -15,6 +15,8 @@ Pada MVP V1, bagian ini berisi pengaturan playback. **Mode Murotal** tersedia se
 | Pengaturan | Default | Persistensi | Status |
 |------------|---------|-------------|--------|
 | Ikuti Ayat yang Diputar | ON (`true`) | `settings.autoFollowPlayback` | ✅ Diimplementasi |
+| Sorot Kata | ON (`true`) | `settings.wordHighlight` | ✅ Diimplementasi (`docs/37`) |
+| Jeda Menirukan | 1 dtk (`1000`) | `settings.wordLoopGapMs` | ✅ Diimplementasi (`docs/38`) |
 | Mode Murotal | OFF (`false`) | `settings.murotalEnabled` | ✅ Diimplementasi |
 
 > **Label UI (2 Nov 2026):** label Bahasa Indonesia diganti agar tidak campur Inggris — "Auto Follow Playback" → **Ikuti Ayat yang Diputar**, "Auto Download Audio" → **Unduh Audio Otomatis**, "Playback" → **Pemutaran**, "Offline & Cache" → **Offline & Penyimpanan**, "Hapus Cache" → **Hapus Audio Tersimpan**, "Repeat" → **Pengulangan**, "Range Ayat" → **Rentang Ayat**, "Infinite" → **Tanpa batas**. Nama field (`autoFollowPlayback`, dll.) tidak berubah.

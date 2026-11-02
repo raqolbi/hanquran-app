@@ -21,6 +21,8 @@ export interface SettingsRecord {
   autoDownloadOnPlay: boolean;
   /** Sorot kata yang sedang dibaca qari (bila data waktu tersedia). Default: true. */
   wordHighlight: boolean;
+  /** Jeda menirukan di antara pengulangan Ulang Kata (ms). Default: 1000. */
+  wordLoopGapMs: WordLoopGapMs;
   /** Slug qari dari `data/reciters.json` (mis. `Alafasy_128kbps`). */
   reciterId: string;
   /** Konfigurasi repeat hafalan — persisten di Dexie. */
@@ -28,6 +30,8 @@ export interface SettingsRecord {
   translationResourceId: number;
   updatedAt: number;
 }
+
+export type WordLoopGapMs = 0 | 1000 | 2000 | 3000;
 
 export interface FavoriteRecord {
   surahId: number;

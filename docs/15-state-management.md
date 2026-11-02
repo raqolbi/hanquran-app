@@ -121,7 +121,7 @@ State ephemeral yang **tidak** dipakai komponen lain. Hidup di komponen pemilikn
 
 # 3. Pemilik State (Store Ownership)
 
-Empat store Zustand resmi pada MVP. Tidak ada store tambahan yang boleh dibuat tanpa keputusan eksplisit di dokumen ini.
+Empat store Zustand resmi pada MVP, ditambah satu store runtime untuk Ulang Kata (keputusan P15-2, 2 Nov 2026 — lihat di bawah). Tidak ada store tambahan yang boleh dibuat tanpa keputusan eksplisit di dokumen ini.
 
 | Store              | File                       | Tanggung Jawab                                                                                  |
 | ------------------ | -------------------------- | ----------------------------------------------------------------------------------------------- |
@@ -129,6 +129,9 @@ Empat store Zustand resmi pada MVP. Tidak ada store tambahan yang boleh dibuat t
 | `useRepeatStore`   | `stores/repeatStore.ts`    | Konfigurasi & runtime repeat: `config` (persisten di Dexie `settings.repeatConfig`), `runtime` `{ cycleIndex, isActive, lastBoundary }` |
 | `useUserStore`     | `stores/userStore.ts`      | Preferensi pengguna: favorit, `settings` (qari, ukuran teks, terjemahan, aksesibilitas, playback), `lastViewed` (persisten di Dexie); `persistenceAvailable` |
 | `useOfflineStore`  | `stores/offlineStore.ts`   | `connectionStatus`, `downloadStatuses` per surat + qari, `manifestSummary`, `audioCacheRevision` |
+| `useWordLoopStore` | `stores/wordLoopStore.ts`  | Runtime Ulang Kata (`docs/38`): `loop` `{ surahId, ayahNumber, reciterId, range, clip, cycles, phase }` atau `null`. **Tidak** dipersist, **tidak** disinkronkan lintas tab |
+
+> **Keputusan P15-2 — store terpisah, bukan slice `useRepeatStore`:** siklus hidupnya berbeda (berakhir saat pindah ayat/halaman, tidak dipersist, tidak ikut `BroadcastChannel('hanquran:repeat')`), dan Repeat ayat justru **ditangguhkan** selama Ulang Kata aktif. Mesinnya `services/word-loop-engine.ts` (lewat `AudioController`), penghubung UI `hooks/use-word-loop-controls.ts`.
 
 Pemilik state non-store:
 
@@ -372,6 +375,8 @@ Tabel ini adalah daftar lengkap state pada MVP. Setiap penambahan state wajib me
 | Ikuti Ayat yang Diputar               | IndexedDB          | Ya        | Dexie (`settings.autoFollowPlayback`) |
 | Auto Download saat putar           | IndexedDB          | Ya        | Dexie (`settings.autoDownloadOnPlay`) |
 | Sorot kata (`wordHighlight`)       | IndexedDB          | Ya        | Dexie (`settings.wordHighlight`) |
+| Jeda menirukan (`wordLoopGapMs`)   | IndexedDB          | Ya        | Dexie (`settings.wordLoopGapMs`, default 1000) |
+| Ulang Kata aktif                   | Zustand            | Tidak     | `useWordLoopStore` |
 | Data waktu per kata                | `public/data/word-timings/*` via `services/quran/word-timings.ts` | Tidak (fetch + memori) | Static files (`docs/37`) |
 | Rentang kata aktif                 | React Local State (`useActiveWordRange`) | Tidak | React Local State |
 | Penyimpanan tersedia (`persistenceAvailable`) | Zustand | Tidak | Zustand |
@@ -634,6 +639,7 @@ Jika ada perbedaan antar dokumen tentang state, dokumen ini menjadi acuan final.
 * [x] Hubungkan komponen `AudioPlayer`, `RepeatStatus`, `OfflineStatusBadge` ke selector store.
 * [x] Implementasi aksi **Hapus Audio Tersimpan** sesuai aturan Bagian 6.4 — `services/cache-manager.ts`, Settings UI.
 * [x] Tulis unit test untuk action store dan integrasi `audio-controller` ↔ store.
+* [x] `useWordLoopStore` + `services/word-loop-engine.ts` untuk Ulang Kata (`docs/38`).
 
 ---
 

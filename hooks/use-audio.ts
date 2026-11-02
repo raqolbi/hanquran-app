@@ -44,7 +44,8 @@ function prefetchNextAyahUrl(
   }
 }
 
-function buildTrack(
+/** Bangun `AudioTrack` ayat (dipakai juga oleh Ulang Kata). */
+export function buildTrack(
   {
     surahId,
     ayahNumber,

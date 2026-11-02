@@ -117,7 +117,7 @@ Aturan perilaku:
 
 - Al-Juhaynee & Ibrahim Al Dosary (Warsh) belum didukung — perlu data waktu sendiri (forced alignment).
 - Data menambah ±5 MB (terkompresi) ke APK Android; PWA tidak terpengaruh karena dimuat per surat.
-- Ketuk kata untuk mengulang satu kata / rentang kata → direncanakan di `docs/38-word-loop-spec.md`.
+- Ketuk kata untuk mengulang satu kata / rentang kata → ✅ **Ulang Kata** (`docs/38-word-loop-spec.md`). Memutar ayat mulai dari kata tertentu (tanpa mengulang) belum ada.
 - Data 2016; bila penulis quran-align merilis revisi, jalankan ulang skrip dengan versi path baru.
 
 ---

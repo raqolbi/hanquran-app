@@ -222,9 +222,45 @@ html[data-app-locale='id'] [data-content-locale='en'] {
     0 0.08em 0.45em 0.08em rgb(16 185 129 / 0.28);
 }
 
+/* Ulang Kata (docs/38 §3.4) — kata bisa diketuk/diseret. */
+.quran-words-interactive .quran-word {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.quran-words-interactive .quran-word:focus-visible {
+  outline: 0.08em solid #059669; /* emerald-600 */
+  outline-offset: 0.08em;
+}
+
+/* Kata/rentang yang sedang diulang: bingkai amber, beda dari pil hijau. */
+.quran-word[data-loop='true'] {
+  background-color: #fffbeb; /* amber-50 */
+  outline: 0.07em solid #f59e0b; /* amber-500 */
+  outline-offset: 0.06em;
+}
+
+/* Rentang yang sedang dipilih (tekan lama + seret). */
+.quran-word[data-selecting='true'] {
+  background-color: rgb(252 211 77 / 0.45); /* amber-300 */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quran-word {
+    transition: none;
+  }
+}
+
 /* Tanpa garis bawah: bertabrakan dengan harakat bawah (kasrah, dll.). */
 html[data-contrast='high'] .quran-word[data-state='read'] {
   color: #064e3b;
+}
+
+html[data-contrast='high'] .quran-word[data-loop='true'] {
+  outline-color: #92400e; /* amber-800 */
 }
 
 html[data-contrast='high'] .quran-word[data-state='active'] {

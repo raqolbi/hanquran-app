@@ -10,7 +10,11 @@ import {
   SURAH_DETAIL_READING_CONTROLS_HEIGHT,
 } from '@/lib/surah-detail-chrome';
 import type { AppLocale } from '@/types';
-import { LiveQuranAyahText, QuranAyahText } from '@/components/quran-ayah-text';
+import {
+  LiveQuranAyahText,
+  QuranAyahText,
+  type WordLoopHandlers,
+} from '@/components/quran-ayah-text';
 
 interface AyahCardProps {
   number: number;
@@ -26,6 +30,8 @@ interface AyahCardProps {
    * `isActive`; ayat lain dirender sebagai teks utuh.
    */
   wordTiming?: { surahId: number; reciterId: string; enabled: boolean };
+  /** Gestur Ulang Kata — hanya untuk ayat aktif (docs/38). */
+  wordLoop?: WordLoopHandlers;
   showTransliteration?: boolean;
   showTranslation?: boolean;
   onClick?: () => void;
@@ -42,8 +48,12 @@ export function AyahCard({
   wordTiming,
   showTransliteration = false,
   showTranslation = false,
+  wordLoop,
   onClick,
 }: AyahCardProps) {
+  // Ayat aktif tidak perlu dipilih lagi — dan kata di dalamnya bisa menjadi
+  // tombol (Ulang Kata), jadi kartu tidak boleh ikut ber-role tombol.
+  const selectable = !!onClick && !isActive;
   const t = useTranslations('surah');
   const { arabicStyle } = useArabicTextSize();
 
@@ -55,16 +65,16 @@ export function AyahCard({
       transition={{ duration: 0.3 }}
       onClick={onClick}
       // Bisa dipilih dengan keyboard (Tab lalu Enter/Spasi), sama seperti ketuk.
-      role={onClick ? 'button' : undefined}
-      tabIndex={onClick ? 0 : undefined}
+      role={selectable ? 'button' : undefined}
+      tabIndex={selectable ? 0 : undefined}
       aria-current={isActive ? 'true' : undefined}
       onKeyDown={
-        onClick
+        selectable
           ? (event) => {
               if (event.target !== event.currentTarget) return;
               if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
-                onClick();
+                onClick?.();
               }
             }
           : undefined
@@ -107,6 +117,7 @@ export function AyahCard({
             ayahNumber={number}
             reciterId={wordTiming.reciterId}
             enabled={wordTiming.enabled}
+            wordLoop={wordLoop}
           />
         ) : (
           <QuranAyahText
