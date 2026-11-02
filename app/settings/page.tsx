@@ -239,7 +239,6 @@ export default function SettingsPage() {
                   <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
                     <span>{option.name}</span>
                     <ReciterBadges
-                      popular={option.popular}
                       memorization={option.memorization}
                       wordHighlight={hasWordTimings(option.id)}
                     />
@@ -251,7 +250,6 @@ export default function SettingsPage() {
           {selectedReciter ? (
             <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
               <ReciterBadges
-                popular={selectedReciter.popular}
                 memorization={selectedReciter.memorization}
                 wordHighlight={hasWordTimings(selectedReciter.id)}
               />
@@ -437,13 +435,11 @@ export default function SettingsPage() {
   );
 }
 
-/** Tanda qari: Populer (kurasi), Untuk Hafalan (Muallim), Sorot Kata (data quran-align). */
+/** Tanda qari: Untuk Hafalan (Muallim), Sorot Kata (data quran-align). */
 function ReciterBadges({
-  popular,
   memorization,
   wordHighlight,
 }: {
-  popular?: boolean;
   memorization?: boolean;
   wordHighlight: boolean;
 }) {
@@ -452,11 +448,6 @@ function ReciterBadges({
     'inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium leading-none';
   return (
     <>
-      {popular ? (
-        <span className={`${badge} bg-amber-100 text-amber-900`}>
-          ★ {t('badgePopular')}
-        </span>
-      ) : null}
       {memorization ? (
         <span className={`${badge} bg-sky-100 text-sky-900`}>
           {t('badgeMemorization')}

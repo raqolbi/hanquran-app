@@ -118,7 +118,6 @@ Aturan perilaku:
 - Al-Juhaynee & Ibrahim Al Dosary (Warsh) belum didukung — perlu data waktu sendiri (forced alignment).
 - Data menambah ±5 MB (terkompresi) ke APK Android; PWA tidak terpengaruh karena dimuat per surat.
 - Ketuk kata untuk mengulang satu kata / rentang kata → direncanakan di `docs/38-word-loop-spec.md`.
-- Tanda "★ Populer" masih kurasi → rencana berbasis Vercel Analytics di `docs/39` §D.
 - Data 2016; bila penulis quran-align merilis revisi, jalankan ulang skrip dengan versi path baru.
 
 ---
@@ -129,26 +128,25 @@ Sumber: `data/reciters.json` (urutan = urutan tampil di Pengaturan). Di Pengatur
 
 | Tanda | Arti | Sumber |
 |-------|------|--------|
-| ★ Populer | Qari yang dikenal luas | **Kurasi HanQuran** (field `popular`), bukan rating/jumlah unduhan — belum ada sumber data popularitas yang dipakai |
 | Untuk hafalan | Rekaman metode belajar (Muallim) | Field `memorization` |
 | Sorot kata | Mendukung sorot kata | Otomatis dari `data/word-timing-reciters.json` |
 
-| Qari | Folder EveryAyah | Populer | Sorot kata |
-|------|------------------|:-------:|:----------:|
-| Mishary Rashid Alafasy (default) | `Alafasy_128kbps` | ★ | ✅ |
-| Abdul Basit Abdus Samad (Murattal) | `Abdul_Basit_Murattal_192kbps` | ★ | ✅ |
-| Abdurrahman As-Sudais | `Abdurrahmaan_As-Sudais_192kbps` | ★ | ✅ |
-| Saud Ash-Shuraim | `Saood_ash-Shuraym_128kbps` | ★ | ✅ |
-| Mahmoud Khalil Al-Husary (Murattal) | `Husary_128kbps` | ★ | ✅ |
-| Muhammad Siddiq Al-Minshawi (Murattal) | `Minshawy_Murattal_128kbps` | ★ | ✅ |
-| Mahmoud Khalil Al-Husary (Muallim) — untuk hafalan | `Husary_Muallim_128kbps` | | ✅ |
-| Abdul Basit Abdus Samad (Mujawwad) | `Abdul_Basit_Mujawwad_128kbps` | | ✅ |
-| Muhammad Siddiq Al-Minshawi (Mujawwad) | `Minshawy_Mujawwad_192kbps` | | ✅ |
-| Abu Bakr Ash-Shatri | `Abu_Bakr_Ash-Shaatree_128kbps` | | ✅ |
-| Hani Ar-Rifai | `Hani_Rifai_192kbps` | | ✅ |
-| Mohamed Al-Tablawi | `Mohammad_al_Tablaway_128kbps` | | ✅ |
-| Abdullaah Awaad Al-Juhaynee | `Abdullaah_3awwaad_Al-Juhaynee_128kbps` | | — |
-| Ibrahim Al Dosary (Warsh) | `warsh/warsh_ibrahim_aldosary_128kbps` | | — |
+| Qari | Folder EveryAyah | Sorot kata |
+|------|------------------|:----------:|
+| Mishary Rashid Alafasy (default) | `Alafasy_128kbps` | ✅ |
+| Abdul Basit Abdus Samad (Murattal) | `Abdul_Basit_Murattal_192kbps` | ✅ |
+| Abdurrahman As-Sudais | `Abdurrahmaan_As-Sudais_192kbps` | ✅ |
+| Saud Ash-Shuraim | `Saood_ash-Shuraym_128kbps` | ✅ |
+| Mahmoud Khalil Al-Husary (Murattal) | `Husary_128kbps` | ✅ |
+| Muhammad Siddiq Al-Minshawi (Murattal) | `Minshawy_Murattal_128kbps` | ✅ |
+| Mahmoud Khalil Al-Husary (Muallim) — untuk hafalan | `Husary_Muallim_128kbps` | ✅ |
+| Abdul Basit Abdus Samad (Mujawwad) | `Abdul_Basit_Mujawwad_128kbps` | ✅ |
+| Muhammad Siddiq Al-Minshawi (Mujawwad) | `Minshawy_Mujawwad_192kbps` | ✅ |
+| Abu Bakr Ash-Shatri | `Abu_Bakr_Ash-Shaatree_128kbps` | ✅ |
+| Hani Ar-Rifai | `Hani_Rifai_192kbps` | ✅ |
+| Mohamed Al-Tablawi | `Mohammad_al_Tablaway_128kbps` | ✅ |
+| Abdullaah Awaad Al-Juhaynee | `Abdullaah_3awwaad_Al-Juhaynee_128kbps` | — |
+| Ibrahim Al Dosary (Warsh) | `warsh/warsh_ibrahim_aldosary_128kbps` | — |
 
 Menambah qari: pastikan folder ada di EveryAyah (`https://everyayah.com/data/{folder}/001001.mp3`), tambahkan ke `data/reciters.json`; untuk sorot kata perlu data waktu yang dibuat dari file audio yang sama.
 
@@ -160,4 +158,5 @@ Menambah qari: pastikan folder ada di EveryAyah (`https://everyayah.com/data/{fo
 |---------|-----------|
 | 2 November 2026 | Dokumen awal — implementasi dengan data quran-align untuk 3 qari |
 | 2 November 2026 | Tampilan sorotan dipercantik: pil bergradasi + cincin/glow, jejak kata yang sudah dibaca, varian kontras tinggi |
-| 2 November 2026 | Diperluas ke 12 qari (9 qari baru di aplikasi); qari default → Alafasy; tanda Populer / Untuk hafalan / Sorot kata (§8) |
+| 2 November 2026 | Diperluas ke 12 qari (9 qari baru di aplikasi); qari default → Alafasy; tanda Untuk hafalan / Sorot kata (§8) |
+| 2 November 2026 | Tanda "Populer" dihapus (tanpa data popularitas yang bisa dipertanggungjawabkan, dan pemeliharaannya merepotkan) |

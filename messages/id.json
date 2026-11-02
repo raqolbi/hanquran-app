@@ -103,11 +103,10 @@
       "description": "Pilih suara qari favorit untuk bacaan audio.",
       "selectPlaceholder": "Pilih qari",
       "selectAriaLabel": "Pilih qari",
-      "badgePopular": "Populer",
       "badgeMemorization": "Untuk hafalan",
       "badgeWordHighlight": "Sorot kata",
       "noWordHighlight": "Qari ini belum mendukung sorot kata.",
-      "legend": "★ Populer = qari yang dikenal luas (kurasi HanQuran). Untuk hafalan = rekaman metode belajar (Muallim). Sorot kata = kata yang dibaca disorot saat tilawah."
+      "legend": "Untuk hafalan = rekaman metode belajar (Muallim). Sorot kata = kata yang dibaca disorot saat tilawah."
     },
     "playback": {
       "title": "Playback",

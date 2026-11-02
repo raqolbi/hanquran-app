@@ -353,7 +353,7 @@ Catatan rilis: [`RELEASE.md`](./RELEASE.md).
 | [`docs/36-performance-cwv.md`](./docs/36-performance-cwv.md) | Performa beranda & Core Web Vitals |
 | [`docs/37-word-highlight-spec.md`](./docs/37-word-highlight-spec.md) | Sorot kata saat tilawah (data quran-align) |
 | [`docs/38-word-loop-spec.md`](./docs/38-word-loop-spec.md) | Rencana: ulang kata / rentang kata untuk hafalan |
-| [`docs/39-followup-fixes-plan.md`](./docs/39-followup-fixes-plan.md) | Rencana perbaikan lanjutan & popularitas qari |
+| [`docs/39-followup-fixes-plan.md`](./docs/39-followup-fixes-plan.md) | Rencana perbaikan lanjutan (sisa audit) |
 | [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md) | Atribusi & lisensi pihak ketiga |
 | [`docs/19-document-audit.md`](./docs/19-document-audit.md) | Audit dokumentasi & status tiap dokumen |
 | [`docs/analytics.md`](./docs/analytics.md) | Event Vercel Analytics |

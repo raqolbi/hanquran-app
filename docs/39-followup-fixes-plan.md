@@ -1,10 +1,10 @@
-# 39 — Rencana Perbaikan Lanjutan (Sisa Audit & Popularitas Qari)
+# 39 — Rencana Perbaikan Lanjutan (Sisa Audit)
 
 **Tanggal:** 2 November 2026
 **Status:** 📝 Rencana — belum dikerjakan (task: `docs/18` Phase 14)
 **Asal temuan:** audit kode 2 November 2026 (`docs/18` Phase 12b residual, `docs/19` Audit v4)
 
-Dokumen ini merinci temuan audit yang **belum** diperbaiki, beserta usulan perbaikan dan kriteria selesai, serta rencana mengganti tanda "★ Populer" (kurasi) dengan data nyata dari Vercel Analytics.
+Dokumen ini merinci temuan audit yang **belum** diperbaiki, beserta usulan perbaikan dan kriteria selesai.
 
 Prioritas: **P1** = berdampak langsung ke pengguna/CI · **P2** = kualitas & aksesibilitas · **P3** = kerapian.
 
@@ -101,33 +101,9 @@ Prioritas: **P1** = berdampak langsung ke pengguna/CI · **P2** = kualitas & aks
 
 ---
 
-## D. Popularitas Qari dari Vercel Analytics — P2
-
-### D1. Yang sudah ada
-
-Event `audio_play` (`lib/analytics`) sudah mengirim `reciterId` setiap trek baru diputar — **tanpa** perlu perubahan kode. Dari dashboard Vercel → Analytics → Events → `audio_play` → properti `reciterId`, bisa dilihat qari mana yang paling sering diputar.
-
-### D2. Batasan
-
-- Data **tidak bisa dibaca langsung oleh aplikasi** saat runtime (dashboard Vercel, bukan API publik untuk klien). Jadi tanda "Populer" tetap berasal dari berkas `data/reciters.json`, tetapi isinya diperbarui **berdasarkan data**.
-- Hanya pengguna **web** (PWA) — Analytics tidak aktif di APK Android (`docs/32` A1).
-- Ketersediaan & retensi custom events bergantung pada paket Vercel yang dipakai — cek di dashboard.
-- Bias: qari default (Alafasy) akan selalu terlihat paling populer. Usulan metrik: hitung **pemilihan qari** (event baru `reciter_selected` saat pengguna mengganti qari di Pengaturan) dan/atau `audio_play` **di luar** qari default.
-- Privasi: hanya ID qari, tanpa data pribadi; konsisten dengan `docs/33`.
-
-### D3. Usulan alur
-
-1. Tambah event `reciter_selected { reciterId, previousReciterId }` (`docs/analytics.md`).
-2. Tiap rilis (mis. bulanan), lihat 30 hari terakhir → urutkan qari menurut jumlah pemilihan + putar.
-3. Perbarui `data/reciters.json`: tandai **5–6 teratas** `popular: true` dan urutkan daftar sesuai peringkat; catat periode & angka di `docs/37` §8.
-4. Ubah keterangan di aplikasi dari "kurasi HanQuran" menjadi "berdasarkan pilihan pengguna (periode …)".
-
-Opsional (P3): skrip yang membaca ekspor CSV dari dashboard lalu memperbarui `data/reciters.json` otomatis.
-
----
-
 ## Riwayat
 
 | Tanggal | Perubahan |
 |---------|-----------|
 | 2 November 2026 | Dokumen awal — sisa audit A–C & rencana popularitas qari D |
+| 2 November 2026 | Bagian D (popularitas qari) dihapus — tanda Populer tidak dipakai |

@@ -25,11 +25,6 @@ export interface SurahData extends SurahSummary {
 export interface Reciter {
   id: string;
   name: string;
-  /**
-   * Qari populer — **kurasi redaksi** (dikenal luas di aplikasi/radio
-   * Al-Qur'an), bukan data unduhan/rating pengguna. Lihat `docs/37` §8.
-   */
-  popular?: boolean;
   /** Rekaman metode belajar (Muallim) — cocok untuk menghafal. */
   memorization?: boolean;
 }

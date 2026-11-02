@@ -103,11 +103,10 @@
       "description": "Choose your preferred reciter for audio playback.",
       "selectPlaceholder": "Select reciter",
       "selectAriaLabel": "Select reciter",
-      "badgePopular": "Popular",
       "badgeMemorization": "For memorization",
       "badgeWordHighlight": "Word highlight",
       "noWordHighlight": "This reciter does not support word highlight yet.",
-      "legend": "★ Popular = widely known reciters (HanQuran curation). For memorization = teaching-style recording (Muallim). Word highlight = the recited word is highlighted during playback."
+      "legend": "For memorization = teaching-style recording (Muallim). Word highlight = the recited word is highlighted during playback."
     },
     "playback": {
       "title": "Playback",

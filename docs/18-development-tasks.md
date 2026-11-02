@@ -77,7 +77,7 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 12        | Locale Paint Pertama (F8)         | 4      | 0      | 0      | 4      | 4       | ✅ Selesai (P12-1–P12-4) — 1 Nov 2026        |
 | 12b       | Audit Bug & Hardening             | 13     | 3      | 7      | 3      | 13      | ✅ Selesai (P12b-1–P12b-13) — 2 Nov 2026     |
 | 13        | Sorot Kata (quran-align)          | 10     | 0      | 8      | 2      | 10      | ✅ Selesai (P13-1–P13-10) — 2 Nov 2026       |
-| 14        | Perbaikan Lanjutan Audit          | 11     | 0      | 5      | 6      | 0       | 📋 Belum dimulai (`docs/39`)                  |
+| 14        | Perbaikan Lanjutan Audit          | 10     | 0      | 5      | 5      | 0       | 📋 Belum dimulai (`docs/39`)                  |
 | 15        | Ulang Kata (Hafalan per Kata)     | 12     | 0      | 10     | 2      | 0       | 📋 Belum dimulai (`docs/38`)                  |
 | **TOTAL** |                                   | **110** | **50** | **37** | **23** | **83**  | (+ Phase 9; + Phase 10 SEO; + Phase 10b hardening; + Phase 11 CWV; + Phase 11b LCP gate; + Phase 12 F8; + Phase 12b audit) |
 
@@ -1475,7 +1475,7 @@ Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan de
 | P13-7 | Test: tokenizer = skrip di seluruh dataset, validitas semua file waktu, pencarian rentang, loader, URL Simpan Offline | [TEST] | P2 | — |
 | P13-8 | Tambah 9 qari EveryAyah yang punya data quran-align (total 14 qari, 12 bersorot kata); verifikasi durasi file | [NEW] | P1 | §2, §8 |
 | P13-9 | Qari default pengguna baru → Alafasy (`DEFAULT_RECITER_ID`) | [UPDATE] | P1 | §8 |
-| P13-10 | Tanda qari di Pengaturan: ★ Populer (kurasi), Untuk hafalan, Sorot kata; daftar bisa digulir | [NEW] | P2 | §8 |
+| P13-10 | Tanda qari di Pengaturan: Untuk hafalan, Sorot kata; daftar bisa digulir (tanda ★ Populer sempat ditambahkan lalu dihapus) | [NEW] | P2 | §8 |
 
 - [x] [NEW] P13-1 — skrip data (P1)
 - [x] [TEST] P13-2 — verifikasi audio (P1)
@@ -1490,7 +1490,7 @@ Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan de
 
 **Hasil verifikasi (2 Nov 2026):** Playwright dengan audio CDN diganti file uji — qari Alafasy, 1:1 menyorot `بِسْمِ` → `ٱللَّهِ` → `ٱلرَّحْمَٰنِ` → `ٱلرَّحِيمِ` sesuai waktu data; Mode Fokus Husary 2:2 menyorot kata 0→1→2 (7 kata, tanda waqaf ikut kata sebelumnya); qari default Al-Juhaynee tidak memecah teks (0 span kata). 0 error konsol. Suite test **445 lulus / 15 gagal (460)** — 15 kegagalan lama (jsdom).
 
-**Residual:** Al-Juhaynee & Warsh belum didukung sorot kata; ketuk kata untuk memutar dari kata itu belum ada; label "Populer" masih kurasi (belum ada data popularitas).
+**Residual:** Al-Juhaynee & Warsh belum didukung sorot kata; ketuk kata untuk memutar dari kata itu belum ada.
 
 ---
 
@@ -1510,8 +1510,7 @@ Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan de
 | P14-7 | Pasang ESLint (flat config) + jalankan di CI | [NEW] | P2 | C2 |
 | P14-8 | Perbaiki 15 test gagal (jsdom `Blob`/`Response`) | [TEST] | P2 | C3 |
 | P14-9 | Celah kecil: `install-prompt` try/catch, rejection `toggleFavorite`, `null` di Select qari, kunci i18n tak terpakai | [FIX] | P2 | C5 |
-| P14-10 | Event `reciter_selected` + alur pembaruan tanda Populer dari Vercel Analytics | [NEW] | P2 | D |
-| P14-11 | Test precache menulis ke folder sementara; selidiki test yang menggantung | [TEST] | P3 | C4 |
+| P14-10 | Test precache menulis ke folder sementara; selidiki test yang menggantung | [TEST] | P3 | C4 |
 
 - [ ] [FIX] P14-1 — posisi Lanjutkan Hafalan (P1)
 - [ ] [FIX] P14-2 — cache navigasi tanpa query (P1)
@@ -1522,8 +1521,7 @@ Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan de
 - [ ] [NEW] P14-7 — ESLint (P2)
 - [ ] [TEST] P14-8 — 15 test jsdom (P2)
 - [ ] [FIX] P14-9 — celah kecil (P2)
-- [ ] [NEW] P14-10 — popularitas qari dari Analytics (P2)
-- [ ] [TEST] P14-11 — kebersihan test (P3)
+- [ ] [TEST] P14-10 — kebersihan test (P3)
 
 **Sudah dikerjakan di luar fase ini (2 Nov 2026):** `package-lock.json` disinkronkan (`npm ci` hijau di lingkungan bersih); 5 komponen tidak terpakai dihapus; atribusi pihak ketiga di `THIRD_PARTY_NOTICES.md`.
 

@@ -79,7 +79,7 @@ Rilis gabungan sejak 0.5.0: aplikasi Android (Capacitor), Gerbang Threads, SEO &
 - **Pemberitahuan penyimpanan** di Pengaturan bila browser tidak mengizinkan penyimpanan data (mode privat)
 - **Sorot kata saat tilawah** di Surah Detail & Mode Fokus untuk 12 qari — data waktu dari quran-align (CC BY 4.0); bisa dimatikan di Pengaturan → Playback → Sorot Kata (`docs/37`)
 - **9 qari baru:** Abdul Basit (Murattal & Mujawwad), Abdurrahman As-Sudais, Saud Ash-Shuraim, Al-Husary (Muallim — untuk hafalan), Al-Minshawi (Murattal), Abu Bakr Ash-Shatri, Hani Ar-Rifai, Mohamed Al-Tablawi
-- **Tanda qari** di Pengaturan: ★ Populer, Untuk hafalan, Sorot kata
+- **Tanda qari** di Pengaturan: Untuk hafalan, Sorot kata
 
 #### Perbaikan
 
