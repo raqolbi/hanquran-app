@@ -209,9 +209,9 @@ agar render klien = HTML server (tanpa hydration mismatch). Supaya pengguna
 |---------|------|-------|
 | Cache | `lib/app-locale.ts` (`hanquran:app-locale`) | Salinan sinkron `settings.appLocale` di `localStorage` |
 | Skrip init | `buildAppLocaleInitScript()` di `app/layout.tsx` | Baca cache → deteksi → set `<html data-app-locale>` + `lang` sebelum paint; hanya membaca |
-| Sinkronisasi | `stores/userStore.ts`, `components/providers/intl-provider.tsx` | Tulis cache saat `init()`/ganti bahasa; set atribut setelah `initialized` |
+| Sinkronisasi | `stores/userStore.ts`, `components/providers/intl-provider.tsx` | Tulis cache saat `init()`/ganti bahasa; terapkan atribut (`applyAppLocaleToDocument()`) **sebelum** `set()` agar atribut dan teks `next-intl` berganti dalam frame yang sama |
 | Teks bilingual | `components/shared/locale-text.tsx` | Render `<span data-locale="id|en">`; CSS menyembunyikan yang tidak aktif |
-| Konten ayat | `hooks/use-surah.ts` → `data-content-locale` | Terjemahan seed `id` disembunyikan (`visibility:hidden`) sampai terjemahan locale aktif siap |
+| Konten ayat | `hooks/use-surah.ts` → `data-content-locale` | Terjemahan seed `id` disembunyikan (`visibility:hidden`) sampai terjemahan locale aktif siap; dipakai juga oleh [`app/focus/[id]/page.tsx`](../app/focus/%5Bid%5D/page.tsx) |
 
 Aturan CSS (`app/globals.css`):
 
@@ -225,6 +225,15 @@ html[data-app-locale='id'] [data-content-locale='en'] { visibility: hidden; }
 Tanpa atribut (SSR tanpa JS) teks `id` tetap tampil. Seed beranda membawa
 `meaningTranslations { id, en }`, sehingga locale `en` tidak perlu refetch
 daftar surat. Pencarian mencocokkan kedua bahasa.
+
+**Urutan sinkronisasi.** Atribut `<html>` tidak diperbarui di `useEffect`
+setelah paint, melainkan lewat `applyAppLocaleToDocument()` yang dipanggil
+sinkron dari `userStore.init()` dan `updateSettings({ appLocale })` sebelum
+`set()`. Dengan begitu, saat cache basi (nilai `localStorage` ≠ Dexie) atau
+saat pengguna mengganti bahasa, teks bilingual dan teks `next-intl` tidak
+sempat tampil dengan bahasa berbeda dalam satu frame. `IntlProvider` tetap
+memanggil helper yang sama sebagai jaring pengaman untuk perubahan locale di
+luar alur store.
 
 **Batasan yang diketahui:** label shell yang belum dual-render (kartu Lanjutkan
 Hafalan, footer, banner install, header surat) masih dapat berkedip ±200 ms
