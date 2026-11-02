@@ -30,7 +30,7 @@ const KNOWN_CACHES = [CACHE_STATIC, CACHE_SHELL, CACHE_RSC, CACHE_DATA, CACHE_AU
 
 // Route yang shell-nya di-precache saat install (lihat docs/30 §6.1–6.2).
 const SHELL_PRECACHE_URLS = ['/offline.html'];
-const STATIC_ROUTES = ['/', '/settings', '/settings/about'];
+const STATIC_ROUTES = ['/', '/settings', '/settings/about', '/settings/help'];
 // App-shell template untuk route dinamis: satu shell melayani semua id.
 const APP_SHELL_SURAH = '/surah/1';
 const APP_SHELL_FOCUS = '/focus/1';

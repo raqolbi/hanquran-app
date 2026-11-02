@@ -1,8 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { motion } from 'motion/react';
-import { ArrowLeft, ExternalLink } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import {
@@ -17,12 +15,9 @@ import {
   getRepositoryCommercialLicenseUrl,
   getRepositoryLicenseUrl,
 } from '@/lib/app-about';
-import { navigateApp } from '@/lib/navigate';
-import { isAndroidBuild, isNativePlatform } from '@/lib/platform';
-import { routes } from '@/lib/routes';
 
-import { Logo } from '@/components/shared/Logo';
 import { SettingsSection } from '@/components/settings-section';
+import { SettingsSubpageHeader } from '@/components/settings-subpage-header';
 
 export default function AboutPage() {
   const t = useTranslations('about');
@@ -31,7 +26,7 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-dvh bg-background pb-16">
-      <AboutHeader />
+      <SettingsSubpageHeader title={t('title')} />
 
       <main className="mx-auto w-full max-w-2xl space-y-6 px-4 py-6 sm:px-6">
         <SettingsSection title={t('app.sectionTitle')}>
@@ -166,42 +161,3 @@ export default function AboutPage() {
   );
 }
 
-function AboutHeader() {
-  const router = useRouter();
-  const t = useTranslations('about');
-  const tCommon = useTranslations('common');
-
-  const handleBack = () => {
-    if (typeof window !== 'undefined' && window.history.length > 1) {
-      if (isAndroidBuild() || isNativePlatform()) {
-        navigateApp(routes.settings(), (href) => router.push(href));
-        return;
-      }
-      router.back();
-      return;
-    }
-    navigateApp(routes.settings(), (href) => router.push(href));
-  };
-
-  return (
-    <motion.header
-      initial={{ opacity: 0, y: -8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.25, ease: 'easeOut' }}
-      className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur"
-    >
-      <div className="mx-auto flex w-full max-w-2xl items-center gap-3 px-4 py-3 sm:px-6">
-        <button
-          type="button"
-          onClick={handleBack}
-          className="-ml-2 inline-flex h-10 w-10 items-center justify-center rounded-lg text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          aria-label={tCommon('back')}
-        >
-          <ArrowLeft size={20} />
-        </button>
-        <Logo size={24} alt="" />
-        <h1 className="text-lg font-semibold text-foreground">{t('title')}</h1>
-      </div>
-    </motion.header>
-  );
-}

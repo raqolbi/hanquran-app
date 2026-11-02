@@ -74,10 +74,14 @@ Pengaturan — app/settings/page.tsx (client)
 │                                         Offline & Penyimpanan + OfflineStatusBadge, Aksesibilitas)
 │  └─ SettingsRow + Select / Switch / SegmentedControl
 ├─ ClearCacheDialog
-└─ tautan → Tentang
+└─ tautan → Cara Pakai, Tentang
+
+Cara Pakai — app/settings/help/page.tsx (client)
+├─ SettingsSubpageHeader
+└─ section × 9                           (Pengulangan, Ulang Kata, Sorot Kata, Kecepatan, Murotal, Fokus, Lanjutkan, Offline, Keyboard)
 
 Tentang — app/settings/about/page.tsx (client)
-├─ AboutHeader
+├─ SettingsSubpageHeader
 └─ SettingsSection × n                   (info, misi, sumber data, repository & lisensi)
 ```
 

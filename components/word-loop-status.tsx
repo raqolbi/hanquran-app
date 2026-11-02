@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Repeat2, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import { markHintSeen, useHintSeen } from '@/lib/onboarding-hints';
 import { stopWordLoop } from '@/services/word-loop-engine';
 import { useWordLoopStore } from '@/stores/wordLoopStore';
 
@@ -41,6 +42,15 @@ export function WordLoopStatus({ surahId, bottomOffset }: WordLoopStatusProps) {
     setLastAnnounceKey(announceKey);
     setAnnouncement(announceKey || t('stopped'));
   }
+
+  // Petunjuk berhenti, sekali saja: tampil di Ulang Kata pertama, dianggap
+  // dilihat begitu pengguna berhenti mengulang.
+  const stopHintSeen = useHintSeen('word-loop-stop');
+  const wasVisibleRef = useRef(false);
+  useEffect(() => {
+    if (wasVisibleRef.current && !visible) markHintSeen('word-loop-stop');
+    wasVisibleRef.current = visible;
+  }, [visible]);
 
   // Kata yang diulang tidak boleh tertutup chip (mis. dimulai dengan ketukan,
   // saat auto follow sedang ditangguhkan karena sentuhan).
@@ -106,7 +116,12 @@ export function WordLoopStatus({ surahId, bottomOffset }: WordLoopStatusProps) {
               className="pointer-events-auto flex items-center gap-2 rounded-full border border-amber-300 bg-amber-50/95 py-1.5 pl-3 pr-1.5 text-sm text-amber-950 shadow-md backdrop-blur-sm"
             >
               <Repeat2 size={16} aria-hidden="true" className="shrink-0 text-amber-600" />
-              <span className="font-medium">{label}</span>
+              <span className="flex flex-col leading-tight">
+                <span className="font-medium">{label}</span>
+                {!stopHintSeen ? (
+                  <span className="text-xs text-amber-800/80">{t('stopHint')}</span>
+                ) : null}
+              </span>
               {loop.cycles > 0 || loop.phase !== 'playing' ? (
                 <span className="tabular-nums text-amber-800/80">
                   {[

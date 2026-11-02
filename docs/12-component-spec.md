@@ -1631,7 +1631,7 @@ Mengikuti urutan wireframe:
 5. Kontras Tinggi
 6. Offline & Penyimpanan
 7. Aksesibilitas
-8. Navigasi Tentang HanQuran  →  `/settings/about`
+8. Navigasi Cara Pakai  →  `/settings/help`, Tentang HanQuran  →  `/settings/about`
 ```
 
 > **Catatan:** Toggle Terjemahan dan Transliterasi **tidak** ada di Pengaturan — hanya di `VerseDisplayControls` pada Surah Detail (`docs/22-verse-display-controls.md`).

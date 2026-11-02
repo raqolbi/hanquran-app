@@ -301,6 +301,7 @@ Navigasi MVP terdiri dari **empat halaman inti** berikut, ditambah **satu sub-ha
 | `/focus/[id]` | Mode Fokus | Layar baca bebas distraksi (satu ayat; tanpa word highlight MVP) |
 | `/settings` | Pengaturan | Bahasa UI, qari, ukuran teks, playback, cache, aksesibilitas |
 | `/settings/about` | Tentang HanQuran | Informasi aplikasi, filosofi, credits, repository & lisensi (P1) |
+| `/settings/help` | Cara Pakai | Petunjuk fitur hafalan (Growth, 2 Nov 2026) |
 
 Query parameter yang diizinkan:
 - `/surah/[id]?ayah=[n]` — membuka halaman pada ayat tertentu
@@ -324,6 +325,7 @@ Home (/)
   ├── Surah Detail (/surah/[id])
   │     └── Focus Mode (/focus/[id])
   └── Pengaturan (/settings)
+        ├── Cara Pakai (/settings/help)
         └── Tentang HanQuran (/settings/about)
 ```
 
@@ -596,6 +598,7 @@ Empat halaman inti MVP, ditambah sub-halaman Pengaturan untuk informasi aplikasi
 /focus/[id]       — Mode Fokus
 /settings         — Pengaturan
 /settings/about   — Tentang HanQuran (P1)
+/settings/help    — Cara Pakai (Growth)
 ```
 
 Tidak ada route lain di luar daftar di atas yang termasuk MVP.

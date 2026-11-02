@@ -169,7 +169,7 @@
   "about": {
     "title": "Tentang HanQuran",
     "navLink": "Tentang HanQuran",
-    "navAriaLabel": "Informasi aplikasi",
+    "navAriaLabel": "Bantuan dan informasi aplikasi",
     "app": {
       "sectionTitle": "Informasi Aplikasi",
       "description": "Platform hafalan Al-Qur'an — audio per ayat, pengulangan, Mode Murotal, kontrol layar kunci, mode fokus, dan dukungan offline. Tanpa akun. Mobile-first.",
@@ -288,6 +288,86 @@
     "stopped": "Berhenti mengulang kata",
     "unavailableAyah": "Ulang kata belum tersedia untuk ayat ini.",
     "loadFailed": "Data waktu kata belum bisa dimuat. Periksa koneksi lalu coba lagi.",
-    "playFailed": "Audio tidak bisa diputar."
+    "playFailed": "Audio tidak bisa diputar.",
+    "hintTitle": "Tips: Ulang Kata",
+    "hintBody": "Ketuk satu kata untuk mengulangnya terus, atau tekan lama lalu seret untuk beberapa kata.",
+    "hintDismiss": "Mengerti",
+    "hintHelpLink": "Cara Pakai",
+    "stopHint": "Ketuk kata lagi untuk berhenti"
+  },
+  "help": {
+    "title": "Cara Pakai",
+    "navLink": "Cara Pakai",
+    "intro": "Ringkasan fitur hafalan HanQuran dan cara memakainya.",
+    "sections": {
+      "repeat": {
+        "title": "Pengulangan",
+        "items": [
+          "Pilih jumlah pengulangan (1×–tanpa batas) di tombol kiri bawah pemutar audio.",
+          "Ketuk ikon roda gigi di sebelahnya untuk memilih target: ayat aktif, rentang ayat, atau seluruh surat.",
+          "Angka seperti 2/5 di pemutar menunjukkan pengulangan yang sedang berjalan."
+        ]
+      },
+      "wordLoop": {
+        "title": "Ulang Kata",
+        "items": [
+          "Ketuk satu kata pada ayat aktif — kata itu diulang terus.",
+          "Tekan lama kata (±½ detik) lalu seret ke kata lain untuk mengulang beberapa kata. Di komputer: tekan lalu seret dengan mouse, atau Shift + klik kata kedua.",
+          "Ketuk kata itu lagi, tombol Berhenti, atau Esc untuk berhenti.",
+          "Atur Jeda Menirukan (0–3 detik) di Pengaturan → Pemutaran.",
+          "Tersedia untuk qari bertanda \"Sorot kata\" di Pengaturan."
+        ]
+      },
+      "wordHighlight": {
+        "title": "Sorot Kata",
+        "items": [
+          "Kata yang sedang dibaca qari disorot hijau pada ayat aktif.",
+          "Tersedia untuk 12 qari bertanda \"Sorot kata\"; bisa dimatikan di Pengaturan → Pemutaran."
+        ]
+      },
+      "speed": {
+        "title": "Kecepatan Putar",
+        "items": [
+          "Ketuk tombol 1× di ujung kanan bilah progres audio.",
+          "Pilih 0,5× atau 0,75× untuk menirukan bacaan, 1,25× atau 1,5× untuk murojaah. Nada suara tidak berubah."
+        ]
+      },
+      "murotal": {
+        "title": "Mode Murotal",
+        "items": [
+          "Nyalakan di Pengaturan → Pemutaran agar tilawah berlanjut ke ayat dan surat berikutnya sampai dihentikan."
+        ]
+      },
+      "focus": {
+        "title": "Mode Fokus",
+        "items": [
+          "Ketuk tombol Fokus di halaman surat untuk menampilkan satu ayat per layar.",
+          "Gunakan ⏮ / ⏭ untuk berpindah ayat; pengulangan, sorot kata, dan Ulang Kata tetap tersedia."
+        ]
+      },
+      "continue": {
+        "title": "Lanjutkan Hafalan",
+        "items": [
+          "Posisi terakhir disimpan saat Anda memutar audio atau mengetuk ayat — kartu Lanjutkan Hafalan di Beranda membawa Anda kembali ke sana.",
+          "Tandai surat favorit dengan ikon hati; lihat lewat filter Favorit di Beranda."
+        ]
+      },
+      "offline": {
+        "title": "Offline",
+        "items": [
+          "Teks Al-Qur'an, terjemahan, dan transliterasi selalu tersedia tanpa internet.",
+          "Untuk audio offline, ketuk Simpan Offline di halaman surat (per surat dan per qari).",
+          "Unduh Audio Otomatis di Pengaturan menyimpan ayat yang Anda putar."
+        ]
+      },
+      "keyboard": {
+        "title": "Pintasan Keyboard",
+        "items": [
+          "Mode Fokus: ← / → pindah ayat, Spasi putar atau jeda.",
+          "Kartu ayat: Tab lalu Enter untuk memilih ayat.",
+          "Kata pada ayat aktif: Enter = ulang kata, Shift + Enter = perluas rentang, ← / → pindah kata, Esc = berhenti mengulang."
+        ]
+      }
+    }
   }
 }

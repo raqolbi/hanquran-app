@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { X } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import { WordLoopHint } from '@/components/word-loop-hint';
 import { WordLoopStatus } from '@/components/word-loop-status';
 import { AudioPlayer } from '@/components/audio-player';
 import { RepeatSelector } from '@/components/repeat-selector';
@@ -251,6 +252,11 @@ function FocusModeLoaded({
       />
 
       <WordLoopStatus surahId={surah.number} bottomOffset={audioChromeHeight} />
+      <WordLoopHint
+        surahId={surah.number}
+        available={!!wordLoop}
+        bottomOffset={audioChromeHeight}
+      />
 
       {quranCompleteNotice ? (
         <p

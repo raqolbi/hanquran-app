@@ -125,6 +125,7 @@ Pratinjau antarmuka HanQuran — mobile-first, UI Bahasa Indonesia (diambil dari
 | **Ulang Kata** | Ketuk kata di ayat aktif → diulang terus; tekan lama lalu seret → ulang rentang kata; jeda menirukan 0–3 dtk |
 | **Mode Fokus** | Satu ayat per layar, navigasi ayat (juga ← / → dan Spasi di keyboard), audio & repeat, sorot kata, ulang kata |
 | **Pengaturan** | Bahasa UI, qari, Ikuti Ayat yang Diputar, Sorot Kata, Jeda Menirukan, Mode Murotal, Unduh Audio Otomatis, ukuran teks Arab, kontras tinggi, animasi, status & hapus audio tersimpan |
+| **Cara Pakai** | Halaman petunjuk di Pengaturan + petunjuk sekali tampil untuk Ulang Kata |
 | **Bahasa** | UI Bahasa Indonesia & English; terjemahan ayat mengikuti bahasa |
 | **Tentang HanQuran** | Informasi aplikasi, filosofi, credits, repository & lisensi |
 | **Offline** | Seluruh teks Al-Qur'an tersedia offline; **Simpan Offline** audio per surat + qari; opsi Unduh Audio Otomatis |
@@ -152,6 +153,7 @@ Pratinjau antarmuka HanQuran — mobile-first, UI Bahasa Indonesia (diambil dari
 | `/surah/[id]` | Detail surat (`?ayah=` opsional) |
 | `/focus/[id]` | Mode fokus (`?ayah=` opsional) |
 | `/settings` | Pengaturan |
+| `/settings/help` | Cara Pakai |
 | `/settings/about` | Tentang HanQuran |
 
 Spesifikasi lengkap: [`docs/14-routing-spec.md`](./docs/14-routing-spec.md).

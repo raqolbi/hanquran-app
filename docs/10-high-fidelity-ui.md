@@ -627,6 +627,7 @@ Offline & Penyimpanan
 ↓
 Aksesibilitas
 ↓
+Cara Pakai  →  `/settings/help`
 Tentang HanQuran  →  `/settings/about`
 ```
 

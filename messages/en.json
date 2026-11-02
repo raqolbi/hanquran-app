@@ -169,7 +169,7 @@
   "about": {
     "title": "About HanQuran",
     "navLink": "About HanQuran",
-    "navAriaLabel": "App information",
+    "navAriaLabel": "Help and app information",
     "app": {
       "sectionTitle": "App Information",
       "description": "Quran memorization platform — per-verse audio, repeat, Murotal mode, lock screen controls, focus mode, and offline support. No account required. Mobile-first.",
@@ -288,6 +288,86 @@
     "stopped": "Stopped repeating words",
     "unavailableAyah": "Word repeat is not available for this verse yet.",
     "loadFailed": "Word timing data could not be loaded. Check your connection and try again.",
-    "playFailed": "Audio could not be played."
+    "playFailed": "Audio could not be played.",
+    "hintTitle": "Tip: Word Repeat",
+    "hintBody": "Tap a word to repeat it continuously, or long-press and drag to select several words.",
+    "hintDismiss": "Got it",
+    "hintHelpLink": "How to Use",
+    "stopHint": "Tap the word again to stop"
+  },
+  "help": {
+    "title": "How to Use",
+    "navLink": "How to Use",
+    "intro": "A quick overview of HanQuran's memorization features and how to use them.",
+    "sections": {
+      "repeat": {
+        "title": "Repeat",
+        "items": [
+          "Pick a repeat count (1×–unlimited) with the button at the bottom left of the audio player.",
+          "Tap the gear icon next to it to choose the target: active verse, verse range, or the whole surah.",
+          "A number like 2/5 in the player shows the current repetition."
+        ]
+      },
+      "wordLoop": {
+        "title": "Word Repeat",
+        "items": [
+          "Tap a word in the active verse — that word repeats continuously.",
+          "Long-press a word (about ½ second), then drag to another word to repeat several words. On a computer: press and drag with the mouse, or Shift + click the second word.",
+          "Tap the word again, press Stop, or press Esc to stop.",
+          "Set the Imitation Pause (0–3 seconds) in Settings → Playback.",
+          "Available for reciters marked \"Word highlight\" in Settings."
+        ]
+      },
+      "wordHighlight": {
+        "title": "Word Highlight",
+        "items": [
+          "The word being recited is highlighted green in the active verse.",
+          "Available for 12 reciters marked \"Word highlight\"; can be turned off in Settings → Playback."
+        ]
+      },
+      "speed": {
+        "title": "Playback Speed",
+        "items": [
+          "Tap the 1× button at the right end of the audio progress bar.",
+          "Choose 0.5× or 0.75× to imitate the recitation, 1.25× or 1.5× for review. Pitch stays the same."
+        ]
+      },
+      "murotal": {
+        "title": "Murotal Mode",
+        "items": [
+          "Turn it on in Settings → Playback so recitation continues to the next verse and surah until you stop."
+        ]
+      },
+      "focus": {
+        "title": "Focus Mode",
+        "items": [
+          "Tap Focus on a surah page to show one verse per screen.",
+          "Use ⏮ / ⏭ to move between verses; repeat, word highlight, and word repeat remain available."
+        ]
+      },
+      "continue": {
+        "title": "Continue Memorizing",
+        "items": [
+          "Your last position is saved when you play audio or tap a verse — the Continue card on Home takes you back.",
+          "Mark favorite surahs with the heart icon; see them with the Favorites filter on Home."
+        ]
+      },
+      "offline": {
+        "title": "Offline",
+        "items": [
+          "Quran text, translation, and transliteration are always available without internet.",
+          "For offline audio, tap Save Offline on a surah page (per surah and per reciter).",
+          "Auto Download Audio in Settings saves the verses you play."
+        ]
+      },
+      "keyboard": {
+        "title": "Keyboard Shortcuts",
+        "items": [
+          "Focus Mode: ← / → change verse, Space play or pause.",
+          "Verse cards: Tab then Enter to select a verse.",
+          "Words in the active verse: Enter = repeat word, Shift + Enter = extend range, ← / → move between words, Esc = stop repeating."
+        ]
+      }
+    }
   }
 }

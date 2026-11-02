@@ -60,6 +60,7 @@ export const routes = {
   home: (): string => '/',
   settings: (): string => applyPlatformHref('/settings'),
   settingsAbout: (): string => applyPlatformHref('/settings/about'),
+  settingsHelp: (): string => applyPlatformHref('/settings/help'),
   surah: buildSurahHref,
   focus: buildFocusHref,
 } as const;

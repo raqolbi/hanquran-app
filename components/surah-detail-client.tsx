@@ -11,6 +11,7 @@ import { motion } from 'motion/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
+import { WordLoopHint } from '@/components/word-loop-hint';
 import { WordLoopStatus } from '@/components/word-loop-status';
 import { AyahCard } from '@/components/ayah-card';
 import { AudioPlayer } from '@/components/audio-player';
@@ -323,6 +324,11 @@ function SurahDetailView({
       />
 
       <WordLoopStatus surahId={surah.number} bottomOffset={audioChromeHeight} />
+      <WordLoopHint
+        surahId={surah.number}
+        available={!!wordLoop}
+        bottomOffset={audioChromeHeight}
+      />
 
       {quranCompleteNotice ? (
         <p

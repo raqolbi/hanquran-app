@@ -277,7 +277,7 @@ Repeat / fokus hafalan
 - High contrast mode
 - Cache management trigger
 - Settings screen state
-- Navigasi ke layar Tentang HanQuran (`/settings/about`)
+- Navigasi ke layar Cara Pakai (`/settings/help`) dan Tentang HanQuran (`/settings/about`)
 
 > Toggle terjemahan dan transliterasi **bukan** bagian Settings module — dikelola di `VerseDisplayControls` (`docs/22-verse-display-controls.md`).  
 > Spesifikasi Playback: `docs/28-playback-settings.md`, `docs/29-murotal-mode-spec.md`.
@@ -286,6 +286,7 @@ Repeat / fokus hafalan
 
 - `SettingsPage`
 - `AboutPage` (`app/settings/about/page.tsx`)
+- `HelpPage` (`app/settings/help/page.tsx`) — Cara Pakai
 - `FontSizeSetting`
 - `LanguageSetting`
 - `ContrastSetting`

@@ -64,6 +64,7 @@ const LOCALE_OPTIONS: ReadonlyArray<SegmentedOption<AppLocale>> = [
 export default function SettingsPage() {
   const t = useTranslations('settings');
   const tAbout = useTranslations('about');
+  const tHelp = useTranslations('help');
   const tCommon = useTranslations('common');
   const appLocale = useUserStore((s) => s.settings.appLocale);
   const reciterId = useUserStore((s) => s.settings.reciterId);
@@ -446,7 +447,14 @@ export default function SettingsPage() {
           </div>
         </SettingsSection>
 
-        <nav aria-label={tAbout('navAriaLabel')}>
+        <nav aria-label={tAbout('navAriaLabel')} className="space-y-3">
+          <NativeAwareLink
+            href={routes.settingsHelp()}
+            className="flex h-14 w-full items-center justify-between rounded-2xl border border-border bg-white px-4 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <span>{tHelp('navLink')}</span>
+            <ChevronRight size={20} className="text-muted-foreground" aria-hidden />
+          </NativeAwareLink>
           <NativeAwareLink
             href={routes.settingsAbout()}
             className="flex h-14 w-full items-center justify-between rounded-2xl border border-border bg-white px-4 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"

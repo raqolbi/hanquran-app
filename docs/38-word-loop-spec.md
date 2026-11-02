@@ -191,6 +191,7 @@ Tambahkan ke `docs/analytics.md` saat implementasi.
 - **Keyboard:** satu tab stop per ayat (roving tabindex — kata yang diulang atau kata pertama); ←/→ memindah fokus antar-kata (RTL: ← = kata berikutnya), Home/End ke kata pertama/terakhir. Di Mode Fokus, panah pada kata tidak memindah ayat.
 - **Status audio sebagai acuan:** Play/Pause saat Ulang Kata aktif mengikuti status audio sebenarnya; bila pengguna menjeda saat audio masih dimuat, mode tetap aktif dengan status "dijeda" (bukan berhenti). Mode baru berhenti sendiri bila pemutaran gagal dengan error.
 - **Chip tidak menutupi kata:** saat Ulang Kata aktif, ruang bawah halaman (spacer, auto follow, padding Mode Fokus) bertambah `WORD_LOOP_CHIP_SPACE` (56 px), dan bila kata yang diulang tertutup chip, halaman digulir sedikit.
+- **Petunjuk sekali tampil (`WordLoopHint`):** saat audio pertama kali diputar dengan qari yang mendukung (jeda 1,5 dtk), kartu kecil di atas pemutar menjelaskan ketuk/seret, dengan tombol **Mengerti** dan tautan **Cara Pakai** (`/settings/help`). Hilang selamanya setelah Mengerti atau begitu Ulang Kata dipakai. Pada Ulang Kata pertama, chip menambah baris "Ketuk kata lagi untuk berhenti" sampai pengguna pertama kali berhenti. Status di localStorage `hanquran:hint-seen:*` (`lib/onboarding-hints.ts`); bila storage diblokir dianggap sudah dilihat.
 - **Seek butuh dukungan Range** dari sumber audio: CDN EveryAyah, Cache Storage SW (206 sejak P14-3), atau `blob:` offline. Sumber tanpa Range akan kembali ke 0 saat seek.
 
 ### 8.2 Hasil spike presisi (P15-1)

@@ -599,6 +599,7 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
   - Prioritas: P1
   - **Ringkasan:** prefetch ayat berikutnya via `<link rel="prefetch">` + `AudioPrefetchBuffer`; dipicu saat ganti ayat & setelah play
 
+- [x] [NEW] Halaman Cara Pakai (`/settings/help`) + petunjuk sekali tampil Ulang Kata (`WordLoopHint`) — 2 Nov 2026
 - [x] [UPDATE] Tambah kontrol kecepatan putar (0.5×, 0.75×, 1×, 1.25×, 1.5×) — 2 Nov 2026: `PlaybackRateSelect` di baris progres audio, persist `settings.playbackRate`, patch ExoPlayer `setRate` (Android streaming)
   - Tujuan: Memungkinkan pengguna mengatur kecepatan audio
   - File: `components/audio-player.tsx`, `stores/audioStore.ts`

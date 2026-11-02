@@ -50,6 +50,12 @@ Semua penjelasan menggunakan Bahasa Indonesia dan mengikuti implementasi saat in
    - Tujuan: Menampilkan informasi resmi aplikasi — nama, versi, deskripsi, tujuan & filosofi, credits, repository & lisensi.
    - Komponen utama: `AboutPage`, `SettingsSection`, metadata dari `lib/app-about.ts`, credits dari `data/about-credits.ts`.
    - Aksi pengguna: Baca informasi aplikasi, buka tautan eksternal (repository, sumber audio), kembali ke Pengaturan.
+
+6. URL: `/settings/help`
+   - Nama halaman: Cara Pakai
+   - Tujuan: Ringkasan cara memakai fitur hafalan — Pengulangan, Ulang Kata, Sorot Kata, Kecepatan Putar, Mode Murotal, Mode Fokus, Lanjutkan Hafalan, Offline, Pintasan Keyboard.
+   - Komponen utama: `HelpPage`, `SettingsSubpageHeader`; teks di `messages/*.json` → `help.sections`.
+   - Aksi pengguna: Baca petunjuk, kembali ke Pengaturan. Juga dibuka dari petunjuk sekali tampil Ulang Kata (`WordLoopHint`).
    - Spesifikasi: `docs/26-about-screen-spec.md`.
 
 ---
@@ -93,6 +99,7 @@ flowchart TB
   B --> C[Focus Mode (/focus/[id])]
   A --> D[Settings (/settings)]
   D --> H[About (/settings/about)]
+  D --> I[Cara Pakai (/settings/help)]
 ```
 
 ---
@@ -127,8 +134,9 @@ sequenceDiagram
 | `SurahDetail` | Buka Repeat Settings | dialog lokal | `RepeatSettingsDialog` (Dialog/Drawer) |
 | `FocusMode` | Keluar | `/surah/[id]?ayah=` | router.push(routes.surah(...)) |
 | Global/Header | Pengaturan | `/settings` | Link dari `Header` (ikon) |
+| `Settings` | Cara Pakai | `/settings/help` | Baris navigasi di bagian bawah Pengaturan (di atas Tentang) |
 | `Settings` | Tentang HanQuran | `/settings/about` | Baris navigasi di bagian bawah Pengaturan |
-| `About` | Kembali | `/settings` | `router.back()` bila ada riwayat, selain itu ke `/settings` |
+| `About` / `Help` | Kembali | `/settings` | `router.back()` bila ada riwayat, selain itu ke `/settings` |
 
 ---
 
@@ -149,6 +157,7 @@ sequenceDiagram
 - `app/focus/[id]/page.tsx` — Focus Mode
 - `app/settings/page.tsx` — Settings
 - `app/settings/about/page.tsx` — Tentang HanQuran
+- `app/settings/help/page.tsx` — Cara Pakai
 - `lib/routes.ts` — route helpers (`toStaticExportHref`, `parseSurahIdFromPathname`)
 - `lib/navigate.ts` — navigasi aman Android (hard navigation ke `.html`)
 - `lib/ayah-param.ts` — validasi `?ayah`
