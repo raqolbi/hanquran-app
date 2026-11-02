@@ -1,5 +1,6 @@
 'use client';
 
+import { Fragment } from 'react';
 import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
 
@@ -11,6 +12,13 @@ import {
   APP_NAME,
   QOLCORE_URL,
 } from '@/lib/app-about';
+
+const socialLinks = [
+  { key: 'threads', href: APP_AUTHOR_THREADS_URL },
+  { key: 'x', href: APP_AUTHOR_X_URL },
+].filter((link): link is { key: 'threads' | 'x'; href: string } =>
+  Boolean(link.href),
+);
 
 const linkClassName =
   'font-medium text-primary underline-offset-4 transition-colors hover:text-primary/80 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm';
@@ -38,56 +46,61 @@ export function HomeFooter() {
           <Logo size={28} alt="" />
           <p className="text-sm font-semibold tracking-tight text-foreground">{APP_NAME}</p>
 
-          <p className="text-xs text-muted-foreground">
-            {t.rich('madeBy', {
-              name: APP_AUTHOR_NAME,
-              author: (chunks) => (
-                <span className="font-medium text-foreground">{chunks}</span>
-              ),
-            })}
-          </p>
+          {/* Tiap bagian hanya dirender bila nilainya ada — env yang
+              dikosongkan menyembunyikan elemen terkait (docs/26 §4.5). */}
+          {APP_AUTHOR_NAME ? (
+            <p className="text-xs text-muted-foreground">
+              {t.rich('madeBy', {
+                name: APP_AUTHOR_NAME,
+                author: (chunks) => (
+                  <span className="font-medium text-foreground">{chunks}</span>
+                ),
+              })}
+            </p>
+          ) : null}
 
-          <nav aria-label={t('socialAriaLabel')}>
-            <div className="flex items-center justify-center gap-2 text-xs">
-              <a
-                href={APP_AUTHOR_THREADS_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={linkClassName}
-              >
-                {t('threads')}
-                <span className="sr-only">{tAbout('opensInNewTab')}</span>
-              </a>
-              <span aria-hidden className="text-muted-foreground/40">
-                ·
-              </span>
-              <a
-                href={APP_AUTHOR_X_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={linkClassName}
-              >
-                {t('x')}
-                <span className="sr-only">{tAbout('opensInNewTab')}</span>
-              </a>
-            </div>
-          </nav>
+          {socialLinks.length > 0 ? (
+            <nav aria-label={t('socialAriaLabel')}>
+              <div className="flex items-center justify-center gap-2 text-xs">
+                {socialLinks.map((link, index) => (
+                  <Fragment key={link.key}>
+                    {index > 0 ? (
+                      <span aria-hidden className="text-muted-foreground/40">
+                        ·
+                      </span>
+                    ) : null}
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={linkClassName}
+                    >
+                      {t(link.key)}
+                      <span className="sr-only">{tAbout('opensInNewTab')}</span>
+                    </a>
+                  </Fragment>
+                ))}
+              </div>
+            </nav>
+          ) : null}
 
-          <p className="text-[11px] leading-relaxed text-muted-foreground">
-            {t.rich('fromQolcore', {
-              company: (chunks) => (
-                <a
-                  href={QOLCORE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={linkClassName}
-                >
-                  {chunks}
-                  <span className="sr-only">{tAbout('opensInNewTab')}</span>
-                </a>
-              ),
-            })}
-          </p>
+          {QOLCORE_URL ? (
+            <p className="text-[11px] leading-relaxed text-muted-foreground">
+              {t.rich('fromQolcore', {
+                company: (chunks) => (
+                  <a
+                    href={QOLCORE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={linkClassName}
+                  >
+                    {chunks}
+                    <span className="sr-only">{tAbout('opensInNewTab')}</span>
+                  </a>
+                ),
+              })}
+            </p>
+          ) : null}
         </div>
       </div>
     </motion.footer>

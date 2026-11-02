@@ -14,7 +14,7 @@
 importScripts('/sw-helpers.js');
 importScripts('/sw-precache-manifest.js');
 
-const SW_VERSION = 'v3';
+const SW_VERSION = 'v4';
 const CACHE_STATIC = 'hanquran-static-v2';
 const CACHE_SHELL = 'hanquran-shell-v2';
 // v3: invalidate salinan dataset lama (cache-first) setelah update konten.
@@ -258,7 +258,23 @@ self.addEventListener('message', (event) => {
     const { requestId, surahId, urls } = data;
     if (!requestId || !surahId || !Array.isArray(urls)) return;
 
-    void prefetchSurahAudio(event, { requestId, surahId, urls });
+    // Hanya URL audio CDN yang dikenal — SW tidak boleh dipakai mengunduh
+    // & menyimpan URL sembarang ke cache.
+    const audioUrls = urls.filter(isAllowedAudioUrl);
+    if (audioUrls.length !== urls.length) {
+      postDownloadMessage(event, {
+        type: 'download-failed',
+        requestId,
+        surahId,
+        reason: 'unknown',
+        message: 'URL audio tidak diizinkan',
+      });
+      return;
+    }
+
+    // `waitUntil` menjaga SW tetap hidup sampai unduhan selesai; tanpa ini
+    // browser boleh menghentikan SW "idle" di tengah unduhan surat panjang.
+    keepAlive(event, prefetchSurahAudio(event, { requestId, surahId, urls: audioUrls }));
     return;
   }
 
@@ -266,23 +282,61 @@ self.addEventListener('message', (event) => {
     const { surahId, dataUrls, routeUrls } = data;
     if (!surahId || !Array.isArray(dataUrls) || !Array.isArray(routeUrls)) return;
 
-    void cacheSurahOfflineContent({ dataUrls, routeUrls });
+    keepAlive(
+      event,
+      cacheSurahOfflineContent({
+        dataUrls: dataUrls.filter(isSameOriginPath),
+        routeUrls: routeUrls.filter(isSameOriginPath),
+      }),
+    );
     return;
   }
 
   if (data.type === 'cache-offline-batch') {
     const { requestId, dataUrls, routeUrls } = data;
-    const data2 = Array.isArray(dataUrls) ? dataUrls : [];
-    const routes2 = Array.isArray(routeUrls) ? routeUrls : [];
+    const data2 = (Array.isArray(dataUrls) ? dataUrls : []).filter(isSameOriginPath);
+    const routes2 = (Array.isArray(routeUrls) ? routeUrls : []).filter(isSameOriginPath);
 
-    void (async () => {
-      await cacheSurahOfflineContent({ dataUrls: data2, routeUrls: routes2 });
-      if (requestId) {
-        postDownloadMessage(event, { type: 'cache-offline-batch-done', requestId });
-      }
-    })();
+    keepAlive(
+      event,
+      (async () => {
+        await cacheSurahOfflineContent({ dataUrls: data2, routeUrls: routes2 });
+        if (requestId) {
+          postDownloadMessage(event, { type: 'cache-offline-batch-done', requestId });
+        }
+      })(),
+    );
   }
 });
+
+/** Perpanjang umur SW selama `promise` berjalan (ExtendableMessageEvent). */
+function keepAlive(event, promise) {
+  const guarded = Promise.resolve(promise).catch((error) => {
+    console.warn('[HanQuran SW] Tugas pesan gagal:', error);
+  });
+  if (typeof event.waitUntil === 'function') {
+    event.waitUntil(guarded);
+  }
+}
+
+function isAllowedAudioUrl(raw) {
+  if (typeof raw !== 'string') return false;
+  try {
+    return getRequestCategory(new URL(raw), self.location.origin) === 'audio';
+  } catch {
+    return false;
+  }
+}
+
+/** Path data/route harus tetap di origin aplikasi. */
+function isSameOriginPath(raw) {
+  if (typeof raw !== 'string') return false;
+  try {
+    return new URL(raw, self.location.origin).origin === self.location.origin;
+  } catch {
+    return false;
+  }
+}
 
 const DOWNLOAD_CONCURRENCY = 3;
 const PRECACHE_CONCURRENCY = 6;

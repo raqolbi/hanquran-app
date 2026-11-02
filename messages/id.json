@@ -154,6 +154,10 @@
       "smoothAnimation": "Animasi halus",
       "smoothAnimationDescription": "Matikan untuk mengurangi gerakan pada layar.",
       "smoothAnimationAriaLabel": "Aktifkan animasi halus"
+    },
+    "storage": {
+      "unavailableTitle": "Data tidak dapat disimpan",
+      "unavailableBody": "Browser ini tidak mengizinkan penyimpanan data (mungkin mode privat atau penyimpanan diblokir). Favorit, posisi baca, dan pengaturan hanya berlaku sampai halaman ditutup."
     }
   },
   "about": {
@@ -261,7 +265,7 @@
   },
   "threadsGate": {
     "title": "Dukung HanQuran",
-    "body": "Ikuti @cenybug di Threads untuk melanjutkan ke HanQuran.",
+    "body": "Ikuti {handle} di Threads untuk melanjutkan ke HanQuran.",
     "openThreads": "Buka Threads",
     "continue": "Lanjut",
     "openFailedHint": "Jika Threads tidak terbuka, ketuk Lanjut."

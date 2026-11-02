@@ -12,7 +12,7 @@ const gateState = vi.hoisted(() => ({
   showOverlay: true,
   isContinueEnabled: false,
   showOpenFailedHint: false,
-  threadsUrl: 'https://www.threads.com/@cenybug',
+  threadsUrl: 'https://www.threads.com/@qolcore',
   openThreads: vi.fn(),
   continueToApp: vi.fn(),
 }));

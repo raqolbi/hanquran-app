@@ -105,3 +105,21 @@ describe('buildThreadsGateInitScript', () => {
     expect(window.localStorage.getItem(THREADS_GATE_STORAGE_KEY)).toBe(before);
   });
 });
+
+describe('completeThreadsGate — storage diblokir', () => {
+  it('tidak melempar error dan mengembalikan false', async () => {
+    const { completeThreadsGate: complete } = await import('@/lib/threads-gate');
+    const { vi } = await import('vitest');
+    const spy = vi
+      .spyOn(Object.getPrototypeOf(window.localStorage), 'setItem')
+      .mockImplementation(() => {
+        throw new DOMException('blocked', 'SecurityError');
+      });
+    try {
+      expect(() => complete()).not.toThrow();
+      expect(complete()).toBe(false);
+    } finally {
+      spy.mockRestore();
+    }
+  });
+});

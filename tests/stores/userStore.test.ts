@@ -69,6 +69,61 @@ describe('useUserStore — reciterId', () => {
     );
   });
 
+  it('melengkapi SEMUA field yang hilang pada settings lama sekaligus', async () => {
+    // @ts-expect-error — bentuk legacy tanpa beberapa field sekaligus
+    await db.settings.put({
+      id: 'default',
+      appLocale: 'id',
+      fontSize: 40,
+      translationVisible: false,
+      contrastMode: 'default',
+      smoothAnimation: true,
+      reciterId: getDefaultReciterId(),
+      translationResourceId: 33,
+      updatedAt: 1,
+    });
+
+    await useUserStore.getState().init();
+
+    const { settings } = useUserStore.getState();
+    expect(settings.transliterationVisible).toBe(false);
+    expect(settings.autoFollowPlayback).toBe(true);
+    expect(settings.murotalEnabled).toBe(false);
+    expect(settings.autoDownloadOnPlay).toBe(false);
+
+    const stored = await db.settings.get('default');
+    expect(stored?.autoFollowPlayback).toBe(true);
+    expect(stored).not.toHaveProperty('qariId');
+  });
+
+  it('degraded mode: Dexie gagal → tetap berfungsi di memori', async () => {
+    const { vi } = await import('vitest');
+    const spy = vi
+      .spyOn(db.settings, 'get')
+      .mockRejectedValue(new Error('IndexedDB diblokir'));
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const putSpy = vi.spyOn(db.favorites, 'put');
+    useUserStore.setState({ persistenceAvailable: true });
+
+    try {
+      await useUserStore.getState().init();
+      expect(useUserStore.getState().initialized).toBe(true);
+      expect(useUserStore.getState().persistenceAvailable).toBe(false);
+
+      await useUserStore.getState().toggleFavorite(5);
+      expect(useUserStore.getState().favorites).toEqual([5]);
+      expect(putSpy).not.toHaveBeenCalled();
+
+      await useUserStore.getState().updateSettings({ fontSize: 48 });
+      expect(useUserStore.getState().settings.fontSize).toBe(48);
+    } finally {
+      spy.mockRestore();
+      errorSpy.mockRestore();
+      putSpy.mockRestore();
+      useUserStore.setState({ persistenceAvailable: true });
+    }
+  });
+
   it('menyimpan fontSize ke Dexie', async () => {
     await useUserStore.getState().init();
     await useUserStore.getState().updateSettings({ fontSize: 48 });

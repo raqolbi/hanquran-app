@@ -5,11 +5,14 @@ import { useEffect, useId, useRef } from 'react';
 import { LocaleText } from '@/components/shared/locale-text';
 import { Logo } from '@/components/shared/Logo';
 import { useThreadsGate } from '@/hooks/use-threads-gate';
+import { APP_AUTHOR_THREADS_HANDLE } from '@/lib/app-about';
 import { getLocalePair } from '@/lib/locale-text';
 import { THREADS_GATE_COMPLETED_ATTRIBUTE } from '@/lib/threads-gate';
 
 const TITLE = getLocalePair('threadsGate', 'title');
-const BODY = getLocalePair('threadsGate', 'body');
+const BODY = getLocalePair('threadsGate', 'body', {
+  handle: APP_AUTHOR_THREADS_HANDLE,
+});
 const OPEN_THREADS = getLocalePair('threadsGate', 'openThreads');
 const CONTINUE = getLocalePair('threadsGate', 'continue');
 const OPEN_FAILED_HINT = getLocalePair('threadsGate', 'openFailedHint');

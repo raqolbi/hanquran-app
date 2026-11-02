@@ -154,6 +154,10 @@
       "smoothAnimation": "Smooth animations",
       "smoothAnimationDescription": "Turn off to reduce motion on screen.",
       "smoothAnimationAriaLabel": "Enable smooth animations"
+    },
+    "storage": {
+      "unavailableTitle": "Data can’t be saved",
+      "unavailableBody": "This browser doesn’t allow storing data (private mode or blocked storage). Favorites, reading position, and settings only last until the page is closed."
     }
   },
   "about": {
@@ -261,7 +265,7 @@
   },
   "threadsGate": {
     "title": "Support HanQuran",
-    "body": "Follow @cenybug on Threads to continue to HanQuran.",
+    "body": "Follow {handle} on Threads to continue to HanQuran.",
     "openThreads": "Open Threads",
     "continue": "Continue",
     "openFailedHint": "If Threads doesn’t open, tap Continue."

@@ -22,6 +22,9 @@ export interface UseThreadsGateResult {
   continueToApp: () => void;
 }
 
+/** Gate hanya aktif bila URL Threads tersedia (lihat `lib/app-about.ts`). */
+const THREADS_GATE_ENABLED = Boolean(APP_AUTHOR_THREADS_URL);
+
 function remainingDelayMs(clickedAt: number, now = Date.now()): number {
   return clickedAt + THREADS_GATE_CONTINUE_DELAY_MS - now;
 }
@@ -120,6 +123,8 @@ export function useThreadsGate(): UseThreadsGateResult {
       return;
     }
 
+    // Gagal simpan (storage diblokir) tidak boleh mengunci pengguna:
+    // overlay tetap ditutup untuk sesi ini.
     completeThreadsGate();
     clearTimer();
     setStatus('completed');
@@ -127,7 +132,8 @@ export function useThreadsGate(): UseThreadsGateResult {
 
   return {
     status,
-    showOverlay: status !== 'completed',
+    // Tanpa URL Threads (env dikosongkan) gate tidak punya tujuan → tidak tampil.
+    showOverlay: THREADS_GATE_ENABLED && status !== 'completed',
     isContinueEnabled: status === 'ready',
     showOpenFailedHint: status === 'ready' && openFailed,
     threadsUrl: APP_AUTHOR_THREADS_URL,

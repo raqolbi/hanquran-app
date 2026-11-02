@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { AudioPlayer } from '@/components/audio-player';
 import { RepeatSelector } from '@/components/repeat-selector';
 import { RepeatSettingsDialog } from '@/components/repeat-settings-dialog';
+import { parseAyahParam, clampAyahNumber } from '@/lib/ayah-param';
 import { parseSurahIdFromPathname, routes } from '@/lib/routes';
 import { navigateApp } from '@/lib/navigate';
 import { useArabicTextSize } from '@/hooks/use-arabic-text-size';
@@ -23,6 +24,7 @@ import { useTrackSurahOpened } from '@/hooks/use-track-surah-opened';
 import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
 import type { SurahData } from '@/services/quran';
 import type { AppLocale } from '@/types';
+import { quranFont } from '@/lib/quran-font';
 
 interface FocusModePageProps {
   params: Promise<{ id: string }>;
@@ -48,8 +50,8 @@ function FocusModeLoaded({
   const { focusArabicStyle } = useArabicTextSize();
   const reciterId = usePreferredReciterId();
 
-  const [activeAyah, setActiveAyah] = useState(
-    Math.min(Math.max(startAyah, 1), surah.ayahs.length),
+  const [activeAyah, setActiveAyah] = useState(() =>
+    clampAyahNumber(startAyah, surah.ayahs.length),
   );
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [quranCompleteNotice, setQuranCompleteNotice] = useState(false);
@@ -91,7 +93,7 @@ function FocusModeLoaded({
   });
 
   useEffect(() => {
-    setActiveAyah(Math.min(Math.max(startAyah, 1), surah.ayahs.length));
+    setActiveAyah(clampAyahNumber(startAyah, surah.ayahs.length));
   }, [startAyah, surah.ayahs.length]);
 
   const currentAyah = useMemo(
@@ -152,7 +154,7 @@ function FocusModeLoaded({
           >
             <p
               dir="rtl"
-              className="font-serif text-foreground"
+              className={`${quranFont.className} text-foreground`}
               style={focusArabicStyle}
             >
               {currentAyah.arabic}
@@ -238,7 +240,8 @@ export default function FocusModePage({ params }: FocusModePageProps) {
   const resolvedParams = React.use(params);
   const surahId = parseSurahIdFromPathname(pathname) || resolvedParams.id;
   const searchParams = useSearchParams();
-  const startAyah = parseInt(searchParams.get('ayah') ?? '1', 10);
+  // Input URL tak tepercaya — `?ayah=abc` dulu menghasilkan NaN (docs/35 §9 H1).
+  const startAyah = parseAyahParam(searchParams.get('ayah'));
 
   const { surah, loading, error, retry, contentLocale } = useSurah(surahId);
 

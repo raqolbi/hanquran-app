@@ -33,23 +33,28 @@ export function HomeClient({ initialSurahs }: HomeClientProps) {
   const { surahs, loading, error, retry } = useSurahList(initialSurahs);
   const favorites = useUserStore((s) => s.favorites);
   const toggleFavorite = useUserStore((s) => s.toggleFavorite);
-  const isFavorite = useUserStore((s) => s.isFavorite);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
+
+  // Turunkan status favorit dari slice `favorites` yang di-subscribe, BUKAN
+  // dari `isFavorite()` — fungsi itu membaca `get()` (state live Dexie) saat
+  // hidrasi, sedangkan slice memakai `getInitialState()` (sama dengan SSR).
+  // Membaca state live saat hidrasi memicu hydration mismatch pada ikon hati.
+  const favoriteSet = useMemo(() => new Set(favorites), [favorites]);
 
   const filteredSurahs = useMemo(() => {
     return surahs.filter((surah) => {
       const matchesSearch = matchesSurahSearch(searchQuery, surah);
       const matchesFilter =
         selectedFilter === 'all' ||
-        (selectedFilter === 'favorites' && favorites.includes(surah.number));
+        (selectedFilter === 'favorites' && favoriteSet.has(surah.number));
       return matchesSearch && matchesFilter;
     });
-  }, [surahs, searchQuery, selectedFilter, favorites]);
+  }, [surahs, searchQuery, selectedFilter, favoriteSet]);
 
   const surahsWithFavorites = filteredSurahs.map((surah) => ({
     ...surah,
-    isFavorited: isFavorite(surah.number),
+    isFavorited: favoriteSet.has(surah.number),
   }));
 
   const emptyMessage =

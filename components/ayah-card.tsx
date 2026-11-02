@@ -10,6 +10,7 @@ import {
   SURAH_DETAIL_READING_CONTROLS_HEIGHT,
 } from '@/lib/surah-detail-chrome';
 import type { AppLocale } from '@/types';
+import { quranFont } from '@/lib/quran-font';
 
 interface AyahCardProps {
   number: number;
@@ -73,7 +74,7 @@ export function AyahCard({
 
       <div className="space-y-4">
         <p
-          className="font-serif text-foreground leading-relaxed text-center"
+          className={`${quranFont.className} text-foreground leading-relaxed text-center`}
           style={arabicStyle}
           dir="rtl"
         >

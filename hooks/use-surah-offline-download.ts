@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { getDownloadManager } from '@/services/download-manager';
 import { downloadManifestKey } from '@/services/download-manifest-key';
+import { useIsClient } from '@/hooks/use-is-client';
 import { useSurahOfflineReady } from '@/hooks/use-surah-offline-ready';
 import { routes } from '@/lib/routes';
 import { db } from '@/services/db/db';
@@ -113,7 +114,12 @@ export function useSurahOfflineDownload({
   const isDownloading = downloadStatus === 'downloading' || isSaving;
   const badgeStatus = toSurahBadgeStatus(downloadStatus);
   const isOnline = connectionStatus === 'online';
+  // `caches` tidak ada di server → tombol SSR selalu `disabled`. Cek baru
+  // dilakukan setelah hidrasi (`useIsClient`) agar render pertama klien sama
+  // dengan HTML server (hydration mismatch atribut `disabled`).
+  const isClient = useIsClient();
   const canSave =
+    isClient &&
     isOnline &&
     typeof caches !== 'undefined' &&
     !isOfflineReady &&

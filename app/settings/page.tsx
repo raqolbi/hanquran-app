@@ -53,6 +53,7 @@ import {
 
 import { useReciters } from '@/hooks/use-reciters';
 import { useIsClient } from '@/hooks/use-is-client';
+import { quranFont } from '@/lib/quran-font';
 
 const LOCALE_OPTIONS: ReadonlyArray<SegmentedOption<AppLocale>> = [
   { value: 'id', label: 'Bahasa Indonesia' },
@@ -67,6 +68,9 @@ export default function SettingsPage() {
   const reciterId = useUserStore((s) => s.settings.reciterId);
   const fontSize = useUserStore((s) => s.settings.fontSize);
   const updateSettings = useUserStore((s) => s.updateSettings);
+  const storageUnavailable = useUserStore(
+    (s) => s.initialized && !s.persistenceAvailable,
+  );
   const textSize = fontSizeToTextSize(fontSize);
 
   const { reciters } = useReciters();
@@ -183,6 +187,17 @@ export default function SettingsPage() {
       <SettingsHeader />
 
       <main className="mx-auto w-full max-w-2xl space-y-6 px-4 py-6 sm:px-6">
+        {storageUnavailable ? (
+          // Degraded mode (docs/15 §12.5): Dexie tidak dapat dibuka.
+          <div
+            role="status"
+            className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900"
+          >
+            <p className="font-semibold">{t('storage.unavailableTitle')}</p>
+            <p className="mt-1">{t('storage.unavailableBody')}</p>
+          </div>
+        ) : null}
+
         <SettingsSection
           title={t('language.title')}
           description={t('language.description')}
@@ -427,7 +442,7 @@ function TextSizePreview({ size }: TextSizePreviewProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
         dir="rtl"
-        className="text-center font-serif text-foreground"
+        className={`${quranFont.className} text-center text-foreground`}
         style={{ fontSize: ARABIC_TEXT_SIZE_PX[size], lineHeight: 1.9 }}
       >
         بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ

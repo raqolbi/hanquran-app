@@ -41,13 +41,26 @@ export function isThreadsGateCompleted(): boolean {
   }
 }
 
-export function completeThreadsGate(now = Date.now()): void {
+/**
+ * Simpan status selesai. Mengembalikan `false` bila storage tidak tersedia
+ * (mode privat / diblokir / kuota penuh) — pemanggil tetap harus menutup
+ * overlay agar pengguna tidak terkunci.
+ */
+export function completeThreadsGate(now = Date.now()): boolean {
   if (typeof window === 'undefined') {
-    return;
+    return false;
   }
 
   const record: CompletedRecord = { completedAt: now };
-  window.localStorage.setItem(THREADS_GATE_STORAGE_KEY, JSON.stringify(record));
+  try {
+    window.localStorage.setItem(
+      THREADS_GATE_STORAGE_KEY,
+      JSON.stringify(record),
+    );
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /** Untuk pengujian. */
@@ -56,7 +69,11 @@ export function clearThreadsGateCompletion(): void {
     return;
   }
 
-  window.localStorage.removeItem(THREADS_GATE_STORAGE_KEY);
+  try {
+    window.localStorage.removeItem(THREADS_GATE_STORAGE_KEY);
+  } catch {
+    // Storage tidak tersedia — tidak ada yang perlu dihapus.
+  }
 }
 
 /**

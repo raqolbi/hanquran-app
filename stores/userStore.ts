@@ -23,6 +23,13 @@ interface UserState {
   settings: SettingsRecord;
   lastViewed: { surahId: number; ayahNumber: number } | null;
   initialized: boolean;
+  /**
+   * `false` bila IndexedDB/Dexie tidak dapat dibuka (mode privat, diblokir,
+   * rusak) — **degraded mode** (docs/15 §12.5). Perubahan tetap berlaku di
+   * memori selama sesi, tetapi tidak disimpan; Pengaturan menampilkan
+   * pemberitahuan.
+   */
+  persistenceAvailable: boolean;
 }
 
 interface UserActions {
@@ -34,115 +41,130 @@ interface UserActions {
   setLastViewed: (surahId: number, ayahNumber: number) => Promise<void>;
 }
 
+/**
+ * Lengkapi field yang belum ada pada record `settings` lama.
+ *
+ * Sebelumnya memakai rantai `else if`, sehingga hanya SATU field hilang yang
+ * diperbaiki per init — pengguna lama yang kehilangan beberapa field
+ * (mis. `transliterationVisible` + `autoFollowPlayback`) tetap punya
+ * `undefined` dan fitur default-ON ikut mati.
+ */
+function normalizeStoredSettings(stored: SettingsRecord): {
+  settings: SettingsRecord;
+  changed: boolean;
+} {
+  const legacy = stored as SettingsRecord & { qariId?: number };
+  let changed = false;
+  const next: SettingsRecord & { qariId?: number } = { ...legacy };
+
+  // Pengguna lama tanpa `appLocale` sudah memakai UI bahasa Indonesia.
+  if (!next.appLocale) {
+    next.appLocale = 'id';
+    changed = true;
+  }
+
+  const defaultableKeys = [
+    'transliterationVisible',
+    'autoFollowPlayback',
+    'murotalEnabled',
+    'autoDownloadOnPlay',
+  ] as const;
+  for (const key of defaultableKeys) {
+    if (next[key] === undefined) {
+      next[key] = defaultSettings[key];
+      changed = true;
+    }
+  }
+
+  const reciterId = normalizeReciterId(next.reciterId);
+  if (reciterId !== next.reciterId) {
+    next.reciterId = reciterId;
+    changed = true;
+  }
+  if ('qariId' in next) {
+    delete next.qariId;
+    changed = true;
+  }
+
+  const fontSize = normalizeArabicFontSize(next.fontSize);
+  if (fontSize !== next.fontSize) {
+    next.fontSize = fontSize;
+    changed = true;
+  }
+
+  if (changed) {
+    next.updatedAt = Date.now();
+  }
+
+  return { settings: next, changed };
+}
+
 export const useUserStore = create<UserState & UserActions>()((set, get) => ({
   favorites: [],
   settings: defaultSettings,
   lastViewed: null,
   initialized: false,
+  persistenceAvailable: true,
 
   init: async () => {
-    const [storedSettings, favorites, lastRead] = await Promise.all([
-      db.settings.get('default'),
-      db.favorites.orderBy('createdAt').toArray(),
-      db.lastRead.get('last-read'),
-    ]);
+    try {
+      const [storedSettings, favorites, lastRead] = await Promise.all([
+        db.settings.get('default'),
+        db.favorites.orderBy('createdAt').toArray(),
+        db.lastRead.get('last-read'),
+      ]);
 
-    let settings = storedSettings ?? null;
-
-    if (!settings) {
-      settings = {
-        ...defaultSettings,
-        appLocale: detectAppLocale(),
-        updatedAt: Date.now(),
-      };
-      await db.settings.put(settings);
-    } else if (!settings.appLocale) {
-      settings = {
-        ...settings,
-        appLocale: 'id',
-        updatedAt: Date.now(),
-      };
-      await db.settings.put(settings);
-    } else if (settings.transliterationVisible === undefined) {
-      settings = {
-        ...settings,
-        transliterationVisible: false,
-        updatedAt: Date.now(),
-      };
-      await db.settings.put(settings);
-    } else if (settings.autoFollowPlayback === undefined) {
-      settings = {
-        ...settings,
-        autoFollowPlayback: true,
-        updatedAt: Date.now(),
-      };
-      await db.settings.put(settings);
-    } else if (settings.murotalEnabled === undefined) {
-      settings = {
-        ...settings,
-        murotalEnabled: false,
-        updatedAt: Date.now(),
-      };
-      await db.settings.put(settings);
-    } else if (settings.autoDownloadOnPlay === undefined) {
-      settings = {
-        ...settings,
-        autoDownloadOnPlay: false,
-        updatedAt: Date.now(),
-      };
-      await db.settings.put(settings);
-    }
-
-    const legacySettings = settings as SettingsRecord & { qariId?: number };
-    if (!settings.reciterId) {
-      settings = {
-        ...settings,
-        reciterId: normalizeReciterId(undefined),
-        updatedAt: Date.now(),
-      };
-      delete legacySettings.qariId;
-      await db.settings.put(settings);
-    } else {
-      const normalized = normalizeReciterId(settings.reciterId);
-      if (normalized !== settings.reciterId) {
+      let settings: SettingsRecord;
+      if (!storedSettings) {
         settings = {
-          ...settings,
-          reciterId: normalized,
+          ...defaultSettings,
+          appLocale: detectAppLocale(),
           updatedAt: Date.now(),
         };
         await db.settings.put(settings);
+      } else {
+        const { settings: normalized, changed } =
+          normalizeStoredSettings(storedSettings);
+        settings = normalized;
+        if (changed) {
+          await db.settings.put(settings);
+        }
       }
+
+      set({
+        settings,
+        favorites: favorites.map((f) => f.surahId),
+        lastViewed: lastRead
+          ? { surahId: lastRead.surahId, ayahNumber: lastRead.ayahNumber }
+          : null,
+        initialized: true,
+      });
+
+      // Segarkan cache pra-paint agar paint berikutnya memakai locale Dexie
+      // (docs/21 §5.6). Menutup kasus cache basi / pengguna lama tanpa cache.
+      writeCachedAppLocale(settings.appLocale);
+      // Terapkan atribut sebelum React render ulang, agar cache basi tidak
+      // menghasilkan satu frame campuran bahasa.
+      applyAppLocaleToDocument(settings.appLocale);
+    } catch (err) {
+      // IndexedDB tidak tersedia / rusak: jalan dengan default di memori
+      // agar UI tidak macet di status "belum siap" tanpa pesan.
+      console.error('[HanQuran] Gagal membaca data pengguna dari Dexie:', err);
+      set({ initialized: true, persistenceAvailable: false });
     }
-
-    const normalizedFontSize = normalizeArabicFontSize(settings.fontSize);
-    if (normalizedFontSize !== settings.fontSize) {
-      settings = {
-        ...settings,
-        fontSize: normalizedFontSize,
-        updatedAt: Date.now(),
-      };
-      await db.settings.put(settings);
-    }
-
-    set({
-      settings,
-      favorites: favorites.map((f) => f.surahId),
-      lastViewed: lastRead
-        ? { surahId: lastRead.surahId, ayahNumber: lastRead.ayahNumber }
-        : null,
-      initialized: true,
-    });
-
-    // Segarkan cache pra-paint agar paint berikutnya memakai locale Dexie
-    // (docs/21 §5.6). Menutup kasus cache basi / pengguna lama tanpa cache.
-    writeCachedAppLocale(settings.appLocale);
-    // Terapkan atribut sebelum React render ulang, agar cache basi tidak
-    // menghasilkan satu frame campuran bahasa.
-    applyAppLocaleToDocument(settings.appLocale);
   },
 
   toggleFavorite: async (surahId, options) => {
     const favorites = get().favorites;
+    if (!get().persistenceAvailable) {
+      // Degraded mode: tetap berfungsi di memori untuk sesi ini.
+      set({
+        favorites: favorites.includes(surahId)
+          ? favorites.filter((id) => id !== surahId)
+          : [...favorites, surahId],
+      });
+      return;
+    }
     if (favorites.includes(surahId)) {
       // Optimistic update + recovery (docs/15 Bagian 13.4).
       set({ favorites: favorites.filter((id) => id !== surahId) });
@@ -183,7 +205,9 @@ export const useUserStore = create<UserState & UserActions>()((set, get) => ({
       id: 'default',
       updatedAt: Date.now(),
     };
-    await db.settings.put(next);
+    if (get().persistenceAvailable) {
+      await db.settings.put(next);
+    }
 
     if (normalizedPatch.appLocale !== undefined) {
       // Terapkan ke `<html>` sebelum `set`, agar teks bilingual dan teks
@@ -210,7 +234,9 @@ export const useUserStore = create<UserState & UserActions>()((set, get) => ({
       ayahNumber,
       updatedAt: Date.now(),
     };
-    await db.lastRead.put(record);
+    if (get().persistenceAvailable) {
+      await db.lastRead.put(record);
+    }
     set({ lastViewed: { surahId, ayahNumber } });
     trackLastReadUpdated({ surahId, ayahNumber });
   },

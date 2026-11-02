@@ -22,11 +22,18 @@ export async function initStores(): Promise<void> {
   getDownloadManager().attachServiceWorkerListener();
   getRepeatTabSync();
 
-  await Promise.all([
+  // `allSettled`: satu store gagal tidak boleh membatalkan yang lain
+  // atau menimbulkan unhandled rejection dari `void initStores()`.
+  const results = await Promise.allSettled([
     useUserStore.getState().init(),
     useRepeatStore.getState().init(),
     useOfflineStore.getState().init(),
   ]);
+  for (const result of results) {
+    if (result.status === 'rejected') {
+      console.error('[HanQuran] Inisialisasi store gagal:', result.reason);
+    }
+  }
 
   void repairOfflineSurahCachesIfNeeded();
 }
