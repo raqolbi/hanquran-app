@@ -87,17 +87,13 @@ components/
 ├─ audio-player.tsx, repeat-selector.tsx, repeat-settings-dialog.tsx,
 ├─ repeat-status.tsx, repeat-progress-badge.tsx, offline-status-badge.tsx
 │
-├─ settings-section.tsx, native-aware-link.tsx, json-ld.tsx
-│
-└─ (tidak dipakai — kode lama)
-   action-bar.tsx, ayah-word-highlight.tsx, bottom-navigation.tsx,
-   focus-mode-player.tsx, favorites.tsx
+└─ settings-section.tsx, native-aware-link.tsx, json-ld.tsx
 ```
 
 
 Catatan:
 
-- Komponen yang ditandai **tidak dipakai** tidak di-import di mana pun (dicek 2 Nov 2026). `action-bar.tsx` digantikan `VerseDisplayControls` (`docs/22`); `ayah-word-highlight.tsx` & `focus-mode-player.tsx` milik word highlight Post-MVP (`docs/24`). Kandidat dihapus.
+- Lima komponen lama yang tidak dipakai dihapus 2 Nov 2026 (lihat `docs/13` § Komponen yang Dihapus).
 - `components/ui/` tidak boleh mengimpor `stores/` atau `services/`.
 
 ---

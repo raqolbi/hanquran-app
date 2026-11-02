@@ -3,8 +3,8 @@
 Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi HanQuran menuju MVP. Berisi daftar pekerjaan teknis yang dapat langsung dikerjakan developer.
 
 **Terakhir diperbarui:** 2 November 2026
-**Status:** 🚧 Menuju rilis `0.6.0` (lihat `RELEASE.md`) — `0.2.0`–`0.5.0` sudah diimplementasi; uji manual perangkat & tag Git belum dibuat; Phase 9 Android (Capacitor) ✅ diimplementasi (checklist `docs/32` §13); Phase 10 SEO ✅ selesai; Phase 10b hardening ✅ selesai; Phase 11 performa beranda ✅ selesai; Phase 11b LCP Threads Gate ✅ selesai; Phase 12 locale paint pertama (F8) ✅ selesai; Phase 12b audit bug & hardening ✅ selesai; Phase 13 sorot kata ✅ selesai
-**Total Development Tasks:** 97 + Phase 9 Android (lihat `docs/32` §13) + Phase 10 SEO (lihat `docs/35-seo-spec.md` §4) + Phase 10b Hardening (lihat `docs/35` §8–§9) + Phase 11 Performa Beranda (lihat `docs/36-performance-cwv.md`) + Phase 11b LCP Threads Gate (lihat `docs/34` §8) + Phase 12 Locale Paint Pertama (lihat `docs/21` §5.6) + Phase 12b Audit Bug & Hardening + Phase 13 Sorot Kata (lihat `docs/37`)
+**Status:** 🚧 Menuju rilis `0.6.0` (lihat `RELEASE.md`) — `0.2.0`–`0.5.0` sudah diimplementasi; uji manual perangkat & tag Git belum dibuat; Phase 9 Android (Capacitor) ✅ diimplementasi (checklist `docs/32` §13); Phase 10 SEO ✅ selesai; Phase 10b hardening ✅ selesai; Phase 11 performa beranda ✅ selesai; Phase 11b LCP Threads Gate ✅ selesai; Phase 12 locale paint pertama (F8) ✅ selesai; Phase 12b audit bug & hardening ✅ selesai; Phase 13 sorot kata ✅ selesai; Phase 14 perbaikan lanjutan audit 📋; Phase 15 ulang kata 📋
+**Total Development Tasks:** 97 + Phase 9 Android (lihat `docs/32` §13) + Phase 10 SEO (lihat `docs/35-seo-spec.md` §4) + Phase 10b Hardening (lihat `docs/35` §8–§9) + Phase 11 Performa Beranda (lihat `docs/36-performance-cwv.md`) + Phase 11b LCP Threads Gate (lihat `docs/34` §8) + Phase 12 Locale Paint Pertama (lihat `docs/21` §5.6) + Phase 12b Audit Bug & Hardening + Phase 13 Sorot Kata (lihat `docs/37`) + Phase 14 Perbaikan Lanjutan (`docs/39`) + Phase 15 Ulang Kata (`docs/38`)
 **Arsitektur data:** `docs/23-static-dataset-architecture.md`
 
 ---
@@ -77,6 +77,8 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 12        | Locale Paint Pertama (F8)         | 4      | 0      | 0      | 4      | 4       | ✅ Selesai (P12-1–P12-4) — 1 Nov 2026        |
 | 12b       | Audit Bug & Hardening             | 13     | 3      | 7      | 3      | 13      | ✅ Selesai (P12b-1–P12b-13) — 2 Nov 2026     |
 | 13        | Sorot Kata (quran-align)          | 10     | 0      | 8      | 2      | 10      | ✅ Selesai (P13-1–P13-10) — 2 Nov 2026       |
+| 14        | Perbaikan Lanjutan Audit          | 11     | 0      | 5      | 6      | 0       | 📋 Belum dimulai (`docs/39`)                  |
+| 15        | Ulang Kata (Hafalan per Kata)     | 12     | 0      | 10     | 2      | 0       | 📋 Belum dimulai (`docs/38`)                  |
 | **TOTAL** |                                   | **110** | **50** | **37** | **23** | **83**  | (+ Phase 9; + Phase 10 SEO; + Phase 10b hardening; + Phase 11 CWV; + Phase 11b LCP gate; + Phase 12 F8; + Phase 12b audit) |
 
 
@@ -1440,7 +1442,10 @@ Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan de
 
 **Tambahan verifikasi (2 Nov 2026, laporan pengguna kedua):** `/surah/1` dan `/surah/2` — 0 hydration mismatch dalam 3 kali muat ulang; tombol Simpan Offline aktif setelah hidrasi; `getComputedStyle` teks ayat = `quranFont`, font berstatus `loaded`, alif wasla & tanda waqaf tampil benar di desktop dan lebar 430 px (ayat panjang terbungkus tanpa terpotong).
 
-**Residual / backlog (belum dikerjakan):**
+**Residual / backlog:** → dipindah menjadi task **Phase 14** (`docs/39`), kecuali yang ditandai selesai.
+
+<details><summary>Daftar residual awal</summary>
+
 
 - 15 test Cache Storage gagal karena `new Response(new Blob())` di jsdom melempar `object.stream is not a function` — perbaiki fixture/lingkungan test.
 - `tests/scripts/generate-sw-precache.test.ts` menulis ke `public/sw-precache-manifest.js` asli; sebagian test bisa macet di mesin lokal.
@@ -1448,7 +1453,9 @@ Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan de
 - Overlay gate: belum ada focus trap / Esc / `inert` pada latar.
 - Membuka surat apa pun langsung menimpa posisi "Lanjutkan Hafalan" ke ayat 1; label "dihafal" menyesatkan.
 - SW: cache navigasi tak terbatas (tiap `?ayah` jadi entri), RSC cache-first bisa basi setelah deploy, audio cache dilayani 200 untuk permintaan Range (risiko iOS).
-- Kode mati: `components/favorites.tsx`, state `completedAyahs` di Surah Detail.
+- ~~Kode mati: `components/favorites.tsx`~~ (dihapus 2 Nov 2026), state `completedAyahs` di Surah Detail.
+
+</details>
 
 ---
 
@@ -1484,6 +1491,77 @@ Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan de
 **Hasil verifikasi (2 Nov 2026):** Playwright dengan audio CDN diganti file uji — qari Alafasy, 1:1 menyorot `بِسْمِ` → `ٱللَّهِ` → `ٱلرَّحْمَٰنِ` → `ٱلرَّحِيمِ` sesuai waktu data; Mode Fokus Husary 2:2 menyorot kata 0→1→2 (7 kata, tanda waqaf ikut kata sebelumnya); qari default Al-Juhaynee tidak memecah teks (0 span kata). 0 error konsol. Suite test **445 lulus / 15 gagal (460)** — 15 kegagalan lama (jsdom).
 
 **Residual:** Al-Juhaynee & Warsh belum didukung sorot kata; ketuk kata untuk memutar dari kata itu belum ada; label "Populer" masih kurasi (belum ada data popularitas).
+
+---
+
+# 🧹 Phase 14 — Perbaikan Lanjutan Hasil Audit
+
+**Status:** 📋 Belum dimulai
+**Spek:** [`docs/39-followup-fixes-plan.md`](./39-followup-fixes-plan.md) (kode A1–D3 merujuk bagian di dokumen itu)
+
+| ID | Task | Tipe | Prioritas | Ref |
+|----|------|------|-----------|-----|
+| P14-1 | "Lanjutkan Hafalan" hanya disimpan setelah interaksi bermakna; label "Terakhir dibaca" | [FIX] | P1 | A1 |
+| P14-2 | SW: kunci cache navigasi tanpa query `?ayah` | [FIX] | P1 | B1 |
+| P14-3 | SW: RSC network-first berbatas waktu (atau buang RSC beda `buildId`) | [FIX] | P1 | B2 |
+| P14-4 | SW: respons `206` untuk permintaan Range audio dari cache (iOS) + uji perangkat | [FIX] | P1 | B3 |
+| P14-5 | Perbaiki seluruh error TypeScript, matikan `ignoreBuildErrors`, `tsc --noEmit` di CI | [FIX] | P1 | C1 |
+| P14-6 | Focus trap + `inert` untuk Gerbang Threads | [A11Y] | P2 | A2 |
+| P14-7 | Pasang ESLint (flat config) + jalankan di CI | [NEW] | P2 | C2 |
+| P14-8 | Perbaiki 15 test gagal (jsdom `Blob`/`Response`) | [TEST] | P2 | C3 |
+| P14-9 | Celah kecil: `install-prompt` try/catch, rejection `toggleFavorite`, `null` di Select qari, kunci i18n tak terpakai | [FIX] | P2 | C5 |
+| P14-10 | Event `reciter_selected` + alur pembaruan tanda Populer dari Vercel Analytics | [NEW] | P2 | D |
+| P14-11 | Test precache menulis ke folder sementara; selidiki test yang menggantung | [TEST] | P3 | C4 |
+
+- [ ] [FIX] P14-1 — posisi Lanjutkan Hafalan (P1)
+- [ ] [FIX] P14-2 — cache navigasi tanpa query (P1)
+- [ ] [FIX] P14-3 — RSC tidak basi setelah deploy (P1)
+- [ ] [FIX] P14-4 — Range 206 audio iOS (P1)
+- [ ] [FIX] P14-5 — TypeScript bersih + CI (P1)
+- [ ] [A11Y] P14-6 — gerbang Threads (P2)
+- [ ] [NEW] P14-7 — ESLint (P2)
+- [ ] [TEST] P14-8 — 15 test jsdom (P2)
+- [ ] [FIX] P14-9 — celah kecil (P2)
+- [ ] [NEW] P14-10 — popularitas qari dari Analytics (P2)
+- [ ] [TEST] P14-11 — kebersihan test (P3)
+
+**Sudah dikerjakan di luar fase ini (2 Nov 2026):** `package-lock.json` disinkronkan (`npm ci` hijau di lingkungan bersih); 5 komponen tidak terpakai dihapus; atribusi pihak ketiga di `THIRD_PARTY_NOTICES.md`.
+
+---
+
+# 🔁 Phase 15 — Ulang Kata (Hafalan per Kata)
+
+**Status:** 📋 Belum dimulai
+**Spek:** [`docs/38-word-loop-spec.md`](./38-word-loop-spec.md)
+**Bergantung pada:** Phase 13 (data waktu per kata)
+
+| ID | Task | Tipe | Prioritas | Ref |
+|----|------|------|-----------|-----|
+| P15-1 | Spike: presisi berhenti di akhir potongan (web rAF vs Android `currentTime`/timer) — target meleset ≤ 80 ms | [SPIKE] | P1 | §4.3 |
+| P15-2 | Putuskan pemilik state (`useWordLoopStore` baru vs slice `useRepeatStore`) & catat di `docs/15` | [DOC] | P1 | §4.5 |
+| P15-3 | Logika potongan: rentang → `{startMs, endMs}` dengan perluasan segmen gabungan & bantalan | [NEW] | P1 | §4.1 |
+| P15-4 | Mesin siklus: seek → play → berhenti → jeda menirukan → ulang; integrasi `AudioController` | [NEW] | P1 | §4.2 |
+| P15-5 | Ketuk kata (mulai/pindah/berhenti) di ayat aktif & ayat lain; pesan untuk qari tanpa data | [NEW] | P1 | §3.1 |
+| P15-6 | Tekan lama + seret rentang (sentuh & mouse), Shift+klik; tidak bentrok dengan gulir | [NEW] | P1 | §3.2 |
+| P15-7 | Tangguhkan Repeat ayat & Murotal; aturan ⏮/⏭, ganti qari, pindah ayat | [NEW] | P1 | §4.4 |
+| P15-8 | Tampilan: bingkai amber kata diulang, chip status + tombol Berhenti, Mode Fokus | [NEW] | P1 | §3.4 |
+| P15-9 | Pengaturan "Jeda menirukan" (0/1/2/3 detik, default 1) | [NEW] | P2 | §4.2 |
+| P15-10 | Keyboard & pembaca layar (role button, aria-pressed, Esc, aria-live) | [A11Y] | P1 | §3.3 |
+| P15-11 | Event `word_loop_started` / `word_loop_stopped` | [NEW] | P3 | §6 |
+| P15-12 | Test unit (potongan, siklus, interaksi) + uji perangkat web/iOS/Android | [TEST] | P1 | §7 |
+
+- [ ] [SPIKE] P15-1 — presisi berhenti (P1)
+- [ ] [DOC] P15-2 — pemilik state (P1)
+- [ ] [NEW] P15-3 — potongan (P1)
+- [ ] [NEW] P15-4 — mesin siklus (P1)
+- [ ] [NEW] P15-5 — ketuk kata (P1)
+- [ ] [NEW] P15-6 — seret rentang (P1)
+- [ ] [NEW] P15-7 — interaksi fitur lain (P1)
+- [ ] [NEW] P15-8 — tampilan (P1)
+- [ ] [NEW] P15-9 — jeda menirukan (P2)
+- [ ] [A11Y] P15-10 — aksesibilitas (P1)
+- [ ] [NEW] P15-11 — analytics (P3)
+- [ ] [TEST] P15-12 — test & uji perangkat (P1)
 ---
 
 # 🏁 6. MVP Checklist

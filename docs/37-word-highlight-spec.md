@@ -14,7 +14,7 @@ Saat tilawah diputar, kata yang sedang dibaca qari disorot (latar hijau muda) pa
 | Aspek | Keputusan |
 |-------|-----------|
 | Sumber data | [quran-align](https://github.com/cpfair/quran-align) rilis `release-2016-11-24` (Collin Fair) |
-| Lisensi | **CC BY 4.0** — atribusi wajib (sudah di layar Tentang → Sumber Data) |
+| Lisensi | **CC BY 4.0** — atribusi wajib: layar Tentang → Sumber Data, `README.md` § Credits, dan `THIRD_PARTY_NOTICES.md` (termasuk daftar perubahan yang kami lakukan pada data) |
 | Qari yang didukung | **12 qari** — seluruh qari di rilis quran-align (lihat §8) |
 | Qari lain | Abdullaah Al-Juhaynee & Ibrahim Al Dosary (Warsh) — **tidak ada data**; aplikasi berjalan normal tanpa sorotan |
 | Qari default | **Mishary Alafasy** (`DEFAULT_RECITER_ID`) untuk pengguna baru; pengguna lama tetap memakai qari tersimpan |
@@ -117,7 +117,8 @@ Aturan perilaku:
 
 - Al-Juhaynee & Ibrahim Al Dosary (Warsh) belum didukung — perlu data waktu sendiri (forced alignment).
 - Data menambah ±5 MB (terkompresi) ke APK Android; PWA tidak terpengaruh karena dimuat per surat.
-- Ketuk kata untuk memutar dari kata itu / mengulang satu kata belum ada.
+- Ketuk kata untuk mengulang satu kata / rentang kata → direncanakan di `docs/38-word-loop-spec.md`.
+- Tanda "★ Populer" masih kurasi → rencana berbasis Vercel Analytics di `docs/39` §D.
 - Data 2016; bila penulis quran-align merilis revisi, jalankan ulang skrip dengan versi path baru.
 
 ---

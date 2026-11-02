@@ -133,17 +133,9 @@ Tentang — app/settings/about/page.tsx (client)
 
 ---
 
-## Komponen Tidak Dipakai
+## Komponen yang Dihapus
 
-File berikut masih ada tetapi **tidak di-import** di mana pun (dicek 2 Nov 2026). Jangan dijadikan acuan; kandidat dihapus.
-
-| File | Keterangan |
-|------|------------|
-| `components/action-bar.tsx` | Digantikan `VerseDisplayControls` (`docs/22`) |
-| `components/favorites.tsx` | Daftar favorit lama; diganti filter chip "Favorit" |
-| `components/bottom-navigation.tsx` | Navigasi bawah tidak dipakai di MVP |
-| `components/focus-mode-player.tsx` | Digantikan `AudioPlayer` di Mode Fokus |
-| `components/ayah-word-highlight.tsx` | Stub lama — sorot kata kini di `quran-ayah-text.tsx` (`docs/37`) |
+Dihapus 2 November 2026 karena tidak di-import di mana pun: `action-bar.tsx` (digantikan `VerseDisplayControls`), `favorites.tsx` (diganti filter chip "Favorit"), `bottom-navigation.tsx`, `focus-mode-player.tsx` (digantikan `AudioPlayer`), `ayah-word-highlight.tsx` (digantikan `QuranAyahText`, `docs/37`). Riwayatnya tetap ada di Git.
 
 ---
 
@@ -160,4 +152,5 @@ File berikut masih ada tetapi **tidak di-import** di mana pun (dicek 2 Nov 2026)
 | Tanggal | Perubahan |
 |---------|-----------|
 | Juni 2026 | Dokumen awal |
+| 2 November 2026 | Komponen tidak dipakai dihapus dari repo |
 | 2 November 2026 | Ditulis ulang: pola server/client (SSG + seed), `HomeClient`, `SurahDetailClient`, top chrome, Simpan Offline, `StartAyahSync`, degraded mode; komponen tidak dipakai dipisah ke tabel tersendiri; referensi `lib/surahs-data` (sudah dihapus) dibuang |

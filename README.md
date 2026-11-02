@@ -352,6 +352,9 @@ Catatan rilis: [`RELEASE.md`](./RELEASE.md).
 | [`docs/35-seo-spec.md`](./docs/35-seo-spec.md) | SEO & discoverability |
 | [`docs/36-performance-cwv.md`](./docs/36-performance-cwv.md) | Performa beranda & Core Web Vitals |
 | [`docs/37-word-highlight-spec.md`](./docs/37-word-highlight-spec.md) | Sorot kata saat tilawah (data quran-align) |
+| [`docs/38-word-loop-spec.md`](./docs/38-word-loop-spec.md) | Rencana: ulang kata / rentang kata untuk hafalan |
+| [`docs/39-followup-fixes-plan.md`](./docs/39-followup-fixes-plan.md) | Rencana perbaikan lanjutan & popularitas qari |
+| [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md) | Atribusi & lisensi pihak ketiga |
 | [`docs/19-document-audit.md`](./docs/19-document-audit.md) | Audit dokumentasi & status tiap dokumen |
 | [`docs/analytics.md`](./docs/analytics.md) | Event Vercel Analytics |
 | [`CLAUDE.md`](./CLAUDE.md) | Konvensi penulisan kode & dokumen |
@@ -406,6 +409,12 @@ Sumber eksternal dan library yang **benar-benar dipakai** oleh project:
 | **Dataset statis `public/data/`** | Teks Arab Uthmani, metadata surat, terjemahan `id` & `en` (manifest v1.0.0, 114 surat / 6236 ayat) |
 | **[EveryAyah](https://everyayah.com/)** | CDN audio tilawah per ayat (`AYAH_AUDIO_BASE_URL` di `services/quran/audio-config.ts`) |
 | **`data/reciters.json`** | Metadata qari yang didukung (slug CDN + nama tampilan) |
+| **[Tanzil Project](https://tanzil.net/)** | Teks Al-Qur'an Utsmani (diolah lewat [HanQuran Data Generator](https://github.com/raqolbi/hanquran-data-generator)) |
+| **[eQuran.id](https://equran.id/)** | Transliterasi |
+| **[quran-align](https://github.com/cpfair/quran-align)** | Data waktu per kata untuk sorot kata — © Collin Fair, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); diolah oleh `scripts/build-word-timings.mjs` |
+| **[Amiri Quran](https://github.com/aliftype/amiri)** | Font teks Al-Qur'an — © The Amiri Project Authors, SIL OFL 1.1 |
+
+Rincian lisensi & perubahan yang kami lakukan: [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md).
 
 ### Framework & library utama
 
@@ -415,7 +424,7 @@ Next.js · React · TypeScript · Tailwind CSS · shadcn/ui · Zustand · Dexie 
 
 | Layanan | Penggunaan |
 |---------|------------|
-| **[Vercel](https://vercel.com/)** | Hosting & deployment (direncanakan) |
+| **[Vercel](https://vercel.com/)** | Hosting & deployment |
 | **Vercel Analytics** | Page views & custom events produksi |
 
 ### Branding

@@ -21,17 +21,17 @@
 | 7 | VerseDisplayControls | `components/verse-display-controls.tsx` | ✅ Ada |
 | 8, 8b, 8c | TranslationToggle, TransliterationToggle, FocusModeButton | tombol di dalam `VerseDisplayControls` | ⚪ Bukan komponen terpisah |
 | 9 | AyahCard | `components/ayah-card.tsx` | ✅ Ada |
-| 10 | AyahWordHighlight | sorot kata di `components/quran-ayah-text.tsx` (`docs/37`) | ✅ Diimplementasi dengan nama lain; `ayah-word-highlight.tsx` lama tidak dipakai |
+| 10 | AyahWordHighlight | sorot kata di `components/quran-ayah-text.tsx` (`docs/37`) | ✅ Diimplementasi dengan nama lain; file stub lama dihapus |
 | 11 | AudioPlayer | `components/audio-player.tsx` | ✅ Ada |
 | 12 | RepeatSelector | `components/repeat-selector.tsx` | ✅ Ada |
 | 13 | RepeatSettingsDialog | `components/repeat-settings-dialog.tsx` | ✅ Ada |
 | 14 | RepeatStatus | `components/repeat-status.tsx` | ✅ Ada |
 | 15 | RepeatProgressBadge | `components/repeat-progress-badge.tsx` | ✅ Ada |
 | 16 | FocusModeScreen | `app/focus/[id]/page.tsx` (`FocusModeLoaded`) | ✅ Ada (halaman, bukan komponen) |
-| 17 | FocusModePlayer | `components/focus-mode-player.tsx` | ❌ Tidak dipakai — digantikan `AudioPlayer` |
+| 17 | FocusModePlayer | — | 🗑️ Dihapus — digantikan `AudioPlayer` |
 | 18 | SettingsCard | `SettingsSection` / `SettingsRow` — `components/settings-section.tsx` | ✅ Ada (nama berbeda) |
 | 19 | ReciterSelector | `Select` qari di `app/settings/page.tsx` | ⚪ Bukan komponen terpisah |
-| 20 | BottomNavigation | `components/bottom-navigation.tsx` | ❌ Tidak dipakai di MVP |
+| 20 | BottomNavigation | — | 🗑️ Dihapus — tidak dipakai di MVP |
 | 21 | BottomSheet | `Drawer` — `components/ui/drawer.tsx` | ✅ Ada sebagai primitive |
 | 22 | OfflineStatusBadge | `components/offline-status-badge.tsx` | ✅ Ada |
 | 23 | ConnectionIndicator | ekspor dari `components/offline-status-badge.tsx` | ✅ Ada |
@@ -42,7 +42,7 @@
 | 28 | HomeFooter | `components/home-footer.tsx` | ✅ Ada |
 | 29 | ThreadsGate | `components/shared/threads-gate.tsx` | ✅ Ada |
 
-Legenda: ✅ ada · ⚪ digabung ke komponen lain · ⏸️ ditunda · ❌ file ada tapi tidak dipakai · 🚫 tidak ada.
+Legenda: ✅ ada · ⚪ digabung ke komponen lain · ⏸️ ditunda · 🗑️ dihapus (tidak dipakai) · 🚫 tidak ada.
 
 Komponen nyata yang **tidak** punya bagian di spek ini: `HomeClient`, `SurahDetailClient`, `SurahDetailTopChrome`, `SurahDetailScrollSpacer`, `StartAyahSync`, `InstallBanner`, `LocaleText`, `NativeAwareLink`, `JsonLd`, `ErrorBoundary`/`ErrorFallback` — lihat `docs/13-component-tree.md`.
 
@@ -1559,7 +1559,7 @@ saat teks Arab terlihat.
 
 ---
 
-# 17. FocusModePlayer — ❌ tidak dipakai (digantikan AudioPlayer)
+# 17. FocusModePlayer — 🗑️ dihapus (digantikan AudioPlayer)
 
 > **Status: Legacy / tidak dipakai.** Focus Mode (`app/focus/[id]/page.tsx`) memakai `AudioPlayer` + `RepeatSelector variant="inline"` langsung. File `components/focus-mode-player.tsx` dapat dihapus di refactor berikutnya.
 
@@ -1755,7 +1755,7 @@ Radius   : 12px
 
 ---
 
-# 20. BottomNavigation — ❌ tidak dipakai di MVP
+# 20. BottomNavigation — 🗑️ dihapus (tidak dipakai di MVP)
 
 ## Purpose
 

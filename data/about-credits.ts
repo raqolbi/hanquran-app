@@ -34,6 +34,7 @@ export const ABOUT_DATA_SOURCE_CREDITS: readonly AboutDataSourceCredit[] = [
     id: 'audioMurottal',
     labelKey: 'dataSources.audioMurottal.label',
     sourceKey: 'dataSources.audioMurottal.source',
+    href: 'https://everyayah.com/',
   },
   {
     // Wajib atribusi — data berlisensi CC BY 4.0.

@@ -220,11 +220,11 @@
         },
         "audioMurottal": {
           "label": "Audio Murottal",
-          "source": "Para qari dan penyedia audio yang digunakan oleh HanQuran"
+          "source": "Para qari melalui EveryAyah"
         },
         "wordTimings": {
           "label": "Waktu per kata (sorot kata)",
-          "source": "quran-align oleh Collin Fair — lisensi CC BY 4.0"
+          "source": "quran-align oleh Collin Fair — lisensi CC BY 4.0 (data diolah ulang)"
         }
       }
     },

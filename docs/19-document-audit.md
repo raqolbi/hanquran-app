@@ -33,6 +33,8 @@ Dokumen ini adalah laporan audit komprehensif terhadap seluruh dokumentasi proye
 | `19-document-audit` | ✅ Dokumen ini | |
 | `20-mvp-freeze` | 🔒 Beku | Ditambah §12 Change Log pasca-freeze (isi freeze tidak diubah) |
 | `21`–`31`, `33`–`37` | ✅ Spek fitur | Nama cache di `23`, `30` diperbarui; `37` sorot kata (baru) |
+| `38-word-loop-spec`, `39-followup-fixes-plan` | 📝 Rencana | Belum diimplementasi (Phase 15, Phase 14) |
+| `THIRD_PARTY_NOTICES.md` (root) | ✅ | Atribusi & lisensi sumber pihak ketiga |
 | `32-capacitor-android-platform` | ✅ Diperbarui | Status: diimplementasi; path `android/app/build.gradle` |
 | `SETUP` | ✅ Sinkron | Node 22, dua lockfile, perintah Android, Dexie v5, `npm run lint` belum berfungsi |
 | `analytics` | ✅ | |
@@ -59,9 +61,11 @@ Legenda: ✅ sinkron/acuan · 🔄 diperbarui dengan catatan · 📌 kebutuhan/a
 
 ### Temuan Terbuka (di luar dokumen)
 
-- `package-lock.json` tidak sinkron dengan `package.json` (`npm ci` gagal di lingkungan bersih: `Missing @emnapi/runtime …`) — CI GitHub Actions memakai `npm ci`. Perlu `npm install` lalu commit lockfile, setelah dicek di mesin lokal.
-- `npm run lint` didefinisikan tetapi ESLint tidak terpasang.
-- 5 komponen tidak dipakai (`docs/13` § Komponen Tidak Dipakai) — kandidat dihapus.
+- ~~`package-lock.json` tidak sinkron dengan `package.json`~~ — diperbaiki 2 Nov 2026 (`npm ci` hijau di lingkungan bersih).
+- `npm run lint` didefinisikan tetapi ESLint tidak terpasang → task P14-7 (`docs/39` C2).
+- ~~5 komponen tidak dipakai~~ — dihapus 2 Nov 2026.
+
+Sisa temuan audit kode kini direncanakan di `docs/39` (task `docs/18` Phase 14).
 
 ---
 

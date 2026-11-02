@@ -220,11 +220,11 @@
         },
         "audioMurottal": {
           "label": "Recitation Audio",
-          "source": "The reciters and audio providers used by HanQuran"
+          "source": "Reciters via EveryAyah"
         },
         "wordTimings": {
           "label": "Word timings (word highlight)",
-          "source": "quran-align by Collin Fair — CC BY 4.0 license"
+          "source": "quran-align by Collin Fair — CC BY 4.0 license (data reformatted)"
         }
       }
     },
