@@ -292,6 +292,7 @@ function SurahDetailView({
 
       <AudioPlayer
         ref={audioRef}
+        bottomChromeHeight={audioChromeHeight}
         surahId={surah.number}
         currentAyah={activeAyah}
         reciterId={reciterId}

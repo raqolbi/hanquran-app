@@ -5,6 +5,7 @@ import { motion } from 'motion/react';
 import { Play, Pause, SkipBack, SkipForward } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import { PlaybackRateSelect } from '@/components/playback-rate-select';
 import { useAudio } from '@/hooks/use-audio';
 import { usePreferredReciterId } from '@/hooks/use-preferred-reciter';
 import { SURAH_DETAIL_AUDIO_MIN_HEIGHT } from '@/lib/surah-detail-chrome';
@@ -24,6 +25,8 @@ interface AudioPlayerProps {
   onPlaybackBlocked?: () => void;
   /** Kontrol tambahan di baris transport (mis. repeat inline). */
   toolbarStart?: ReactNode;
+  /** Tinggi chrome audio — untuk posisi menu kecepatan putar. */
+  bottomChromeHeight?: number;
 }
 
 export const AudioPlayer = forwardRef<HTMLDivElement, AudioPlayerProps>(
@@ -40,6 +43,7 @@ export const AudioPlayer = forwardRef<HTMLDivElement, AudioPlayerProps>(
       isNextDisabled = false,
       isPlaybackBlocked = false,
       onPlaybackBlocked,
+      bottomChromeHeight = SURAH_DETAIL_AUDIO_MIN_HEIGHT,
     },
     ref,
   ) {
@@ -50,8 +54,7 @@ export const AudioPlayer = forwardRef<HTMLDivElement, AudioPlayerProps>(
     const { isPlaying, progress, duration, toggleAyah, seek, isCurrentAyah } =
       useAudio();
 
-    const showAsPlaying =
-      isPlaying && isCurrentAyah(surahId, currentAyah);
+    const showAsPlaying = isPlaying && isCurrentAyah(surahId, currentAyah);
 
     const handlePlayPause = () => {
       if (isPlaybackBlocked) {
@@ -85,26 +88,36 @@ export const AudioPlayer = forwardRef<HTMLDivElement, AudioPlayerProps>(
         style={{ minHeight: SURAH_DETAIL_AUDIO_MIN_HEIGHT }}
       >
         <div className="mx-auto flex w-full max-w-3xl flex-col gap-3 px-4 pt-3 pb-2 short-landscape:gap-1.5 short-landscape:pt-2 short-landscape:pb-1">
-          <div
-            role="slider"
-            aria-label={t('audioProgress')}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-valuenow={Math.round(progress)}
-            aria-disabled={isPlaybackBlocked}
-            tabIndex={isPlaybackBlocked ? -1 : 0}
-            onClick={handleProgressClick}
-            onKeyDown={(event) => {
-              if (isPlaybackBlocked) return;
-              if (event.key === 'ArrowRight') seek(Math.min(duration, duration * (progress / 100) + 5));
-              if (event.key === 'ArrowLeft') seek(Math.max(0, duration * (progress / 100) - 5));
-            }}
-            className={`h-1.5 w-full overflow-hidden rounded-full bg-border short-landscape:h-1 ${isPlaybackBlocked ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
-          >
-            <motion.div
-              className="pointer-events-none h-full rounded-full bg-primary"
-              style={{ width: `${progress}%` }}
-            />
+          <div className="flex items-center gap-3">
+            <div
+              role="slider"
+              aria-label={t('audioProgress')}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={Math.round(progress)}
+              aria-disabled={isPlaybackBlocked}
+              tabIndex={isPlaybackBlocked ? -1 : 0}
+              onClick={handleProgressClick}
+              onKeyDown={(event) => {
+                if (isPlaybackBlocked) return;
+                if (event.key === 'ArrowRight')
+                  seek(Math.min(duration, duration * (progress / 100) + 5));
+                if (event.key === 'ArrowLeft')
+                  seek(Math.max(0, duration * (progress / 100) - 5));
+              }}
+              className={`h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-border short-landscape:h-1 ${
+                isPlaybackBlocked
+                  ? 'cursor-not-allowed opacity-50'
+                  : 'cursor-pointer'
+              }`}
+            >
+              <motion.div
+                className="pointer-events-none h-full rounded-full bg-primary"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            {/* Kecepatan di baris progres — baris transport sudah penuh di HP 360 px. */}
+            <PlaybackRateSelect bottomChromeHeight={bottomChromeHeight} />
           </div>
 
           <div className="flex items-center justify-between gap-2 py-0.5 sm:gap-3">
@@ -124,7 +137,9 @@ export const AudioPlayer = forwardRef<HTMLDivElement, AudioPlayerProps>(
                 type="button"
                 onClick={handlePlayPause}
                 aria-disabled={isPlaybackBlocked}
-                className={`rounded-full bg-primary p-2.5 text-white transition-colors hover:bg-primary/90 sm:p-3 ${isPlaybackBlocked ? 'cursor-not-allowed opacity-50' : ''}`}
+                className={`rounded-full bg-primary p-2.5 text-white transition-colors hover:bg-primary/90 sm:p-3 ${
+                  isPlaybackBlocked ? 'cursor-not-allowed opacity-50' : ''
+                }`}
                 aria-label={showAsPlaying ? tCommon('pause') : tCommon('play')}
               >
                 {showAsPlaying ? (

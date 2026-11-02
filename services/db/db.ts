@@ -64,6 +64,7 @@ export const defaultSettings: SettingsRecord = {
   autoDownloadOnPlay: false,
   wordHighlight: true,
   wordLoopGapMs: 1000,
+  playbackRate: 1,
   reciterId: getDefaultReciterId(),
   translationResourceId: 33, // Terjemahan Kemenag (Indonesia)
   updatedAt: 0,

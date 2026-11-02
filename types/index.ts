@@ -23,6 +23,8 @@ export interface SettingsRecord {
   wordHighlight: boolean;
   /** Jeda menirukan di antara pengulangan Ulang Kata (ms). Default: 1000. */
   wordLoopGapMs: WordLoopGapMs;
+  /** Kecepatan putar tilawah. Default: 1. */
+  playbackRate: PlaybackRate;
   /** Slug qari dari `data/reciters.json` (mis. `Alafasy_128kbps`). */
   reciterId: string;
   /** Konfigurasi repeat hafalan — persisten di Dexie. */
@@ -130,7 +132,7 @@ export interface AudioTrack {
   reciterName?: string;
 }
 
-export type PlaybackRate = 0.75 | 1 | 1.25 | 1.5;
+export type PlaybackRate = 0.5 | 0.75 | 1 | 1.25 | 1.5;
 
 export type AudioErrorCode = 'network' | 'decode' | 'aborted' | 'unknown';
 

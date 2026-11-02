@@ -112,6 +112,7 @@ Pratinjau antarmuka HanQuran — mobile-first, UI Bahasa Indonesia.
 |-------|-----------|
 | **Beranda** | 114 surat, pencarian, filter favorit, kartu Lanjutkan Hafalan |
 | **Detail Surat** | Ayat rasm Utsmani (font Amiri Quran), **sorot kata saat tilawah** (12 dari 14 qari), terjemahan & transliterasi (toggle), audio, repeat, unduh offline |
+| **Kecepatan Putar** | 0.5× – 1.5× di pemutar audio (nada tidak berubah), tersimpan otomatis |
 | **Ulang Kata** | Ketuk kata di ayat aktif → diulang terus; tekan lama lalu seret → ulang rentang kata; jeda menirukan 0–3 dtk |
 | **Mode Fokus** | Satu ayat per layar, navigasi ayat (juga ← / → dan Spasi di keyboard), audio & repeat, sorot kata, ulang kata |
 | **Pengaturan** | Bahasa UI, qari, Ikuti Ayat yang Diputar, Sorot Kata, Jeda Menirukan, Mode Murotal, Unduh Audio Otomatis, ukuran teks Arab, kontras tinggi, animasi, status & hapus audio tersimpan |

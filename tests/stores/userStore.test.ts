@@ -26,6 +26,7 @@ describe('useUserStore — reciterId', () => {
         autoDownloadOnPlay: false,
         wordHighlight: true,
       wordLoopGapMs: 1000,
+      playbackRate: 1,
         reciterId: getDefaultReciterId(),
         translationResourceId: 33,
         updatedAt: 0,
@@ -94,6 +95,8 @@ describe('useUserStore — reciterId', () => {
     expect(settings.murotalEnabled).toBe(false);
     expect(settings.autoDownloadOnPlay).toBe(false);
     expect(settings.wordHighlight).toBe(true);
+    expect(settings.wordLoopGapMs).toBe(1000);
+    expect(settings.playbackRate).toBe(1);
 
     const stored = await db.settings.get('default');
     expect(stored?.autoFollowPlayback).toBe(true);
@@ -178,6 +181,7 @@ describe('useUserStore — aksesibilitas', () => {
         autoDownloadOnPlay: false,
         wordHighlight: true,
       wordLoopGapMs: 1000,
+      playbackRate: 1,
         reciterId: getDefaultReciterId(),
         translationResourceId: 33,
         updatedAt: 0,
@@ -268,6 +272,17 @@ describe('useUserStore — aksesibilitas', () => {
     expect(useUserStore.getState().settings.murotalEnabled).toBe(false);
   });
 
+  it('menyimpan playbackRate ke Dexie; nilai tidak valid kembali ke 1×', async () => {
+    await useUserStore.getState().init();
+    await useUserStore.getState().updateSettings({ playbackRate: 0.5 });
+    expect((await db.settings.get('default'))?.playbackRate).toBe(0.5);
+
+    // @ts-expect-error — nilai di luar pilihan (mis. data rusak)
+    await db.settings.update('default', { playbackRate: 3 });
+    await useUserStore.getState().init();
+    expect(useUserStore.getState().settings.playbackRate).toBe(1);
+  });
+
   it('menyimpan autoDownloadOnPlay ke Dexie', async () => {
     await useUserStore.getState().init();
     await useUserStore.getState().updateSettings({ autoDownloadOnPlay: true });
@@ -320,6 +335,7 @@ describe('useUserStore — lastViewed', () => {
         autoDownloadOnPlay: false,
         wordHighlight: true,
       wordLoopGapMs: 1000,
+      playbackRate: 1,
         reciterId: getDefaultReciterId(),
         translationResourceId: 33,
         updatedAt: 0,
@@ -390,6 +406,7 @@ describe('useUserStore — favorites', () => {
         autoDownloadOnPlay: false,
         wordHighlight: true,
       wordLoopGapMs: 1000,
+      playbackRate: 1,
         reciterId: getDefaultReciterId(),
         translationResourceId: 33,
         updatedAt: 0,
@@ -452,6 +469,7 @@ describe('useUserStore — cache locale pra-paint (F8)', () => {
         autoDownloadOnPlay: false,
         wordHighlight: true,
       wordLoopGapMs: 1000,
+      playbackRate: 1,
         reciterId: getDefaultReciterId(),
         translationResourceId: 33,
         updatedAt: 0,

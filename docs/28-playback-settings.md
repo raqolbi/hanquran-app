@@ -17,11 +17,14 @@ Pada MVP V1, bagian ini berisi pengaturan playback. **Mode Murotal** tersedia se
 | Ikuti Ayat yang Diputar | ON (`true`) | `settings.autoFollowPlayback` | ✅ Diimplementasi |
 | Sorot Kata | ON (`true`) | `settings.wordHighlight` | ✅ Diimplementasi (`docs/37`) |
 | Jeda Menirukan | 1 dtk (`1000`) | `settings.wordLoopGapMs` | ✅ Diimplementasi (`docs/38`) |
+| Kecepatan putar | 1× | `settings.playbackRate` | ✅ Diimplementasi — dipilih di **pemutar audio** (baris progres), bukan di halaman Pengaturan |
 | Mode Murotal | OFF (`false`) | `settings.murotalEnabled` | ✅ Diimplementasi |
 
 > **Label UI (2 Nov 2026):** label Bahasa Indonesia diganti agar tidak campur Inggris — "Auto Follow Playback" → **Ikuti Ayat yang Diputar**, "Auto Download Audio" → **Unduh Audio Otomatis**, "Playback" → **Pemutaran**, "Offline & Cache" → **Offline & Penyimpanan**, "Hapus Cache" → **Hapus Audio Tersimpan**, "Repeat" → **Pengulangan**, "Range Ayat" → **Rentang Ayat**, "Infinite" → **Tanpa batas**. Nama field (`autoFollowPlayback`, dll.) tidak berubah.
 
 > **Bukan bagian Playback Settings:** pengaturan repeat (`RepeatSettingsDialog`), play/pause, navigasi ayat — tetap di kontrol audio pada Surah Detail. Lihat `docs/22-verse-display-controls.md` (Bagian 6).
+
+> **Kecepatan putar (2 Nov 2026):** 0.5× (Sangat lambat), 0.75× (Lambat), 1× (Normal), 1.25× (Cepat), 1.5× (Sangat cepat). Tombol kecil `⏲ 1×` di ujung kanan baris progres pada Surah Detail & Mode Fokus — tidak di baris tombol transport karena di HP 360 px baris itu sudah penuh. Nada suara tidak berubah (web: `preservesPitch`; Android: `PlaybackParams`/ExoPlayer `setPlaybackSpeed`). Berlaku juga untuk sorot kata & Ulang Kata. Di Android, mengubah kecepatan saat dijeda hanya disimpan lalu diterapkan saat diputar (MediaPlayer otomatis melanjutkan pemutaran bila kecepatan diubah). Streaming CDN di Android memerlukan patch `remote-asset-set-rate` di `scripts/apply-native-audio-complete-patch.mjs` (dijalankan oleh `npm run cap:sync`).
 
 > **Bukan bagian Playback Settings:** **Unduh Audio Otomatis** — toggle di section **Offline & Penyimpanan**. Lihat `docs/31-auto-download-audio-spec.md`.
 

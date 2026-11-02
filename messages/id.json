@@ -75,7 +75,13 @@
     "offlineDownloadProgress": "{completed} dari {total} ayat diunduh"
   },
   "audio": {
-    "offlineUnavailableToast": "Audio tidak tersedia offline. Simpan surat ini saat online untuk mendengarkan tanpa internet."
+    "offlineUnavailableToast": "Audio tidak tersedia offline. Simpan surat ini saat online untuk mendengarkan tanpa internet.",
+    "playbackRateAriaLabel": "Kecepatan putar: {rate}",
+    "playbackRateVerySlow": "Sangat lambat",
+    "playbackRateSlow": "Lambat",
+    "playbackRateNormal": "Normal",
+    "playbackRateFast": "Cepat",
+    "playbackRateVeryFast": "Sangat cepat"
   },
   "focus": {
     "exit": "Keluar",

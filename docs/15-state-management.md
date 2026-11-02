@@ -376,6 +376,7 @@ Tabel ini adalah daftar lengkap state pada MVP. Setiap penambahan state wajib me
 | Auto Download saat putar           | IndexedDB          | Ya        | Dexie (`settings.autoDownloadOnPlay`) |
 | Sorot kata (`wordHighlight`)       | IndexedDB          | Ya        | Dexie (`settings.wordHighlight`) |
 | Jeda menirukan (`wordLoopGapMs`)   | IndexedDB          | Ya        | Dexie (`settings.wordLoopGapMs`, default 1000) |
+| Kecepatan putar (`playbackRate`)   | IndexedDB + Zustand | Ya       | Dexie (`settings.playbackRate`) → `useAudioStore.playbackRate` lewat `AudioController.setPlaybackRate` (`components/playback-rate-select.tsx`) |
 | Ulang Kata aktif                   | Zustand            | Tidak     | `useWordLoopStore` |
 | Data waktu per kata                | `public/data/word-timings/*` via `services/quran/word-timings.ts` | Tidak (fetch + memori) | Static files (`docs/37`) |
 | Rentang kata aktif                 | React Local State (`useActiveWordRange`) | Tidak | React Local State |

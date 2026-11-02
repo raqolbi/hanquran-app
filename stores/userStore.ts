@@ -7,6 +7,7 @@
  */
 
 import { create } from 'zustand';
+import { isPlaybackRate } from '@/lib/playback-rate';
 import { db, defaultSettings } from '@/services/db/db';
 import { detectAppLocale } from '@/i18n/detection';
 import { trackBookmarkCreated, trackLastReadUpdated } from '@/lib/analytics';
@@ -75,6 +76,11 @@ function normalizeStoredSettings(stored: SettingsRecord): {
       next[key] = defaultSettings[key];
       changed = true;
     }
+  }
+
+  if (!isPlaybackRate(next.playbackRate)) {
+    next.playbackRate = defaultSettings.playbackRate;
+    changed = true;
   }
 
   if (![0, 1000, 2000, 3000].includes(next.wordLoopGapMs)) {

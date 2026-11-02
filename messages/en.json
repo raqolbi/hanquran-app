@@ -75,7 +75,13 @@
     "offlineDownloadProgress": "{completed} of {total} verses downloaded"
   },
   "audio": {
-    "offlineUnavailableToast": "Audio isn't available offline. Save this surah while online to listen without internet."
+    "offlineUnavailableToast": "Audio isn't available offline. Save this surah while online to listen without internet.",
+    "playbackRateAriaLabel": "Playback speed: {rate}",
+    "playbackRateVerySlow": "Very slow",
+    "playbackRateSlow": "Slow",
+    "playbackRateNormal": "Normal",
+    "playbackRateFast": "Fast",
+    "playbackRateVeryFast": "Very fast"
   },
   "focus": {
     "exit": "Exit",

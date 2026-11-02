@@ -4,16 +4,19 @@
  *
  * 1) dispatchComplete: tetap PAUSED + currentlyPlayingAssetId (antar ayat)
  * 2) Notifikasi: prev/next ayat (bukan ±15 detik)
+ * 3) RemoteAudioAsset (ExoPlayer, audio CDN): setRate — upstream tidak
+ *    meng-override sehingga kecepatan putar diabaikan saat streaming.
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-const target = join(
+const PLUGIN_DIR = join(
   process.cwd(),
-  'node_modules/@capgo/capacitor-native-audio/android/src/main/java/ee/forgr/audio/NativeAudio.java',
+  'node_modules/@capgo/capacitor-native-audio/android/src/main/java/ee/forgr/audio',
 );
+const target = join(PLUGIN_DIR, 'NativeAudio.java');
 
-/** @type {{ id: string; marker: string; original: string; patched: string }[]} */
+/** @type {{ id: string; file?: string; marker: string; original: string; patched: string }[]} */
 const PATCHES = [
   {
     id: 'dispatchComplete-paused',
@@ -225,6 +228,36 @@ const PATCHES = [
 
     private void syncCurrentPlaybackState(String reason) {`,
   },
+  {
+    id: 'remote-asset-set-rate',
+    file: 'RemoteAudioAsset.java',
+    marker: 'HanQuran: kecepatan putar ExoPlayer',
+    original: `    @Override
+    public void setVolume(final float volume) throws Exception {
+        setVolume(volume, 0);
+    }`,
+    patched: `    @Override
+    public void setVolume(final float volume) throws Exception {
+        setVolume(volume, 0);
+    }
+
+    // HanQuran: kecepatan putar ExoPlayer (upstream tidak meng-override setRate).
+    @Override
+    public void setRate(final float rate) throws Exception {
+        owner
+            .getActivity()
+            .runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        for (ExoPlayer player : players) {
+                            if (player != null) player.setPlaybackSpeed(rate);
+                        }
+                    }
+                }
+            );
+    }`,
+  },
 ];
 
 if (!existsSync(target)) {
@@ -232,11 +265,20 @@ if (!existsSync(target)) {
   process.exit(0);
 }
 
-let source = readFileSync(target, 'utf8');
+/** @type {Map<string, string>} */
+const sources = new Map();
+const readSource = (file) => {
+  if (!sources.has(file)) sources.set(file, readFileSync(join(PLUGIN_DIR, file), 'utf8'));
+  return sources.get(file);
+};
 let applied = 0;
 let skipped = 0;
+/** @type {Set<string>} */
+const changed = new Set();
 
 for (const patch of PATCHES) {
+  const file = patch.file ?? 'NativeAudio.java';
+  const source = readSource(file);
   if (source.includes(patch.marker)) {
     console.log(`[native-audio-patch] ${patch.id}: sudah terpasang.`);
     skipped += 1;
@@ -248,13 +290,14 @@ for (const patch of PATCHES) {
     );
     process.exit(1);
   }
-  source = source.replace(patch.original, patch.patched);
+  sources.set(file, source.replace(patch.original, patch.patched));
+  changed.add(file);
   applied += 1;
   console.log(`[native-audio-patch] ${patch.id}: diterapkan.`);
 }
 
-if (applied > 0) {
-  writeFileSync(target, source);
+for (const file of changed) {
+  writeFileSync(join(PLUGIN_DIR, file), sources.get(file));
 }
 
 console.log(

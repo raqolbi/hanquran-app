@@ -82,6 +82,7 @@ Rilis gabungan sejak 0.5.0: aplikasi Android (Capacitor), Gerbang Threads, SEO &
 - **Tanda qari** di Pengaturan: Untuk hafalan, Sorot kata
 - **Ulang Kata** untuk hafalan per kata: ketuk kata di ayat aktif → diulang terus; tekan lama lalu seret → ulang rentang kata; **Jeda Menirukan** 0–3 dtk di Pengaturan → Pemutaran (`docs/38`)
 - **Keyboard Mode Fokus:** ← / → pindah ayat, Spasi putar/jeda
+- **Kecepatan putar** 0.5× – 1.5× di pemutar audio (tombol `1×` di baris progres), tersimpan otomatis; nada suara tidak berubah
 - **Label Bahasa Indonesia** tidak lagi campur Inggris (mis. Pengulangan, Tanpa batas, Rentang Ayat, Ikuti Ayat yang Diputar, Unduh Audio Otomatis, Hapus Audio Tersimpan — `docs/28` §1)
 
 #### Perbaikan

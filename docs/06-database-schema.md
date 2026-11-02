@@ -322,6 +322,8 @@ interface SettingsRecord {
   wordHighlight: boolean;
   /** Jeda menirukan Ulang Kata (docs/38): 0 | 1000 | 2000 | 3000 ms. Default: 1000. */
   wordLoopGapMs: 0 | 1000 | 2000 | 3000;
+  /** Kecepatan putar tilawah: 0.5 | 0.75 | 1 | 1.25 | 1.5. Default: 1. */
+  playbackRate: 0.5 | 0.75 | 1 | 1.25 | 1.5;
   /** Slug qari dari `data/reciters.json` (mis. `Alafasy_128kbps`). */
   reciterId: string;
   /** Konfigurasi repeat hafalan (dikelola `useRepeatStore`). */

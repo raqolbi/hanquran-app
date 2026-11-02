@@ -583,7 +583,11 @@ export class AudioController {
   }
 
   setPlaybackRate(rate: PlaybackRate): void {
-    this.applyPlaybackRate(rate);
+    // Android MediaPlayer melanjutkan pemutaran bila kecepatan diubah saat
+    // dijeda — simpan saja; play()/resume() menerapkannya.
+    if (!this.nativePlayer || useAudioStore.getState().isPlaying) {
+      this.applyPlaybackRate(rate);
+    }
     useAudioStore.getState().setPlaybackRate(rate);
     this.syncMediaSessionPosition();
   }
