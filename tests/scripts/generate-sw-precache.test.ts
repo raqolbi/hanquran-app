@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
@@ -16,13 +16,14 @@ describe('scripts/generate-sw-precache.mjs', () => {
   });
 
   it('menulis dataHash nyata dan daftar /data/* non-kosong', () => {
-    const before = readFileSync(SOURCE_MANIFEST, 'utf8');
+    // File di public/ di-generate saat build (gitignore) — bisa belum ada.
+    const before = existsSync(SOURCE_MANIFEST) ? readFileSync(SOURCE_MANIFEST, 'utf8') : null;
     execFileSync(process.execPath, ['scripts/generate-sw-precache.mjs', MANIFEST], {
       cwd: ROOT,
       stdio: 'pipe',
     });
     // Berkas di public/ tidak boleh tersentuh.
-    expect(readFileSync(SOURCE_MANIFEST, 'utf8')).toBe(before);
+    expect(existsSync(SOURCE_MANIFEST) ? readFileSync(SOURCE_MANIFEST, 'utf8') : null).toBe(before);
 
     const source = readFileSync(MANIFEST, 'utf8');
     const match = source.match(/self\.__SW_PRECACHE__ = (\{[\s\S]*\});/);

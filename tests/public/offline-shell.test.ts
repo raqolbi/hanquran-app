@@ -38,14 +38,3 @@ describe('public/sw.js shell cache', () => {
     expect(sw).toContain("cache: 'reload'");
   });
 });
-
-describe('public/sw-precache-manifest.js placeholder', () => {
-  const manifest = readFileSync(
-    resolve(process.cwd(), 'public/sw-precache-manifest.js'),
-    'utf8',
-  );
-
-  it('menyertakan field dataHash', () => {
-    expect(manifest).toContain('dataHash');
-  });
-});

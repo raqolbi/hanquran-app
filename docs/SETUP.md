@@ -56,7 +56,7 @@ cp .env.example .env.local   # opsional — semua env bersifat opsional
 | `npm run cap:open`   | Buka proyek Android di Android Studio                                     |
 | `node scripts/build-word-timings.mjs <dir>` | Regenerasi data sorot kata dari rilis quran-align (jarang; `docs/37` §4) |
 
-Catatan: `npm run build` menjalankan `scripts/generate-sw-precache.mjs` sebelum & sesudah `next build` untuk mengisi `public/sw-precache-manifest.js`. Jangan commit hasil placeholder `"buildId": "dev"` dari dev/test.
+Catatan: `npm run build` menjalankan `scripts/generate-sw-precache.mjs` sebelum & sesudah `next build` untuk membuat `public/sw-precache-manifest.js`. File itu **di-gitignore** (2 Nov 2026) — selalu di-generate saat build (lokal & Vercel `buildCommand`), tidak dipakai di `npm run dev` maupun APK. Menjalankan `next build` langsung tanpa skrip ini membuat Service Worker gagal terpasang.
 
 
 ---
@@ -161,7 +161,7 @@ npm run test
 
 Per 2 Nov 2026: **476 test / 95 file**, semua lulus. `tests/setup.ts` memasang `Blob` Node karena `Blob` jsdom tidak punya `.stream()`.
 
-Catatan: `tests/scripts/generate-sw-precache.test.ts` menulis ke `public/sw-precache-manifest.js`. Setelah menjalankan test, kembalikan file itu dengan `git checkout -- public/sw-precache-manifest.js` sebelum commit.
+Catatan: `tests/scripts/generate-sw-precache.test.ts` menulis ke folder sementara dan memastikan `public/` tidak tersentuh (P14-10).
 
 ### Performance & Lighthouse
 

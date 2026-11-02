@@ -142,7 +142,7 @@ services/
 ├─ offline-surah-precache.ts, cache-manager.ts
 ```
 
-Service Worker **bukan** di `services/`, melainkan file statis `public/sw.js` + `public/sw-helpers.js` + `public/sw-precache-manifest.js` (di-generate `scripts/generate-sw-precache.mjs`).
+Service Worker **bukan** di `services/`, melainkan file statis `public/sw.js` + `public/sw-helpers.js` + `public/sw-precache-manifest.js` (di-generate `scripts/generate-sw-precache.mjs` saat build; di-gitignore).
 
 Aturan: komponen tidak mengakses `services/db/` langsung (lewat store) dan tidak mengakses `services/quran/` langsung (lewat hook).
 
