@@ -83,7 +83,7 @@ File audio biner ayat per ayat disimpan di `Cache Storage` (`hanquran-audio-v1`,
 * **Main thread** — Auto Download saat putar (`services/audio-play-cache.ts`) dan fallback `download-manager` bila SW tidak tersedia.
 * Penghapusan lewat **Hapus Cache** (`services/cache-manager.ts`).
 
-Nama cache lain (`hanquran-static-v2`, `hanquran-shell-v2`, `hanquran-data-v3`) dikelola SW — lihat `docs/06` §6.
+Nama cache lain (`hanquran-static-v2`, `hanquran-shell-v2`, `hanquran-rsc-v1`, `hanquran-data-v3`) dikelola SW — lihat `docs/06` §6.
 
 ## 2.3b Penyimpanan Ringan Browser (`localStorage` / `sessionStorage`)
 
@@ -518,7 +518,7 @@ Tujuan: aplikasi dapat dipakai membaca, mendengarkan, dan menghafal tanpa koneks
 Service Worker `install` → berfungsi penuh tanpa jaringan sejak terpasang
 (termasuk cold-start PWA terinstal). Jaringan hanya untuk stream / Simpan Offline audio.
 
-1. **Aset aplikasi** (HTML app-shell, JS/CSS `/_next/static/*`, font) — **di-precache saat SW `install`** (`hanquran-static-v2`, `hanquran-shell-v2`); daftar file ber-hash di-generate `postbuild`. Lihat `docs/30` §6.1, §6.3.
+1. **Aset aplikasi** (HTML app-shell, JS/CSS `/_next/static/*`, font) — **di-precache saat SW `install`** (`hanquran-static-v2`, `hanquran-shell-v2` + `hanquran-rsc-v1`); daftar file ber-hash di-generate `postbuild`. Lihat `docs/30` §6.1, §6.3.
 2. **Data Al-Qur'an** (teks, terjemahan, metadata) — seluruh `public/data/*` **di-precache saat SW `install`** (`hanquran-data-v3`, cache-first). **Bukan** Dexie — lihat `docs/23`, `docs/30` §2.1.
 3. **File audio** — di `hanquran-audio-v1` melalui:
    - **Simpan Offline** (unduh eksplisit seluruh surat+qari → `downloadManifest.status === 'ready'`), atau

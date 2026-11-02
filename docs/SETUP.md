@@ -139,7 +139,7 @@ Audio tilawah di-stream dari **CDN audio** (`services/quran/audio-config.ts` →
 
 ## 7. Service Worker
 
-- File: `public/sw.js` (`SW_VERSION = 'v4'`) + `public/sw-helpers.js` + `public/sw-precache-manifest.js` (di-generate saat build). Ditulis manual, bukan Workbox.
+- File: `public/sw.js` (`SW_VERSION = 'v5'`) + `public/sw-helpers.js` + `public/sw-precache-manifest.js` (di-generate saat build). Ditulis manual, bukan Workbox.
 - Registrasi: `components/providers/app-providers.tsx` → `lib/register-service-worker.ts` (production web saja; tidak di Android native).
 - Nama cache & strategi: `docs/06` §6, perilaku offline: `docs/30`.
 

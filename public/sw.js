@@ -14,13 +14,20 @@
 importScripts('/sw-helpers.js');
 importScripts('/sw-precache-manifest.js');
 
-const SW_VERSION = 'v4';
+const SW_VERSION = 'v5';
 const CACHE_STATIC = 'hanquran-static-v2';
 const CACHE_SHELL = 'hanquran-shell-v2';
+/**
+ * Payload RSC disimpan TERPISAH dari dokumen HTML. Di cache yang sama,
+ * `cache.put` untuk RSC menimpa dokumen ber-URL sama (meski respons punya
+ * `Vary: rsc`), sehingga app-shell offline hilang dan surat yang belum
+ * pernah dibuka menampilkan offline.html (temuan 2 Nov 2026).
+ */
+const CACHE_RSC = 'hanquran-rsc-v1';
 // v3: invalidate salinan dataset lama (cache-first) setelah update konten.
 const CACHE_DATA = 'hanquran-data-v3';
 const CACHE_AUDIO = 'hanquran-audio-v1';
-const KNOWN_CACHES = [CACHE_STATIC, CACHE_SHELL, CACHE_DATA, CACHE_AUDIO];
+const KNOWN_CACHES = [CACHE_STATIC, CACHE_SHELL, CACHE_RSC, CACHE_DATA, CACHE_AUDIO];
 
 // Route yang shell-nya di-precache saat install (lihat docs/30 §6.1–6.2).
 const SHELL_PRECACHE_URLS = ['/offline.html'];
@@ -36,7 +43,12 @@ const {
   isAppRouterRequest,
   cacheFirst,
   staleWhileRevalidate,
+  navigationCacheKey,
+  rscCacheKey,
 } = self.SwHelpers;
+
+/** Batas tunggu jaringan untuk payload RSC sebelum memakai cache (docs/39 B2). */
+const RSC_NETWORK_TIMEOUT_MS = 2500;
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -94,6 +106,7 @@ self.addEventListener('activate', (event) => {
           .filter((name) => name.startsWith('hanquran-') && !KNOWN_CACHES.includes(name))
           .map((name) => caches.delete(name)),
       );
+      await pruneShellCacheQueries();
       await self.clients.claim();
     })(),
   );
@@ -129,22 +142,40 @@ function appShellRouteFor(url) {
   return null;
 }
 
+/**
+ * Bersihkan cache shell dari versi SW sebelumnya: entri ber-query
+ * (`?ayah=`, `?_rsc=`) dan payload RSC (kini di `CACHE_RSC`).
+ */
+async function pruneShellCacheQueries() {
+  const cache = await caches.open(CACHE_SHELL);
+  const keys = await cache.keys();
+  await Promise.all(
+    keys
+      .filter(
+        (request) =>
+          new URL(request.url).search !== '' || request.headers.get('RSC') === '1',
+      )
+      .map((request) => cache.delete(request)),
+  );
+}
+
 async function handleNavigation(request, url) {
   const cache = await caches.open(CACHE_SHELL);
+  const key = navigationCacheKey(url);
 
   try {
     const response = await fetch(request);
     if (response.ok && response.type === 'basic') {
-      await cache.put(request, response.clone());
+      await cache.put(key, response.clone());
     }
     return response;
   } catch {
-    // Offline → cache cocok (abaikan query seperti ?ayah).
+    // Offline → cache path yang sama (query diabaikan).
   }
 
   const cached =
-    (await cache.match(request)) ||
-    (await cache.match(request, { ignoreSearch: true }));
+    (await cache.match(key, { ignoreVary: true })) ||
+    (await cache.match(request, { ignoreSearch: true, ignoreVary: true }));
   if (cached) return cached;
 
   // Route dinamis: layani app-shell agar bisa render id apa pun offline.
@@ -176,34 +207,49 @@ async function matchShellDocument(cache, route) {
   );
 }
 
+/**
+ * Payload RSC: **network-first berbatas waktu** (docs/39 B2). Sebelumnya
+ * cache-first, sehingga setelah deploy navigasi pertama bisa memakai payload
+ * build lama. Kini jaringan diutamakan; cache hanya dipakai bila offline
+ * atau jaringan lebih lambat dari `RSC_NETWORK_TIMEOUT_MS`.
+ */
 async function handleAppRouter(event, request, url) {
-  const cache = await caches.open(CACHE_SHELL);
+  const cache = await caches.open(CACHE_RSC);
+  const key = rscCacheKey(url);
+  // Prefetch App Router berisi payload parsial — jangan disimpan sebagai
+  // payload penuh halaman.
+  const isPrefetch = request.headers.get('Next-Router-Prefetch') === '1';
 
-  const cached =
-    (await cache.match(request)) ||
-    (await cache.match(request, { ignoreSearch: true }));
-
-  if (cached) {
-    event.waitUntil(
-      fetch(request)
-        .then((response) => {
-          if (response.ok) return cache.put(request, response.clone());
-          return undefined;
-        })
-        .catch(() => undefined),
-    );
-    return cached;
-  }
-
-  try {
-    const response = await fetch(request);
-    if (response.ok) {
-      await cache.put(request, response.clone());
+  const network = fetch(request).then((response) => {
+    if (response.ok && !isPrefetch) {
+      event.waitUntil(cache.put(key, response.clone()).catch(() => undefined));
     }
     return response;
+  });
+  // Bila cache sudah dipakai (timeout), kegagalan jaringan setelahnya diabaikan.
+  network.catch(() => undefined);
+
+  const findCached = async () =>
+    (await cache.match(key, { ignoreVary: true })) ||
+    (await cache.match(request, { ignoreSearch: true, ignoreVary: true }));
+
+  const timedOut = new Promise((resolve) => {
+    setTimeout(() => resolve('timeout'), RSC_NETWORK_TIMEOUT_MS);
+  });
+
+  try {
+    const first = await Promise.race([network, timedOut]);
+    if (first !== 'timeout') return first;
+
+    const cached = await findCached();
+    if (cached) return cached;
+    return await network;
   } catch {
-    // Offline & id belum pernah dicache → pakai app-shell RSC.
+    // Offline / gagal jaringan → cache path ini, lalu app-shell.
   }
+
+  const cached = await findCached();
+  if (cached) return cached;
 
   const shellRoute = appShellRouteFor(url);
   if (shellRoute) {
@@ -376,6 +422,7 @@ async function cacheSurahOfflineContent({ dataUrls, routeUrls }) {
 /** Cache dokumen HTML + payload RSC untuk daftar route (App Router). */
 async function cacheRouteShells(routeUrls) {
   const shellCache = await caches.open(CACHE_SHELL);
+  const rscCache = await caches.open(CACHE_RSC);
 
   await runWithConcurrency(routeUrls, PRECACHE_CONCURRENCY, async (path) => {
     try {
@@ -396,7 +443,7 @@ async function cacheRouteShells(routeUrls) {
       });
       const rscResponse = await fetch(rscRequest);
       if (rscResponse.ok) {
-        await shellCache.put(rscRequest, rscResponse.clone());
+        await rscCache.put(rscRequest, rscResponse.clone());
       }
     } catch (error) {
       console.warn('[HanQuran SW] Precache route gagal:', path, error);

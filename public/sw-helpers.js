@@ -133,13 +133,108 @@
   async function cacheFirst(request, cacheName) {
     const cache = await caches.open(cacheName);
     const cached = await cache.match(request);
-    if (cached) return cached;
+    if (cached) {
+      const range = request.headers.get('range');
+      return range ? rangeResponseFromCache(cached, range) : cached;
+    }
 
     const response = await fetch(request);
-    if (response.ok) {
+    // Hanya respons penuh (200) yang boleh disimpan: Cache API menolak 206
+    // (Partial Content) dengan TypeError, yang dulu membuat pemutaran gagal.
+    if (response.status === 200) {
       await cache.put(request, response.clone());
     }
     return response;
+  }
+
+  /**
+   * Parse header `Range: bytes=…` untuk ukuran `size`.
+   * Mendukung `start-end`, `start-`, dan `-suffix`. `null` bila tidak valid.
+   *
+   * @param {string} header
+   * @param {number} size
+   * @returns {{ start: number, end: number } | null}
+   */
+  function parseByteRange(header, size) {
+    const match = /^bytes=(\d*)-(\d*)$/.exec((header || '').trim());
+    if (!match || size <= 0) return null;
+    const [, rawStart, rawEnd] = match;
+    if (rawStart === '' && rawEnd === '') return null;
+
+    let start;
+    let end;
+    if (rawStart === '') {
+      const suffix = Number(rawEnd);
+      if (suffix <= 0) return null;
+      start = Math.max(0, size - suffix);
+      end = size - 1;
+    } else {
+      start = Number(rawStart);
+      end = rawEnd === '' ? size - 1 : Math.min(Number(rawEnd), size - 1);
+    }
+    if (start > end || start >= size) return null;
+    return { start, end };
+  }
+
+  /**
+   * Bangun respons `206 Partial Content` dari respons cache penuh.
+   * Safari/iOS mewajibkan 206 untuk media; 200 utuh membuat audio offline
+   * gagal diputar/di-seek (docs/39 B3).
+   *
+   * @param {Response} cached
+   * @param {string} rangeHeader
+   * @returns {Promise<Response>}
+   */
+  async function rangeResponseFromCache(cached, rangeHeader) {
+    const blob = await cached.blob();
+    const range = parseByteRange(rangeHeader, blob.size);
+    const contentType = cached.headers.get('content-type') || 'audio/mpeg';
+
+    if (!range) {
+      return new Response(null, {
+        status: 416,
+        statusText: 'Range Not Satisfiable',
+        headers: { 'Content-Range': `bytes */${blob.size}` },
+      });
+    }
+
+    const body = blob.slice(range.start, range.end + 1, contentType);
+    return new Response(body, {
+      status: 206,
+      statusText: 'Partial Content',
+      headers: {
+        'Content-Type': contentType,
+        'Content-Length': String(body.size),
+        'Content-Range': `bytes ${range.start}-${range.end}/${blob.size}`,
+        'Accept-Ranges': 'bytes',
+      },
+    });
+  }
+
+  /**
+   * Kunci cache dokumen navigasi **tanpa query** (`?ayah=` dsb.): satu
+   * halaman melayani semua query, jadi cukup satu entri per path (docs/39 B1).
+   *
+   * @param {URL} url
+   * @returns {Request}
+   */
+  function navigationCacheKey(url) {
+    return new Request(url.origin + url.pathname, {
+      headers: { Accept: 'text/html,application/xhtml+xml' },
+    });
+  }
+
+  /**
+   * Kunci cache payload RSC per path (abaikan `?_rsc=<hash>` yang berubah
+   * tiap navigasi) — sama dengan bentuk yang dipakai `cacheRouteShells`.
+   *
+   * @param {URL} url
+   * @returns {Request}
+   */
+  function rscCacheKey(url) {
+    return new Request(url.origin + url.pathname, {
+      headers: { RSC: '1', Accept: 'text/x-component' },
+    });
   }
 
   /**
@@ -191,6 +286,10 @@
     networkFirstNavigation,
     getRequestCategory,
     cacheFirst,
+    parseByteRange,
+    rangeResponseFromCache,
+    navigationCacheKey,
+    rscCacheKey,
     staleWhileRevalidate,
   };
 })(typeof self !== 'undefined' ? self : globalThis);

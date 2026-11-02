@@ -83,6 +83,10 @@ Rilis gabungan sejak 0.5.0: aplikasi Android (Capacitor), Gerbang Threads, SEO &
 
 #### Perbaikan
 
+- Surat yang belum pernah dibuka kini bisa dibuka offline lagi (app-shell sempat tertimpa payload RSC di cache yang sama)
+- Posisi "Lanjutkan Hafalan" tidak lagi tertimpa saat sekadar membuka surat lain; label kartu kini "Terakhir dibaca"
+- Navigasi setelah deploy tidak memakai payload halaman versi lama; cache halaman tidak lagi membengkak per `?ayah`
+- Audio offline menjawab permintaan Range dengan 206 (persiapan dukungan Safari iOS)
 - Surat yang sudah "Simpan Offline" tidak lagi di-precache ulang setiap aplikasi dibuka (nama cache shell lama)
 - Teks ayat tidak lagi tampil sebagai kotak: font **Amiri Quran** dibundel untuk rasm Utsmani (alif wasla, tanda waqaf)
 - Hydration mismatch di ikon favorit Beranda dan tombol Simpan Offline
@@ -95,7 +99,7 @@ Rilis gabungan sejak 0.5.0: aplikasi Android (Capacitor), Gerbang Threads, SEO &
 
 #### PWA & offline
 
-- Service Worker **v4**: unduhan audio offline tidak terputus di tengah jalan (`waitUntil`); SW hanya menerima URL audio CDN & path se-origin
+- Service Worker **v5**: cache halaman & RSC dipisah, kunci tanpa query, RSC network-first; unduhan audio offline tidak terputus di tengah jalan (`waitUntil`); SW hanya menerima URL audio CDN & path se-origin
 - Font Al-Qur'an ikut di-precache (`/_next/static/media`) — tersedia offline
 
 #### Catatan penting

@@ -60,7 +60,11 @@ function FocusModeLoaded({
 
   const totalAyahs = surah.ayahs.length;
 
-  usePersistLastViewed(surah.number, activeAyah);
+  // Posisi baca disimpan hanya setelah ada interaksi (docs/39 A1):
+  // audio diputar atau pengguna berpindah dari ayat awal.
+  const [engaged, setEngaged] = useState(false);
+  const initialAyah = clampAyahNumber(startAyah, surah.ayahs.length);
+  usePersistLastViewed(surah.number, activeAyah, engaged);
   useTrackSurahOpened(surah);
 
   const {
@@ -97,6 +101,10 @@ function FocusModeLoaded({
   useEffect(() => {
     setActiveAyah(clampAyahNumber(startAyah, surah.ayahs.length));
   }, [startAyah, surah.ayahs.length]);
+
+  useEffect(() => {
+    if (isActiveAyahPlaying || activeAyah !== initialAyah) setEngaged(true);
+  }, [isActiveAyahPlaying, activeAyah, initialAyah]);
 
   const currentAyah = useMemo(
     () => surah.ayahs.find((a) => a.number === activeAyah) ?? surah.ayahs[0],

@@ -534,14 +534,17 @@ interface NoteRecord {
 
 # 6. Cache Storage Design
 
-Nama cache aktif (sumber: `public/sw.js`, `SW_VERSION = 'v4'`). Saat aktivasi SW, cache `hanquran-*` yang tidak ada di daftar ini dihapus.
+Nama cache aktif (sumber: `public/sw.js`, `SW_VERSION = 'v5'`). Saat aktivasi SW, cache `hanquran-*` yang tidak ada di daftar ini dihapus.
 
 | Cache | Isi | Strategi |
 |-------|-----|----------|
 | `hanquran-static-v2` | JS/CSS/font ber-hash (`/_next/static/*`), ikon, `manifest.json`, `offline.html` | Precache saat install + stale-while-revalidate |
-| `hanquran-shell-v2` | Dokumen HTML + payload RSC rute (`/`, `/settings`, `/surah/1` sebagai app-shell, dst.) | Network-first untuk navigasi; app-shell untuk id surat apa pun saat offline |
+| `hanquran-shell-v2` | Dokumen HTML rute (`/`, `/settings`, `/surah/1` & `/focus/1` sebagai app-shell, halaman yang pernah dibuka) — kunci **tanpa query** | Network-first untuk navigasi; app-shell untuk id surat apa pun saat offline |
+| `hanquran-rsc-v1` | Payload RSC App Router per path (kunci tanpa `?_rsc=`) | **Network-first** berbatas 2,5 detik; cache/app-shell saat offline. Prefetch tidak disimpan |
 | `hanquran-data-v3` | Dataset `public/data/*` (kecuali `word-timings/` yang dimuat saat dipakai) | Precache saat install + cache-first |
-| `hanquran-audio-v1` | MP3 per ayat dari CDN `everyayah.com` | Cache-first |
+| `hanquran-audio-v1` | MP3 per ayat dari CDN `everyayah.com` | Cache-first; permintaan `Range` dijawab `206` dari salinan penuh (iOS) |
+
+Dokumen HTML dan payload RSC **wajib** di cache terpisah: di cache yang sama, `put` RSC menimpa dokumen ber-URL sama sehingga app-shell offline hilang (diperbaiki 2 Nov 2026, SW v5).
 
 ## 6.1 `hanquran-audio-v1`
 

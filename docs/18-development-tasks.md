@@ -77,7 +77,7 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 12        | Locale Paint Pertama (F8)         | 4      | 0      | 0      | 4      | 4       | ✅ Selesai (P12-1–P12-4) — 1 Nov 2026        |
 | 12b       | Audit Bug & Hardening             | 13     | 3      | 7      | 3      | 13      | ✅ Selesai (P12b-1–P12b-13) — 2 Nov 2026     |
 | 13        | Sorot Kata (quran-align)          | 10     | 0      | 8      | 2      | 10      | ✅ Selesai (P13-1–P13-10) — 2 Nov 2026       |
-| 14        | Perbaikan Lanjutan Audit          | 10     | 0      | 5      | 5      | 0       | 📋 Belum dimulai (`docs/39`)                  |
+| 14        | Perbaikan Lanjutan Audit          | 10     | 0      | 5      | 5      | 3       | 🚧 Berjalan (`docs/39`)                       |
 | 15        | Ulang Kata (Hafalan per Kata)     | 12     | 0      | 10     | 2      | 0       | 📋 Belum dimulai (`docs/38`)                  |
 | **TOTAL** |                                   | **110** | **50** | **37** | **23** | **83**  | (+ Phase 9; + Phase 10 SEO; + Phase 10b hardening; + Phase 11 CWV; + Phase 11b LCP gate; + Phase 12 F8; + Phase 12b audit) |
 
@@ -1496,7 +1496,7 @@ Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan de
 
 # 🧹 Phase 14 — Perbaikan Lanjutan Hasil Audit
 
-**Status:** 📋 Belum dimulai
+**Status:** 🚧 Berjalan — P14-1–P14-3 selesai, P14-4 menunggu uji iPhone
 **Spek:** [`docs/39-followup-fixes-plan.md`](./39-followup-fixes-plan.md) (kode A1–D3 merujuk bagian di dokumen itu)
 
 | ID | Task | Tipe | Prioritas | Ref |
@@ -1512,10 +1512,10 @@ Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan de
 | P14-9 | Celah kecil: `install-prompt` try/catch, rejection `toggleFavorite`, `null` di Select qari, kunci i18n tak terpakai | [FIX] | P2 | C5 |
 | P14-10 | Test precache menulis ke folder sementara; selidiki test yang menggantung | [TEST] | P3 | C4 |
 
-- [ ] [FIX] P14-1 — posisi Lanjutkan Hafalan (P1)
-- [ ] [FIX] P14-2 — cache navigasi tanpa query (P1)
-- [ ] [FIX] P14-3 — RSC tidak basi setelah deploy (P1)
-- [ ] [FIX] P14-4 — Range 206 audio iOS (P1)
+- [x] [FIX] P14-1 — posisi Lanjutkan Hafalan (P1)
+- [x] [FIX] P14-2 — cache navigasi tanpa query (P1)
+- [x] [FIX] P14-3 — RSC tidak basi setelah deploy (P1)
+- [ ] [FIX] P14-4 — Range 206 audio iOS (P1) — kode ✅, uji iPhone ⏳
 - [ ] [FIX] P14-5 — TypeScript bersih + CI (P1)
 - [ ] [A11Y] P14-6 — gerbang Threads (P2)
 - [ ] [NEW] P14-7 — ESLint (P2)

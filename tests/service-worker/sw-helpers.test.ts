@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
@@ -206,7 +207,8 @@ describe('SwHelpers.networkFirstNavigation', () => {
     );
 
     expect(response).toBe(network);
-    expect(cacheStore.put).toHaveBeenCalledWith(request, network);
+    // Kode menyimpan salinan (`response.clone()`), bukan objek yang sama.
+    expect(cacheStore.put).toHaveBeenCalledWith(request, expect.any(Response));
   });
 
   it('mengembalikan cache shell untuk URL yang sama saat offline', async () => {
@@ -307,7 +309,8 @@ describe('SwHelpers.cacheFirst', () => {
     const response = await helpers.cacheFirst(request, 'hanquran-audio-v1');
 
     expect(response).toBe(network);
-    expect(cacheStore.put).toHaveBeenCalledWith(request, network);
+    // Kode menyimpan salinan (`response.clone()`), bukan objek yang sama.
+    expect(cacheStore.put).toHaveBeenCalledWith(request, expect.any(Response));
   });
 });
 

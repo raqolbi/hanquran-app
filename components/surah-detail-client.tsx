@@ -120,7 +120,9 @@ function SurahDetailView({
   const smoothAnimation = useUserStore((s) => s.settings.smoothAnimation);
   const wordHighlight = useUserStore((s) => s.settings.wordHighlight);
 
-  usePersistLastViewed(surah.number, activeAyah);
+  // Posisi baca disimpan hanya setelah ada interaksi (docs/39 A1).
+  const [engaged, setEngaged] = useState(false);
+  usePersistLastViewed(surah.number, activeAyah, engaged);
   useTrackSurahOpened(surah);
 
   const reciterId = usePreferredReciterId();
@@ -165,6 +167,10 @@ function SurahDetailView({
       enabled: true,
       remeasureKey: `${isPlaying}-${showTranslation}-${showTransliteration}`,
     });
+
+  useEffect(() => {
+    if (isPlaying) setEngaged(true);
+  }, [isPlaying]);
 
   useAutoFollowPlayback({
     activeAyah,
@@ -261,6 +267,7 @@ function SurahDetailView({
                 if (ayah.number !== activeAyah && isPlaying) {
                   pause();
                 }
+                setEngaged(true);
                 setActiveAyah(ayah.number);
               }}
             />

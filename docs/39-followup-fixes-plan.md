@@ -14,6 +14,8 @@ Prioritas: **P1** = berdampak langsung ke pengguna/CI · **P2** = kualitas & aks
 
 ### A1. "Lanjutkan Hafalan" tertimpa saat sekadar membuka surat — P1
 
+✅ **Selesai 2 Nov 2026** — `usePersistLastViewed(surahId, ayah, engaged)`; label "Terakhir dibaca".
+
 **Masalah:** `usePersistLastViewed` menyimpan ayat aktif begitu Surah Detail dibuka (ayat 1). Pengguna yang sedang di Al-Baqarah 150 lalu mengintip surat lain kehilangan posisinya. Label kartu "x dari y dihafal" juga menyesatkan — yang dicatat adalah posisi baca, bukan hafalan.
 
 **Usulan:**
@@ -36,6 +38,8 @@ Prioritas: **P1** = berdampak langsung ke pengguna/CI · **P2** = kualitas & aks
 
 ### B1. Cache navigasi tidak dibatasi — P1
 
+✅ **Selesai 2 Nov 2026** — `navigationCacheKey`; entri ber-query lama dibersihkan saat aktivasi SW v5.
+
 **Masalah:** `handleNavigation` menyimpan setiap URL lengkap, termasuk `?ayah=n`, sehingga cache `hanquran-shell-v2` terus membesar.
 
 **Usulan:** simpan dengan kunci **tanpa query** (`url.origin + url.pathname`), karena halaman yang sama melayani semua `?ayah`. Pertahankan fallback `ignoreSearch`.
@@ -44,6 +48,8 @@ Prioritas: **P1** = berdampak langsung ke pengguna/CI · **P2** = kualitas & aks
 
 ### B2. Payload RSC basi setelah deploy — P1
 
+✅ **Selesai 2 Nov 2026** — network-first 2,5 dtk + cache RSC terpisah `hanquran-rsc-v1`. Sekaligus memperbaiki bug: RSC menimpa dokumen app-shell di cache yang sama sehingga surat yang belum pernah dibuka gagal dibuka offline.
+
 **Masalah:** `handleAppRouter` memakai cache-first untuk RSC; setelah deploy, navigasi pertama bisa memakai payload build lama (risiko gagal memuat chunk).
 
 **Usulan:** **network-first dengan batas waktu** (mis. 2,5 detik) untuk RSC saat online, fallback ke cache/app-shell saat offline. Atau sertakan `buildId` (sudah ada di `sw-precache-manifest.js`) dan hapus entri RSC dengan build berbeda saat aktivasi.
@@ -51,6 +57,8 @@ Prioritas: **P1** = berdampak langsung ke pengguna/CI · **P2** = kualitas & aks
 **Selesai bila:** setelah deploy baru, navigasi klien online selalu memakai payload baru; offline tetap jalan (`docs/30` §8).
 
 ### B3. Audio dari cache untuk permintaan Range (iOS) — P1
+
+✅ **Kode selesai 2 Nov 2026** (`rangeResponseFromCache`, 206/416; respons 206 dari jaringan tidak lagi dicoba disimpan). ⏳ Uji Safari iOS di perangkat masih perlu.
 
 **Masalah:** audio tersimpan disajikan sebagai respons 200 utuh untuk permintaan `Range`. Safari/iOS sering mewajibkan `206 Partial Content` untuk media, sehingga audio offline bisa gagal diputar di iPhone.
 

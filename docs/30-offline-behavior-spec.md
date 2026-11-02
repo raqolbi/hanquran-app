@@ -219,14 +219,15 @@ next/prev) menuju **surat lain** yang audionya belum tersedia offline, pemutaran
 
 ## 6. Service Worker — Offline First
 
-Nama cache di bawah sesuai `public/sw.js` (`SW_VERSION = 'v4'`, 2 Nov 2026). Angka versi cache dinaikkan per jenis bila isinya harus diinvalidasi; cache `hanquran-*` lain dihapus saat aktivasi.
+Nama cache di bawah sesuai `public/sw.js` (`SW_VERSION = 'v5'`, 2 Nov 2026). Angka versi cache dinaikkan per jenis bila isinya harus diinvalidasi; cache `hanquran-*` lain dihapus saat aktivasi.
 
 | Cache | Isi | Strategi |
 |-------|-----|----------|
-| `hanquran-shell-v2` | App shell: `offline.html`, **app-shell HTML** + RSC route | network-first nav / SWR (`ignoreSearch`), **fallback app-shell** |
+| `hanquran-shell-v2` | App shell: `offline.html`, **dokumen HTML** route (kunci tanpa query) | network-first nav, **fallback app-shell** |
+| `hanquran-rsc-v1` | Payload RSC route (kunci tanpa `?_rsc=`) | network-first berbatas 2,5 dtk; offline → cache / app-shell RSC |
 | `hanquran-static-v2` | `/_next/static/*` (JS/CSS hashed), font, ikon, `manifest.json` | **precache install** + SWR |
 | `hanquran-data-v3` | seluruh `/data/*` | **precache install** + cache-first |
-| `hanquran-audio-v1` | MP3 CDN | cache-first (Simpan Offline / auto download saat play jika ON) |
+| `hanquran-audio-v1` | MP3 CDN | cache-first (Simpan Offline / auto download saat play jika ON); `Range` → `206` |
 
 **Jangan** fallback navigasi `/surah/*` ke HTML Beranda — menyebabkan splash + kembali ke home (bug 25 Juni 2026).
 

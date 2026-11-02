@@ -129,7 +129,7 @@
 │  Cache Storage                                                │
 │   ├─ Audio Files (hanquran-audio-v1)                          │
 │   ├─ Dataset Qur'an (hanquran-data-v3)                        │
-│   ├─ App shell / RSC (hanquran-shell-v2)                      │
+│   ├─ App shell (hanquran-shell-v2) + RSC (hanquran-rsc-v1)    │
 │   └─ Static Assets (hanquran-static-v2)                       │
 │                                                               │
 └───────────────────────────────┬───────────────────────────────┘
