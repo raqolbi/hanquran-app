@@ -7,7 +7,7 @@
 [![License: HCCL v1.0](https://img.shields.io/badge/License-HCCL%20v1.0-2ea44f)](./LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000?style=flat&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Tests](https://img.shields.io/badge/tests-222%20passing-brightgreen)](./tests)
+[![Tests](https://img.shields.io/badge/tests-503%20passing-brightgreen)](./tests)
 
 Repository: [github.com/raqolbi/hanquran-app](https://github.com/raqolbi/hanquran-app)
 
@@ -40,8 +40,9 @@ Buka aplikasi → Pilih surat → Putar audio → Aktifkan repeat → Mode fokus
 
 ### Fokus aplikasi
 
-- Hafalan (tahfidz) dengan **repeat** ayat / range / seluruh surat
-- Audio tilawah **per ayat**
+- Hafalan (tahfidz) dengan **pengulangan** ayat / rentang ayat / seluruh surat
+- **Ulang Kata** — ketuk kata (atau seret beberapa kata) untuk diulang terus, dengan jeda menirukan
+- Audio tilawah **per ayat** dari 14 qari, **sorot kata** yang sedang dibaca, kecepatan 0.5×–1.5×
 - **Mode Fokus** — satu ayat, minim distraksi
 - **Lanjutkan Hafalan** dari posisi terakhir
 - Preferensi lokal (bahasa UI, qari, tampilan ayat, aksesibilitas)
@@ -53,12 +54,12 @@ Buka aplikasi → Pilih surat → Putar audio → Aktifkan repeat → Mode fokus
 | **Versi** | `0.6.0` (belum di-tag) |
 | **Scope** | MVP V1 dibekukan di [`docs/20-mvp-freeze.md`](./docs/20-mvp-freeze.md) |
 | **Implementasi** | Core MVP + Growth `0.2.0`–`0.6.0` — lihat [`RELEASE.md`](./RELEASE.md) |
-| **Pengujian** | 476 test (Vitest), semua lulus |
+| **Pengujian** | 503 test (Vitest), semua lulus; `typecheck` & `lint` di CI |
 | **Deploy** | PWA di [Vercel](./docs/25-deployment-vercel.md); Android via Capacitor ([`docs/32`](./docs/32-capacitor-android-platform.md)) |
 
-**Sudah diimplementasikan** (diverifikasi dari codebase): daftar 114 surat (di-SSG, ada di HTML awal), detail surat (SSG + SEO), audio player (kecepatan putar, prefetch ayat berikutnya), repeat engine + badge progress `x/y`, mode fokus, **Mode Murotal**, Media Session (lock screen), favorit surat, lanjutkan hafalan, auto follow playback, layar Tentang HanQuran, i18n UI (`id` / `en`), unduh offline per surat, Service Worker, PWA (manifest, install prompt, offline shell, splash), Vercel Analytics, aplikasi Android (Capacitor), Gerbang Threads, font Amiri Quran untuk rasm Utsmani.
+**Sudah diimplementasikan** (diverifikasi dari codebase): daftar 114 surat (di-SSG, ada di HTML awal), detail surat (SSG + SEO), audio player (kecepatan putar 0.5×–1.5×, prefetch ayat berikutnya), 14 qari, **sorot kata** (12 qari, data quran-align), **Ulang Kata** (ketuk/seret kata + jeda menirukan), repeat engine + badge progress `x/y`, mode fokus (+ pintasan keyboard), **Mode Murotal**, Media Session (lock screen), favorit surat, lanjutkan hafalan, auto follow playback, layar Tentang HanQuran, i18n UI (`id` / `en`), unduh offline per surat, Service Worker, PWA (manifest, install prompt, offline shell, splash), Vercel Analytics, aplikasi Android (Capacitor), Gerbang Threads, font Amiri Quran untuk rasm Utsmani.
 
-**Belum selesai / di luar MVP V1** (dokumentasi resmi): sorot kata untuk Al-Juhaynee & Warsh, persist posisi audio, verifikasi E2E offline, error tracking produksi, seluruh kriteria rilis di [`docs/20-mvp-freeze.md`](./docs/20-mvp-freeze.md) §9.
+**Belum selesai / di luar MVP V1** (dokumentasi resmi): uji perangkat iPhone & APK untuk Ulang Kata / audio offline / kecepatan putar, sorot kata untuk Al-Juhaynee & Warsh, persist posisi audio, verifikasi E2E offline, error tracking produksi, seluruh kriteria rilis di [`docs/20-mvp-freeze.md`](./docs/20-mvp-freeze.md) §9.
 
 ---
 
@@ -85,22 +86,27 @@ Buka aplikasi → Pilih surat → Putar audio → Aktifkan repeat → Mode fokus
 
 ## Screenshot
 
-Pratinjau antarmuka HanQuran — mobile-first, UI Bahasa Indonesia.
+Pratinjau antarmuka HanQuran — mobile-first, UI Bahasa Indonesia (diambil dari build 0.6.0, 2 Nov 2026).
 
 <p align="center">
   <img src="./docs/images/beranda.png" alt="Beranda HanQuran — kartu Lanjutkan Hafalan, pencarian, filter favorit, dan daftar 114 surat" width="400" />
   <br><sub><strong>Beranda</strong> — Lanjutkan Hafalan, pencarian, filter favorit, daftar surat</sub>
 </p>
 
-| Detail surat | Mode Fokus |
+| Detail surat | Ulang Kata |
 | :---: | :---: |
-| <img src="./docs/images/detail-surat.png" alt="Detail surat Al-Faatiha — ayat, terjemahan, transliterasi, audio player" width="360" /> | <img src="./docs/images/mode-fokus.png" alt="Mode Fokus — satu ayat per layar dengan kontrol audio" width="360" /> |
-| <sub><strong>Detail surat</strong> — ayat, terjemahan & transliterasi, unduh offline</sub> | <sub><strong>Mode Fokus</strong> — satu ayat, minim distraksi</sub> |
+| <img src="./docs/images/detail-surat.png" alt="Detail surat Al-Faatiha — kata yang sedang dibaca disorot hijau, terjemahan, transliterasi, pemutar audio dengan kecepatan putar" width="360" /> | <img src="./docs/images/ulang-kata.png" alt="Ulang Kata di Al-Baqarah ayat 2 — kata 2–4 berbingkai kuning diulang terus, chip status dengan tombol Berhenti" width="360" /> |
+| <sub><strong>Detail surat</strong> — sorot kata saat tilawah, terjemahan & transliterasi, kecepatan putar</sub> | <sub><strong>Ulang Kata</strong> — ketuk atau seret kata, diulang terus dengan jeda menirukan</sub> |
 
-| Pengaturan Pengulangan | Pengaturan |
+| Mode Fokus | Pengaturan Pengulangan |
 | :---: | :---: |
-| <img src="./docs/images/pengaturan-repeat.png" alt="Dialog Pengaturan Pengulangan — jumlah dan target pengulangan" width="360" /> | <img src="./docs/images/pengaturan.png" alt="Halaman Pengaturan — bahasa, qari, playback, offline, aksesibilitas" width="360" /> |
-| <sub><strong>Repeat</strong> — jumlah (1×–∞), target ayat / range / surat</sub> | <sub><strong>Pengaturan</strong> — bahasa, qari, playback, ukuran teks, offline</sub> |
+| <img src="./docs/images/mode-fokus.png" alt="Mode Fokus — satu ayat Al-Ikhlas per layar dengan sorot kata dan kontrol audio" width="360" /> | <img src="./docs/images/pengaturan-repeat.png" alt="Dialog Pengaturan Pengulangan — jumlah dan target pengulangan, rentang ayat" width="360" /> |
+| <sub><strong>Mode Fokus</strong> — satu ayat, minim distraksi, sorot kata</sub> | <sub><strong>Pengulangan</strong> — jumlah (1×–tanpa batas), target ayat / rentang / surat</sub> |
+
+<p align="center">
+  <img src="./docs/images/pengaturan.png" alt="Halaman Pengaturan — qari bertanda Sorot kata, Ikuti Ayat yang Diputar, Sorot Kata, Jeda Menirukan, Mode Murotal, ukuran teks" width="360" />
+  <br><sub><strong>Pengaturan</strong> — qari, pemutaran (sorot kata, jeda menirukan, Murotal), ukuran teks, offline, aksesibilitas</sub>
+</p>
 
 ---
 
@@ -110,15 +116,20 @@ Pratinjau antarmuka HanQuran — mobile-first, UI Bahasa Indonesia.
 
 | Fitur | Deskripsi |
 |-------|-----------|
-| **Beranda** | 114 surat, pencarian, filter favorit, kartu Lanjutkan Hafalan |
-| **Detail Surat** | Ayat rasm Utsmani (font Amiri Quran), **sorot kata saat tilawah** (12 dari 14 qari), terjemahan & transliterasi (toggle), audio, repeat, unduh offline |
+| **Beranda** | 114 surat, pencarian (nama, arti, nomor), filter favorit, kartu Lanjutkan Hafalan (posisi terakhir dibaca) |
+| **Detail Surat** | Ayat rasm Utsmani (font Amiri Quran), **sorot kata saat tilawah** (12 dari 14 qari), terjemahan & transliterasi (toggle), favorit, audio per ayat, unduh offline |
+| **Pengulangan** | 1×, 5×, 10×, 25×, 50×, tanpa batas — untuk ayat aktif, rentang ayat, atau seluruh surat; badge progres `x/y` |
+| **Mode Murotal** | Tilawah berkelanjutan ke ayat & surat berikutnya sampai dihentikan |
+| **Layar kunci** | Kontrol putar/jeda & ayat sebelum/berikut di notifikasi / layar kunci (Media Session; Android: notifikasi media) |
 | **Kecepatan Putar** | 0.5× – 1.5× di pemutar audio (nada tidak berubah), tersimpan otomatis |
 | **Ulang Kata** | Ketuk kata di ayat aktif → diulang terus; tekan lama lalu seret → ulang rentang kata; jeda menirukan 0–3 dtk |
 | **Mode Fokus** | Satu ayat per layar, navigasi ayat (juga ← / → dan Spasi di keyboard), audio & repeat, sorot kata, ulang kata |
 | **Pengaturan** | Bahasa UI, qari, Ikuti Ayat yang Diputar, Sorot Kata, Jeda Menirukan, Mode Murotal, Unduh Audio Otomatis, ukuran teks Arab, kontras tinggi, animasi, status & hapus audio tersimpan |
+| **Bahasa** | UI Bahasa Indonesia & English; terjemahan ayat mengikuti bahasa |
 | **Tentang HanQuran** | Informasi aplikasi, filosofi, credits, repository & lisensi |
-| **Offline** | Unduh audio per surat; Service Worker cache dataset & aset |
+| **Offline** | Seluruh teks Al-Qur'an tersedia offline; **Simpan Offline** audio per surat + qari; opsi Unduh Audio Otomatis |
 | **PWA** | Instal ke layar utama, splash screen, halaman fallback offline |
+| **Android** | Aplikasi Capacitor dengan audio latar & notifikasi media (`docs/32`) |
 
 ### Developer
 
@@ -127,6 +138,8 @@ Pratinjau antarmuka HanQuran — mobile-first, UI Bahasa Indonesia.
 | Service layer Quran | `services/quran/` |
 | Audio controller & Media Session | `services/audio-controller.ts`, `services/media-session.ts` |
 | Repeat engine | `services/repeat-engine.ts` |
+| Sorot kata (data waktu per kata) | `services/quran/word-timings.ts`, `hooks/use-active-word-range.ts` |
+| Ulang Kata | `services/word-loop-engine.ts`, `services/quran/word-clip.ts`, `stores/wordLoopStore.ts` |
 | State (Zustand) | `stores/` |
 | Persistensi pengguna (Dexie) | `services/db/` |
 | Custom analytics | `lib/analytics/` — lihat [`docs/analytics.md`](./docs/analytics.md) |
@@ -158,7 +171,7 @@ Spesifikasi lengkap: [`docs/14-routing-spec.md`](./docs/14-routing-spec.md).
 | i18n UI | [next-intl 4](https://next-intl.dev/) — `id`, `en` |
 | PWA | Service Worker (`public/sw.js`), Web App Manifest |
 | Analytics | [@vercel/analytics](https://vercel.com/docs/analytics) |
-| Testing | [Vitest 4](https://vitest.dev/) + Testing Library + jsdom |
+| Testing | [Vitest 4](https://vitest.dev/) + Testing Library (environment `node`, jsdom per file), ESLint 9, `tsc --noEmit` |
 
 Keputusan arsitektur dibekukan: [`docs/20-mvp-freeze.md`](./docs/20-mvp-freeze.md) Bagian 7.
 
@@ -190,7 +203,7 @@ CDN tilawah (everyayah.com)  →  AudioController  →  HTMLAudioElement
 
 ### Offline & PWA
 
-- **Service Worker:** `hanquran-static-v1`, `hanquran-shell-v1`, `hanquran-data-v1`, `hanquran-audio-v1`
+- **Service Worker (`v5`):** `hanquran-static-v2`, `hanquran-shell-v2` (halaman, kunci tanpa query), `hanquran-rsc-v1` (payload navigasi, network-first), `hanquran-data-v3`, `hanquran-audio-v1` (mendukung Range → 206)
 - **Registrasi SW:** production only — `lib/register-service-worker.ts`
 
 > **Penting:** PWA dan Service Worker **tidak aktif** di `npm run dev`. Uji dengan `npm run build && npm start` atau deployment Vercel.
@@ -206,13 +219,13 @@ hanquran-app/
 ├── hooks/               # Custom React hooks
 ├── lib/                 # Utilitas, analytics, routes, PWA helpers
 ├── services/            # Quran loader, audio, repeat, download, db
-├── stores/              # Zustand (audio, user, repeat, offline)
+├── stores/              # Zustand (audio, user, repeat, offline, wordLoop)
 ├── types/               # TypeScript types domain
 ├── i18n/                # Konfigurasi next-intl
 ├── messages/            # String UI (id.json, en.json)
-├── data/                # reciters.json (metadata qari)
+├── data/                # reciters.json (qari), word-timing-reciters.json (qari bersorot kata)
 ├── public/
-│   ├── data/            # Dataset Quran & terjemahan (114 surat)
+│   ├── data/            # Dataset Quran & terjemahan (114 surat), word-timings/ (quran-align)
 │   ├── sw.js            # Service Worker
 │   ├── manifest.json    # PWA manifest
 │   └── branding/        # Logo
@@ -257,6 +270,8 @@ Panduan developer lengkap: [`docs/SETUP.md`](./docs/SETUP.md).
 | `npm run test` | Unit & integration tests |
 | `npm run test:watch` | Tests mode watch |
 | `npm run lint` | ESLint |
+| `npm run typecheck` | Cek tipe TypeScript (`tsc --noEmit`) |
+| `npm run android:sync` | Export static + patch audio native + `cap sync` (`docs/32`) |
 
 ---
 
@@ -291,7 +306,7 @@ Variabel khusus (mis. Sentry) dapat ditambahkan saat Phase 8 release monitoring 
 npm run test
 ```
 
-- **476 test / 95 file** di `tests/` (Vitest + jsdom + fake-indexeddb) — semua lulus per 2 Nov 2026
+- **503 test / 99 file** di `tests/` (Vitest + fake-indexeddb; environment default `node`, file yang butuh DOM memakai `// @vitest-environment jsdom`) — semua lulus per 2 Nov 2026
 - Konfigurasi: `vitest.config.ts`, setup: `tests/setup.ts`
 
 ---
@@ -346,7 +361,7 @@ Catatan rilis: [`RELEASE.md`](./RELEASE.md).
 | [`docs/07-api-integration.md`](./docs/07-api-integration.md) | Sumber data & integrasi |
 | [`docs/26-about-screen-spec.md`](./docs/26-about-screen-spec.md) | Layar Tentang HanQuran |
 | [`docs/27-media-session-api-spec.md`](./docs/27-media-session-api-spec.md) | Media Session API (lock screen) |
-| [`docs/28-playback-settings.md`](./docs/28-playback-settings.md) | Ikuti Ayat yang Diputar |
+| [`docs/28-playback-settings.md`](./docs/28-playback-settings.md) | Pengaturan pemutaran: Ikuti Ayat yang Diputar, Sorot Kata, Jeda Menirukan, kecepatan putar |
 | [`docs/30-offline-behavior-spec.md`](./docs/30-offline-behavior-spec.md) | Perilaku offline (+ addendum APK) |
 | [`docs/32-capacitor-android-platform.md`](./docs/32-capacitor-android-platform.md) | Platform Capacitor Android |
 | [`docs/33-play-store-privacy-and-data-safety.md`](./docs/33-play-store-privacy-and-data-safety.md) | Privasi & Data safety Play |
