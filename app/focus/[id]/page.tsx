@@ -22,6 +22,7 @@ import { usePersistLastViewed } from '@/hooks/use-persist-last-viewed';
 import { useTrackSurahOpened } from '@/hooks/use-track-surah-opened';
 import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
 import type { SurahData } from '@/services/quran';
+import type { AppLocale } from '@/types';
 
 interface FocusModePageProps {
   params: Promise<{ id: string }>;
@@ -31,12 +32,14 @@ interface FocusModeLoadedProps {
   surah: SurahData;
   surahIdParam: string;
   startAyah: number;
+  contentLocale: AppLocale | null;
 }
 
 function FocusModeLoaded({
   surah,
   surahIdParam,
   startAyah,
+  contentLocale,
 }: FocusModeLoadedProps) {
   const tFocus = useTranslations('focus');
   const tPlayback = useTranslations('settings.playback');
@@ -163,6 +166,7 @@ function FocusModeLoaded({
 
             {showTranslation && currentAyah.translation && (
               <p
+                data-content-locale={contentLocale ?? undefined}
                 className={cn(
                   'text-sm sm:text-base text-muted-foreground leading-relaxed px-2',
                   showTransliteration &&
@@ -236,7 +240,7 @@ export default function FocusModePage({ params }: FocusModePageProps) {
   const searchParams = useSearchParams();
   const startAyah = parseInt(searchParams.get('ayah') ?? '1', 10);
 
-  const { surah, loading, error, retry } = useSurah(surahId);
+  const { surah, loading, error, retry, contentLocale } = useSurah(surahId);
 
   if (loading) {
     return (
@@ -267,6 +271,7 @@ export default function FocusModePage({ params }: FocusModePageProps) {
       surah={surah}
       surahIdParam={surahId}
       startAyah={startAyah}
+      contentLocale={contentLocale}
     />
   );
 }
