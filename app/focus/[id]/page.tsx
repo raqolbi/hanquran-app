@@ -29,6 +29,8 @@ import type { SurahData } from '@/services/quran';
 import type { AppLocale } from '@/types';
 import { LiveQuranAyahText } from '@/components/quran-ayah-text';
 import { useUserStore } from '@/stores/userStore';
+import { useWordLoopStore } from '@/stores/wordLoopStore';
+import { WORD_LOOP_CHIP_SPACE } from '@/lib/surah-detail-chrome';
 
 interface FocusModePageProps {
   params: Promise<{ id: string }>;
@@ -114,6 +116,7 @@ function FocusModeLoaded({
     [surah.ayahs, activeAyah],
   );
 
+  const wordLoopActive = useWordLoopStore((s) => s.loop?.surahId === surah.number);
   const wordLoop = useWordLoopControls({
     surahId: surah.number,
     surahName: surah.englishName,
@@ -175,7 +178,9 @@ function FocusModeLoaded({
 
       <main
         className="relative z-10 flex flex-1 items-center justify-center px-4 sm:px-8"
-        style={{ paddingBottom: bottomInset }}
+        style={{
+          paddingBottom: bottomInset + (wordLoopActive ? WORD_LOOP_CHIP_SPACE : 0),
+        }}
       >
         <AnimatePresence mode="wait">
           <motion.div

@@ -17,3 +17,6 @@ export const SURAH_DETAIL_READING_COMFORT_GAP = 16;
  * ~audio + repeat inline (~112) + comfort (16)
  */
 export const SURAH_DETAIL_MIN_SCROLL_INSET = 136;
+
+/** Ruang tambahan di atas pemutar saat chip Ulang Kata tampil (docs/38 §3.4). */
+export const WORD_LOOP_CHIP_SPACE = 56;

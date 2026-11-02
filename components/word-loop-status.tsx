@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Repeat2, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -42,6 +42,28 @@ export function WordLoopStatus({ surahId, bottomOffset }: WordLoopStatusProps) {
     setAnnouncement(announceKey || t('stopped'));
   }
 
+  // Kata yang diulang tidak boleh tertutup chip (mis. dimulai dengan ketukan,
+  // saat auto follow sedang ditangguhkan karena sentuhan).
+  const chipRef = useRef<HTMLDivElement>(null);
+  const rangeKey = loop ? `${loop.ayahNumber}:${loop.range.from}-${loop.range.to}` : '';
+  useEffect(() => {
+    if (!visible) return;
+    const frame = window.requestAnimationFrame(() => {
+      const chip = chipRef.current?.getBoundingClientRect();
+      if (!chip) return;
+      let bottom = 0;
+      document.querySelectorAll<HTMLElement>('[data-loop="true"]').forEach((word) => {
+        bottom = Math.max(bottom, word.getBoundingClientRect().bottom);
+      });
+      const overlap = bottom - (chip.top - 12);
+      if (bottom > 0 && overlap > 0) {
+        const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+        window.scrollBy({ top: overlap + 8, behavior: reduce ? 'auto' : 'smooth' });
+      }
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [visible, rangeKey]);
+
   useEffect(() => {
     if (!visible) return;
     const onKeyDown = (event: KeyboardEvent) => {
@@ -79,7 +101,10 @@ export function WordLoopStatus({ surahId, bottomOffset }: WordLoopStatusProps) {
             className="pointer-events-none fixed inset-x-0 z-40 flex justify-center px-4"
             style={{ bottom: `calc(${bottomOffset}px + 0.75rem)` }}
           >
-            <div className="pointer-events-auto flex items-center gap-2 rounded-full border border-amber-300 bg-amber-50/95 py-1.5 pl-3 pr-1.5 text-sm text-amber-950 shadow-md backdrop-blur-sm">
+            <div
+              ref={chipRef}
+              className="pointer-events-auto flex items-center gap-2 rounded-full border border-amber-300 bg-amber-50/95 py-1.5 pl-3 pr-1.5 text-sm text-amber-950 shadow-md backdrop-blur-sm"
+            >
               <Repeat2 size={16} aria-hidden="true" className="shrink-0 text-amber-600" />
               <span className="font-medium">{label}</span>
               {loop.cycles > 0 || loop.phase !== 'playing' ? (

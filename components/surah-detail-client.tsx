@@ -40,6 +40,8 @@ import { navigateApp } from '@/lib/navigate';
 import type { SurahData } from '@/services/quran';
 import { showAppToast } from '@/lib/app-toast';
 import { useUserStore } from '@/stores/userStore';
+import { useWordLoopStore } from '@/stores/wordLoopStore';
+import { WORD_LOOP_CHIP_SPACE } from '@/lib/surah-detail-chrome';
 import type { AppLocale } from '@/types';
 
 /**
@@ -182,12 +184,16 @@ function SurahDetailView({
     notifyIfPlaybackBlocked,
   });
 
+  // Chip Ulang Kata mengambang di atas pemutar — beri ruang agar ayat tidak tertutup.
+  const wordLoopActive = useWordLoopStore((s) => s.loop?.surahId === surah.number);
+  const readingBottomInset = bottomInset + (wordLoopActive ? WORD_LOOP_CHIP_SPACE : 0);
+
   useAutoFollowPlayback({
     activeAyah,
     isPlaying,
     enabled: autoFollowPlayback,
     smoothAnimation,
-    bottomInset,
+    bottomInset: readingBottomInset,
   });
 
   // Inset audio dipakai saat deep link `?ayah` perlu di-scroll; simpan di ref
@@ -286,7 +292,7 @@ function SurahDetailView({
               }}
             />
           ))}
-          <SurahDetailScrollSpacer height={bottomInset} />
+          <SurahDetailScrollSpacer height={readingBottomInset} />
         </motion.div>
       </div>
 

@@ -634,6 +634,9 @@ export class AudioController {
       void this.nativePlayer.applyRate(rate);
       return;
     }
+    // `defaultPlaybackRate` ikut diset: algoritma load (ganti src) mengembalikan
+    // `playbackRate` ke nilai default.
+    this.audio.defaultPlaybackRate = rate;
     this.audio.playbackRate = rate;
   }
 
