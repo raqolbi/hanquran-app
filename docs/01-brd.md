@@ -1,5 +1,7 @@
 # Business Requirements Document (BRD)
 
+> 📌 **Dokumen kebutuhan bisnis awal (Juni 2026).** Tetap berlaku sebagai arah produk. Scope MVP yang mengikat: `docs/20`; status implementasi: `docs/18`; rilis: `RELEASE.md`.
+
 ## HanQuran
 
 ### Version 1.0

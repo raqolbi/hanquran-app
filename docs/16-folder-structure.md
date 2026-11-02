@@ -1,268 +1,228 @@
-# 16 — Struktur Folder Final HanQuran V1
+# 16 — Struktur Folder HanQuran
 
-Dokumen ini mendefinisikan struktur folder yang direkomendasikan untuk HanQuran V1. Ditulis dalam Bahasa Indonesia dan disesuaikan dengan implementasi nyata (`hanquran-app`) serta prinsip Next.js App Router (Next.js 16+ / 15+ App Router). Tujuan: struktur yang bersih, scalable, mudah dipahami developer baru, tanpa over-engineering.
+Dokumen ini memetakan struktur folder **aktual** repository `hanquran-app` (Next.js App Router + Capacitor Android). Gunakan sebagai peta untuk developer baru.
 
----
+**Terakhir disinkronkan dengan kode:** 2 November 2026 (versi `0.6.0`).
 
-**Ringkasan singkat**
-- Basis implementasi: folder `hanquran-app` berisi aplikasi Next.js.
-- Rekomendasi: simpan code aplikasi di dalam `hanquran-app/` (atau `app/` pada repo monorepo), sementara `branding/` dan `docs/` tetap di root.
+> Versi sebelumnya dokumen ini berisi struktur **rekomendasi** (folder `components/screens/`, `components/atoms/`, `services/api/`, `services/sw/`, `styles/`, `types/*.ts` terpisah) yang **tidak pernah** dibuat. Seluruh isi di bawah mengikuti kode nyata. Jika menambah folder baru, perbarui dokumen ini.
 
 ---
 
-## 1. Tujuan Struktur Folder
-- Mempermudah navigasi dan on‑boarding developer baru.
-- Memisahkan concerns: UI, domain logic, services, storage, assets, dokumentasi.
-- Memudahkan skalabilitas (fitur baru, modul, testability).
-- Cocok untuk Next.js App Router (server + client components).
+## 1. Prinsip Organisasi Kode
+
+- **App Router first:** `app/` adalah entrypoint. Halaman surat (`/surah/[id]`) adalah server component yang di-SSG; interaksi ada di client component (`components/*-client.tsx`).
+- **Komponen datar:** komponen layar ada langsung di `components/`; primitives di `components/ui/`; komponen lintas layar (brand, gate, error) di `components/shared/`; provider global di `components/providers/`.
+- **Logika murni** di `lib/` (tanpa React), **integrasi platform** di `services/` (audio, SW, Dexie, dataset).
+- **State global** di `stores/` (Zustand, persist langsung ke Dexie). State lokal tetap di komponen.
+- **Konten Qur'an** dari `public/data/*` lewat `services/quran/` — **bukan** Dexie (`docs/23`).
+- Dokumentasi di `docs/` dalam Bahasa Indonesia (`CLAUDE.md`).
 
 ---
 
-## 2. Prinsip Organisasi Kode
-- App Router first: `app/` adalah entrypoint; gunakan server components untuk layout/SEO, client components untuk interaksi.
-- Komponen bersifat composable: pisahkan `components/` (screen & shared) dan `components/ui/` (primitives).
-- Logic domain di `lib/` atau `services/` (pure functions, data loaders, API helpers).
-- State global di `stores/` (mis. `zustand`), small client-only slices di `hooks/` atau component-local state.
-- Persistensi di `services/db/` (Dexie setup & migrations) dan `public/` untuk asset statis.
-- Dokumentasi di `docs/` mengikuti CLAUDE.md (Bahasa Indonesia).
-
----
-
-## 3. Struktur Folder Lengkap (rekomendasi)
+## 2. Struktur Root
 
 ```
-/ (repo root)
-├─ CLAUDE.md
-├─ README.md
-├─ branding/                    # sumber aset desain
-├─ docs/                        # semua dokumen proyek
-│  ├─ 00-vision.md
-│  ├─ ...
-│  └─ 16-folder-structure.md
-├─ hanquran-app/          # Next.js App
-│  ├─ app/                      # Next.js App Router
-│  │  ├─ layout.tsx
-│  │  ├─ page.tsx
-│  │  ├─ loading.tsx
-│  │  ├─ /surah/[id]/page.tsx
-│  │  ├─ /focus/[id]/page.tsx
-│  │  ├─ /settings/page.tsx
-│  │  └─ /settings/about/page.tsx
-│  ├─ components/
-│  │  ├─ ui/                    # primitives (Button, Dialog, Drawer, Select, Switch)
-│  │  ├─ shared/                # shared components (Logo, Header, OfflineBadge)
-│  │  ├─ screens/               # screen-level components (SurahDetailHeader, VerseDisplayControls)
-│  │  └─ atoms/                 # sangat kecil, optional
-│  ├─ lib/                      # utilities, routes, repeat-options, surah-detail-chrome, viewport
-│  ├─ messages/                 # next-intl: id.json, en.json (UI strings)
-│  ├─ i18n/                     # next-intl config, locale detection
-│  ├─ hooks/                    # reusable hooks (useMediaQuery, useAudioController)
-│  ├─ services/                 # SW, download manager, audio controller, api client
-│  ├─ stores/                   # zustand stores (audio, user, repeat, offline)
-│  ├─ types/                    # shared TS types / interfaces
-│  ├─ styles/                   # tailwind config, global css
-│  ├─ public/                   # static assets (branding/, favicon, fonts)
-│  ├─ scripts/                  # dev scripts (perf audit, bundle measure)
-│  ├─ tests/                    # unit / integration tests for components & stores
-│  ├─ package.json
-│  └─ tsconfig.json
-├─ tools/                       # optional utilities for repo maintenance
-└─ .gitignore
+hanquran-app/
+├─ app/                 # Next.js App Router (halaman, layout, sitemap, robots, font)
+├─ components/          # komponen React
+├─ hooks/               # custom hooks (client-side)
+├─ lib/                 # helper murni & util
+├─ services/            # integrasi platform: audio, SW, Dexie, dataset Qur'an
+├─ stores/              # Zustand stores
+├─ types/               # tipe bersama (satu file: types/index.ts)
+├─ i18n/                # konfigurasi & deteksi locale next-intl
+├─ messages/            # teks UI: id.json, en.json
+├─ data/                # data kecil yang di-bundle: reciters.json, about-credits.ts
+├─ public/              # aset statis, dataset Qur'an, Service Worker
+├─ scripts/             # build, Android, precache SW, audit performa
+├─ tests/               # unit & integration test (Vitest + jsdom)
+├─ android/             # proyek Capacitor Android (docs/32)
+├─ branding/, assets/   # sumber aset desain & ikon/splash Capacitor
+├─ docs/                # dokumentasi proyek
+├─ reports/             # hasil audit (Lighthouse)
+├─ capacitor.config.ts, next.config.mjs, vercel.json, vitest.config.ts
+├─ CLAUDE.md, README.md, RELEASE.md, LICENSE, COMMERCIAL-LICENSE.md
+└─ package.json, pnpm-lock.yaml
 ```
 
-> Catatan: `hanquran-app/public/branding` sudah berisi `logo.png` dan `logo-with-text.png` — tetap gunakan `components/shared/Logo.tsx` sebagai single source of truth untuk referensi brand.
+Tidak ada folder `styles/` (CSS global di `app/globals.css`, Tailwind v4 via `@tailwindcss/postcss`) maupun `src/`.
 
 ---
 
-## 4. Penjelasan Setiap Folder
-- `app/` — Next.js App Router: tempat halaman (server+client components), layouts, dan routing. Gunakan struktur file/route sesuai Next.js (folder per route).
-- `components/` — Semua komponen UI. Subfolder disusun untuk kemudahan: `ui/` (primitives), `shared/` (brand + utilities), `screens/` (komponen yang mewakili bagian layar), `atoms/` (komponen sangat kecil).
-- `lib/` — Pure helpers, route builders (`routes.ts`), repeat (`repeat-options.ts`, `repeat-progress.ts`), auto follow (`auto-follow-playback.ts`), murotal pending play (`murotal-pending-play.ts`), layout chrome (`surah-detail-chrome.ts`), media query viewport (`viewport.ts`), gate Threads (`threads-gate.ts`, spek `docs/34`).
-- `messages/` + `i18n/` — Lokalisasi UI via **`next-intl`** (`id`, `en`). Lihat `docs/21-i18n-and-locale.md`.
-- `hooks/` — Custom React hooks yang reusable (harus client-side). Contoh: `useMediaQuery`, `useAudioController`.
-- `services/` — Layanan aplikasi yang berinteraksi dengan platform: `service-worker/`, `download-manager.ts`, `audio-controller.ts`, `api/` (jika ada sinkronisasi server).
-- `stores/` — Client state stores (Zustand): `audioStore.ts`, `userStore.ts`, `repeatStore.ts`, `offlineStore.ts`. Simpan di sini agar mudah dicari.
-- `types/` — Shared TypeScript types/interfaces (SurahData, RepeatConfig, ConnectionStatus).
-- `public/` — Static assets served langsung: icons, branding images, audio placeholders. Audio binaries stored later in Cache Storage via SW, bukan di `public/`.
-- `styles/` — Tailwind config, global CSS, design tokens jika perlu.
-- `tests/` — Unit & integration tests. Keep test file colocated with components if preferred (e.g., `component.test.tsx`) or centralized.
-- `docs/` — Dokumen proyek (wireframes, spec, routing, component-tree, state management).
+## 3. `app/`
+
+```
+app/
+├─ layout.tsx            # root layout: skrip pra-paint (locale, PWA, gate), JSON-LD, AppProviders
+├─ page.tsx              # Beranda (SSG) → HomeClient
+├─ loading.tsx
+├─ globals.css           # Tailwind v4 + token desain
+├─ robots.ts, sitemap.ts # SEO (docs/35)
+├─ icon.png, apple-icon.png
+├─ fonts/                # Amiri Quran (woff2 + lisensi OFL) — docs/09 §4
+├─ surah/[id]/           # layout.tsx (generateStaticParams) + page.tsx (server, SSG)
+├─ focus/[id]/           # layout.tsx (noindex, static params) + page.tsx (client)
+└─ settings/             # layout.tsx (noindex) + page.tsx + about/page.tsx
+```
 
 ---
 
-## 5. Struktur `components/` (detail)
-Rekomendasi struktur komponen yang mencerminkan implementasi saat ini.
+## 4. `components/`
 
 ```
 components/
-├─ ui/                 # primitives; tidak bergantung pada projek domain
-│  ├─ button.tsx
-│  ├─ dialog.tsx
-│  ├─ drawer.tsx
-│  ├─ select.tsx
-│  └─ switch.tsx
-├─ shared/             # brand + small shared building blocks
-│  ├─ logo.tsx
-│  ├─ header.tsx
-│  └─ offline-status-badge.tsx
-├─ screens/            # screen specific components (composed from ui + shared)
-│  ├─ surah-detail-header.tsx
-│  ├─ action-bar.tsx              # legacy name → VerseDisplayControls (docs/22)
-│  └─ audio-player.tsx
-│  ├─ lazy-surah-card.tsx       # Beranda — mount SurahCard saat viewport
-│  └─ home-footer.tsx           # Beranda — footer kredit pembuat & Qolcore
-├─ atoms/              # very small components (AyahWordHighlight, Chip)
-└─ index.ts            # optional barrel export
-```
-
-Prinsip:
-- `ui/` tidak boleh mengimpor `lib/` atau `stores/`.
-- `screens/` boleh mengimpor `ui/`, `shared/`, `lib/`, `stores/`.
-- Komponen besar (halaman) tetap di `app/` sebagai glue layer.
-
----
-
-## 6. Struktur `services/`
-
-```
-services/
-├─ audio-controller.ts      # jembatan HTMLAudioElement ↔ useAudioStore
-├─ media-session.ts         # Media Session API — metadata & kontrol lock screen
-├─ murotal-resolver.ts    # logika advance ayat/surat saat Mode Murotal ON
-├─ repeat-engine.ts         # logika siklus repeat
-├─ download-manager.ts      # orchestration unduh audio ke Cache Storage
-├─ db/                      # Dexie — hanya data pengguna
-│  ├─ db.ts                 # Dexie instance + schema v2
-│  └─ migrations.ts         # migrasi antar versi Dexie
-├─ quran/                   # Static Dataset service layer (konten Quran)
-│  ├─ quran-service.ts
-│  ├─ data-loader.ts
-│  ├─ mappers.ts
-│  └─ audio-service.ts
-└─ sw/                      # service worker source (workbox / manual sw)
-   └─ service-worker.js
+├─ ui/                   # primitives: button, dialog, drawer, select, switch, segmented-control
+├─ shared/               # Logo, ThreadsGate, InstallBanner, ErrorBoundary, ErrorFallback,
+│                        # LocaleText, AppToastHost, PwaSplashDismisser
+├─ providers/            # AppProviders, IntlProvider, AccessibilityProvider, NativeShellBootstrap
+│
+├─ home-client.tsx       # Beranda interaktif (pencarian, filter, favorit)
+├─ header.tsx, search-input.tsx, filter-chips.tsx, continue-reading.tsx, home-footer.tsx
+├─ surah-card.tsx, lazy-surah-card.tsx
+│
+├─ surah-detail-client.tsx            # Surah Detail interaktif
+├─ surah-detail-header.tsx, surah-detail-top-chrome.tsx, surah-detail-scroll-spacer.tsx
+├─ start-ayah-sync.tsx                # sinkron ?ayah (di dalam Suspense)
+├─ verse-display-controls.tsx, ayah-card.tsx, surah-offline-download.tsx
+├─ audio-player.tsx, repeat-selector.tsx, repeat-settings-dialog.tsx,
+├─ repeat-status.tsx, repeat-progress-badge.tsx, offline-status-badge.tsx
+│
+├─ settings-section.tsx, native-aware-link.tsx, json-ld.tsx
+│
+└─ (tidak dipakai — kode lama)
+   action-bar.tsx, ayah-word-highlight.tsx, bottom-navigation.tsx,
+   focus-mode-player.tsx, favorites.tsx
 ```
 
 Catatan:
-- `services/quran/` adalah satu-satunya jalur akses konten Quran — **bukan** Dexie.
-- `services/db/db.ts` hanya untuk data pengguna (settings, favorites, dll.).
-- Service Worker adalah sumber kebenaran untuk file di Cache Storage. Client memverifikasi via `caches.match`.
-- Komponen tidak boleh mengakses `services/db/` atau `services/quran/` secara langsung — konten Quran via hooks, data pengguna via Store.
+
+- Komponen yang ditandai **tidak dipakai** tidak di-import di mana pun (dicek 2 Nov 2026). `action-bar.tsx` digantikan `VerseDisplayControls` (`docs/22`); `ayah-word-highlight.tsx` & `focus-mode-player.tsx` milik word highlight Post-MVP (`docs/24`). Kandidat dihapus.
+- `components/ui/` tidak boleh mengimpor `stores/` atau `services/`.
 
 ---
 
-## 6b. Struktur `scripts/` (audit performa)
+## 5. `hooks/`
 
-```
-scripts/
-├─ measure-bundle.mjs      # ukuran chunk .next/static
-├─ run-lighthouse.mjs       # audit Lighthouse mobile
-└─ validate-pwa.mjs        # smoke PWA (manifest + SW)
-```
+Semua hook client-side, nama file `use-*.ts`. Kelompok utama:
 
-Perintah: `npm run perf`, `perf:bundle`, `perf:lighthouse`, `perf:pwa` — lihat `docs/SETUP.md` §8.
+| Kelompok | Hook |
+|----------|------|
+| Konten | `use-surah`, `use-surah-list`, `use-reciters`, `use-preferred-reciter` |
+| Audio & repeat | `use-audio`, `use-ayah-audio`, `use-surah-repeat-playback`, `use-audio-playback-gate`, `use-auto-follow-playback` |
+| Offline | `use-surah-offline-download`, `use-surah-offline-ready` |
+| Tampilan | `use-reading-display`, `use-arabic-text-size`, `use-surah-detail-bottom-inset`, `use-media-query`, `use-is-client` |
+| Lain-lain | `use-persist-last-viewed`, `use-track-surah-opened`, `use-install-prompt`, `use-threads-gate` |
 
 ---
 
-## 7. Struktur `stores/` (state)
-Gunakan `zustand` dengan akses langsung ke Dexie dari action store (tanpa persist middleware).
+## 6. `lib/`
+
+Helper murni (dapat diuji tanpa React). Contoh: `routes.ts` (builder URL + static export Android), `navigate.ts`, `ayah-param.ts`, `surah-search.ts`, `surah-seed.ts`, `repeat-*.ts`, `auto-follow-playback.ts`, `murotal-pending-play.ts`, `app-locale.ts`, `locale-text.ts`, `threads-gate.ts`, `install-prompt.ts`, `app-about.ts` (konstanta & env tautan pembuat), `site-url.ts`, `schema-org.ts`, `platform.ts`, `native-*.ts`, `quran-font.ts`, `analytics/`.
+
+---
+
+## 7. `services/`
+
+```
+services/
+├─ quran/                       # satu-satunya jalur konten Qur'an (public/data/*)
+│  ├─ quran-service.ts, data-loader.ts, mappers.ts, paths.ts
+│  ├─ server-surah.ts           # baca dataset saat build/SSG
+│  ├─ audio-service.ts, audio-config.ts   # URL MP3 CDN everyayah.com
+│  └─ app-types.ts, dataset-types.ts, index.ts
+├─ db/
+│  ├─ db.ts                     # instance Dexie + defaultSettings
+│  └─ migrations.ts             # schema v1…v5
+├─ audio-controller.ts          # HTMLAudioElement ↔ useAudioStore
+├─ native-audio-player.ts, native-media-session.ts, resolve-native-audio-path.ts  # Android
+├─ media-session.ts, audio-tab-sync.ts, repeat-tab-sync.ts
+├─ repeat-engine.ts, murotal-resolver.ts, playback-track-navigation.ts
+├─ download-manager.ts (+ -types), download-manifest-key.ts
+├─ audio-play-cache.ts, audio-prefetch.ts, audio-cache-stats.ts, audio-cache-constants.ts
+├─ surah-audio-cache.ts, resolve-playable-audio-url.ts
+├─ offline-surah-precache.ts, cache-manager.ts
+```
+
+Service Worker **bukan** di `services/`, melainkan file statis `public/sw.js` + `public/sw-helpers.js` + `public/sw-precache-manifest.js` (di-generate `scripts/generate-sw-precache.mjs`).
+
+Aturan: komponen tidak mengakses `services/db/` langsung (lewat store) dan tidak mengakses `services/quran/` langsung (lewat hook).
+
+---
+
+## 8. `stores/`
 
 ```
 stores/
-├─ audioStore.ts        # play/pause/seek/currentTrack (runtime, tidak dipersist)
-├─ userStore.ts         # favorites, settings (baca/tulis Dexie langsung)
-├─ repeatStore.ts       # repeatConfig (persisten di Dexie), repeatState (runtime)
-├─ offlineStore.ts      # connection, downloadStatuses, manifest (baca Dexie + SW)
-└─ index.ts             # helper untuk combine stores (optional)
+├─ audioStore.ts     # runtime pemutaran (tidak dipersist)
+├─ userStore.ts      # favorit, settings, lastViewed (Dexie) + persistenceAvailable
+├─ repeatStore.ts    # config (Dexie settings.repeatConfig) + runtime
+├─ offlineStore.ts   # koneksi, status unduhan per surat+qari, ringkasan manifest
+└─ index.ts          # barrel + initStores()
 ```
 
-Prinsip:
-- Store memegang UI state yang perlu diakses lintas komponen.
-- Persistensi dilakukan via **Dexie langsung** dari action store (`init()` untuk baca, action untuk tulis).
-- `useAudioStore` tidak dipersist — seluruh state bersifat runtime.
-- Jangan taruh ephemeral UI states di store (modal open/close kecuali diperlukan lintas komponen).
+Rincian: `docs/15-state-management.md`.
 
 ---
 
-## 8. Struktur `hooks/`
+## 9. `types/`, `i18n/`, `messages/`, `data/`
 
-```
-hooks/
-├─ use-media-query.ts
-├─ use-audio.ts          # hook yang mengikat audio element dan audioStore
-├─ use-service-worker.ts # wrapper postMessage / events
-└─ index.ts
-```
-
-Prinsip: hooks hanya client-side; tulis dengan `use client` bila perlu.
+- `types/index.ts` — satu file untuk tipe bersama (`SettingsRecord`, `DownloadManifestRecord`, `RepeatConfig`, `ConnectionStatus`, …). Tipe dataset/konten ada di `services/quran/*-types.ts`.
+- `i18n/config.ts`, `i18n/detection.ts` — locale `id`/`en` client-side (tanpa prefix URL). `docs/21`.
+- `messages/id.json`, `messages/en.json` — seluruh teks UI.
+- `data/reciters.json` — daftar qari; `data/about-credits.ts` — sumber data di layar Tentang.
 
 ---
 
-## 9. Struktur `types/`
-
-```
-types/
-├─ index.d.ts
-├─ domain.ts            # SurahData, SurahAyah
-├─ repeat.ts            # RepeatTarget, RepeatCount
-└─ offline.ts           # ConnectionStatus, DownloadManifest
-```
-
-Gunakan tipe ini di seluruh aplikasi untuk konsistensi.
-
----
-
-## 10. Struktur Assets & Branding
+## 10. `public/`
 
 ```
 public/
-├─ branding/
-│  ├─ logo.png
-│  └─ logo-with-text.png
-├─ icons/
-└─ fonts/
+├─ data/                 # dataset Qur'an: manifest.json, quran/NNN.json, translations/{id,en}/NNN.json
+├─ branding/, icons/, og/
+├─ manifest.json         # PWA manifest
+├─ offline.html
+├─ sw.js, sw-helpers.js, sw-precache-manifest.js
 ```
 
-- Simpan source artwork (Figma exports, guidelines) di `branding/` pada root repo (non-public). Gunakan `public/branding` untuk asset runtime.
-- Semua referensi logo gunakan `components/shared/Logo.tsx`.
+---
+
+## 11. `scripts/`
+
+| Script | Fungsi |
+|--------|--------|
+| `generate-sw-precache.mjs` (+ `lib/dataset-fingerprint.mjs`) | Daftar precache SW & fingerprint dataset (sebelum & sesudah `next build`) |
+| `build-android.mjs`, `build-android-bundle.mjs`, `prepare-capacitor-assets.mjs`, `apply-native-audio-complete-patch.mjs`, `patches/` | Pipeline Android (`docs/32`) |
+| `measure-bundle.mjs`, `run-lighthouse.mjs`, `validate-pwa.mjs` | Audit performa/PWA (`npm run perf*`) |
+| `generate-og-image.mjs`, `generate-favicons.mjs` | Aset SEO/ikon |
 
 ---
 
-## 11. Struktur Dokumentasi
-- `docs/` berisi semua dokumen (00-.. 16-..).
-- Dokumentasi technical yang berubah sering (routing, components, state) letakkan di `docs/` versied.
-- Ikuti CLAUDE.md: semua dokumen dalam Bahasa Indonesia.
+## 12. `tests/`
+
+Dipisah per lapisan, mengikuti struktur sumber: `tests/app`, `components`, `hooks`, `lib`, `services`, `stores`, `i18n`, `public`, `scripts`, `service-worker`, plus `fixtures/`, `helpers/`, `setup.ts`. Tidak ada test e2e/a11y otomatis (backlog `docs/18` Phase 7).
 
 ---
 
-## 12. Aturan Penamaan
-- File/Folder: `kebab-case` (mis. `surah-detail-header.tsx`, `repeat-settings-dialog.tsx`).
-- Komponen React: `PascalCase` (mis. `SurahCard`, `AudioPlayer`).
-- Hooks: `useCamelCase` (mis. `useMediaQuery`, `useAudioController`).
-- Stores: `camelCase` file for store export (mis. `audioStore.ts` exports `useAudioStore`).
-- Types: `PascalCase` exports from `types/*.ts`.
+## 13. Aturan Penamaan
+
+- File/folder: `kebab-case` (`surah-detail-header.tsx`). Pengecualian lama: `components/shared/Logo.tsx`, `ErrorBoundary.tsx`, `ErrorFallback.tsx`, dan file store `camelCase` (`audioStore.ts`).
+- Komponen React: `PascalCase`. Hook: `useCamelCase` di file `use-kebab-case.ts`.
+- Store: file `xxxStore.ts` mengekspor `useXxxStore`.
 
 ---
 
-## 13. Anti-Pattern yang Harus Dihindari
-- Menaruh business logic di komponen presentasional.
-- Menyimpan heavy binary assets di `public/` (gunakan Cache Storage dan SW untuk audio besar).
-- Menggunakan React Context untuk frequently-changing data (gunakan `zustand`).
-- Prop drilling berskala besar — gunakan stores atau colocate component.
-- Menyamakan UI primitives dengan screen components (pisahkan `components/ui` vs `components/screens`).
+## 14. Anti-Pattern
+
+- Business logic di komponen presentasional — pindahkan ke `lib/` atau `services/`.
+- Menyimpan biner audio di `public/` — audio dari CDN + Cache Storage.
+- React Context untuk data yang sering berubah — gunakan Zustand.
+- Membaca nilai khusus browser (`window`, `caches`, state live store via `get()`) saat render komponen yang di-SSR — penyebab hydration mismatch (`docs/15` §13).
 
 ---
 
-## 14. Struktur Final yang Direkomendasikan (ringkas)
-- Keep app inside `hanquran-app/` with clear subfolders: `app/`, `components/`, `lib/`, `hooks/`, `services/`, `stores/`, `types/`, `public/`, `styles/`, `tests/`, `docs/`.
-- Single source of truth untuk branding: `components/shared/Logo.tsx` + `public/branding/*`.
-- State: `stores/` (zustand) + persist langsung ke **Dexie** (`services/db/`); audio files in Cache Storage + service worker.
-- Seluruh akses data: `stores/` → `services/api/` (Repository) → `services/db/` (Dexie) → `public/data/*` (fallback).
+## Riwayat
 
----
-
-Jika Anda mau, saya bisa:
-- Terapkan skeleton folders & contoh file (`audioStore`, `download-manager`, SW skeleton).
-- Atau commit dokumen ini dan/atau menjalankan langkah scaffolding minimal.
-
-Dokumen ini disimpan sebagai `docs/16-folder-structure.md`.
+| Tanggal | Perubahan |
+|---------|-----------|
+| Juni 2026 | Dokumen awal — struktur rekomendasi |
+| 2 November 2026 | Ditulis ulang mengikuti struktur aktual repo; folder rekomendasi yang tidak pernah dibuat dihapus; komponen tidak terpakai ditandai |

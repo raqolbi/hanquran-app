@@ -2,6 +2,50 @@
 
 ## HanQuran V1
 
+**Terakhir disinkronkan dengan kode:** 2 November 2026 (versi `0.6.0`).
+
+> **Cara membaca dokumen ini.** Sebagian besar bagian di bawah adalah **spek desain** (tujuan, visual, perilaku) yang ditulis sebelum implementasi. Nama komponen dan bentuk props di spek desain **tidak selalu** sama dengan kode. Gunakan tabel **Status Implementasi** di bawah sebagai acuan nama & file nyata. Bila spek dan kode berbeda pada **perilaku**, kode + dokumen spesifik fitur (`docs/22`–`docs/36`) yang berlaku; bila berbeda pada **visual**, spek ini + `docs/09`/`docs/10` yang berlaku.
+
+---
+
+# Status Implementasi
+
+| § | Nama di spek | Komponen / file aktual | Status |
+|---|--------------|------------------------|--------|
+| 1 | ContinueReadingCard | `ContinueReading` — `components/continue-reading.tsx` | ✅ Ada (nama berbeda) |
+| 2 | SearchInput | `components/search-input.tsx` | ✅ Ada |
+| 3 | FavoriteFilter | `FilterChips` — `components/filter-chips.tsx` | ✅ Ada (nama berbeda) |
+| 4 | SurahCard | `components/surah-card.tsx` (+ `lazy-surah-card.tsx`) | ✅ Props sesuai kode (diperbarui 2 Nov 2026) |
+| 5 | FavoriteButton | tombol di `SurahCard` & `SurahDetailHeader` | ⚪ Bukan komponen terpisah |
+| 6 | SurahMetaHeader | `SurahDetailHeader` — `components/surah-detail-header.tsx` | ✅ Ada (nama & props berbeda) |
+| 7 | VerseDisplayControls | `components/verse-display-controls.tsx` | ✅ Ada |
+| 8, 8b, 8c | TranslationToggle, TransliterationToggle, FocusModeButton | tombol di dalam `VerseDisplayControls` | ⚪ Bukan komponen terpisah |
+| 9 | AyahCard | `components/ayah-card.tsx` | ✅ Ada |
+| 10 | AyahWordHighlight | `components/ayah-word-highlight.tsx` | ⏸️ Post-MVP — file ada, tidak dipakai (`docs/24`) |
+| 11 | AudioPlayer | `components/audio-player.tsx` | ✅ Ada |
+| 12 | RepeatSelector | `components/repeat-selector.tsx` | ✅ Ada |
+| 13 | RepeatSettingsDialog | `components/repeat-settings-dialog.tsx` | ✅ Ada |
+| 14 | RepeatStatus | `components/repeat-status.tsx` | ✅ Ada |
+| 15 | RepeatProgressBadge | `components/repeat-progress-badge.tsx` | ✅ Ada |
+| 16 | FocusModeScreen | `app/focus/[id]/page.tsx` (`FocusModeLoaded`) | ✅ Ada (halaman, bukan komponen) |
+| 17 | FocusModePlayer | `components/focus-mode-player.tsx` | ❌ Tidak dipakai — digantikan `AudioPlayer` |
+| 18 | SettingsCard | `SettingsSection` / `SettingsRow` — `components/settings-section.tsx` | ✅ Ada (nama berbeda) |
+| 19 | ReciterSelector | `Select` qari di `app/settings/page.tsx` | ⚪ Bukan komponen terpisah |
+| 20 | BottomNavigation | `components/bottom-navigation.tsx` | ❌ Tidak dipakai di MVP |
+| 21 | BottomSheet | `Drawer` — `components/ui/drawer.tsx` | ✅ Ada sebagai primitive |
+| 22 | OfflineStatusBadge | `components/offline-status-badge.tsx` | ✅ Ada |
+| 23 | ConnectionIndicator | ekspor dari `components/offline-status-badge.tsx` | ✅ Ada |
+| 24 | SurahOfflineDownload | `components/surah-offline-download.tsx` | ✅ Ada |
+| 25 | OfflineBanner | — | 🚫 Belum ada (tidak dijadwalkan) |
+| 26 | EmptyState | markup kosong inline di `HomeClient` | ⚪ Bukan komponen terpisah |
+| 27 | Logo / LogoWithText | `components/shared/Logo.tsx` | ✅ Ada |
+| 28 | HomeFooter | `components/home-footer.tsx` | ✅ Ada |
+| 29 | ThreadsGate | `components/shared/threads-gate.tsx` | ✅ Ada |
+
+Legenda: ✅ ada · ⚪ digabung ke komponen lain · ⏸️ ditunda · ❌ file ada tapi tidak dipakai · 🚫 tidak ada.
+
+Komponen nyata yang **tidak** punya bagian di spek ini: `HomeClient`, `SurahDetailClient`, `SurahDetailTopChrome`, `SurahDetailScrollSpacer`, `StartAyahSync`, `InstallBanner`, `LocaleText`, `NativeAwareLink`, `JsonLd`, `ErrorBoundary`/`ErrorFallback` — lihat `docs/13-component-tree.md`.
+
 ---
 
 # Purpose
@@ -54,11 +98,12 @@ type RepeatCount =
   | 10
   | 25
   | 50
-  | "infinite"
+  | typeof INFINITE // Number.POSITIVE_INFINITY — lib/repeat-options.ts
 
+// Nilai data = bahasa Inggris; label UI "Makkiyah"/"Madaniyah" via i18n.
 type RevelationType =
-  | "makkiyah"
-  | "madaniyah"
+  | "Meccan"
+  | "Medinan"
 
 type ConnectionStatus =
   | "online"
@@ -72,7 +117,7 @@ type ConnectionStatus =
 
 # Module Mapping
 
-Komponen di dokumen ini dipetakan ke modul pada `05-module-catalog.md`.
+Komponen di dokumen ini dipetakan ke modul pada `05-module-catalog.md`. Untuk nama file nyata, gunakan tabel **Status Implementasi** di atas.
 
 | Component             | Module           | Alias di Module Catalog                                                 |
 | --------------------- | ---------------- | ----------------------------------------------------------------------- |
@@ -308,28 +353,30 @@ isi list, tidak berpindah route.
 
 ## Purpose
 
-Menampilkan ringkasan surat pada Home. Di Beranda, dipakai melalui **`LazySurahCard`** — mount saat mendekati viewport (`IntersectionObserver`).
+Menampilkan ringkasan surat pada Home. Di Beranda, dipakai melalui **`LazySurahCard`** — kartu selalu ada di HTML (SSR/SEO, `docs/36` §3); kartu di luar viewport dilewati browser lewat `content-visibility: auto` + `contain-intrinsic-size` (bukan `IntersectionObserver`).
 
 ---
 
 ## Props
 
+Sesuai `components/surah-card.tsx`:
+
 ```ts
 interface SurahCardProps {
-  surahNumber: number
-
-  surahName: string
-  surahNameArabic: string
-
-  translation: string
-
+  number: number
+  arabicName: string
+  englishName: string
+  meaning: string
+  /** Arti `id` + `en` untuk paint pertama (docs/21 F8). */
+  meaningTranslations?: LocalePair
   ayahCount: number
-
-  revelationType: RevelationType
-
-  isFavorite: boolean
+  type: 'Meccan' | 'Medinan'
+  isFavorited?: boolean
+  onToggleFavorite?: () => void
 }
 ```
+
+`isFavorited` di Beranda **wajib** diturunkan dari slice `favorites` yang di-subscribe (`useUserStore((s) => s.favorites)`), bukan dari `isFavorite()` — fungsi itu membaca state live via `get()` saat hidrasi dan memicu hydration mismatch ikon hati (perbaikan 2 Nov 2026, `docs/18` Phase 12b).
 
 ---
 
@@ -372,6 +419,20 @@ Tidak ikut membuka surat
 
 Tap target favorite tidak boleh
 mengganggu tap target card.
+
+### Struktur DOM (aksesibilitas)
+
+Tautan kartu dan tombol favorit adalah **saudara**, bukan bersarang:
+
+```text
+div.relative (motion: hover/tap, tabIndex=-1)
+├─ a  → /surah/[id]   (seluruh isi kartu + chevron)
+└─ button[aria-label] (favorit, posisi absolute kanan atas)
+```
+
+- `<button>` di dalam `<a>` dilarang (HTML tidak valid, tab stop ganda).
+- Pembungkus motion memakai `tabIndex={-1}` agar `whileTap` tidak menambah tab stop.
+- Fokus keyboard ditandai `focus-within:ring` pada kartu.
 
 ---
 
@@ -811,7 +872,7 @@ Play Audio dari ayat tersebut
 
 ---
 
-# 10. AyahWordHighlight
+# 10. AyahWordHighlight — ⏸️ Post-MVP (tidak dipakai)
 
 ## Purpose
 
@@ -1498,7 +1559,7 @@ saat teks Arab terlihat.
 
 ---
 
-# 17. FocusModePlayer
+# 17. FocusModePlayer — ❌ tidak dipakai (digantikan AudioPlayer)
 
 > **Status: Legacy / tidak dipakai.** Focus Mode (`app/focus/[id]/page.tsx`) memakai `AudioPlayer` + `RepeatSelector variant="inline"` langsung. File `components/focus-mode-player.tsx` dapat dihapus di refactor berikutnya.
 
@@ -1694,7 +1755,7 @@ Radius   : 12px
 
 ---
 
-# 20. BottomNavigation
+# 20. BottomNavigation — ❌ tidak dipakai di MVP
 
 ## Purpose
 
@@ -1957,7 +2018,7 @@ Surah Detail — di bawah header, di atas `VerseDisplayControls`.
 
 ---
 
-# 25. OfflineBanner
+# 25. OfflineBanner — 🚫 belum ada
 
 ## Purpose
 
@@ -2177,6 +2238,8 @@ Tidak ada props publik (komponen tanpa konfigurasi).
 
 Teks UI via i18n namespace `home.footer.*`.
 
+Nilai nama & tautan dapat diganti saat build lewat env `NEXT_PUBLIC_AUTHOR_NAME`, `NEXT_PUBLIC_AUTHOR_THREADS_URL`, `NEXT_PUBLIC_AUTHOR_X_URL`, `NEXT_PUBLIC_ORGANIZATION_URL` Tidak dipasang → bawaan; dikosongkan/`-`/tidak valid → bagian terkait **tidak dirender** (tautan, pemisah `·`, baris nama, baris organisasi). Lihat `docs/26` §4.5.
+
 ---
 
 ## Visual
@@ -2215,8 +2278,9 @@ Tidak ada props publik. State dari `hooks/use-threads-gate.ts`.
 
 | Elemen | Sumber |
 |--------|--------|
-| URL Threads | `lib/app-about.ts` (`APP_AUTHOR_THREADS_URL`) — sama dengan HomeFooter |
-| Teks UI | i18n `threadsGate.*` |
+| URL Threads | `lib/app-about.ts` (`APP_AUTHOR_THREADS_URL`, dapat diganti env `NEXT_PUBLIC_AUTHOR_THREADS_URL`) — sama dengan HomeFooter |
+| Handle di teks | `APP_AUTHOR_THREADS_HANDLE` — diturunkan dari path URL (`/@nama`), fallback `APP_AUTHOR_NAME` |
+| Teks UI | i18n `threadsGate.*` (`body` memakai token `{handle}`) |
 | Logo | `Logo` size 40 |
 
 ## Perilaku

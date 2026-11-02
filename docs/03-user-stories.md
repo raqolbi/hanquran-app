@@ -1,5 +1,7 @@
 # User Stories
 
+> 📌 **User stories awal.** Status implementasi: `docs/18`; scope MVP: `docs/20`. Story word-by-word highlight ditunda ke Post-MVP (`docs/24`).
+
 ## HanQuran V1
 
 ---

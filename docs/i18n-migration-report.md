@@ -1,6 +1,8 @@
 # Laporan Migrasi i18n — HanQuran
 
-**Tanggal:** 2025-06-24  
+> 📜 **Dokumen historis.** Laporan sekali jalan migrasi teks UI ke `next-intl` (24 Juni 2026). Isinya tidak diperbarui mengikuti kode dan **bukan acuan implementasi**. Acuan terkini: `docs/21-i18n-and-locale.md`.
+
+**Tanggal:** 2026-06-24  
 **Status:** Implementasi selesai  
 **Framework:** `next-intl` (App Router, tanpa prefix locale di URL)
 

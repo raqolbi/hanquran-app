@@ -651,3 +651,28 @@ Dokumentasi arsitektur yang menjadi acuan tunggal:
 **Seluruh Sprint 1 s.d. Sprint 5 harus mengacu pada dokumen ini.**
 
 Dokumen ini disimpan di `docs/20-mvp-freeze.md` dan tidak boleh diperbarui kecuali melalui proses Change Control yang terdokumentasi.
+
+---
+
+# 12. Catatan Pasca-Freeze (Change Log)
+
+> Bagian ini **tidak mengubah** isi freeze di atas; hanya mencatat keputusan yang diambil setelah freeze agar pembaca tidak salah mengira isi di atas masih lengkap. Dicatat 2 November 2026.
+
+| Tanggal | Perubahan | Dokumen keputusan |
+|---------|-----------|-------------------|
+| 24 Juni 2026 | Konten Qur'an dari dataset statis `public/data/*`, bukan Dexie | `docs/23` |
+| 24 Juni 2026 | Word-by-word highlight dipindah ke Post-MVP | `docs/24` |
+| 24 Juni 2026 | Bahasa aplikasi `id`/`en` (`next-intl`), layar Tentang | `docs/21`, `docs/26` |
+| 25–26 Juni 2026 | Media Session, Playback Settings, Mode Murotal, offline-first penuh, Auto Download Audio | `docs/27`–`docs/31` |
+| Agustus 2026 | Platform Android (Capacitor) & Gerbang Threads | `docs/32`, `docs/34` |
+| Oktober–November 2026 | SEO (SSG), performa beranda, locale paint pertama, audit bug | `docs/35`, `docs/36`, `docs/21` §5.6, `docs/18` Phase 12b |
+
+Pembaruan tabel **Architecture Freeze** di atas:
+
+| Dokumen | Catatan |
+|---------|---------|
+| `docs/04` | Komponen tree & schema di dalamnya usang — gunakan `docs/13` (komponen) dan `docs/06` (schema v5) |
+| `docs/06` | Schema aktual **v5**; tabel konten Qur'an dihapus sejak v2 |
+| `docs/17` | Historis — status fase di `docs/18` |
+| §7 Workbox | Service Worker ditulis manual (`public/sw.js`), Workbox tidak dipakai — `docs/30` |
+

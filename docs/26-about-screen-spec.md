@@ -98,16 +98,34 @@ Tambahan kategori teknologi **tidak** ditampilkan — hanya sumber data konten.
 
 ### 4.5 Kredit Pembuat (Beranda)
 
-Konstanta di `lib/app-about.ts` — dipakai oleh `HomeFooter` di Beranda (bukan di layar About):
+Konstanta di `lib/app-about.ts` — dipakai oleh `HomeFooter` di Beranda dan Overlay Gate Threads. Layar Tentang **tidak** menampilkan tautan pembuat (hanya Sumber Data & Repository).
 
-| Konstanta | Nilai |
-|-----------|-------|
-| `APP_AUTHOR_NAME` | Cenybug |
-| `APP_AUTHOR_THREADS_URL` | https://www.threads.com/@cenybug |
+| Konstanta | Env pengganti (opsional, saat build) | Nilai bawaan |
+|-----------|--------------------------------------|--------------|
+| `APP_AUTHOR_NAME` | `NEXT_PUBLIC_AUTHOR_NAME` | CenyBug |
+| `APP_AUTHOR_THREADS_URL` | `NEXT_PUBLIC_AUTHOR_THREADS_URL` | https://www.threads.com/@qolcore |
+| `APP_AUTHOR_X_URL` | `NEXT_PUBLIC_AUTHOR_X_URL` | https://x.com/cenybug |
+| `QOLCORE_URL` | `NEXT_PUBLIC_ORGANIZATION_URL` | https://qolcore.com |
+| `APP_AUTHOR_THREADS_HANDLE` | — (diturunkan dari URL Threads `/@nama`) | @qolcore |
+
+Aturan env:
+
+- Dibaca saat **build** (`next build` / `build:android`) dan di-inline ke bundle; ubah env → build ulang / redeploy.
+- **Tidak dipasang** → nilai bawaan.
+- **Dikosongkan** (`NAMA=`) atau diisi `-` (untuk dashboard hosting yang menolak nilai kosong) → elemen **tidak dirender**:
+
+| Env dikosongkan | Yang hilang |
+|-----------------|-------------|
+| `NEXT_PUBLIC_AUTHOR_THREADS_URL` | Tautan Threads di footer **dan** seluruh Gerbang Threads (tidak di-SSR, tanpa scroll lock) |
+| `NEXT_PUBLIC_AUTHOR_X_URL` | Tautan X di footer (pemisah `·` ikut menyesuaikan) |
+| `NEXT_PUBLIC_AUTHOR_NAME` | Baris "Dibuat oleh …" |
+| `NEXT_PUBLIC_ORGANIZATION_URL` | Baris "Sebuah karya dari Qolcore" |
+
+  Jika Threads dan X sama-sama kosong, `<nav>` sosial tidak dirender.
+- URL hanya diterima bila `https://` (`resolvePublicUrl`); nilai tidak valid (mis. `javascript:`, `http://`) **disembunyikan** + `console.warn` saat build.
+- Contoh di `.env.example`.
 
 Overlay Gate Threads memakai **konstanta yang sama** — jangan duplikasi URL (`docs/34-threads-gate-spec.md`).
-| `APP_AUTHOR_X_URL` | https://x.com/cenybug |
-| `QOLCORE_URL` | https://qolcore.com |
 
 Teks UI: `messages` → `home.footer.*`
 
@@ -164,6 +182,7 @@ Bukan P0 blocker rilis, tetapi **termasuk MVP lengkap** bersama fitur Settings l
 
 | Tanggal | Perubahan |
 |---------|-----------|
+| 2 November 2026 | §4.5: tabel konstanta dirapikan; tautan pembuat dapat diganti env `NEXT_PUBLIC_*` (tidak dipasang → bawaan, dikosongkan/`-` → disembunyikan); ditegaskan bahwa layar Tentang tidak menampilkan tautan pembuat |
 | 17 Agustus 2026 | Overlay Gate Threads memakai `APP_AUTHOR_THREADS_URL` yang sama (`docs/34`) |
 | 10 Juli 2026 | Tambah §4.5 kredit pembuat Beranda (`HomeFooter`, konstanta `lib/app-about.ts`) |
 | 24 Juni 2026 | Dokumen awal — audit, scope, routing, konten, P1 |

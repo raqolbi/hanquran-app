@@ -184,7 +184,7 @@ Setelah splash, Dialog tanpa tombol tutup. Dua aksi: **Buka Threads** (primary) 
 │   ┌──────────────────────────────┐   │
 │   │         [Logo]               │   │
 │   │         HanQuran             │   │
-│   │  Ikuti @cenybug di Threads   │   │
+│   │  Ikuti @qolcore di Threads   │   │
 │   │  untuk melanjutkan ke        │   │
 │   │  HanQuran.                   │   │
 │   │  [ Buka Threads ]            │   │
@@ -192,6 +192,8 @@ Setelah splash, Dialog tanpa tombol tutup. Dua aksi: **Buka Threads** (primary) 
 │   └──────────────────────────────┘   │
 └──────────────────────────────────────┘
 ```
+
+> `@qolcore` adalah nilai bawaan; handle di teks mengikuti env `NEXT_PUBLIC_AUTHOR_THREADS_URL` (`docs/34` §5).
 
 Lanjut menyala **5 detik** setelah Threads diketuk (tautan `APP_AUTHOR_THREADS_URL`), tanpa hitung mundur di UI. Tidak menunggu event “kembali ke app”. Funnel hafalan (§2) dimulai setelah overlay ditutup.
 

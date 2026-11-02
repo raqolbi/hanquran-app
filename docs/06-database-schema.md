@@ -2,6 +2,8 @@
 
 ## HanQuran V1
 
+**Terakhir disinkronkan dengan kode:** 2 November 2026 — `services/db/migrations.ts` (schema **v5**), `types/index.ts`, `public/sw.js` (**v4**).
+
 ---
 
 # 1. Overview
@@ -66,8 +68,18 @@ Komponen tidak mengakses Dexie secara langsung — hanya melalui action store.
 
 ```text
 Name:    hanquran-db
-Version: 2  (v1 menyertakan tabel konten Quran — dihapus di v2)
+Version: 5
 ```
+
+| Versi | Perubahan |
+|-------|-----------|
+| v1 | Termasuk tabel konten Quran (`surahs`, `ayahs`, `translations`, `wordTimings`, `reciters`) — tidak pernah dipakai runtime |
+| v2 | Tabel konten Quran dihapus; hanya data pengguna + manifest offline |
+| v3 | Cadangkan `downloadManifest` lama ke `downloadManifestLegacy` |
+| v4 | Hapus `downloadManifest` lama (Dexie tidak bisa mengubah primary key in-place) |
+| v5 | `downloadManifest` baru dengan PK `[surahId+reciterId]` (per surat **dan** qari), data cadangan dipulihkan |
+
+Sumber kebenaran: `services/db/migrations.ts`.
 
 Version dinaikkan setiap ada perubahan schema yang tidak backward-compatible.
 
@@ -106,11 +118,11 @@ interface SurahRecord {
 ### Notes
 
 - Setelah `surahs` tersimpan, Home Screen tidak perlu request API lagi.
-- Phase: **MVP**
+- Phase: ~~MVP~~ — **dihapus di v2** (konten dari `public/data/*`)
 
 ---
 
-## 5.2 `ayahs`
+## 5.2 `ayahs` — ⚠️ DIHAPUS (v2)
 
 ### Purpose
 
@@ -135,11 +147,11 @@ interface AyahRecord {
 
 ### Notes
 
-- Phase: **MVP**
+- Phase: ~~MVP~~ — **dihapus di v2** (konten dari `public/data/*`)
 
 ---
 
-## 5.3 `translations`
+## 5.3 `translations` — ⚠️ DIHAPUS (v2)
 
 ### Purpose
 
@@ -166,11 +178,11 @@ interface TranslationRecord {
 ### Notes
 
 - V1 default: terjemahan Indonesia (resourceId default dikonfigurasi di settings)
-- Phase: **MVP**
+- Phase: ~~MVP~~ — **dihapus di v2** (konten dari `public/data/*`)
 
 ---
 
-## 5.4 `wordTimings`
+## 5.4 `wordTimings` — ⚠️ DIHAPUS (v2)
 
 ### Purpose
 
@@ -195,11 +207,11 @@ interface WordTimingRecord {
 
 ### Notes
 
-- Phase: **MVP**
+- Phase: ~~MVP~~ — **dihapus di v2** (konten dari `public/data/*`)
 
 ---
 
-## 5.5 `reciters`
+## 5.5 `reciters` — ⚠️ DIHAPUS (v2)
 
 ### Purpose
 
@@ -225,7 +237,7 @@ interface ReciterRecord {
 ### Notes
 
 - Di-fetch dari `/v4/resources/recitations` dan di-cache
-- Phase: **MVP**
+- Phase: ~~MVP~~ — **dihapus di v2** (konten dari `public/data/*`)
 
 ---
 
@@ -306,7 +318,10 @@ interface SettingsRecord {
   murotalEnabled: boolean;
   /** Cache audio ayat saat diputar (online). Default: false. Lihat docs/31. */
   autoDownloadOnPlay: boolean;
-  qariId: number;
+  /** Slug qari dari `data/reciters.json` (mis. `Alafasy_128kbps`). */
+  reciterId: string;
+  /** Konfigurasi repeat hafalan (dikelola `useRepeatStore`). */
+  repeatConfig?: RepeatConfig;
   translationResourceId: number;
   updatedAt: number;
 }
@@ -324,6 +339,8 @@ interface SettingsRecord {
 - `autoFollowPlayback`: mengatur auto scroll ayat aktif saat playback di Surah Detail. Default `true`. Lihat `docs/28-playback-settings.md`.
 - `murotalEnabled`: mengaktifkan pemutaran tilawah berkelanjutan (ayat → ayat, surat → surat). Default `false`. Lihat `docs/29-murotal-mode-spec.md`.
 - `autoDownloadOnPlay`: mengaktifkan cache otomatis file MP3 ayat yang diputar saat online. Default `false`. Lihat `docs/31-auto-download-audio-spec.md`.
+- `reciterId` menggantikan `qariId` (angka) lama; `qariId` dihapus otomatis saat `init()`.
+- Field baru **tidak** butuh versi Dexie baru: `normalizeStoredSettings()` di `stores/userStore.ts` melengkapi field yang hilang dari `defaultSettings` (`services/db/db.ts`).
 - Dapat diperluas via migration tanpa mengubah primary key
 - Phase: **MVP**
 
@@ -340,6 +357,8 @@ Melacak surat yang sudah diunduh audionya untuk kebutuhan offline.
 ```ts
 interface DownloadManifestRecord {
   surahId: number;
+  /** Slug qari — bagian dari primary key bersama `surahId`. */
+  reciterId: string;
   status: 'downloading' | 'ready' | 'failed';
   sizeBytes: number;
   ayahsCount: number;
@@ -350,11 +369,12 @@ interface DownloadManifestRecord {
 
 ### Keys & Index
 
-- Primary key: `surahId`
-- Index: `status`, `cachedAt`
+- Primary key: `[surahId+reciterId]` (sejak v5)
+- Index: `surahId`, `reciterId`, `status`, `cachedAt`
 
 ### Notes
 
+- Satu surat bisa "siap offline" untuk satu qari tetapi belum untuk qari lain.
 - Diperbarui oleh `download-manager.ts` setelah unduhan selesai
 - Phase: **MVP**
 
@@ -512,79 +532,55 @@ interface NoteRecord {
 
 # 6. Cache Storage Design
 
+Nama cache aktif (sumber: `public/sw.js`, `SW_VERSION = 'v4'`). Saat aktivasi SW, cache `hanquran-*` yang tidak ada di daftar ini dihapus.
+
+| Cache | Isi | Strategi |
+|-------|-----|----------|
+| `hanquran-static-v2` | JS/CSS/font ber-hash (`/_next/static/*`), ikon, `manifest.json`, `offline.html` | Precache saat install + stale-while-revalidate |
+| `hanquran-shell-v2` | Dokumen HTML + payload RSC rute (`/`, `/settings`, `/surah/1` sebagai app-shell, dst.) | Network-first untuk navigasi; app-shell untuk id surat apa pun saat offline |
+| `hanquran-data-v3` | Dataset `public/data/*` | Precache saat install + cache-first |
+| `hanquran-audio-v1` | MP3 per ayat dari CDN `everyayah.com` | Cache-first |
+
 ## 6.1 `hanquran-audio-v1`
 
-### Purpose
+- Key = **URL lengkap** MP3, mis. `https://everyayah.com/data/{reciterId}/{SSSAAA}.mp3` (`services/quran/audio-service.ts`).
+- Ditulis oleh: Service Worker (Simpan Offline, `prefetch-surah`), dan main thread untuk **Auto Download saat putar** (`services/audio-play-cache.ts`) serta fallback `download-manager` saat SW tidak tersedia.
+- Tidak ada eviction otomatis; dihapus lewat **Hapus Cache** di Pengaturan.
+- Metadata unduhan per surat + qari ada di tabel Dexie `downloadManifest`.
 
-Menyimpan file audio MP3 per ayat yang pernah diputar atau diunduh.
+## 6.2 `hanquran-data-v3`
 
-### Key Pattern
+- Salinan dataset Qur'an untuk offline. Nomor versi dinaikkan saat isi dataset berubah agar salinan lama tidak dipakai (lihat juga fingerprint dataset di `scripts/generate-sw-precache.mjs`).
 
-```text
-audio/{reciterId}/{surahId}/{ayahNumber}
-```
+## 6.3 `hanquran-static-v2` & `hanquran-shell-v2`
 
-### Notes
-
-- File biner dikelola **hanya** oleh Service Worker
-- Eviction mengikuti strategi LRU
-- Metadata unduhan disimpan di `downloadManifest` tabel Dexie
-
----
-
-## 6.2 `hanquran-data-v1`
-
-### Purpose
-
-Menyimpan response API yang di-cache Service Worker (opsional, sebagai fallback tambahan).
-
-### Notes
-
-- Sumber data utama runtime tetap Dexie, bukan cache ini
-- Service Worker dapat menggunakan cache ini sebagai layer tambahan
-
----
-
-## 6.3 `hanquran-static-v1`
-
-### Purpose
-
-Menyimpan aset statis aplikasi.
-
-```text
-JS, CSS, fonts, manifest, icons
-```
-
-Strategy:
-
-```text
-Cache First
-```
+- Daftar aset diambil dari `public/sw-precache-manifest.js` yang di-generate saat build. Rincian perilaku offline: `docs/30-offline-behavior-spec.md`.
 
 ---
 
 # 7. Dexie Schema Definition
 
-```ts
-db.version(1).stores({
-  surahs:                 'id, nameLatin, revelationPlace, cachedAt',
-  ayahs:                  'id, surahId, [surahId+ayahNumber], cachedAt',
-  translations:           'id, surahId, [surahId+ayahNumber], [resourceId+surahId], cachedAt',
-  wordTimings:            'id, [surahId+ayahNumber], cachedAt',
-  reciters:               'id, nameLatin, cachedAt',
-  favorites:              'surahId, createdAt',
-  lastRead:               'id',
-  settings:               'id',
-  downloadManifest:       'surahId, status, cachedAt',
+Schema aktif (v5) — lihat `SCHEMA_V3` + `applyMigrations()` di `services/db/migrations.ts`:
 
-  // Growth Phase (schema tersedia sejak v1 untuk migrasi bersih)
-  bookmarks:              'id, surahId, createdAt',
-  memorization_progress:  'surahId, percentComplete, lastSessionAt',
-  murajaah_sessions:      'id, surahId, completedAt',
-  statistics:             'date',
-  notes:                  'id, surahId, updatedAt',
+```ts
+db.version(5).stores({
+  favorites:             'surahId, createdAt',
+  lastRead:              'id',
+  settings:              'id',
+  downloadManifest:      '[surahId+reciterId], surahId, reciterId, status, cachedAt',
+
+  // Growth Phase (schema tersedia, belum diisi di MVP)
+  bookmarks:             'id, surahId, createdAt',
+  memorization_progress: 'surahId, percentComplete, lastSessionAt',
+  murajaah_sessions:     'id, surahId, completedAt',
+  statistics:            'date',
+  notes:                 'id, surahId, updatedAt',
+
+  downloadManifestLegacy: null, // tabel sementara v3–v4, dihapus di v5
 });
 ```
+
+Setiap `version()` mendefinisikan **seluruh** tabel. Versi lama (v1–v4) tetap dideklarasikan agar pengguna lama bisa naik bertahap.
 
 ---
 
@@ -600,10 +596,8 @@ db.version(1).stores({
 
 | Tabel | Index | Alasan |
 |-------|-------|--------|
-| `ayahs` | `surahId` | Filter semua ayat per surat |
-| `ayahs` | `[surahId+ayahNumber]` | Lookup ayat spesifik |
-| `translations` | `[surahId+ayahNumber]` | Fetch terjemahan per ayat |
-| `translations` | `[resourceId+surahId]` | Fetch semua terjemahan satu sumber per surat |
+| `downloadManifest` | `[surahId+reciterId]` (PK) | Status offline per surat **dan** qari |
+| `favorites` | `createdAt` | Urutan favorit |
 | `memorization_progress` | `percentComplete` | Sort by progress |
 | `murajaah_sessions` | `surahId`, `completedAt` | Filter riwayat per surat |
 | `downloadManifest` | `status` | Filter surat yang sudah `ready` |
@@ -629,17 +623,15 @@ db.version(2).stores({
   ...
 }).upgrade(tx => {
   // Kode migrasi data jika diperlukan
-  return tx.table('settings').toCollection().modify(record => {
-    if (record.qariId === undefined) {
-      record.qariId = 7; // default Mishary
-    }
-  });
 });
 ```
 
-## Likely Future Migrations (v2)
+Contoh nyata: v3→v5 (`downloadManifest` ganti primary key) di `services/db/migrations.ts`.
 
-- Menambah field `qariId` ke `settings` (sudah termasuk sejak v1)
+**Field baru pada record yang sudah ada** (mis. `settings.autoDownloadOnPlay`) tidak memerlukan versi baru — default diisi saat `init()` oleh `normalizeStoredSettings()`.
+
+## Kemungkinan Migrasi Berikutnya
+
 - Mengaktifkan tabel Growth Phase yang sudah didefinisikan di schema
 - Menambah field `syncId` ke tabel user data untuk sinkronisasi cloud (Future Phase)
 
@@ -652,8 +644,13 @@ db.version(2).stores({
 Dexie mengelola versi database secara otomatis. Version di-track di IndexedDB metadata.
 
 ```ts
-const db = new Dexie('hanquran-db');
-db.version(1).stores({...});
+// services/db/db.ts
+class HanQuranDB extends Dexie {
+  constructor() {
+    super('hanquran-db');
+    applyMigrations(this); // v1 … v5
+  }
+}
 ```
 
 ## App Version vs Schema Version
@@ -677,13 +674,14 @@ IndexedDB tidak mendukung rollback versi. Jika versi baru bermasalah:
 
 ### Data Quran
 
+Tidak lewat Dexie (lihat `docs/23`):
+
 ```text
-Dexie
-↓
-Data Ada?
-↓
-Ya → Tampilkan
-Tidak → Muat dari public/data/* → Simpan Dexie → Tampilkan
+Seed server (SSG) bila cocok
+↓ tidak
+cache memori services/quran/
+↓ tidak ada
+fetch /data/quran/*.json (SW: cache-first hanquran-data-v3)
 ```
 
 ### Audio
@@ -703,11 +701,6 @@ Tidak → Download → Simpan Cache Storage → Play
 
 | Data | Trigger |
 |------|---------|
-| `surahs` | Saat daftar surat berhasil di-fetch dari API |
-| `ayahs` | Saat surat dibuka dan data dari API |
-| `translations` | Saat terjemahan diminta dan belum ada di lokal |
-| `wordTimings` | Saat audio/highlight diminta dan belum ada |
-| `reciters` | Saat daftar qari di-fetch |
 | `favorites` | Saat pengguna toggle favorit |
 | `lastRead` | Saat pengguna pindah surat/ayat |
 | `settings` | Saat pengguna mengubah preferensi |
@@ -724,7 +717,7 @@ Tidak → Download → Simpan Cache Storage → Play
 
 ## MVP (V1)
 
-Tabel aktif: `surahs`, `ayahs`, `translations`, `wordTimings`, `reciters`, `favorites`, `lastRead`, `settings`, `downloadManifest`
+Tabel aktif: `favorites`, `lastRead`, `settings`, `downloadManifest` (konten Quran dari `public/data/*`)
 
 Fitur:
 - Membaca Al-Quran
@@ -781,4 +774,4 @@ Schema berikut belum diperlukan di V1:
 - `cloudSyncQueue`
 - `devices`
 
-Tabel Growth Phase (`bookmarks`, `memorization_progress`, dll.) sudah ada dalam schema Dexie V1 agar migration V2 bersih, tetapi belum diisi data di MVP.
+Tabel Growth Phase (`bookmarks`, `memorization_progress`, dll.) sudah ada dalam schema Dexie sejak v1 agar migrasi bersih, tetapi belum diisi data di MVP.

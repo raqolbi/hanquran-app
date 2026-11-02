@@ -2,6 +2,26 @@
 
 ## HanQuran V1
 
+**Terakhir disinkronkan dengan kode:** 2 November 2026 (versi `0.6.0`).
+
+> **Cara membaca dokumen ini.** Modul di sini adalah **batas tanggung jawab konseptual**. Kode tidak disusun per folder fitur (`src/features/*` tidak pernah dibuat) — kode disusun per lapisan (`components/`, `hooks/`, `services/`, `stores/`, `lib/`). Nama komponen/hook di bagian 4–5 (mis. `AyahItem`, `AudioEngine`, `useActiveAyah`) adalah nama konsep; nama & file nyata ada di tabel **Pemetaan ke Kode** di bawah, `docs/13`, dan `docs/16`.
+
+---
+
+# 0. Pemetaan ke Kode
+
+| Modul | Komponen | Hook / Store | Service / Lib |
+|-------|----------|--------------|----------------|
+| Quran | `HomeClient`, `SurahCard`, `SurahDetailClient`, `SurahDetailHeader`, `VerseDisplayControls`, `AyahCard` | `useSurahList`, `useSurah`, `useReadingDisplay`, `useUserStore` (favorit) | `services/quran/*`, `lib/surah-search.ts`, `lib/surah-seed.ts` |
+| Audio | `AudioPlayer` | `useAudio`, `useAyahAudio`, `useAudioPlaybackGate`, `useAudioStore` | `services/audio-controller.ts`, `native-audio-player.ts`, `media-session.ts`, `native-media-session.ts`, `audio-tab-sync.ts` |
+| Memorization | `RepeatSelector`, `RepeatSettingsDialog`, `RepeatStatus`, `RepeatProgressBadge`, Mode Fokus (`app/focus/[id]`) | `useSurahRepeatPlayback`, `useRepeatStore` | `services/repeat-engine.ts`, `murotal-resolver.ts`, `playback-track-navigation.ts`, `lib/repeat-*.ts` |
+| Reading Resume | `ContinueReading` | `usePersistLastViewed`, `useAutoFollowPlayback`, `useUserStore.lastViewed` | `lib/auto-follow-playback.ts`, `lib/ayah-scroll.ts` |
+| Settings | `app/settings/page.tsx`, `SettingsSection`, `SettingsRow`, layar Tentang | `useUserStore.settings`, `useArabicTextSize`, `usePreferredReciterId` | `lib/arabic-text-size.ts`, `lib/reciter-preference.ts`, `i18n/*` |
+| Offline | `SurahOfflineDownload`, `OfflineStatusBadge`, `ConnectionIndicator` | `useSurahOfflineDownload`, `useSurahOfflineReady`, `useOfflineStore` | `services/download-manager.ts`, `audio-play-cache.ts`, `cache-manager.ts`, `public/sw.js` |
+| Infrastructure | — | `stores/index.ts` (`initStores`) | `services/db/*` (Dexie v5), `lib/register-service-worker.ts`, `lib/platform.ts` |
+
+Word highlight (`HighlightEngine`, `useHighlight`) **belum ada** — Post-MVP (`docs/24`).
+
 ---
 
 # 1. Purpose
@@ -117,8 +137,8 @@ Repeat / fokus hafalan
 
 ### Depends On
 
-- Infrastructure API repository
-- Infrastructure DB repository
+- Dataset statis via `services/quran/` (bukan repository API/DB — `docs/23`)
+- Store pengguna (`useUserStore`) untuk favorit
 - Settings module
 - Reading Resume module
 
@@ -307,7 +327,7 @@ Repeat / fokus hafalan
 - `useCacheStatus()`
 - `cacheManager`
 - `audioCache`
-- Workbox/service worker integration
+- Integrasi Service Worker manual (`public/sw.js`, bukan Workbox)
 
 ### Depends On
 
@@ -443,22 +463,9 @@ Shared Module -> contains Quran business rules
 
 ---
 
-# 7. Suggested Folder Mapping
+# 7. Folder Mapping
 
-```text
-src/
-├── features/
-│   ├── quran/
-│   ├── audio/
-│   ├── memorization/
-│   ├── reading-resume/
-│   ├── settings/
-│   └── offline/
-├── visual/
-├── infrastructure/
-├── context/
-└── shared/
-```
+> Rancangan awal `src/features/*` **tidak dipakai**. Struktur folder aktual (per lapisan) ada di `docs/16-folder-structure.md`; pemetaan modul → file ada di bagian **0** dokumen ini.
 
 ---
 

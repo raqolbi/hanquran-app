@@ -2,6 +2,8 @@
 
 Dokumen ini menjelaskan cara menyiapkan lingkungan pengembangan HanQuran untuk developer baru. Mengacu pada arsitektur yang dibekukan di `docs/20-mvp-freeze.md`.
 
+**Terakhir disinkronkan dengan kode:** 2 November 2026 (versi `0.6.0`).
+
 ---
 
 ## 1. Prasyarat
@@ -9,8 +11,11 @@ Dokumen ini menjelaskan cara menyiapkan lingkungan pengembangan HanQuran untuk d
 
 | Tool    | Versi minimum             |
 | ------- | ------------------------- |
-| Node.js | 20 LTS                    |
+| Node.js | 22 LTS (dipakai CI; minimal 20.9 untuk Next.js 16) |
 | npm     | 10 (terpaket dengan Node) |
+| JDK + Android SDK | Hanya untuk build Android (`docs/32`) |
+
+Repo menyimpan dua lockfile: `package-lock.json` (dipakai CI GitHub Actions: `npm ci`) dan `pnpm-lock.yaml` (dipakai Vercel). Bila menambah dependency, perbarui **keduanya**.
 
 
 Codebase aplikasi berada di folder `hanquran-app/`. Seluruh perintah di bawah dijalankan dari dalam folder tersebut.
@@ -22,6 +27,7 @@ Codebase aplikasi berada di folder `hanquran-app/`. Seluruh perintah di bawah di
 ```bash
 cd hanquran-app
 npm install
+cp .env.example .env.local   # opsional — semua env bersifat opsional
 ```
 
 > MVP tidak memerlukan kredensial API eksternal. Konten Quran disajikan dari dataset statis `public/data/*`, audio tilawah dari CDN eksternal (`AYAH_AUDIO_BASE_URL`), dan daftar qari dari `data/reciters.json`. Detail arsitektur data: `[docs/07-api-integration.md](./07-api-integration.md)`.
@@ -36,13 +42,19 @@ npm install
 | `npm run dev`        | Menjalankan dev server di [http://localhost:3000](http://localhost:3000) |
 | `npm run build`      | Build produksi (Next.js + Turbopack)                                     |
 | `npm run start`      | Menjalankan hasil build produksi                                         |
-| `npm run lint`       | Linting dengan ESLint                                                    |
+| `npm run lint`       | ⚠️ Belum berfungsi — ESLint bukan dependency & belum ada konfigurasi. Pakai `npx tsc --noEmit` |
 | `npm run test`       | Menjalankan unit & integration test (Vitest)                             |
 | `npm run test:watch` | Menjalankan test dalam mode watch                                        |
 | `npm run perf`       | Build produksi + ukur bundle (`.next/static`)                            |
 | `npm run perf:bundle`| Ukur ukuran chunk JS/CSS hasil build                                       |
 | `npm run perf:lighthouse` | Audit Lighthouse mobile (butuh `npm run start` di port 3000)        |
 | `npm run perf:pwa`   | Smoke audit PWA (manifest + service worker)                              |
+| `npm run build:android` | Static export + profil Android (`HANQURAN_TARGET=android`) → `out/`   |
+| `npm run android:sync` | `build:android` + patch audio native + `cap sync android`             |
+| `npm run android:bundle` | Build AAB rilis (butuh keystore, lihat `docs/32`)                  |
+| `npm run cap:open`   | Buka proyek Android di Android Studio                                     |
+
+Catatan: `npm run build` menjalankan `scripts/generate-sw-precache.mjs` sebelum & sesudah `next build` untuk mengisi `public/sw-precache-manifest.js`. Jangan commit hasil placeholder `"buildId": "dev"` dari dev/test.
 
 
 ---
@@ -56,10 +68,12 @@ Lihat `docs/20-mvp-freeze.md` Bagian 7. Ringkasan:
 | ---------------- | ----------------------------------------------------------- |
 | Framework        | Next.js App Router                                          |
 | Bahasa           | TypeScript                                                  |
-| Styling          | Tailwind CSS + shadcn/ui (`@base-ui/react`)                 |
+| Framework versi  | Next.js 16, React 19                                        |
+| Styling          | Tailwind CSS v4 + shadcn/ui (`@base-ui/react`)              |
 | Runtime State    | Zustand                                                     |
 | Persistent State | Dexie (IndexedDB)                                           |
-| Audio Cache      | Cache Storage API (via Service Worker)                      |
+| Audio Cache      | Cache Storage API (Service Worker + Auto Download main thread) |
+| Android          | Capacitor 8 (static export)                                 |
 | Data Source      | Dataset statis `public/data/*` + CDN audio tilawah          |
 | Testing          | Vitest + jsdom + fake-indexeddb                             |
 | UI i18n          | next-intl (`id`, `en`) — lihat `docs/21-i18n-and-locale.md` |
@@ -69,30 +83,23 @@ Lihat `docs/20-mvp-freeze.md` Bagian 7. Ringkasan:
 
 ## 5. Struktur Folder
 
-Mengikuti `docs/16-folder-structure.md`:
+Peta lengkap & terbaru: **`docs/16-folder-structure.md`**. Ringkasan:
 
 ```
 hanquran-app/
-├─ app/            — Next.js App Router (halaman: /, /surah/[id], /focus/[id], /settings, /settings/about)
-├─ components/
-│  ├─ ui/          — primitives (Button, Dialog, dll.)
-│  ├─ shared/      — komponen bersama (Logo, ErrorBoundary, AppBootstrap)
-│  └─ ...          — komponen layar
-├─ stores/         — Zustand stores (audio, user, repeat, offline)
-├─ services/
-│  ├─ db/          — Dexie setup & migrations
-│  ├─ api/         — Repository Layer (Phase 1)
-│  ├─ audio-controller.ts  — jembatan HTMLAudioElement ↔ store (Phase 2)
-│  ├─ media-session.ts     — Media Session API, lock screen (Phase 2b, `docs/27`)
-│  └─ download-manager/  — (Phase 5)
-├─ data/           — reciters.json dan metadata domain
-├─ types/          — TypeScript types/interfaces domain
-├─ hooks/          — custom React hooks
-├─ lib/            — utilitas, route helper, seed data
-├─ tests/          — unit & integration tests
-└─ public/
-   ├─ data/        — dataset statis Quran & terjemahan
-   └─ sw.js        — Service Worker
+├─ app/         — App Router: /, /surah/[id], /focus/[id], /settings, /settings/about, sitemap, robots, fonts/
+├─ components/  — komponen layar; ui/ (primitives), shared/, providers/
+├─ hooks/       — custom hooks (use-*.ts)
+├─ lib/         — helper murni (routes, ayah-param, locale, gate, analytics, …)
+├─ services/    — quran/ (dataset), db/ (Dexie), audio, download manager, cache
+├─ stores/      — Zustand: audio, user, repeat, offline
+├─ types/       — types/index.ts
+├─ i18n/, messages/ — next-intl
+├─ data/        — reciters.json, about-credits.ts
+├─ public/      — data/ (dataset Qur'an), sw.js, sw-helpers.js, manifest.json, branding/
+├─ scripts/     — precache SW, Android, audit performa
+├─ tests/       — Vitest
+└─ android/     — proyek Capacitor
 ```
 
 ---
@@ -121,9 +128,9 @@ Audio tilawah di-stream dari **CDN audio** (`services/quran/audio-config.ts` →
 
 ### Database Dexie
 
-- Nama database: `hanquran-db`, versi schema: **2** (v1 menyertakan tabel konten Quran — dihapus).
+- Nama database: `hanquran-db`, versi schema: **5** (v1 menyertakan tabel konten Quran — dihapus di v2; v3–v5 mengganti PK `downloadManifest` menjadi `[surahId+reciterId]`).
 - Tabel MVP: `settings`, `favorites`, `lastRead`, `downloadManifest` + Growth tables.
-- Definisi schema: `services/db/migrations.ts` (`SCHEMA_V2`).
+- Definisi schema: `services/db/migrations.ts` (`SCHEMA_V3` dipakai di versi 5).
 - Sumber kebenaran struktur: `docs/06-database-schema.md`.
 - **Konten Quran tidak disimpan di Dexie.**
 
@@ -131,9 +138,9 @@ Audio tilawah di-stream dari **CDN audio** (`services/quran/audio-config.ts` →
 
 ## 7. Service Worker
 
-- File: `public/sw.js` + `public/sw-helpers.js` (Phase 5 — runtime caching + DownloadManager messaging).
-- Registrasi: `components/providers/app-providers.tsx` → `lib/register-service-worker.ts` (production only).
-- Strategi caching runtime & DownloadManager diimplementasikan di **Phase 5**.
+- File: `public/sw.js` (`SW_VERSION = 'v4'`) + `public/sw-helpers.js` + `public/sw-precache-manifest.js` (di-generate saat build). Ditulis manual, bukan Workbox.
+- Registrasi: `components/providers/app-providers.tsx` → `lib/register-service-worker.ts` (production web saja; tidak di Android native).
+- Nama cache & strategi: `docs/06` §6, perilaku offline: `docs/30`.
 
 ---
 
@@ -150,7 +157,9 @@ Jalankan:
 npm run test
 ```
 
-Saat ini: **222 test** (Vitest + jsdom + `fake-indexeddb`).
+Per 2 Nov 2026: **447 test / 90 file**; 15 test Cache Storage gagal karena keterbatasan jsdom (`new Response(new Blob())`) — bukan bug aplikasi (`docs/18` Phase 12b residual).
+
+Catatan: `tests/scripts/generate-sw-precache.test.ts` menulis ke `public/sw-precache-manifest.js`. Setelah menjalankan test, kembalikan file itu dengan `git checkout -- public/sw-precache-manifest.js` sebelum commit.
 
 ### Performance & Lighthouse
 
@@ -180,7 +189,7 @@ Ikuti `CLAUDE.md`:
 
 ## 10. Deploy ke Vercel (staging & production)
 
-HanQuran direncanakan di-host di **Vercel**. Panduan lengkap — branch strategy, preview vs production, checklist QA, rollback:
+HanQuran di-host di **Vercel** (PWA, saluran utama); aplikasi Android dibangun dari repo yang sama via Capacitor (`docs/32`). Panduan lengkap — branch strategy, preview vs production, checklist QA, rollback:
 
 **[`docs/25-deployment-vercel.md`](./25-deployment-vercel.md)**
 

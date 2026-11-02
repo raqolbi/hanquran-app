@@ -50,13 +50,13 @@ Buka aplikasi → Pilih surat → Putar audio → Aktifkan repeat → Mode fokus
 
 | Aspek | Keterangan |
 |-------|------------|
-| **Versi** | `0.3.0` |
+| **Versi** | `0.6.0` (belum di-tag) |
 | **Scope** | MVP V1 dibekukan di [`docs/20-mvp-freeze.md`](./docs/20-mvp-freeze.md) |
-| **Implementasi** | Core MVP + Growth `0.2.0`/`0.3.0` — lihat [`RELEASE.md`](./RELEASE.md) |
-| **Pengujian** | 222 unit test (Vitest) |
-| **Deploy** | Direncanakan di [Vercel](./docs/25-deployment-vercel.md) |
+| **Implementasi** | Core MVP + Growth `0.2.0`–`0.6.0` — lihat [`RELEASE.md`](./RELEASE.md) |
+| **Pengujian** | 447 test (Vitest) — 15 test Cache Storage masih gagal karena lingkungan jsdom |
+| **Deploy** | PWA di [Vercel](./docs/25-deployment-vercel.md); Android via Capacitor ([`docs/32`](./docs/32-capacitor-android-platform.md)) |
 
-**Sudah diimplementasikan** (diverifikasi dari codebase): daftar 114 surat (lazy load kartu), detail surat, audio player (kecepatan putar, prefetch ayat berikutnya), repeat engine + badge progress `x/y`, mode fokus, **Mode Murotal**, Media Session (lock screen), favorit surat, lanjutkan hafalan, auto follow playback, layar Tentang HanQuran, i18n UI (`id` / `en`), unduh offline per surat, Service Worker, PWA (manifest, install prompt, offline shell, splash), Vercel Analytics.
+**Sudah diimplementasikan** (diverifikasi dari codebase): daftar 114 surat (di-SSG, ada di HTML awal), detail surat (SSG + SEO), audio player (kecepatan putar, prefetch ayat berikutnya), repeat engine + badge progress `x/y`, mode fokus, **Mode Murotal**, Media Session (lock screen), favorit surat, lanjutkan hafalan, auto follow playback, layar Tentang HanQuran, i18n UI (`id` / `en`), unduh offline per surat, Service Worker, PWA (manifest, install prompt, offline shell, splash), Vercel Analytics, aplikasi Android (Capacitor), Gerbang Threads, font Amiri Quran untuk rasm Utsmani.
 
 **Belum selesai / di luar MVP V1** (dokumentasi resmi): word-by-word highlight, persist posisi audio, verifikasi E2E offline, error tracking produksi, seluruh kriteria rilis di [`docs/20-mvp-freeze.md`](./docs/20-mvp-freeze.md) §9.
 
@@ -111,9 +111,9 @@ Pratinjau antarmuka HanQuran — mobile-first, UI Bahasa Indonesia.
 | Fitur | Deskripsi |
 |-------|-----------|
 | **Beranda** | 114 surat, pencarian, filter favorit, kartu Lanjutkan Hafalan |
-| **Detail Surat** | Ayat Uthmani, terjemahan & transliterasi (toggle), audio, repeat, unduh offline |
+| **Detail Surat** | Ayat rasm Utsmani (font Amiri Quran), terjemahan & transliterasi (toggle), audio, repeat, unduh offline |
 | **Mode Fokus** | Satu ayat per layar, navigasi ayat, audio & repeat (tanpa word highlight di MVP) |
-| **Pengaturan** | Bahasa UI, qari, Auto Follow Playback, Mode Murotal, ukuran teks Arab, kontras tinggi, animasi, status & hapus cache |
+| **Pengaturan** | Bahasa UI, qari, Auto Follow Playback, Mode Murotal, Auto Download Audio, ukuran teks Arab, kontras tinggi, animasi, status & hapus cache |
 | **Tentang HanQuran** | Informasi aplikasi, filosofi, credits, repository & lisensi |
 | **Offline** | Unduh audio per surat; Service Worker cache dataset & aset |
 | **PWA** | Instal ke layar utama, splash screen, halaman fallback offline |
@@ -226,7 +226,7 @@ Referensi lengkap: [`docs/16-folder-structure.md`](./docs/16-folder-structure.md
 
 | Tool | Versi minimum |
 |------|---------------|
-| Node.js | 20 LTS |
+| Node.js | 22 LTS (minimal 20.9) |
 | npm | 10 |
 
 ---
@@ -267,6 +267,18 @@ MVP **tidak mewajibkan** environment variable. File contoh: [`.env.example`](./.
 cp .env.example .env.local
 ```
 
+Variabel opsional (dibaca saat **build**, ubah → build ulang / redeploy):
+
+| Variabel | Fungsi |
+|----------|--------|
+| `NEXT_PUBLIC_SITE_URL` | Domain final untuk canonical, sitemap, robots (wajib di Vercel Production) |
+| `NEXT_PUBLIC_AUTHOR_NAME` | Nama pembuat di footer Beranda |
+| `NEXT_PUBLIC_AUTHOR_THREADS_URL` | Tautan Threads di Gerbang Threads & footer; handle `@nama` di teks gerbang ikut berubah |
+| `NEXT_PUBLIC_AUTHOR_X_URL` | Tautan X di footer |
+| `NEXT_PUBLIC_ORGANIZATION_URL` | Tautan organisasi (Qolcore) di footer |
+
+Tidak dipasang → nilai bawaan. Dikosongkan (`NAMA=`) atau diisi `-` → elemen disembunyikan (URL Threads kosong juga mematikan Gerbang Threads). URL harus `https://`; nilai tidak valid ikut disembunyikan. Rincian: [`docs/26-about-screen-spec.md`](./docs/26-about-screen-spec.md) §4.5.
+
 Variabel khusus (mis. Sentry) dapat ditambahkan saat Phase 8 release monitoring diimplementasikan — lihat [`docs/18-development-tasks.md`](./docs/18-development-tasks.md).
 
 ---
@@ -277,7 +289,7 @@ Variabel khusus (mis. Sentry) dapat ditambahkan saat Phase 8 release monitoring 
 npm run test
 ```
 
-- **222 test** di `tests/` (Vitest + jsdom + fake-indexeddb)
+- **442 test / 90 file** di `tests/` (Vitest + jsdom + fake-indexeddb) — per 2 Nov 2026, 15 test Cache Storage masih gagal karena masalah lingkungan jsdom (`new Response(new Blob())`), bukan kode aplikasi
 - Konfigurasi: `vitest.config.ts`, setup: `tests/setup.ts`
 
 ---
@@ -324,7 +336,10 @@ Catatan rilis: [`RELEASE.md`](./RELEASE.md).
 | [`docs/20-mvp-freeze.md`](./docs/20-mvp-freeze.md) | Scope MVP V1 (dibekukan) |
 | [`docs/SETUP.md`](./docs/SETUP.md) | Setup developer |
 | [`docs/18-development-tasks.md`](./docs/18-development-tasks.md) | Backlog & progress implementasi |
+| [`docs/13-component-tree.md`](./docs/13-component-tree.md) | Pohon komponen aktual |
 | [`docs/14-routing-spec.md`](./docs/14-routing-spec.md) | Spesifikasi rute |
+| [`docs/16-folder-structure.md`](./docs/16-folder-structure.md) | Struktur folder aktual |
+| [`docs/06-database-schema.md`](./docs/06-database-schema.md) | Schema Dexie (v5) & Cache Storage |
 | [`docs/15-state-management.md`](./docs/15-state-management.md) | State & persistensi |
 | [`docs/07-api-integration.md`](./docs/07-api-integration.md) | Sumber data & integrasi |
 | [`docs/26-about-screen-spec.md`](./docs/26-about-screen-spec.md) | Layar Tentang HanQuran |
@@ -334,6 +349,9 @@ Catatan rilis: [`RELEASE.md`](./RELEASE.md).
 | [`docs/32-capacitor-android-platform.md`](./docs/32-capacitor-android-platform.md) | Platform Capacitor Android |
 | [`docs/33-play-store-privacy-and-data-safety.md`](./docs/33-play-store-privacy-and-data-safety.md) | Privasi & Data safety Play |
 | [`docs/34-threads-gate-spec.md`](./docs/34-threads-gate-spec.md) | Overlay Gate Threads (sekali, gimmick) |
+| [`docs/35-seo-spec.md`](./docs/35-seo-spec.md) | SEO & discoverability |
+| [`docs/36-performance-cwv.md`](./docs/36-performance-cwv.md) | Performa beranda & Core Web Vitals |
+| [`docs/19-document-audit.md`](./docs/19-document-audit.md) | Audit dokumentasi & status tiap dokumen |
 | [`docs/analytics.md`](./docs/analytics.md) | Event Vercel Analytics |
 | [`CLAUDE.md`](./CLAUDE.md) | Konvensi penulisan kode & dokumen |
 

@@ -2,8 +2,72 @@
 
 Dokumen ini adalah laporan audit komprehensif terhadap seluruh dokumentasi proyek HanQuran. Audit dilakukan untuk memastikan konsistensi, mengidentifikasi konflik, duplikasi, dan gap dalam dokumentasi sebelum Sprint 1 dimulai.
 
-**Terakhir diperbarui:** 25 Juni 2026  
-**Versi audit:** 3 (revisi setelah unifikasi arsitektur final: Zustand + Dexie + Local First)
+**Terakhir diperbarui:** 2 November 2026  
+**Versi audit:** 4 (sinkronisasi dokumen dengan kode `0.6.0`) — audit v1–v3 di bawah dipertahankan sebagai riwayat
+
+---
+
+## Audit v4 — 2 November 2026: Sinkronisasi Dokumen dengan Kode
+
+**Metode:** (1) cek otomatis seluruh path `app/`, `components/`, `hooks/`, `lib/`, `services/`, dll. yang disebut di `docs/*.md` & `README.md` terhadap repo; (2) cek manual nama komponen, props, store, schema Dexie, nama cache SW, rute, perintah, dan status tiap dokumen terhadap kode.
+
+### Status Dokumen (acuan cepat)
+
+| Dokumen | Status | Catatan |
+|---------|--------|---------|
+| `00-vision` | 📌 Arah produk | Tidak terikat implementasi |
+| `01-brd`, `02-product-backlog`, `03-user-stories` | 📌 Kebutuhan awal | Diberi catatan: scope di `20`, status di `18` |
+| `04-system-architecture` | 🔄 Diperbarui sebagian | Bagian 0 baru = arsitektur aktual; §5, §9, §12 dialihkan ke `13`, `06`, `16`; peta status per bagian |
+| `05-module-catalog` | 🔄 Diperbarui | Tabel pemetaan modul → file; `src/features/*` dinyatakan tidak dipakai |
+| `06-database-schema` | ✅ Sinkron | Schema v5, PK `downloadManifest`, `reciterId`, nama cache SW v4 |
+| `07-api-integration` | ✅ Sinkron (nama cache) | |
+| `08-ui-ux-wireframe`, `09-design-system`, `10-high-fidelity-ui` | ✅ Acuan visual | `09` §4 mencatat font Amiri Quran |
+| `11-v0-master-prompt` | 📜 Historis | |
+| `12-component-spec` | 🔄 Diperbarui | Tabel **Status Implementasi** (nama spek → file nyata); `SurahCard` sinkron; komponen tak dipakai ditandai |
+| `13-component-tree` | ✅ Ditulis ulang | Pola SSG + client, komponen tak dipakai dipisah |
+| `14-routing-spec` | ✅ Sinkron | SSG, 404 id tak valid, validasi `?ayah`, sitemap/robots, bentuk URL Android; rute "rekomendasi" ditandai di luar scope |
+| `15-state-management` | ✅ Sinkron | Penulis Cache Storage, kunci localStorage/sessionStorage, field store aktual |
+| `16-folder-structure` | ✅ Ditulis ulang | Struktur aktual |
+| `17-implementation-roadmap` | 📜 Historis | |
+| `18-development-tasks` | ✅ Sinkron | Status Phase 9 Android & header diperbarui |
+| `19-document-audit` | ✅ Dokumen ini | |
+| `20-mvp-freeze` | 🔒 Beku | Ditambah §12 Change Log pasca-freeze (isi freeze tidak diubah) |
+| `21`–`31`, `33`–`36` | ✅ Spek fitur | Nama cache di `23`, `30` diperbarui |
+| `32-capacitor-android-platform` | ✅ Diperbarui | Status: diimplementasi; path `android/app/build.gradle` |
+| `SETUP` | ✅ Sinkron | Node 22, dua lockfile, perintah Android, Dexie v5, `npm run lint` belum berfungsi |
+| `analytics` | ✅ | |
+| `i18n-migration-report`, `verse-display-controls-implementation` | 📜 Historis | Tanggal salah ketik `2025` → `2026` |
+| `README.md` | ✅ Sinkron | Versi, jumlah test, status deploy, daftar dokumen |
+
+Legenda: ✅ sinkron/acuan · 🔄 diperbarui dengan catatan · 📌 kebutuhan/arah · 📜 historis (bukan acuan) · 🔒 beku.
+
+### Temuan yang Diperbaiki
+
+| # | Temuan | Perbaikan |
+|---|--------|-----------|
+| D-01 | `docs/06` masih schema v2, `qariId`, PK `downloadManifest = surahId`, cache `*-v1` | Disinkronkan ke v5 & SW v4 |
+| D-02 | `docs/16` berisi folder yang tidak pernah ada (`components/screens`, `services/api`, `services/sw`, `styles/`) | Ditulis ulang |
+| D-03 | `docs/13` merujuk `lib/surahs-data` (sudah dihapus), komponen tak dipakai tercampur dengan yang aktif | Ditulis ulang |
+| D-04 | `docs/12` memakai nama konsep (`FavoriteFilter`, `SurahMetaHeader`, …) tanpa pemetaan ke file | Tabel Status Implementasi |
+| D-05 | `docs/04`: Workbox, Next 15, IndexedDB berisi surat/ayat, Docker | Bagian 0 + penandaan bagian usang |
+| D-06 | `docs/15`: "SW satu-satunya penulis Cache Storage" (salah — Auto Download menulis dari main thread); status unduhan "per-track" | Diperbaiki |
+| D-07 | `docs/32` status "belum diimplementasi"; `docs/18` Phase 9 "belum dimulai" | Diperbarui |
+| D-08 | `docs/30`, `docs/23`, `docs/07`, `docs/15` nama cache `*-v1` | Diperbarui ke `static-v2`, `shell-v2`, `data-v3` |
+| D-09 | `SETUP`/`README`: 222 test, Dexie v2, `services/api/`, versi `0.3.0` | Diperbarui |
+| D-10 | `docs/14` mencantumkan rute "rekomendasi MVP" yang tidak dijadwalkan | Ditandai di luar scope |
+| D-11 | `.env.example` tidak pernah masuk Git (ter-ignore `.env*`) padahal dirujuk README | `.gitignore` ditambah `!.env.example` |
+
+### Temuan Terbuka (di luar dokumen)
+
+- `package-lock.json` tidak sinkron dengan `package.json` (`npm ci` gagal di lingkungan bersih: `Missing @emnapi/runtime …`) — CI GitHub Actions memakai `npm ci`. Perlu `npm install` lalu commit lockfile, setelah dicek di mesin lokal.
+- `npm run lint` didefinisikan tetapi ESLint tidak terpasang.
+- 5 komponen tidak dipakai (`docs/13` § Komponen Tidak Dipakai) — kandidat dihapus.
+
+---
+
+## Riwayat Audit Sebelumnya (v1–v3)
+
+**Versi audit lama:** 3 (revisi setelah unifikasi arsitektur final: Zustand + Dexie + Local First)
 
 > **Pembaruan 24 Juni 2026:** Keputusan **Static Dataset Architecture** menggantikan Local-First / Dexie untuk konten Quran. Lihat `docs/23-static-dataset-architecture.md`. Beberapa temuan audit di bawah mengacu pada arsitektur lama.
 

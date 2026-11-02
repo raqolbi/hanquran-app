@@ -47,13 +47,13 @@ public/data/manifest.json
 public/data/quran/{id}.json
 public/data/translations/{lang}/{id}.json
         ↓ fetch (services/quran/data-loader.ts)
-Service Worker: hanquran-data-v1 (cache-first)
+Service Worker: hanquran-data-v3 (cache-first)
         ↓
 In-memory Map (per sesi tab)
 ```
 
 - **Bukan** disimpan di Dexie.
-- **Di-precache saat SW `install`** (lihat §6.1): seluruh dataset (`manifest.json`, 114 file quran, terjemahan `id` + `en`) langsung tersimpan di `hanquran-data-v1` sebagai aset offline — **tanpa** menunggu pengguna membuka surat.
+- **Di-precache saat SW `install`** (lihat §6.1): seluruh dataset (`manifest.json`, 114 file quran, terjemahan `id` + `en`) langsung tersimpan di `hanquran-data-v3` sebagai aset offline — **tanpa** menunggu pengguna membuka surat.
 - Runtime (cache-first) tetap mengisi entri apa pun yang belum sempat ter-precache.
 
 ### 2.2 Audio tilawah (CDN)
@@ -215,11 +215,13 @@ next/prev) menuju **surat lain** yang audionya belum tersedia offline, pemutaran
 
 ## 6. Service Worker — Offline First
 
+Nama cache di bawah sesuai `public/sw.js` (`SW_VERSION = 'v4'`, 2 Nov 2026). Angka versi cache dinaikkan per jenis bila isinya harus diinvalidasi; cache `hanquran-*` lain dihapus saat aktivasi.
+
 | Cache | Isi | Strategi |
 |-------|-----|----------|
-| `hanquran-shell-v1` | App shell: `offline.html`, **app-shell HTML** + RSC route | network-first nav / SWR (`ignoreSearch`), **fallback app-shell** |
-| `hanquran-static-v1` | `/_next/static/*` (JS/CSS hashed), font, ikon, `manifest.json` | **precache install** + SWR |
-| `hanquran-data-v1` | seluruh `/data/*` | **precache install** + cache-first |
+| `hanquran-shell-v2` | App shell: `offline.html`, **app-shell HTML** + RSC route | network-first nav / SWR (`ignoreSearch`), **fallback app-shell** |
+| `hanquran-static-v2` | `/_next/static/*` (JS/CSS hashed), font, ikon, `manifest.json` | **precache install** + SWR |
+| `hanquran-data-v3` | seluruh `/data/*` | **precache install** + cache-first |
 | `hanquran-audio-v1` | MP3 CDN | cache-first (Simpan Offline / auto download saat play jika ON) |
 
 **Jangan** fallback navigasi `/surah/*` ke HTML Beranda — menyebabkan splash + kembali ke home (bug 25 Juni 2026).
@@ -242,15 +244,14 @@ ia berjalan sekali saat SW dipasang/diperbarui. Selama proses install, perangkat
 
 ### 6.2 Route dinamis via App Shell
 
-`/surah/[id]` dan `/focus/[id]` adalah route **dinamis** (server-rendered
-on-demand) — tidak ada HTML statis per-id untuk di-precache. Strategi:
+`/surah/[id]` dan `/focus/[id]` kini di-**SSG** untuk id 1–114 (`docs/35`, `docs/36`), tetapi HTML per-id tetap **tidak** di-precache saat install (hanya yang pernah dibuka / Simpan Offline). Strategi:
 
-- Precache **satu app-shell** (mis. dokumen `/surah/1` atau shell khusus) di
-  `hanquran-shell-v1`.
+- Precache **satu app-shell** (dokumen + RSC `/surah/1` dan `/focus/1`) di
+  `hanquran-shell-v2`.
 - Untuk navigasi offline ke `/surah/<id>` / `/focus/<id>` yang **tidak** ada di
   cache, SW mengembalikan **app-shell** tersebut (bukan `offline.html`).
 - Halaman membaca `id` dari **URL sisi-klien** (`parseSurahIdFromPathname(usePathname())`),
-  lalu memuat data dari `hanquran-data-v1`. Dengan demikian satu shell melayani semua id.
+  lalu memuat data dari `hanquran-data-v3`. Dengan demikian satu shell melayani semua id.
 - Mode Fokus tidak boleh menampilkan error boundary saat offline; data ayat
   diambil dari cache data yang sudah di-precache.
 

@@ -247,6 +247,8 @@ Audit kritis terhadap hasil T1–T9 (bukan audit SEO awal). Semua temuan **tidak
 
 Urutan disarankan: **H1 → H2 → H3 → H5 → H4 → H7 → H9 → H6 → H8**.
 
+> **Catatan 2 Nov 2026 (H7 di mode fokus):** H7 awalnya hanya diterapkan di Surah Detail. Mode fokus masih memakai `parseInt` sehingga `/focus/1?ayah=abc` menghasilkan `NaN`. Kini `/focus/[id]` juga memakai `parseAyahParam` + `clampAyahNumber` (`docs/18` Phase 12b).
+
 Kontrak non-regresi: app-shell offline & SW tidak berubah; `generateStaticParams` tetap; export Android tetap hijau; Lighthouse SEO tidak turun.
 
 F8, F10, F13 dicatat sebagai backlog terpisah; F10 sudah ikut beres saat H1. **F11** dikerjakan sebagai **Phase 11 — Performa Beranda & CWV** (`docs/36-performance-cwv.md`), lihat §9.2.

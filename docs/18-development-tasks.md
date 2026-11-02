@@ -2,9 +2,9 @@
 
 Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi HanQuran menuju MVP. Berisi daftar pekerjaan teknis yang dapat langsung dikerjakan developer.
 
-**Terakhir diperbarui:** 1 November 2026
-**Status:** 🚧 Sprint 2 — Growth `0.2.0`/`0.3.0` diimplementasi di kode; uji manual perangkat & tag rilis menunggu; Phase 9 Android (Capacitor) terdokumentasi di `docs/32`; Phase 10 SEO ✅ selesai; Phase 10b hardening ✅ selesai; Phase 11 performa beranda ✅ selesai; Phase 11b LCP Threads Gate ✅ selesai; Phase 12 locale paint pertama (F8) ✅ selesai
-**Total Development Tasks:** 97 + Phase 9 Android (lihat `docs/32` §13) + Phase 10 SEO (lihat `docs/35-seo-spec.md` §4) + Phase 10b Hardening (lihat `docs/35` §8–§9) + Phase 11 Performa Beranda (lihat `docs/36-performance-cwv.md`) + Phase 11b LCP Threads Gate (lihat `docs/34` §8) + Phase 12 Locale Paint Pertama (lihat `docs/21` §5.6)
+**Terakhir diperbarui:** 2 November 2026
+**Status:** 🚧 Menuju rilis `0.6.0` (lihat `RELEASE.md`) — `0.2.0`–`0.5.0` sudah diimplementasi; uji manual perangkat & tag Git belum dibuat; Phase 9 Android (Capacitor) ✅ diimplementasi (checklist `docs/32` §13); Phase 10 SEO ✅ selesai; Phase 10b hardening ✅ selesai; Phase 11 performa beranda ✅ selesai; Phase 11b LCP Threads Gate ✅ selesai; Phase 12 locale paint pertama (F8) ✅ selesai; Phase 12b audit bug & hardening ✅ selesai
+**Total Development Tasks:** 97 + Phase 9 Android (lihat `docs/32` §13) + Phase 10 SEO (lihat `docs/35-seo-spec.md` §4) + Phase 10b Hardening (lihat `docs/35` §8–§9) + Phase 11 Performa Beranda (lihat `docs/36-performance-cwv.md`) + Phase 11b LCP Threads Gate (lihat `docs/34` §8) + Phase 12 Locale Paint Pertama (lihat `docs/21` §5.6) + Phase 12b Audit Bug & Hardening
 **Arsitektur data:** `docs/23-static-dataset-architecture.md`
 
 ---
@@ -69,13 +69,14 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 6         | PWA & Packaging                   | 8      | 5      | 2      | 1      | 5       | 🟡 Uji manual PWA tersisa                    |
 | 7         | Testing & Quality Assurance       | 9      | 6      | 2      | 1      | 2       | ⏳ Audio + repeat unit ✅                      |
 | 8         | Release & Monitoring              | 11     | 6      | 3      | 2      | 3       | 🟡 Error tracking & rollout belum            |
-| 9         | Platform Android (Capacitor)      | —      | —      | —      | —      | 0       | 📋 Backlog di `docs/32` §13 — PWA tetap utama |
+| 9         | Platform Android (Capacitor)      | —      | —      | —      | —      | —       | ✅ Diimplementasi Agu 2026 — checklist di `docs/32` §13 |
 | 10        | SEO & Discoverability             | 9      | 4      | 3      | 2      | 9       | ✅ Selesai (T1–T9) — follow-up perf → Phase 11 ✅ |
 | 10b       | SEO Hardening (pasca-audit)       | 9      | 4      | 3      | 2      | 9       | ✅ Selesai (H1–H9) — 29 Okt 2026             |
 | 11        | Performa Beranda & CWV            | 6      | 2      | 3      | 1      | 6       | ✅ Selesai (P11-1–P11-6) — 29 Okt 2026       |
 | 11b       | LCP Threads Gate (SSR pra-paint)  | 3      | 0      | 3      | 0      | 3       | ✅ Selesai (P11b-1–P11b-3) — 31 Okt 2026     |
 | 12        | Locale Paint Pertama (F8)         | 4      | 0      | 0      | 4      | 4       | ✅ Selesai (P12-1–P12-4) — 1 Nov 2026        |
-| **TOTAL** |                                   | **110** | **50** | **37** | **23** | **83**  | (+ Phase 9; + Phase 10 SEO; + Phase 10b hardening; + Phase 11 CWV; + Phase 11b LCP gate; + Phase 12 F8) |
+| 12b       | Audit Bug & Hardening             | 13     | 3      | 7      | 3      | 13      | ✅ Selesai (P12b-1–P12b-13) — 2 Nov 2026     |
+| **TOTAL** |                                   | **110** | **50** | **37** | **23** | **83**  | (+ Phase 9; + Phase 10 SEO; + Phase 10b hardening; + Phase 11 CWV; + Phase 11b LCP gate; + Phase 12 F8; + Phase 12b audit) |
 
 
 > Catatan: Phase 7 (Testing & QA) berjalan **paralel** mulai Phase 1 — bukan sequential setelah Phase 6 selesai.
@@ -1167,7 +1168,7 @@ Verifikasi: `npm run build` dan `npm run test` (128 test) lulus.
 
 # 📱 Phase 9 — Platform Android (CapacitorJS)
 
-**Status:** 📋 Belum dimulai  
+**Status:** ✅ Diimplementasi (1 Agustus 2026) — status per task di `docs/32` §13 (beberapa uji perangkat masih terbuka)  
 **Spek & daftar task lengkap:** [`docs/32-capacitor-android-platform.md`](./32-capacitor-android-platform.md) §3.4 (solusi PWA-safe), §6.5 (dual pipeline), **§13 (checklist task)**
 
 **Kontrak produk:**
@@ -1394,6 +1395,57 @@ Verifikasi browser: dengan request terjemahan `en` ditahan, **286/286** paragraf
 
 Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan dependency repo (gap lama, bukan regresi); verifikasi memakai `tsc --noEmit` + suite test.
 
+
+---
+
+# 🛠️ Phase 12b — Audit Bug & Hardening (2 Nov 2026)
+
+**Status:** ✅ Selesai 2 November 2026  
+**Temuan asal:** laporan hydration mismatch ikon favorit di Beranda + audit kode menyeluruh (bug, keamanan, UI/UX, logika)
+
+| ID | Task | Tipe | Prioritas | Ref |
+|----|------|------|-----------|-----|
+| P12b-1 | Hydration mismatch ikon hati: `HomeClient` menurunkan `isFavorited` dari slice `favorites`, bukan `isFavorite()` (yang membaca `get()` saat hidrasi) | [FIX] | P0 | `docs/15` §13 |
+| P12b-2 | Gate Threads tidak mengunci pengguna bila `localStorage` diblokir: `completeThreadsGate()` aman & mengembalikan `boolean` | [FIX] | P1 | `docs/34` §14 |
+| P12b-3 | Mode fokus: `?ayah` divalidasi `parseAyahParam` + `clampAyahNumber` (sebelumnya `?ayah=abc` → `NaN`) | [FIX] | P1 | `docs/35` H7 |
+| P12b-4 | `userStore.init()`: `normalizeStoredSettings()` melengkapi semua field settings lama sekaligus (ganti rantai `else if`) | [FIX] | P1 | `docs/15` §5.2 |
+| P12b-5 | SW: pesan unduhan dibungkus `event.waitUntil`; `prefetch-surah` hanya menerima URL audio CDN, pesan cache offline hanya path se-origin; `SW_VERSION` → `v4` | [FIX]/[HARDEN] | P1 | `docs/15` §12.4 |
+| P12b-6 | `init()` store tahan gagal Dexie (`try/catch`) + `initStores()` memakai `Promise.allSettled` | [FIX] | P1 | `docs/15` §12.5 |
+| P12b-7 | `SurahCard`: tombol favorit jadi saudara tautan (bukan `<button>` di dalam `<a>`); tanpa tab stop ganda | [FIX] | P1 | `docs/12` §4 |
+| P12b-8 | Tautan pembuat dapat diganti env `NEXT_PUBLIC_AUTHOR_*` / `NEXT_PUBLIC_ORGANIZATION_URL` (hanya `https://`); tidak dipasang → bawaan, dikosongkan/`-` → disembunyikan (URL Threads kosong mematikan gate); handle di teks gerbang diturunkan dari URL | [NEW] | P2 | `docs/26` §4.5, `docs/34` §5 |
+| P12b-9 | Test: settings lama multi-field, storage gate diblokir, struktur `SurahCard`, validasi env | [TEST] | P1 | — |
+| P12b-10 | Hydration mismatch atribut `disabled` tombol Simpan Offline: cek `caches` baru setelah hidrasi (`useIsClient`) | [FIX] | P0 | `docs/15` §13 |
+| P12b-11 | Teks ayat tampil kotak (tofu) di sebagian sistem: font Amiri Quran self-host (`lib/quran-font.ts`) untuk ayat, Mode Fokus, pratinjau Pengaturan | [FIX] | P0 | `docs/09` §4 |
+| P12b-12 | Degraded mode: `persistenceAvailable` di `userStore` + pemberitahuan di Pengaturan; aksi tetap jalan di memori | [NEW] | P2 | `docs/15` §12.5 |
+| P12b-13 | URL Threads bawaan diganti ke `https://www.threads.com/@qolcore` | [CHORE] | P2 | `docs/34` §5 |
+
+- [x] [FIX] P12b-1 — hydration favorit (P0)
+- [x] [FIX] P12b-2 — gate aman storage diblokir (P1)
+- [x] [FIX] P12b-3 — `?ayah` mode fokus (P1)
+- [x] [FIX] P12b-4 — normalisasi settings lama (P1)
+- [x] [FIX] P12b-5 — SW `waitUntil` + allowlist URL (P1)
+- [x] [FIX] P12b-6 — `init()` tahan gagal Dexie (P1)
+- [x] [FIX] P12b-7 — struktur DOM `SurahCard` (P1)
+- [x] [NEW] P12b-8 — env tautan pembuat (P2)
+- [x] [TEST] P12b-9 — test baru (P1)
+- [x] [FIX] P12b-10 — hydration tombol Simpan Offline (P0)
+- [x] [FIX] P12b-11 — font Al-Qur'an Amiri Quran (P0)
+- [x] [NEW] P12b-12 — indikator degraded mode (P2)
+- [x] [CHORE] P12b-13 — default Threads @qolcore (P2)
+
+**Hasil verifikasi (2 Nov 2026):** dev server + Playwright — dengan kode lama, 4/4 reload setelah memfavoritkan surat memunculkan "A tree hydrated but some attributes…"; setelah P12b-1, **0** error dan status favorit tetap tersimpan. `document.querySelectorAll('a button').length === 0`. `/focus/1?ayah=abc` → "Ayat 1 / 7". Env `NEXT_PUBLIC_AUTHOR_THREADS_URL=https://www.threads.com/@akuncoba` → teks gerbang "Ikuti @akuncoba…" dan tautan gerbang/footer berubah; `NEXT_PUBLIC_AUTHOR_X_URL=javascript:…` ditolak. Build production dengan `NEXT_PUBLIC_AUTHOR_THREADS_URL=` dan `NEXT_PUBLIC_AUTHOR_X_URL=-` → overlay gate tidak ada di DOM, scroll tidak terkunci, footer hanya menampilkan nama + Qolcore (env yang tidak dipasang tetap bawaan). Build web hijau; suite test **427 lulus / 15 gagal (442)** — ke-15 kegagalan sudah ada sebelumnya (lingkungan jsdom, lihat residual).
+
+**Tambahan verifikasi (2 Nov 2026, laporan pengguna kedua):** `/surah/1` dan `/surah/2` — 0 hydration mismatch dalam 3 kali muat ulang; tombol Simpan Offline aktif setelah hidrasi; `getComputedStyle` teks ayat = `quranFont`, font berstatus `loaded`, alif wasla & tanda waqaf tampil benar di desktop dan lebar 430 px (ayat panjang terbungkus tanpa terpotong).
+
+**Residual / backlog (belum dikerjakan):**
+
+- 15 test Cache Storage gagal karena `new Response(new Blob())` di jsdom melempar `object.stream is not a function` — perbaiki fixture/lingkungan test.
+- `tests/scripts/generate-sw-precache.test.ts` menulis ke `public/sw-precache-manifest.js` asli; sebagian test bisa macet di mesin lokal.
+- 26 error TypeScript tersembunyi oleh `typescript.ignoreBuildErrors` (mis. impor `@base-ui/react/utils/useAnchorPositioning` di `components/ui/select.tsx`, `Metadata` dari `'react'` di `app/settings/layout.tsx`).
+- Overlay gate: belum ada focus trap / Esc / `inert` pada latar.
+- Membuka surat apa pun langsung menimpa posisi "Lanjutkan Hafalan" ke ayat 1; label "dihafal" menyesatkan.
+- SW: cache navigasi tak terbatas (tiap `?ayah` jadi entri), RSC cache-first bisa basi setelah deploy, audio cache dilayani 200 untuk permintaan Range (risiko iOS).
+- Kode mati: `components/favorites.tsx`, state `completedAyahs` di Surah Detail.
 ---
 
 # 🏁 6. MVP Checklist

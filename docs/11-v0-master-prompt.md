@@ -1,5 +1,7 @@
 # HanQuran V1 - V0 Master Prompt
 
+> 📜 **Dokumen historis.** Prompt generator UI (v0) yang dipakai di awal proyek untuk membuat kerangka tampilan; menyebut fitur yang kemudian ditunda (word-by-word highlight) dan struktur yang tidak dipakai. Isinya tidak diperbarui mengikuti kode dan **bukan acuan implementasi**. Acuan terkini: `docs/09`, `docs/10`, `docs/12`, `docs/13`.
+
 You are a senior product designer and frontend engineer.
 
 Create UI for HanQuran.

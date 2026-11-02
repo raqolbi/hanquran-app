@@ -1,5 +1,7 @@
 # Product Backlog
 
+> 📌 **Backlog produk awal.** Prioritas & scope MVP yang mengikat ada di `docs/20`; status pengerjaan per task di `docs/18`. Item yang dipindah ke Post-MVP (mis. word-by-word highlight, `docs/24`) tetap tercantum di sini sebagai referensi.
+
 ## HanQuran V1
 
 ---

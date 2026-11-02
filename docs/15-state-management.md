@@ -51,19 +51,21 @@ State client yang sering berubah dan diakses lintas komponen.
 * Status pemutaran audio: `isPlaying`, `currentTime`, `duration`, `currentTrack`.
 * Status repeat runtime: `cycleIndex`, `isRepeatActive`, `lastBoundary`.
 * Status koneksi: `connectionStatus` (`online` / `offline`).
-* Status unduhan audio per-track: `pending` / `downloading` / `ready` / `failed`.
+* Status unduhan audio per **surat + qari** (`downloadManifestKey(surahId, reciterId)`): `idle` / `downloading` / `ready` / `failed`.
+* Ketersediaan penyimpanan (`persistenceAvailable`) — `false` saat degraded mode (§12.5).
 
 ## 2.2 Persistent State (Dexie)
 
 Preferensi pengguna dan data yang harus bertahan antar sesi atau saat offline. Disimpan di IndexedDB melalui **Dexie**.
 
 * Daftar favorit — tabel `favorites`.
-* Pengaturan qari — tabel `settings`.
+* Pengaturan qari (`reciterId`) — tabel `settings`.
 * Bahasa UI aplikasi (`appLocale`: `id` | `en`) — tabel `settings`; framework `next-intl`.
 * Pengaturan ukuran teks Arab — tabel `settings`.
 * Toggle terjemahan — tabel `settings` (`translationVisible`); kontrol UI di `VerseDisplayControls`.
 * Toggle transliterasi — tabel `settings` (`transliterationVisible`); kontrol UI di `VerseDisplayControls`.
 * Aksesibilitas (`contrastMode`, `smoothAnimation`) — tabel `settings`; diterapkan via `AccessibilityProvider`.
+* Auto Download saat putar (`autoDownloadOnPlay`) — tabel `settings`. Lihat `docs/31-auto-download-audio-spec.md`.
 * Playback (`autoFollowPlayback`, `murotalEnabled`) — tabel `settings`; auto scroll ayat aktif & tilawah berkelanjutan. Lihat `docs/28-playback-settings.md`, `docs/29-murotal-mode-spec.md`.
 * Konfigurasi repeat (`count`, `target`, `range`) — tabel `settings`.
 * Penanda Lanjutkan Hafalan (`lastViewed`) — tabel `lastRead`.
@@ -74,7 +76,24 @@ Preferensi pengguna dan data yang harus bertahan antar sesi atau saat offline. D
 
 ## 2.3 Audio Files (Cache Storage)
 
-File audio biner ayat per ayat dikelola Service Worker melalui `Cache Storage` API. Nama cache standar: `hanquran-audio-v1`. Service Worker adalah **satu-satunya** pihak yang menulis dan menghapus file di cache ini.
+File audio biner ayat per ayat disimpan di `Cache Storage` (`hanquran-audio-v1`, key = URL MP3). Penulis:
+
+* **Service Worker** — Simpan Offline per surat (`prefetch-surah`) dan runtime caching.
+* **Main thread** — Auto Download saat putar (`services/audio-play-cache.ts`) dan fallback `download-manager` bila SW tidak tersedia.
+* Penghapusan lewat **Hapus Cache** (`services/cache-manager.ts`).
+
+Nama cache lain (`hanquran-static-v2`, `hanquran-shell-v2`, `hanquran-data-v3`) dikelola SW — lihat `docs/06` §6.
+
+## 2.3b Penyimpanan Ringan Browser (`localStorage` / `sessionStorage`)
+
+Dipakai hanya untuk nilai yang harus terbaca **sinkron sebelum paint** atau per-sesi; selalu dibungkus `try/catch`.
+
+| Kunci | Storage | Isi | Pemilik |
+|-------|---------|-----|---------|
+| `hanquran:app-locale` | localStorage | Cache locale untuk paint pertama (sumber kebenaran tetap Dexie) | `lib/app-locale.ts` |
+| `hanquran:threads-gate-completed` | localStorage | Gerbang Threads sudah diselesaikan | `lib/threads-gate.ts` |
+| `hanquran:install-banner-dismissed` | localStorage | Banner instal PWA ditutup | `lib/install-prompt.ts` |
+| `hanquran:murotal-pending-play` | sessionStorage | Lanjutan Murotal lintas surat (hard navigation) | `lib/murotal-pending-play.ts` |
 
 ## 2.4 Route State (URL Parameter)
 
@@ -94,7 +113,7 @@ State ephemeral yang **tidak** dipakai komponen lain. Hidup di komponen pemilikn
 * Filter chips di Beranda (`FilterChips`).
 * State buka/tutup dialog (`RepeatSettingsDialog`, `ClearCacheDialog`).
 * State pratinjau ukuran teks pada Pengaturan.
-* `activeWordIndex` pada Mode Fokus selama belum dibutuhkan komponen lain.
+* ~~`activeWordIndex` pada Mode Fokus~~ — word highlight ditunda ke Post-MVP (`docs/24`); belum ada di kode.
 * Status hover / fokus tombol.
 
 ---
@@ -105,10 +124,10 @@ Empat store Zustand resmi pada MVP. Tidak ada store tambahan yang boleh dibuat t
 
 | Store              | File                       | Tanggung Jawab                                                                                  |
 | ------------------ | -------------------------- | ----------------------------------------------------------------------------------------------- |
-| `useAudioStore`    | `stores/audioStore.ts`     | Pemutaran audio: `isPlaying`, `currentTrack`, `currentTime`, `duration`, `seek/play/pause` actions |
-| `useRepeatStore`   | `stores/repeatStore.ts`    | Konfigurasi & runtime repeat: `config` (persisten di Dexie), `cycleIndex`, `isActive` (runtime) |
-| `useUserStore`     | `stores/userStore.ts`      | Preferensi pengguna: favorit, qari, textSize, terjemahan, aksesibilitas, lastViewed (persisten di Dexie) |
-| `useOfflineStore`  | `stores/offlineStore.ts`   | `connectionStatus`, `downloadStatuses` per-track, ringkasan manifest yang dibaca dari Dexie     |
+| `useAudioStore`    | `stores/audioStore.ts`     | Pemutaran audio: `isPlaying`, `currentTrack`, `currentTime`, `duration`, `playbackRate`, `error`; actions `play/pause/resume/setCurrentTime/...` |
+| `useRepeatStore`   | `stores/repeatStore.ts`    | Konfigurasi & runtime repeat: `config` (persisten di Dexie `settings.repeatConfig`), `runtime` `{ cycleIndex, isActive, lastBoundary }` |
+| `useUserStore`     | `stores/userStore.ts`      | Preferensi pengguna: favorit, `settings` (qari, ukuran teks, terjemahan, aksesibilitas, playback), `lastViewed` (persisten di Dexie); `persistenceAvailable` |
+| `useOfflineStore`  | `stores/offlineStore.ts`   | `connectionStatus`, `downloadStatuses` per surat + qari, `manifestSummary`, `audioCacheRevision` |
 
 Pemilik state non-store:
 
@@ -143,7 +162,7 @@ Catatan implementasi:
 
 * **Dexie** di-inisialisasi sekali di `services/db/db.ts`. Schema version dan migrasi dikelola di file yang sama.
 * Store Zustand membaca dari Dexie saat inisialisasi (`init()` action), dan menulis ke Dexie saat ada perubahan yang perlu dipersist.
-* `Cache Storage` diakses **hanya** dari Service Worker. Main thread memverifikasi keberadaan file via `caches.match(url)` ketika perlu, tetapi tidak menulis langsung.
+* `Cache Storage` audio ditulis Service Worker **dan** main thread untuk Auto Download / fallback tanpa SW (lihat §2.3). Main thread tidak menulis cache SW lain (`static`, `shell`, `data`).
 * URL Parameter dibaca via `usePathname` / `useSearchParams` dari `next/navigation`.
 
 ---
@@ -162,7 +181,7 @@ Catatan implementasi:
 * Lahir: saat user pertama berinteraksi (mis. menandai favorit, mengubah pengaturan).
 * Hidup: bertahan tanpa batas hingga user menghapus data situs atau menekan **Hapus Cache** di Pengaturan.
 * Sinkronisasi: perubahan di-broadcast ke tab lain (lihat Bagian 9).
-* Migrasi: dijaga oleh Dexie `db.version(N)`. Setting yang belum ada nilainya memakai default deklaratif.
+* Migrasi: dijaga oleh Dexie `db.version(N)`. Setting yang belum ada nilainya memakai default deklaratif: `normalizeStoredSettings()` di `userStore.init()` melengkapi **semua** field yang hilang sekaligus dari `defaultSettings` (`transliterationVisible`, `autoFollowPlayback`, `murotalEnabled`, `autoDownloadOnPlay`), menormalkan `reciterId`/`fontSize`, menghapus `qariId` legacy, lalu menulis sekali ke Dexie bila ada perubahan. (Sebelum 2 Nov 2026 memakai rantai `else if` yang hanya memperbaiki satu field per init.)
 
 ## 5.3 Audio Files (Cache Storage)
 
@@ -190,7 +209,7 @@ Catatan implementasi:
 
 Persistensi memakai **Dexie** langsung dari action store. Tidak menggunakan Zustand persist middleware.
 
-Pola yang digunakan:
+Pola yang digunakan (disederhanakan — implementasi aktual di `stores/userStore.ts` menambah optimistic update + rollback, normalisasi settings lama, dan `try/catch` di `init()`):
 
 ```ts
 // stores/userStore.ts
@@ -337,7 +356,7 @@ Tabel ini adalah daftar lengkap state pada MVP. Setiap penambahan state wajib me
 | Status pemutaran audio             | Zustand            | Tidak     | Zustand            |
 | Track audio aktif                  | Zustand            | Tidak     | Zustand            |
 | Posisi waktu audio                 | Zustand            | Tidak     | Zustand            |
-| Status unduhan per-track           | Zustand            | Tidak     | Zustand            |
+| Status unduhan per surat + qari    | Zustand            | Tidak     | Zustand            |
 | Konfigurasi repeat                 | IndexedDB          | Ya        | Dexie (`settings`) |
 | Runtime repeat (`cycleIndex`)      | Zustand            | Tidak     | Zustand            |
 | Daftar favorit                     | IndexedDB          | Ya        | Dexie (`favorites`)|
@@ -350,12 +369,18 @@ Tabel ini adalah daftar lengkap state pada MVP. Setiap penambahan state wajib me
 | Animasi halus                      | IndexedDB          | Ya        | Dexie (`settings`) |
 | Mode Murotal (`murotalEnabled`)    | IndexedDB          | Ya        | Dexie (`settings`) |
 | Auto Follow Playback               | IndexedDB          | Ya        | Dexie (`settings.autoFollowPlayback`) |
+| Auto Download saat putar           | IndexedDB          | Ya        | Dexie (`settings.autoDownloadOnPlay`) |
+| Penyimpanan tersedia (`persistenceAvailable`) | Zustand | Tidak | Zustand |
+| Cache locale paint pertama         | localStorage       | Ya        | `hanquran:app-locale` |
+| Gerbang Threads selesai            | localStorage       | Ya        | `hanquran:threads-gate-completed` |
+| Banner instal ditutup              | localStorage       | Ya        | `hanquran:install-banner-dismissed` |
+| Lanjutan Murotal lintas surat      | sessionStorage     | Per sesi  | `hanquran:murotal-pending-play` |
 | Status koneksi                     | Zustand            | Tidak     | Zustand            |
 | Manifest cache audio               | IndexedDB          | Ya        | Dexie (`downloadManifest`) |
 | File audio biner                   | Cache Storage      | Ya        | Cache Storage      |
 | Konten Quran (surat, ayat, terjemahan) | `public/data/*` via `services/quran/` | Tidak (fetch + in-memory) | Static files + HTTP cache |
 | Word timings | Field di JSON surat | Tidak | Sama dengan konten Quran |
-| `activeWordIndex` Mode Fokus       | React Local State  | Tidak     | React Local State  |
+| ~~`activeWordIndex` Mode Fokus~~   | — (Post-MVP)       | —         | —                  |
 | Query pencarian Beranda            | React Local State  | Tidak     | React Local State  |
 | Filter chips Beranda               | React Local State  | Tidak     | React Local State  |
 | Dialog terbuka (Repeat / Cache)    | React Local State  | Tidak     | React Local State  |
@@ -489,8 +514,8 @@ Tujuan: aplikasi dapat dipakai membaca, mendengarkan, dan menghafal tanpa koneks
 Service Worker `install` → berfungsi penuh tanpa jaringan sejak terpasang
 (termasuk cold-start PWA terinstal). Jaringan hanya untuk stream / Simpan Offline audio.
 
-1. **Aset aplikasi** (HTML app-shell, JS/CSS `/_next/static/*`, font) — **di-precache saat SW `install`** (`hanquran-static-v1`, `hanquran-shell-v1`); daftar file ber-hash di-generate `postbuild`. Lihat `docs/30` §6.1, §6.3.
-2. **Data Al-Qur'an** (teks, terjemahan, metadata) — seluruh `public/data/*` **di-precache saat SW `install`** (`hanquran-data-v1`, cache-first). **Bukan** Dexie — lihat `docs/23`, `docs/30` §2.1.
+1. **Aset aplikasi** (HTML app-shell, JS/CSS `/_next/static/*`, font) — **di-precache saat SW `install`** (`hanquran-static-v2`, `hanquran-shell-v2`); daftar file ber-hash di-generate `postbuild`. Lihat `docs/30` §6.1, §6.3.
+2. **Data Al-Qur'an** (teks, terjemahan, metadata) — seluruh `public/data/*` **di-precache saat SW `install`** (`hanquran-data-v3`, cache-first). **Bukan** Dexie — lihat `docs/23`, `docs/30` §2.1.
 3. **File audio** — di `hanquran-audio-v1` melalui:
    - **Simpan Offline** (unduh eksplisit seluruh surat+qari → `downloadManifest.status === 'ready'`), atau
    - **Auto Download Audio** saat play (opt-in, default OFF — lihat `docs/31-auto-download-audio-spec.md`).
@@ -524,7 +549,9 @@ Perilaku UI lengkap (baca vs putar, tombol unduh, toast, app-shell route dinamis
 
 ## 12.4 Strategi Unduhan
 
-* `download-manager` (client) mengirim `postMessage({ type: 'prefetch-surah', surahId })` ke Service Worker.
+* `download-manager` (client) mengirim `postMessage({ type: 'prefetch-surah', requestId, surahId, urls })` ke Service Worker.
+* Service Worker hanya menerima `urls` audio CDN yang dikenal (`getRequestCategory(...) === 'audio'`); bila ada URL lain, seluruh permintaan ditolak dengan `download-failed`. Pesan `cache-surah-offline` / `cache-offline-batch` hanya menerima path se-origin.
+* Pekerjaan pesan dibungkus `event.waitUntil()` (`keepAlive`) agar browser tidak menghentikan SW "idle" di tengah unduhan surat panjang.
 * Service Worker melakukan unduhan paralel terkontrol (maksimum 3 koneksi), menulis ke `Cache Storage`, dan mem-publish `progress` setiap N ayat.
 * Setelah selesai, `download-manager` menulis ke Dexie `downloadManifest` dengan `status: 'ready'`.
 * Bila quota Cache Storage hampir penuh, Service Worker menolak unduhan baru dan memancarkan `quota-exceeded`. `useOfflineStore.downloadStatuses[surahId] = 'failed'`.
@@ -532,7 +559,7 @@ Perilaku UI lengkap (baca vs putar, tombol unduh, toast, app-shell route dinamis
 ## 12.5 Strategi Fallback
 
 * Bila Service Worker gagal terdaftar (mis. browser lama), aplikasi tetap berjalan online. Aksi **Simpan Offline** dinonaktifkan dengan pesan informatif.
-* Bila Dexie tidak dapat diinisialisasi, aplikasi berjalan tanpa persistensi: preferensi kembali ke default tiap reload. Hal ini disebut **degraded mode** dan ditampilkan di Pengaturan.
+* Bila Dexie tidak dapat diinisialisasi, aplikasi berjalan tanpa persistensi: preferensi kembali ke default tiap reload. Hal ini disebut **degraded mode**. Implementasi: `userStore.init()` menangkap error, mencatatnya di konsol, lalu menyetel `initialized: true` + `persistenceAvailable: false` dengan default. Dalam mode ini `toggleFavorite`, `updateSettings`, dan `setLastViewed` tetap mengubah state di memori tetapi melewati Dexie. Pengaturan menampilkan pemberitahuan "Data tidak dapat disimpan" (`settings.storage.*`). `initStores()` memakai `Promise.allSettled` agar satu store gagal tidak membatalkan yang lain.
 
 ---
 
@@ -548,6 +575,8 @@ Perilaku UI lengkap (baca vs putar, tombol unduh, toast, app-shell route dinamis
 2. **Selector pattern**
 
    * Komponen membaca store hanya dengan selector spesifik (`useAudioStore((s) => s.isPlaying)`), bukan seluruh slice, untuk menghindari re-render berlebih.
+   * Nilai yang hanya ada di browser (`caches`, `navigator`, `window`) **tidak boleh** memengaruhi atribut pada render pertama komponen yang di-SSR. Gunakan `useIsClient()` (mis. `canSave` di `useSurahOfflineDownload` — dulu memicu mismatch atribut `disabled`).
+   * **Jangan** memanggil fungsi store yang membaca `get()` saat render (mis. `isFavorite(id)`) di komponen yang di-SSR. Selama hidrasi, selector Zustand memakai `getInitialState()` (sama dengan HTML server), sedangkan `get()` membaca state live yang mungkin sudah diisi Dexie → hydration mismatch. Turunkan nilai dari slice yang di-subscribe, mis. `const favorites = useUserStore((s) => s.favorites)` lalu `new Set(favorites).has(id)`.
 
 3. **Action pattern**
 
@@ -561,7 +590,7 @@ Perilaku UI lengkap (baca vs putar, tombol unduh, toast, app-shell route dinamis
 
 5. **Service Worker sebagai eksekutor audio**
 
-   * Semua operasi pada `Cache Storage` melewati Service Worker. Main thread hanya membaca via `caches.match`.
+   * Unduhan surat penuh melewati Service Worker (`download-manager` → `prefetch-surah`). Pengecualian terdokumentasi: Auto Download per ayat & fallback tanpa SW menulis cache audio dari main thread (§2.3).
 
 6. **Store actions sebagai akses Dexie**
 

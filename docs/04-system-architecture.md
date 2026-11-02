@@ -2,6 +2,47 @@
 
 ## HanQuran V1
 
+**Terakhir disinkronkan dengan kode:** 2 November 2026 (versi `0.6.0`).
+
+> **Cara membaca dokumen ini.** Dokumen ini ditulis sebagai arsitektur **rancangan** V1. Sejak itu beberapa keputusan berubah (dataset statis, Service Worker manual, SSG, Android). Bagian **0** di bawah adalah ringkasan arsitektur **aktual** dan berlaku bila ada perbedaan dengan bagian lain. Bagian yang sudah tidak berlaku diberi tanda dan dialihkan ke dokumen yang benar.
+
+---
+
+# 0. Ringkasan Arsitektur Aktual
+
+| Area | Implementasi saat ini | Dokumen acuan |
+|------|------------------------|---------------|
+| Framework | Next.js **16** App Router, React 19, TypeScript, Tailwind CSS v4 | `package.json` |
+| Rendering | Beranda & Surah Detail **SSG** (server component + seed ke client component); Mode Fokus & Pengaturan client page | `docs/35`, `docs/36` |
+| Konten Qur'an | Dataset statis `public/data/*` via `services/quran/` (**tidak** di Dexie) | `docs/23` |
+| Audio | HTML5 Audio di web; plugin native audio di Android; MP3 per ayat dari CDN `everyayah.com` | `docs/07`, `docs/27`, `docs/32` |
+| State | Zustand (`stores/`) + Dexie langsung dari action store | `docs/15` |
+| Penyimpanan pengguna | Dexie schema **v5** (`favorites`, `lastRead`, `settings`, `downloadManifest`, tabel Growth) | `docs/06` |
+| Offline | Service Worker **manual** (`public/sw.js`, bukan Workbox), precache saat install, app-shell untuk rute dinamis | `docs/30`, `docs/06` §6 |
+| i18n | `next-intl` client-side, tanpa prefix URL; teks bilingual pra-paint | `docs/21` |
+| Font Qur'an | Amiri Quran self-host (`next/font/local`) | `docs/09` §4 |
+| Platform | PWA di Vercel (utama) + APK/AAB Android via Capacitor (static export) | `docs/25`, `docs/32` |
+| SEO | Metadata per halaman, sitemap, robots, JSON-LD | `docs/35` |
+
+### Peta Status Bagian Dokumen Ini
+
+| Bagian | Status |
+|--------|--------|
+| 1. Architecture Overview | Diagram konseptual; blok penyimpanan & infrastruktur sudah diperbarui |
+| 2. Tech Stack | ✅ Diperbarui |
+| 3. Visual Foundation | Berlaku sebagai arahan visual; detail di `docs/09`, `docs/10` |
+| 4. Route Design | Konseptual — rute aktual di `docs/14` |
+| 5. Component Tree | ⚠️ Usang → `docs/13` |
+| 6. Data Flow | 6.1 usang (konten tidak lewat Dexie, lihat `docs/23`); 6.2 Post-MVP; 6.3–6.4 konseptual |
+| 7. Audio Architecture | Konseptual — implementasi `services/audio-controller.ts`, `docs/27`, `docs/29` |
+| 8. State Management | Konseptual — acuan `docs/15` |
+| 9. IndexedDB Schema | ⚠️ Usang → `docs/06` |
+| 10. Offline & Service Worker | Konseptual — acuan `docs/30`, `docs/06` §6 |
+| 11. Data Integration | Sebagian berlaku — acuan `docs/07`, `docs/23` |
+| 12. Folder Structure | ⚠️ Usang → `docs/16` |
+| 13. Build & Deployment | Sebagian berlaku — acuan `docs/25`, `docs/32` (Docker belum tersedia) |
+| 14. Performance Strategy | Arahan; hasil terukur di `docs/36` |
+
 ---
 
 # 1. Architecture Overview
@@ -71,8 +112,7 @@
 │  CDN audio tilawah (eksternal)                                │
 │  IndexedDB (Dexie)                                            │
 │  Cache Storage                                                │
-│  Service Worker                                               │
-│  Workbox                                                      │
+│  Service Worker (manual: public/sw.js)                        │
 │                                                               │
 └───────────────────────────────┬───────────────────────────────┘
                                 │
@@ -80,20 +120,17 @@
 ┌───────────────────────────────────────────────────────────────┐
 │                     LOCAL STORAGE                             │
 │                                                               │
-│  IndexedDB                                                    │
+│  IndexedDB (Dexie v5)                                         │
 │   ├─ Settings                                                 │
 │   ├─ Last Read                                                │
 │   ├─ Favorites                                                │
-│   ├─ Surahs                                                   │
-│   ├─ Ayahs                                                    │
-│   ├─ Translations                                             │
-│   ├─ Word Timings                                             │
-│   └─ UI Preferences                                           │
+│   └─ Download Manifest (per surat + qari)                     │
 │                                                               │
 │  Cache Storage                                                │
-│   ├─ Audio Files                                              │
-│   ├─ API Responses                                            │
-│   └─ Static Assets                                            │
+│   ├─ Audio Files (hanquran-audio-v1)                          │
+│   ├─ Dataset Qur'an (hanquran-data-v3)                        │
+│   ├─ App shell / RSC (hanquran-shell-v2)                      │
+│   └─ Static Assets (hanquran-static-v2)                       │
 │                                                               │
 └───────────────────────────────┬───────────────────────────────┘
                                 │
@@ -116,17 +153,17 @@
 
 | Layer     | Technology                   | Reason                    |
 | --------- | ---------------------------- | ------------------------- |
-| Framework | Next.js 15 (App Router)      | SSG, routing, PWA-ready   |
+| Framework | Next.js 16 (App Router)      | SSG, routing, PWA-ready   |
 | Language  | TypeScript                   | Type safety               |
 | Styling   | TailwindCSS 4                | Utility-first, responsive |
 | State     | Zustand                      | Runtime state lintas komponen |
 | DB        | Dexie.js (IndexedDB wrapper) | Offline-first storage     |
 | Audio     | HTML5 Audio API              | Native, no dependency     |
-| Caching   | Workbox (Service Worker)     | PWA offline support       |
-| Font      | Uthmani (web font)           | Standar mushaf            |
+| Caching   | Service Worker manual (`public/sw.js`) | PWA offline support (bukan Workbox) |
+| Font      | Amiri Quran (self-host, `next/font/local`) | Mendukung rasm Utsmani (`docs/09` §4) |
 | Data      | Dataset statis `public/data/*` | Konten Quran & terjemahan |
 | Audio     | CDN audio tilawah            | Tilawah per ayat          |
-| Hosting   | Vercel / Cloudflare Pages    | Static export friendly    |
+| Hosting   | Vercel (PWA) + Capacitor Android (static export) | `docs/25`, `docs/32` |
 | i18n (UI) | next-intl                    | Lokalisasi antarmuka id/en |
 
 > Spesifikasi bahasa aplikasi: `docs/21-i18n-and-locale.md`. Route MVP tetap tanpa prefix locale.
@@ -535,70 +572,15 @@ Tanpa perubahan besar pada struktur aplikasi.
 
 # 5. Component Tree
 
-```
-<RootLayout>
-├── <Header>
-│   ├── <Logo />
-│   ├── <NavLinks />              (Home, Settings)
-│   └── <OfflineIndicator />      (status offline)
-│
-├── <Page>
-│   │
-│   ├── [Halaman: /]
-│   │   └── <SurahListPage>
-│   │       ├── <ContinueReadingCard />
-│   │       ├── <FilterTabs />    (All, Favorites)
-│   │       └── <SurahList>
-│   │           └── <SurahCard /> (×114)
-│   │               ├── <SurahNumber />
-│   │               ├── <SurahName />     (Arab + Latin)
-│   │               ├── <SurahMeta />     (ayat, turun)
-│   │               └── <FavoriteButton />
-│   │
-│   ├── [Halaman: /surah/[id]]
-│   │   └── <SurahPage>
-│   │       ├── <SurahHeader>
-│   │       │   ├── <SurahTitle />
-│   │       │   ├── <Bismillah />
-│   │       │   └── <SurahMeta />
-│   │       ├── <VerseDisplayControls>
-│   │       │   ├── <TranslationToggle />
-│   │       │   ├── <TransliterationToggle />
-│   │       │   └── <FocusModeButton />
-│   │       ├── <AyahList>
-│   │       │   └── <AyahItem /> (×n ayat)
-│   │       │       ├── <AyahText />
-│   │       │       │   └── <Word /> (×n kata)  ← highlight per kata
-│   │       │       ├── <AyahTransliteration /> ← toggle show/hide
-│   │       │       ├── <AyahTranslation />     ← toggle show/hide
-│   │       │       └── <PlayButton />
-│   │       └── <AudioBar>
-│   │           ├── <AudioProgress />
-│   │           └── <AudioControls />
-│   │               ├── <RepeatSelector variant="inline" />
-│   │               └── transport (prev / play / next)
-│   │
-│   ├── [Halaman: /focus/[id]]
-│   │   └── <FocusPage>
-│   │       ├── <FocusAyah />       ← ayat besar; Arab + transliterasi + terjemahan sesuai settings
-│   │       └── <AudioBar />        ← sama dengan Surah Detail (repeat inline)
-│   │
-│   └── [Halaman: /settings]
-│       └── <SettingsPage>
-│           ├── <FontSizeSetting />
-│           ├── <ContrastSetting />
-│           └── <CacheManagement />
-│
-└── <Footer>
-    ├── <NavigationTabs />          (mobile bottom nav)
-    └── <AppVersion />
-```
+> ⚠️ **Usang.** Pohon komponen rancangan awal (`SurahListPage`, `AyahItem`, `<Word/>`, `NavigationTabs`, dll.) tidak dipakai. Pohon komponen aktual: **`docs/13-component-tree.md`**.
 
 ---
 
 # 6. Data Flow
 
 ## 6.1 Read Flow (Cache First, Background Refresh)
+
+> ⚠️ **Usang untuk konten Qur'an.** Konten dibaca dari seed SSG / `public/data/*` via `services/quran/`, bukan Dexie. Lihat `docs/23` dan `docs/06` §11.
 
 ```
 User buka /surah/[id]
@@ -625,6 +607,8 @@ useSurah(id) hook
 ```
 
 ## 6.2 Word Highlight Flow
+
+> ⏸️ **Post-MVP** — tidak diimplementasikan di V1 (`docs/24`). Alur di bawah adalah rancangan.
 
 ```
 Audio diputar
@@ -1029,113 +1013,7 @@ Engine Layer        → operational state
 
 # 9. IndexedDB Schema (Dexie)
 
-```ts
-//
-// Quran Domain
-//
-
-interface SurahRecord {
-  id: number;
-
-  nameArabic: string;
-
-  nameLatin: string;
-
-  nameTranslation: string;
-
-  versesCount: number;
-
-  revelationPlace: "makkah" | "madinah";
-
-  cachedAt: number;
-}
-
-interface AyahRecord {
-  id: string; // 112:1
-
-  surahId: number;
-
-  ayahNumber: number;
-
-  textUthmani: string;
-
-  cachedAt: number;
-}
-
-interface TranslationRecord {
-  id: string;
-
-  surahId: number;
-
-  ayahNumber: number;
-
-  resourceId: number;
-
-  text: string;
-
-  cachedAt: number;
-}
-
-//
-// Audio Domain
-//
-
-interface WordTimingRecord {
-  id: string;
-
-  surahId: number;
-
-  ayahNumber: number;
-
-  segments: [string, number, number][][];
-
-  cachedAt: number;
-}
-
-interface AudioCacheRecord {
-  id: string;
-
-  surahId: number;
-
-  ayahNumber: number;
-
-  reciterId: number;
-
-  url: string;
-
-  cachedAt: number;
-
-  size: number;
-}
-
-interface FavoriteRecord {
-  surahId: number;
-
-  createdAt: number;
-}
-
-interface LastReadRecord {
-  surahId: number;
-
-  ayahNumber: number;
-
-  updatedAt: number;
-}
-
-interface SettingsRecord {
-  fontSize: number;
-
-  translationVisible: boolean;
-
-  transliterationVisible: boolean;
-
-  contrastMode: "default" | "high";
-
-  updatedAt: number;
-}
-```
-
-> `translationVisible` dan `transliterationVisible` dikontrol dari Verse Display Controls — lihat `docs/22-verse-display-controls.md`.
+> ⚠️ **Usang.** Rancangan awal menyimpan surat/ayat/terjemahan di IndexedDB; keputusan MVP memindahkan konten ke dataset statis. Schema aktual (v5): **`docs/06-database-schema.md`**, sumber kode `services/db/migrations.ts`.
 
 ---
 
@@ -1152,6 +1030,8 @@ Tujuan utama:
 - Pengalaman pengguna tetap konsisten pada jaringan lambat
 
 Service Worker berfungsi sebagai lapisan cache dan sinkronisasi antara aplikasi, Cache Storage, dan sumber data eksternal (CDN audio tilawah).
+
+> Bagian ini konseptual. Implementasi aktual (nama cache, strategi per jenis request, app-shell, pesan unduhan): **`docs/30-offline-behavior-spec.md`** dan **`docs/06` §6**. SW ditulis manual di `public/sw.js` (bukan Workbox).
 
 ---
 
@@ -1393,8 +1273,7 @@ Offline Download Manager
 Technology:
 
 ```text
-Workbox
-Service Worker API
+Service Worker API (manual, public/sw.js — tanpa Workbox)
 Cache Storage API
 IndexedDB (Dexie)
 ```
@@ -1615,130 +1494,7 @@ Dengan pendekatan repository, perubahan provider API tidak akan mempengaruhi Fea
 
 # 12. Folder Structure
 
-## Overview
-
-HanQuran menggunakan struktur folder yang bersih dan scalable, sesuai dengan implementasi aktual di `hanquran-app/`. Lihat `docs/16-folder-structure.md` untuk spesifikasi lengkap.
-
----
-
-## Project Structure
-
-```text
-hanquran-app/
-│
-├── app/                        ← Next.js App Router
-│   ├── layout.tsx
-│   ├── page.tsx
-│   ├── loading.tsx
-│   ├── surah/[id]/page.tsx
-│   ├── focus/[id]/page.tsx     ← Focus Mode: /focus/[id]?ayah=[n]
-│   └── settings/page.tsx
-│
-├── components/
-│   ├── ui/                     ← primitives (Button, Dialog, Drawer, Select, Switch)
-│   ├── shared/                 ← brand + utilities (Logo, Header, OfflineBadge)
-│   ├── screens/                ← screen-level components
-│   └── atoms/                  ← sangat kecil, opsional
-│
-├── lib/                        ← utilities, data providers, route helpers
-│
-├── hooks/                      ← custom React hooks (useMediaQuery, useAudio)
-│
-├── services/
-│   ├── audio-controller.ts     ← jembatan HTMLAudioElement ↔ useAudioStore
-│   ├── media-session.ts        ← Media Session API (metadata lock screen)
-│   ├── download-manager.ts     ← unduh audio ke Cache Storage
-│   ├── db/                     ← Dexie — data pengguna saja
-│   │   ├── db.ts
-│   │   └── migrations.ts
-│   ├── quran/                  ← Static Dataset service layer
-│   │   ├── quran-service.ts
-│   │   ├── data-loader.ts
-│   │   └── audio-service.ts
-│   └── sw/                     ← Service Worker (Workbox)
-│       └── service-worker.js
-│
-├── stores/                     ← Zustand stores
-│   ├── audioStore.ts
-│   ├── userStore.ts
-│   ├── repeatStore.ts
-│   └── offlineStore.ts
-│
-├── types/                      ← shared TypeScript interfaces
-│
-├── public/
-│   ├── branding/
-│   ├── icons/
-│   └── fonts/
-│
-├── styles/                     ← Tailwind config, global CSS
-│
-└── tests/                      ← unit & integration tests
-```
-
----
-
-## Architecture Rules
-
-### Static Dataset + Service Layer
-
-Konten Quran: `UI → hooks → services/quran/ → public/data/*`
-
-Data pengguna: `UI → Store → Dexie`
-
-Komponen tidak boleh memanggil `fetch('/data/...')` atau Dexie secara langsung.
-
----
-
-### Store Layer
-
-State global dikelola oleh Zustand stores di `stores/`. Persistensi dilakukan melalui Dexie secara langsung dari action store.
-
----
-
-### Service Layer
-
-Semua akses ke platform (audio, cache, database) melewati `services/`:
-
-```text
-services/audio-controller.ts    → HTMLAudioElement
-services/media-session.ts       → navigator.mediaSession (lock screen)
-services/download-manager.ts   → Cache Storage via SW
-services/db/                   → Dexie (IndexedDB)
-services/api/                  → Repository (public/data/*, CDN audio)
-services/sw/                   → Service Worker
-i18n/ + messages/              → next-intl (UI locale id/en)
-```
-
-### Internationalization Layer
-
-Lokalisasi **hanya untuk shell UI aplikasi** — bukan konten Quran.
-
-```text
-settings.appLocale (Dexie)
-        │
-        ▼
-next-intl provider (layout)
-        │
-        ▼
-useTranslations() di komponen
-```
-
-- First launch: `i18n/detection.ts` (browser locale + timezone)
-- Setelah itu: `settings.appLocale` adalah sumber kebenaran
-- Detail: `docs/21-i18n-and-locale.md`
-
----
-
-### Component Layer
-
-Komponen dibagi berdasarkan tanggung jawab:
-
-```text
-components/ui/       → primitives tanpa domain logic
-components/shared/   → brand + shared utilities
-components/screens/  → screen-level, boleh pakai stores
-```
+> ⚠️ **Usang.** Struktur folder aktual: **`docs/16-folder-structure.md`**.
 
 ---
 
@@ -1762,6 +1518,8 @@ Deployment harus dapat berjalan pada:
 - Docker Environment
 
 tanpa perubahan kode aplikasi.
+
+> **Status aktual:** yang dipakai & diuji hanya **Vercel** (PWA) dan **Capacitor Android** (static export, `docs/32`). Belum ada `Dockerfile`; Cloudflare / self-host / Docker masih rencana.
 
 ---
 
@@ -1985,6 +1743,8 @@ Service Worker
 ## Environment Variables
 
 MVP tidak memerlukan environment variable untuk sumber data Quran. Konten disajikan dari `public/data/*`; audio dari CDN tilawah (`audio-config.ts`); qari dari `data/reciters.json`.
+
+Env opsional yang dipakai kode: `NEXT_PUBLIC_SITE_URL` (SEO) dan `NEXT_PUBLIC_AUTHOR_*` / `NEXT_PUBLIC_ORGANIZATION_URL` (tautan pembuat) — lihat `README.md` dan `docs/26` §4.5. Build Android memakai `HANQURAN_TARGET=android`.
 
 Lihat `docs/07-api-integration.md` untuk detail arsitektur data.
 

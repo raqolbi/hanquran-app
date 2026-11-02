@@ -1,8 +1,8 @@
 # 32 — Platform Android dengan CapacitorJS
 
 **Tanggal:** 31 Juli 2026  
-**Status:** 📋 Audit kelayakan & spesifikasi kebutuhan (belum diimplementasi)  
-**Versi aplikasi yang diaudit:** `0.5.0` (package.json) / PWA Next.js  
+**Status:** ✅ Diimplementasi (Agustus 2026) — task §13 Phase A0–A5 selesai kecuali yang belum dicentang; masuk rilis `0.6.0`. Bagian §1–§12 adalah audit kelayakan awal (31 Juli 2026) dan dipertahankan sebagai latar belakang keputusan.  
+**Versi aplikasi yang diaudit:** `0.5.0` (saat audit) — implementasi dirilis di `0.6.0`  
 **Mengacu:** `docs/04-system-architecture.md`, `docs/20-mvp-freeze.md`, `docs/23-static-dataset-architecture.md`, `docs/30-offline-behavior-spec.md`, `docs/27-media-session-api-spec.md`, `docs/25-deployment-vercel.md`
 
 ---
@@ -463,7 +463,7 @@ Layanan seperti Capgo / Ionic Appflow bisa mendorong update lapisan web di dalam
 | Job build AAB | `.github/workflows/android-aab.yml` — `npm run android:bundle`; signing via secret / `keystore.properties` |
 | Artefak | AAB untuk Play; APK debug untuk sideload internal |
 | Web pipeline | Tidak diganggu (Vercel tetap) |
-| Versi | `package.json` → Android `versionName` / `versionCode` di `app/build.gradle` |
+| Versi | `package.json` → Android `versionName` / `versionCode` di `android/app/build.gradle` (dihitung otomatis: `major*10000 + minor*100 + patch`) |
 | Privasi store | `docs/33-play-store-privacy-and-data-safety.md` |
 
 ### 7.7 Kebutuhan legal & distribusi
@@ -842,3 +842,5 @@ Jangan mulai A5 store sebelum A1 regressi PWA hijau dan A3 offline audio lulus d
 | 31 Juli 2026 | Dokumen awal — audit kelayakan + kebutuhan platform Android CapacitorJS |
 | 31 Juli 2026 | Tambah §6.5 strategi dual pipeline (PWA utama, Android tambahan, satu repo) |
 | 31 Juli 2026 | §3.4 diperluas: solusi per hambatan + aturan zero regression PWA; tambah §13 task development |
+| 1 Agustus 2026 | Implementasi platform Android (Capacitor) — lihat checklist §13 |
+| 2 November 2026 | Status dokumen diperbarui menjadi diimplementasi; path `android/app/build.gradle` diperbaiki |

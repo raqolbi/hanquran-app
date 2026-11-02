@@ -1,6 +1,8 @@
 # Laporan Implementasi — Verse Display Controls
 
-**Tanggal:** 2025-06-24  
+> 📜 **Dokumen historis.** Laporan implementasi Verse Display Controls (24 Juni 2026). Isinya tidak diperbarui mengikuti kode dan **bukan acuan implementasi**. Acuan terkini: `docs/22-verse-display-controls.md`, `docs/12` §7.
+
+**Tanggal:** 2026-06-24  
 **Spesifikasi:** `docs/22-verse-display-controls.md`
 
 ---

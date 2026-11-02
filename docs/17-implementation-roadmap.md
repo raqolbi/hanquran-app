@@ -1,5 +1,7 @@
 # 17 — Implementation Roadmap HanQuran (ke MVP)
 
+> 📜 **Dokumen historis.** Roadmap awal menuju MVP (Juni 2026); kondisi awal yang disebut (mis. `lib/surahs-data.ts`) sudah tidak ada. Isinya tidak diperbarui mengikuti kode dan **bukan acuan implementasi**. Acuan terkini: `docs/18` (status & fase), `RELEASE.md` (riwayat rilis).
+
 Dokumen ini menyusun langkah implementasi dari kondisi saat ini menuju MVP HanQuran. Ditulis dalam Bahasa Indonesia, fokus pada fitur hafalan, dan menyesuaikan dengan codebase saat ini (`hanquran-app`).
 
 ---

@@ -4,6 +4,8 @@ Dokumen ini mendokumentasikan seluruh rute aplikasi HanQuran (App Router Next.js
 
 Semua penjelasan menggunakan Bahasa Indonesia dan mengikuti implementasi saat ini di folder `hanquran-app`.
 
+**Terakhir disinkronkan dengan kode:** 2 November 2026 (versi `0.6.0`).
+
 ---
 
 **Catatan teknis**
@@ -17,22 +19,25 @@ Semua penjelasan menggunakan Bahasa Indonesia dan mengikuti implementasi saat in
 1. URL: `/`
    - Nama halaman: Home (Beranda)
    - Tujuan: Menampilkan daftar surat, pencarian, filter favorit, dan kartu "Lanjutkan Hafalan".
+   - Render: server component **SSG** → `HomeClient` (daftar 114 surat ada di HTML awal, `docs/36`).
    - Komponen utama: `Header`, `ContinueReading`, `SearchInput`, `FilterChips`, daftar `SurahCard`.
    - Aksi pengguna: Cari surat, buka halaman surat, tandai favorit, navigasi ke pengaturan.
 
 2. URL: `/surah/[id]` (contoh: `/surah/2`)
    - Nama halaman: Surah Detail
    - Tujuan: Menampilkan seluruh ayat sebuah surat, kontrol audio, dan opsi repeat/fokus.
+   - Render: server component **SSG** untuk id 1–114 (`generateStaticParams`); id lain → **404** (`dynamicParams = false`). Interaksi di `SurahDetailClient`.
    - Komponen utama: `SurahDetailHeader`, `VerseDisplayControls`, daftar `AyahCard`, `AudioPlayer` (dengan `RepeatSelector` inline), `RepeatSettingsDialog`, `SurahDetailScrollSpacer`.
    - Aksi pengguna: Pilih ayat aktif, putar / jeda audio, lompat ayat, toggle Terjemahan/Transliterasi, buka Mode Fokus, buka pengaturan repeat, tandai favorit.
-   - Query opsional: `?ayah=<number>` untuk membuka halaman pada ayat tertentu.
+   - Query opsional: `?ayah=<number>` untuk membuka halaman pada ayat tertentu. Nilai divalidasi `parseAyahParam` lalu diklem ke `1..jumlah ayat`; tidak valid → ayat 1. Reaktif terhadap back/forward lewat `StartAyahSync`.
 
 3. URL: `/focus/[id]` (contoh: `/focus/2`)
    - Nama halaman: Focus Mode (Mode Fokus)
    - Tujuan: Layar baca bebas distraksi — satu ayat nyata (Arab + transliterasi/terjemahan sesuai preferensi). **Tanpa** word-by-word highlight pada MVP V1 (`docs/24-focus-mode-mvp-scope.md`).
    - Komponen utama: teks ayat, `AudioPlayer` (repeat inline), `RepeatSettingsDialog`.
    - Aksi pengguna: Putar/jeda audio ayat, navigasi ayat sebelumnya/berikutnya, ubah repeat cepat atau buka pengaturan repeat, keluar ke halaman surah.
-   - Query opsional: `?ayah=<number>` untuk memulai dari ayat tertentu.
+   - Query opsional: `?ayah=<number>` untuk memulai dari ayat tertentu (validasi sama dengan Surah Detail).
+   - Render: client page, static params 1–114, `noindex`.
 
 4. URL: `/settings`
    - Nama halaman: Pengaturan
@@ -49,9 +54,16 @@ Semua penjelasan menggunakan Bahasa Indonesia dan mengikuti implementasi saat in
 
 ---
 
-## Rute yang direkomendasikan untuk MVP (belum ada / perlu penambahan)
+6. Rute teknis
+   - `/sitemap.xml`, `/robots.txt` — dari `app/sitemap.ts` & `app/robots.ts` (`docs/35`). Sitemap hanya Beranda + 114 surat; `/focus/*` dan `/settings*` `noindex`.
+   - `/surah/0`, `/focus/0` → redirect ke `/` (`vercel.json`).
+   - Build Android (static export): link memakai bentuk file, mis. `/surah/2.html?ayah=5` (`toStaticExportHref` di `lib/routes.ts`).
 
-Catatan: rekomendasi hanya mencakup fitur yang sesuai wireframe / high-fidelity / component spec.
+---
+
+## Ide Rute di Luar Scope (tidak dijadwalkan)
+
+> **Bukan bagian MVP dan tidak ada di backlog aktif.** Dicatat hanya sebagai ide. Jangan diimplementasikan tanpa keputusan baru di `docs/20` (Change Control) / `docs/18`.
 
 - `/favorites`
   - Tujuan: Halaman yang menampilkan semua surat favorit pengguna (mempermudah navigasi dan manajemen favorit).
@@ -81,9 +93,6 @@ flowchart TB
   B --> C[Focus Mode (/focus/[id])]
   A --> D[Settings (/settings)]
   D --> H[About (/settings/about)]
-  A --> E[Favorites (recommended)]
-  A --> F[Search (optional)]
-  D --> G[Offline Management (recommended /offline)]
 ```
 
 ---
@@ -119,7 +128,7 @@ sequenceDiagram
 | `FocusMode` | Keluar | `/surah/[id]?ayah=` | router.push(routes.surah(...)) |
 | Global/Header | Pengaturan | `/settings` | Link dari `Header` (ikon) |
 | `Settings` | Tentang HanQuran | `/settings/about` | Baris navigasi di bagian bawah Pengaturan |
-| `About` | Kembali | `/settings` | Tombol kembali di header |
+| `About` | Kembali | `/settings` | `router.back()` bila ada riwayat, selain itu ke `/settings` |
 
 ---
 
@@ -132,8 +141,6 @@ sequenceDiagram
   - Daftar rute di atas konsisten dengan halaman yang terdapat di `app/` dan komponen yang digunakan dalam wireframe/high-fidelity (mis. `Focus Mode`, `Surah Detail`, `Settings`).
   - Repeat dan audio player digabung di `AudioPlayer` fixed bawah (Surah Detail & Focus Mode); pengaturan lanjutan via `RepeatSettingsDialog`.
 
-Jika Anda ingin saya jalankan verifikasi lebih teknis (mis. memeriksa semua `Link`/`href` di codebase agar memakai `routes` helper), saya bisa menjalankan pencarian kode untuk memastikan.
-
 ---
 
 ## File Referensi implementasi
@@ -142,7 +149,10 @@ Jika Anda ingin saya jalankan verifikasi lebih teknis (mis. memeriksa semua `Lin
 - `app/focus/[id]/page.tsx` — Focus Mode
 - `app/settings/page.tsx` — Settings
 - `app/settings/about/page.tsx` — Tentang HanQuran
-- `lib/routes.ts` — route helpers
+- `lib/routes.ts` — route helpers (`toStaticExportHref`, `parseSurahIdFromPathname`)
+- `lib/navigate.ts` — navigasi aman Android (hard navigation ke `.html`)
+- `lib/ayah-param.ts` — validasi `?ayah`
+- `app/sitemap.ts`, `app/robots.ts`, `vercel.json` (redirect)
 
 ---
 

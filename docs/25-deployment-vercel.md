@@ -62,6 +62,13 @@ MVP saat ini **tidak wajib** env vars. Saat Phase 8 (Sentry, analytics) ditambah
 | `NEXT_PUBLIC_APP_ENV`        | `staging`           | `production`           |
 
 
+Variabel opsional yang **sudah** dipakai kode (set di Settings → Environment Variables, lalu redeploy karena di-inline saat build):
+
+| Variabel | Fungsi |
+|----------|--------|
+| `NEXT_PUBLIC_SITE_URL` | Domain final untuk canonical/sitemap (`lib/site-url.ts`) |
+| `NEXT_PUBLIC_AUTHOR_NAME`, `NEXT_PUBLIC_AUTHOR_THREADS_URL`, `NEXT_PUBLIC_AUTHOR_X_URL`, `NEXT_PUBLIC_ORGANIZATION_URL` | Tautan pembuat di Gerbang Threads & footer Beranda (`docs/26` §4.5) |
+
 Vercel menyediakan `VERCEL_ENV` (`production` | `preview` | `development`) tanpa konfigurasi manual.
 
 ---

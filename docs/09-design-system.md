@@ -216,6 +216,12 @@ Noto Naskh Arabic
 serif
 ```
 
+**Implementasi saat ini (2 Nov 2026):** teks ayat memakai **Amiri Quran** self-host (`app/fonts/amiri-quran-arabic-400-normal.woff2`, OFL 1.1, ±45 KB) lewat `next/font/local` di `lib/quran-font.ts`. Uthmani Hafs (KFGQPC) belum dipakai karena ketentuan redistribusinya perlu dicek terpisah.
+
+Alasan wajib font khusus: dataset memakai karakter rasm Utsmani — alif wasla `U+0671`, alif kecil `U+0670`, dan tanda waqaf/tanda kecil `U+06D6–U+06ED`. `font-serif` / font sistem sering tidak punya glyph ini sehingga tampil sebagai kotak (tofu). Amiri Quran terverifikasi mencakup **seluruh** codepoint Arab di `public/data/quran/*.json`.
+
+Dipakai di: `AyahCard`, Mode Fokus, pratinjau ukuran teks di Pengaturan. Tidak dimuat di Beranda (nama surat memakai font UI).
+
 ---
 
 ### Sizes

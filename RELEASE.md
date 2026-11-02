@@ -62,6 +62,64 @@ Satu atau dua kalimat: apa yang berubah bagi pengguna.
 
 ## Riwayat
 
+### [0.6.0] — YYYY-MM-DD (belum dirilis — isi tanggal saat deploy production)
+
+#### Ringkasan
+
+Rilis gabungan sejak 0.5.0: aplikasi Android (Capacitor), Gerbang Threads, SEO & performa beranda, bahasa yang benar sejak paint pertama, serta perbaikan bug hasil audit — termasuk teks ayat yang sebelumnya tampil kotak di sebagian perangkat.
+
+#### Fitur baru
+
+- **Aplikasi Android** (Capacitor) dengan audio latar dan fondasi rilis Play Store (`docs/32`)
+- **Footer Beranda** dengan kredit pembuat; **Gerbang Threads** sekali di peluncuran (`docs/34`)
+- **SEO:** konten surat di-render server, metadata per halaman, sitemap & robots, structured data (`docs/35`)
+- **Beranda di-SSG:** daftar 114 surat ada di HTML awal — tampil lebih cepat (`docs/36`)
+- **Bahasa sejak paint pertama:** pengguna `en` tidak lagi melihat kedipan teks Indonesia (`docs/21` §5.6)
+- **Tautan pembuat via env** `NEXT_PUBLIC_AUTHOR_*` / `NEXT_PUBLIC_ORGANIZATION_URL` — dikosongkan/`-` = disembunyikan (`docs/26` §4.5)
+- **Pemberitahuan penyimpanan** di Pengaturan bila browser tidak mengizinkan penyimpanan data (mode privat)
+
+#### Perbaikan
+
+- Teks ayat tidak lagi tampil sebagai kotak: font **Amiri Quran** dibundel untuk rasm Utsmani (alif wasla, tanda waqaf)
+- Hydration mismatch di ikon favorit Beranda dan tombol Simpan Offline
+- Tombol favorit kartu surat tidak lagi bersarang di dalam tautan (aksesibilitas keyboard & HTML valid)
+- Mode Fokus: `?ayah` tidak valid tidak lagi menampilkan "NaN"
+- Gerbang Threads tidak lagi bisa mengunci pengguna saat penyimpanan browser diblokir
+- Pengaturan pengguna lama dilengkapi sekaligus (mis. Auto Follow kembali aktif sesuai default)
+- Pencarian surat lebih longgar; Bismillah di data ayat 1 dirapikan
+- Cache dataset Qur'an lokal ikut terbarui saat data berubah (fingerprint dataset)
+
+#### PWA & offline
+
+- Service Worker **v4**: unduhan audio offline tidak terputus di tengah jalan (`waitUntil`); SW hanya menerima URL audio CDN & path se-origin
+- Font Al-Qur'an ikut di-precache (`/_next/static/media`) — tersedia offline
+
+#### Catatan penting
+
+- Tidak ada perubahan skema Dexie; settings lama dilengkapi otomatis saat aplikasi dibuka
+- Service Worker baru terpasang otomatis; pengguna cukup membuka aplikasi online sekali
+- Default tautan Threads kini `@qolcore` (ubah lewat env bila perlu)
+- Versi `package.json` **0.6.0** — tampil otomatis di layar Tentang HanQuran
+
+#### Masalah yang diketahui
+
+- 15 unit test Cache Storage gagal karena lingkungan jsdom (bukan kode aplikasi)
+- Gerbang Threads belum punya focus trap / tombol Esc
+- Membuka surat apa pun menimpa posisi "Lanjutkan Hafalan" ke ayat 1
+- Rincian lengkap: `docs/18` Phase 12b — residual
+
+#### Uji sebelum rilis
+
+- [x] Build web hijau; 0 hydration mismatch di Beranda & Surah Detail (verifikasi Playwright)
+- [ ] Unit test penuh di mesin lokal
+- [ ] Build Android (`npm run build:android`) + uji APK
+- [ ] Preview / staging diuji
+- [ ] Production deploy
+- [ ] Checklist `docs/25-deployment-vercel.md` §5
+- [ ] `git tag v0.6.0`
+
+---
+
 ### [0.5.0] — 2026-06-26
 
 #### Ringkasan
@@ -225,4 +283,4 @@ Baseline MVP HanQuran — aplikasi hafalan Al-Qur'an dengan audio per ayat, repe
 
 ---
 
-<!-- Versi berikutnya: salin Template di atas ke sini, di atas entri 0.5.0 -->
+<!-- Versi berikutnya: salin Template di atas ke sini, di atas entri 0.6.0 -->

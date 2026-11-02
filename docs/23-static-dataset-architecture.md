@@ -176,7 +176,7 @@ terpasang. Jaringan hanya untuk **stream audio** atau **Simpan Offline audio**.
 | Jenis data | Strategi MVP | Perilaku offline |
 |------------|--------------|------------------|
 | App shell + `/_next/static/*` | Precache saat SW `install` (daftar di-generate `postbuild`) | App **boot tanpa jaringan** (cold start PWA) |
-| Konten Quran `public/data/*` | Precache penuh saat SW `install` (`hanquran-data-v1`) | **Baca surat mana pun** tanpa pernah online membukanya |
+| Konten Quran `public/data/*` | Precache penuh saat SW `install` (`hanquran-data-v3`) | **Baca surat mana pun** tanpa pernah online membukanya |
 | Audio | CDN + SW `hanquran-audio-v1` + Dexie `downloadManifest` | **Putar offline** setelah **Simpan Offline** penuh surat+qari, **atau** ayat per ayat jika **Auto Download Audio** ON (`docs/31`) |
 | Preferensi pengguna | Dexie | Selalu lokal |
 

@@ -91,11 +91,18 @@ Satu-satunya URL yang boleh dibuka dari overlay:
 
 | Konstanta | Nilai saat spek ini ditulis |
 |-----------|-----------------------------|
-| `APP_AUTHOR_THREADS_URL` | `https://www.threads.com/@cenybug` |
+| `APP_AUTHOR_THREADS_URL` | `https://www.threads.com/@qolcore` |
 
-Sumber: `lib/app-about.ts`. Dipakai juga oleh `HomeFooter` dan layar Tentang (`docs/26`).
+Sumber: `lib/app-about.ts`. Dipakai juga oleh `HomeFooter` di Beranda (`docs/26` §4.5). Layar Tentang tidak menampilkan tautan ini.
 
-Dilarang hardcode URL kedua di komponen overlay. Jika akun berubah, ubah konstanta itu saja.
+Dilarang hardcode URL kedua di komponen overlay. Jika akun berubah, cukup set env saat build — tanpa mengubah kode:
+
+| Env | Efek |
+|-----|------|
+| `NEXT_PUBLIC_AUTHOR_THREADS_URL` | Mengganti `APP_AUTHOR_THREADS_URL` (overlay + footer). Tidak dipasang → bawaan. **Dikosongkan atau `-` → Gerbang Threads dimatikan** (`showOverlay` selalu `false`, overlay tidak di-SSR, tanpa scroll lock). Hanya `https://`; nilai tidak valid juga mematikan gate |
+| `NEXT_PUBLIC_AUTHOR_NAME` | Fallback handle bila URL Threads tidak berbentuk `/@nama` |
+
+Handle di teks overlay (`@nama`) diturunkan otomatis dari path URL (`APP_AUTHOR_THREADS_HANDLE`), sehingga teks dan tautan selalu konsisten.
 
 ---
 
@@ -111,7 +118,7 @@ Setelah splash (PWA `z-index` 10000 / splash native Capacitor), overlay Dialog d
 │   │         [Logo 40]            │   │
 │   │         HanQuran             │   │
 │   │                              │   │
-│   │  Ikuti @cenybug di Threads   │   │
+│   │  Ikuti @qolcore di Threads   │   │
 │   │  untuk melanjutkan ke        │   │
 │   │  HanQuran.                   │   │
 │   │                              │   │
@@ -125,6 +132,8 @@ Setelah splash (PWA `z-index` 10000 / splash native Capacitor), overlay Dialog d
 │   └──────────────────────────────┘   │
 └──────────────────────────────────────┘
 ```
+
+> `@qolcore` adalah nilai bawaan; handle di teks mengikuti env `NEXT_PUBLIC_AUTHOR_THREADS_URL` (`docs/34` §5).
 
 Tidak ada tombol X / tutup. Tidak dismiss lewat tap backdrop.
 
@@ -247,7 +256,7 @@ Menulis flag saat **Lanjut** diketuk. Jika app ditutup setelah Threads tetapi se
 | UI | `components/shared/threads-gate.tsx` | Overlay kustom, dua tombol, i18n, penanda `data-threads-gate-overlay` |
 | Mount | `components/providers/app-providers.tsx` | Global, semua rute |
 | Pra-paint | `app/layout.tsx`, `app/globals.css` | Skrip inline menandai `<html>`; CSS menyembunyikan overlay untuk pengguna lama; `<noscript>` kill-switch |
-| URL | `lib/app-about.ts` | `APP_AUTHOR_THREADS_URL` saja |
+| URL | `lib/app-about.ts` | `APP_AUTHOR_THREADS_URL` + `APP_AUTHOR_THREADS_HANDLE` (dapat diganti env, §5) |
 | i18n | `messages/id.json`, `messages/en.json` | namespace `threadsGate` |
 | Tes | `tests/lib/threads-gate.test.ts`, `tests/hooks/use-threads-gate.test.ts` | pola `install-prompt` |
 
@@ -264,7 +273,9 @@ Namespace: `threadsGate`. Semua label Indonesia kecuali proper noun.
 | Kunci | id | en |
 |-------|----|----|
 | `title` | Dukung HanQuran | Support HanQuran |
-| `body` | Ikuti @cenybug di Threads untuk melanjutkan ke HanQuran. | Follow @cenybug on Threads to continue to HanQuran. |
+| `body` | Ikuti {handle} di Threads untuk melanjutkan ke HanQuran. | Follow {handle} on Threads to continue to HanQuran. |
+
+Token `{handle}` diisi `APP_AUTHOR_THREADS_HANDLE` lewat `getLocalePair('threadsGate', 'body', { handle })` (default `@qolcore`).
 | `openThreads` | Buka Threads | Open Threads |
 | `continue` | Lanjut | Continue |
 | `opensInNewTab` | (sudah ada di `about.credits.opensInNewTab`) | sama |
@@ -339,7 +350,7 @@ Invariant:
 
 - Skrip init **hanya membaca** `localStorage`; tidak menulis dan tidak menyentuh data pengguna.
 - Scroll lock & fokus dilewati bila atribut `completed` sudah ada (menghindari kedipan pada pengguna lama).
-- Gate tetap sekali pakai; `completeThreadsGate()` dan format record tidak berubah.
+- Gate tetap sekali pakai; format record tidak berubah. Sejak 2 Nov 2026 `completeThreadsGate()` mengembalikan `boolean` dan tidak melempar error — bila `localStorage` diblokir (mode privat/kuota penuh), overlay tetap ditutup untuk sesi itu sehingga pengguna tidak terkunci (gate akan tampil lagi di kunjungan berikutnya).
 - App-shell offline, service worker, dan export Android tidak berubah.
 
 Hasil: observed LCP first-visit **±3,9 s → 0,10–0,15 s**; Lighthouse performance 82–92 (variasi TBT mesin), SEO 100, CLS 0. Catatan: LCP simulasi Lantern masih ±3,0–3,3 s karena model main-thread; angka observed yang menilai dampak nyata.
@@ -353,3 +364,4 @@ Hasil: observed LCP first-visit **±3,9 s → 0,10–0,15 s**; Lighthouse perfor
 | 17 Agustus 2026 | Spek awal — gimmick sekali, Lanjut aktif 5 detik setelah Threads diketuk |
 | 17 Agustus 2026 | Implementasi client-side (`lib/threads-gate.ts`, overlay di `AppProviders`) |
 | 31 Oktober 2026 | Overlay di-SSR + skrip pra-paint & `<noscript>`; observed LCP ±3,9 s → 0,10–0,15 s (§14) |
+| 2 November 2026 | URL Threads dapat diganti env, dikosongkan → gate dimatikan (§5); copy `body` memakai token `{handle}` (§10); `completeThreadsGate()` aman bila storage diblokir (§14) |

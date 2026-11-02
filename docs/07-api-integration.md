@@ -116,7 +116,7 @@ Metadata qari dari `data/reciters.json` — bukan Dexie.
 
 ## Offline Friendly
 
-Konten Quran tersedia offline setelah Service Worker meng-cache aset `public/data/*` (`hanquran-data-v1`), atau setelah browser HTTP cache terisi. **Bukan** via IndexedDB.
+Konten Quran tersedia offline setelah Service Worker meng-cache aset `public/data/*` (`hanquran-data-v3`), atau setelah browser HTTP cache terisi. **Bukan** via IndexedDB.
 
 **Pemisahan penting:**
 
