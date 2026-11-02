@@ -1,32 +1,28 @@
 import { execFileSync } from 'node:child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
 
 import { afterAll, describe, expect, it } from 'vitest';
 
 const ROOT = resolve(process.cwd());
-const MANIFEST = resolve(ROOT, 'public/sw-precache-manifest.js');
-const PLACEHOLDER = `/* Auto-generated oleh scripts/generate-sw-precache.mjs. JANGAN edit manual. */
-/* Placeholder default — diisi ulang di akhir \`npm run build\` (generate-sw-precache). */
-self.__SW_PRECACHE__ = {
-  "buildId": "dev",
-  "dataHash": "dev",
-  "static": [],
-  "data": []
-};
-`;
+const SOURCE_MANIFEST = resolve(ROOT, 'public/sw-precache-manifest.js');
+const TMP_DIR = mkdtempSync(join(tmpdir(), 'sw-precache-'));
+const MANIFEST = join(TMP_DIR, 'sw-precache-manifest.js');
 
 describe('scripts/generate-sw-precache.mjs', () => {
   afterAll(() => {
-    // Kembalikan placeholder agar repo tidak menyimpan daftar aset lokal.
-    writeFileSync(MANIFEST, PLACEHOLDER, 'utf8');
+    rmSync(TMP_DIR, { recursive: true, force: true });
   });
 
   it('menulis dataHash nyata dan daftar /data/* non-kosong', () => {
-    execFileSync(process.execPath, ['scripts/generate-sw-precache.mjs'], {
+    const before = readFileSync(SOURCE_MANIFEST, 'utf8');
+    execFileSync(process.execPath, ['scripts/generate-sw-precache.mjs', MANIFEST], {
       cwd: ROOT,
       stdio: 'pipe',
     });
+    // Berkas di public/ tidak boleh tersentuh.
+    expect(readFileSync(SOURCE_MANIFEST, 'utf8')).toBe(before);
 
     const source = readFileSync(MANIFEST, 'utf8');
     const match = source.match(/self\.__SW_PRECACHE__ = (\{[\s\S]*\});/);

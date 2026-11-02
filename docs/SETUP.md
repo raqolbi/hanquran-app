@@ -148,7 +148,7 @@ Audio tilawah di-stream dari **CDN audio** (`services/quran/audio-config.ts` →
 
 ## 8. Testing
 
-- Framework: **Vitest** dengan environment `jsdom`.
+- Framework: **Vitest**. Environment default `node`; file yang butuh DOM menulis `// @vitest-environment jsdom` di baris pertama (jsdom lambat disiapkan, ±2 detik per file).
 - `fake-indexeddb` menyediakan IndexedDB in-memory agar Dexie dapat diuji.
 - Setup global: `tests/setup.ts`. Konfigurasi: `vitest.config.ts`.
 - Lokasi test: `tests/**/*.test.ts`.

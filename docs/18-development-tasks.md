@@ -168,7 +168,7 @@ Komponen-komponen berikut **sudah ada** di codebase `hanquran-app/`. Halaman uta
 
 **Total development task yang benar-benar selesai: 70**
 
-Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`, **222 test passing**).
+Pendukung: Vitest (`vitest.config.ts`, `tests/setup.ts`; saat itu 222 test — kini 476).
 
 ### Phase 0 — selesai (7/7, 24 Juni 2026) ✅
 
@@ -1521,7 +1521,7 @@ Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan de
 - [x] [NEW] P14-7 — ESLint (P2)
 - [x] [TEST] P14-8 — 15 test jsdom (P2)
 - [x] [FIX] P14-9 — celah kecil (P2)
-- [ ] [TEST] P14-10 — kebersihan test (P3)
+- [x] [TEST] P14-10 — kebersihan test (P3)
 
 **Sudah dikerjakan di luar fase ini (2 Nov 2026):** `package-lock.json` disinkronkan (`npm ci` hijau di lingkungan bersih); 5 komponen tidak terpakai dihapus; atribusi pihak ketiga di `THIRD_PARTY_NOTICES.md`.
 

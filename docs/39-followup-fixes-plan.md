@@ -1,7 +1,7 @@
 # 39 — Rencana Perbaikan Lanjutan (Sisa Audit)
 
 **Tanggal:** 2 November 2026
-**Status:** 📝 Rencana — belum dikerjakan (task: `docs/18` Phase 14)
+**Status:** ✅ Selesai kecuali uji B3 di iPhone (task: `docs/18` Phase 14)
 **Asal temuan:** audit kode 2 November 2026 (`docs/18` Phase 12b residual, `docs/19` Audit v4)
 
 Dokumen ini merinci temuan audit yang **belum** diperbaiki, beserta usulan perbaikan dan kriteria selesai.
@@ -105,6 +105,8 @@ Prioritas: **P1** = berdampak langsung ke pengguna/CI · **P2** = kualitas & aks
 **Masalah:** `tests/scripts/generate-sw-precache.test.ts` menimpa `public/sw-precache-manifest.js` asli; sebagian test bisa menggantung di mesin lokal.
 
 **Usulan:** skrip menerima path keluaran (env/argumen) → test menulis ke folder sementara. Selidiki test yang menggantung (`--reporter=hanging-process`).
+
+✅ **Selesai 2 Nov 2026** — `generate-sw-precache.mjs` menerima path keluaran (argumen pertama atau `SW_PRECACHE_OUT`); test menulis ke folder sementara dan memastikan berkas di `public/` tidak berubah. Test **tidak menggantung**: tiap file menyiapkan jsdom ±2 detik, sehingga di mesin 2 inti suite butuh >3 menit dan terlihat macet. Environment default diganti ke `node`; 38 file yang butuh DOM menandai diri `// @vitest-environment jsdom` → suite lokal selesai ±2 menit (476/476).
 
 ### C5. Celah kecil — P2
 

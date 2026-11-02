@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { fixtureAyahAudioUrl } from '@/tests/fixtures/audio';

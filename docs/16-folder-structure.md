@@ -35,7 +35,7 @@ hanquran-app/
 ├─ data/                # data kecil yang di-bundle: reciters.json, about-credits.ts
 ├─ public/              # aset statis, dataset Qur'an, Service Worker
 ├─ scripts/             # build, Android, precache SW, audit performa
-├─ tests/               # unit & integration test (Vitest + jsdom)
+├─ tests/               # unit & integration test (Vitest; node default, jsdom per file)
 ├─ android/             # proyek Capacitor Android (docs/32)
 ├─ branding/, assets/   # sumber aset desain & ikon/splash Capacitor
 ├─ docs/                # dokumentasi proyek

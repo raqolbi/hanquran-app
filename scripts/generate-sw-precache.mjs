@@ -12,7 +12,7 @@
  */
 
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
-import { dirname, join, relative, sep } from 'node:path';
+import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { fingerprintDataset } from './lib/dataset-fingerprint.mjs';
@@ -107,9 +107,13 @@ const banner =
   '/* Auto-generated oleh scripts/generate-sw-precache.mjs. JANGAN edit manual. */\n';
 const body = `self.__SW_PRECACHE__ = ${JSON.stringify(manifest, null, 2)};\n`;
 
-const outFile = join(publicDir, 'sw-precache-manifest.js');
+// Path keluaran bisa diganti (argumen pertama atau env SW_PRECACHE_OUT) —
+// dipakai test agar tidak menimpa berkas di public/.
+const outFile = resolve(
+  process.argv[2] || process.env.SW_PRECACHE_OUT || join(publicDir, 'sw-precache-manifest.js'),
+);
 writeFileSync(outFile, banner + body, 'utf8');
 
 console.log(
-  `[sw-precache] buildId=${manifest.buildId} dataHash=${dataHash} static=${manifest.static.length} data=${manifest.data.length} → public/sw-precache-manifest.js`,
+  `[sw-precache] buildId=${manifest.buildId} dataHash=${dataHash} static=${manifest.static.length} data=${manifest.data.length} → ${relative(ROOT, outFile).split(sep).join('/')}`,
 );
