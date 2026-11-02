@@ -113,7 +113,6 @@ Rilis gabungan sejak 0.5.0: aplikasi Android (Capacitor), Gerbang Threads, SEO &
 
 #### Masalah yang diketahui
 
-- 15 unit test Cache Storage gagal karena lingkungan jsdom (bukan kode aplikasi)
 - Gerbang Threads belum punya focus trap / tombol Esc
 - Membuka surat apa pun menimpa posisi "Lanjutkan Hafalan" ke ayat 1
 - Sorot kata belum tersedia untuk Al-Juhaynee dan Ibrahim Al Dosary (Warsh)

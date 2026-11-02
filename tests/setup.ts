@@ -60,3 +60,15 @@ if (typeof globalThis.MediaError === 'undefined') {
   }
   globalThis.MediaError = MediaErrorPolyfill as unknown as typeof MediaError;
 }
+
+/**
+ * `Blob` jsdom tidak punya `.stream()`, sehingga `new Response(new Blob())`
+ * (Response milik Node/undici) melempar "object.stream is not a function".
+ * Pakai `Blob` Node agar test Cache Storage berjalan (docs/39 C3).
+ */
+if (typeof window !== 'undefined') {
+  const { Blob: NodeBlob } = await import('node:buffer');
+  if (typeof (new globalThis.Blob([]) as Blob & { stream?: unknown }).stream !== 'function') {
+    globalThis.Blob = NodeBlob as unknown as typeof Blob;
+  }
+}

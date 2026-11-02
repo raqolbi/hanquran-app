@@ -159,7 +159,7 @@ Jalankan:
 npm run test
 ```
 
-Per 2 Nov 2026: **447 test / 90 file**; 15 test Cache Storage gagal karena keterbatasan jsdom (`new Response(new Blob())`) — bukan bug aplikasi (`docs/18` Phase 12b residual).
+Per 2 Nov 2026: **476 test / 95 file**, semua lulus. `tests/setup.ts` memasang `Blob` Node karena `Blob` jsdom tidak punya `.stream()`.
 
 Catatan: `tests/scripts/generate-sw-precache.test.ts` menulis ke `public/sw-precache-manifest.js`. Setelah menjalankan test, kembalikan file itu dengan `git checkout -- public/sw-precache-manifest.js` sebelum commit.
 

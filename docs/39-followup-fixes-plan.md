@@ -92,6 +92,8 @@ Prioritas: **P1** = berdampak langsung ke pengguna/CI · **P2** = kualitas & aks
 
 ### C3. 15 test gagal karena jsdom — P2
 
+✅ **Selesai 2 Nov 2026** — `Blob` Node dipasang di `tests/setup.ts`; 2 test SW salah ekspektasi diperbaiki (P14-3). Seluruh suite **476/476** lulus di lingkungan bersih.
+
 **Masalah:** `new Response(new Blob())` di jsdom melempar `object.stream is not a function`, menggagalkan 15 test Cache Storage.
 
 **Usulan:** di test, buat respons dengan `new Response('isi')` / `ArrayBuffer`, atau polyfill `Blob` dari `node:buffer` di `tests/setup.ts`.

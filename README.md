@@ -53,7 +53,7 @@ Buka aplikasi → Pilih surat → Putar audio → Aktifkan repeat → Mode fokus
 | **Versi** | `0.6.0` (belum di-tag) |
 | **Scope** | MVP V1 dibekukan di [`docs/20-mvp-freeze.md`](./docs/20-mvp-freeze.md) |
 | **Implementasi** | Core MVP + Growth `0.2.0`–`0.6.0` — lihat [`RELEASE.md`](./RELEASE.md) |
-| **Pengujian** | 447 test (Vitest) — 15 test Cache Storage masih gagal karena lingkungan jsdom |
+| **Pengujian** | 476 test (Vitest), semua lulus |
 | **Deploy** | PWA di [Vercel](./docs/25-deployment-vercel.md); Android via Capacitor ([`docs/32`](./docs/32-capacitor-android-platform.md)) |
 
 **Sudah diimplementasikan** (diverifikasi dari codebase): daftar 114 surat (di-SSG, ada di HTML awal), detail surat (SSG + SEO), audio player (kecepatan putar, prefetch ayat berikutnya), repeat engine + badge progress `x/y`, mode fokus, **Mode Murotal**, Media Session (lock screen), favorit surat, lanjutkan hafalan, auto follow playback, layar Tentang HanQuran, i18n UI (`id` / `en`), unduh offline per surat, Service Worker, PWA (manifest, install prompt, offline shell, splash), Vercel Analytics, aplikasi Android (Capacitor), Gerbang Threads, font Amiri Quran untuk rasm Utsmani.
@@ -289,7 +289,7 @@ Variabel khusus (mis. Sentry) dapat ditambahkan saat Phase 8 release monitoring 
 npm run test
 ```
 
-- **442 test / 90 file** di `tests/` (Vitest + jsdom + fake-indexeddb) — per 2 Nov 2026, 15 test Cache Storage masih gagal karena masalah lingkungan jsdom (`new Response(new Blob())`), bukan kode aplikasi
+- **476 test / 95 file** di `tests/` (Vitest + jsdom + fake-indexeddb) — semua lulus per 2 Nov 2026
 - Konfigurasi: `vitest.config.ts`, setup: `tests/setup.ts`
 
 ---
