@@ -4,8 +4,17 @@ import { Download, Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { OfflineStatusBadge } from '@/components/offline-status-badge';
+import { LocaleText } from '@/components/shared/locale-text';
 import { useSurahOfflineDownload } from '@/hooks/use-surah-offline-download';
+import { getLocalePair } from '@/lib/locale-text';
 import { cn } from '@/lib/utils';
+
+// Label pra-paint (docs/21 §5.6): aksi ini terlihat di atas lipatan surat.
+const SAVE_OFFLINE_LABEL = getLocalePair('surah', 'saveOffline');
+const SAVE_OFFLINE_DOWNLOADING_LABEL = getLocalePair(
+  'surah',
+  'saveOfflineDownloading',
+);
 
 interface SurahOfflineDownloadProps {
   surahId: number;
@@ -46,10 +55,13 @@ export function SurahOfflineDownload({
 
       {isDownloading && progress ? (
         <p className="text-sm text-muted-foreground" role="status" aria-live="polite">
-          {t('offlineDownloadProgress', {
-            completed: progress.completed,
-            total: progress.total,
-          })}
+          {/* Angka diinterpolasi saat render; teks tetap bilingual. */}
+          <LocaleText
+            pair={getLocalePair('surah', 'offlineDownloadProgress', {
+              completed: progress.completed,
+              total: progress.total,
+            })}
+          />
         </p>
       ) : null}
 
@@ -71,7 +83,11 @@ export function SurahOfflineDownload({
         ) : (
           <Download size={16} aria-hidden />
         )}
-        {isDownloading ? t('saveOfflineDownloading') : t('saveOffline')}
+        {isDownloading ? (
+          <LocaleText pair={SAVE_OFFLINE_DOWNLOADING_LABEL} />
+        ) : (
+          <LocaleText pair={SAVE_OFFLINE_LABEL} />
+        )}
       </button>
     </div>
   );

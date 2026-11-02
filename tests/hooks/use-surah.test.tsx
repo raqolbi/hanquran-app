@@ -2,7 +2,7 @@ import { act, cleanup, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useSurah } from '@/hooks/use-surah';
-import { getSurah } from '@/services/quran';
+import { getSurah, prefetchSurahTranslation } from '@/services/quran';
 import { useUserStore } from '@/stores/userStore';
 import type { SurahData } from '@/services/quran';
 
@@ -12,7 +12,11 @@ vi.mock('next-intl', () => ({
 
 vi.mock('@/services/quran', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/services/quran')>();
-  return { ...actual, getSurah: vi.fn() };
+  return {
+    ...actual,
+    getSurah: vi.fn(),
+    prefetchSurahTranslation: vi.fn(),
+  };
 });
 
 const seed = {
@@ -35,6 +39,7 @@ describe('useSurah — seed SSR (docs/35 §9 H2)', () => {
   beforeEach(() => {
     setLocale('id');
     vi.mocked(getSurah).mockReset();
+    vi.mocked(prefetchSurahTranslation).mockReset();
     vi.mocked(getSurah).mockResolvedValue(seed);
   });
 
@@ -78,6 +83,8 @@ describe('useSurah — seed SSR (docs/35 §9 H2)', () => {
     });
 
     expect(result.current.contentLocale).toBe('en');
+    // Terjemahan `id` dipanaskan agar ganti bahasa tidak kosong menunggu jaringan.
+    expect(prefetchSurahTranslation).toHaveBeenCalledWith('2', 'id');
   });
 
   it('retry memaksa fetch ulang', async () => {

@@ -22,7 +22,13 @@ export type {
 
 export { AYAH_AUDIO_BASE_URL } from './audio-config';
 export { formatAyahCode, formatSurahId } from './paths';
-export { getManifest, getSurah, getSurahList, getSurahSummary } from './quran-service';
+export {
+  getManifest,
+  getSurah,
+  getSurahList,
+  getSurahSummary,
+  prefetchSurahTranslation,
+} from './quran-service';
 export {
   buildAyahAudioUrl,
   getDefaultReciterId,

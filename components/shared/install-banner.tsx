@@ -4,7 +4,15 @@ import { motion } from 'motion/react';
 import { Download, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import { LocaleText } from '@/components/shared/locale-text';
 import { useInstallPrompt } from '@/hooks/use-install-prompt';
+import { getLocalePair } from '@/lib/locale-text';
+
+// Label pra-paint (docs/21 §5.6): banner tampil di atas liputan beranda.
+const INSTALL_TITLE = getLocalePair('pwa', 'installTitle');
+const INSTALL_DESCRIPTION = getLocalePair('pwa', 'installDescription');
+const INSTALL_IOS_HINT = getLocalePair('pwa', 'installIOSHint');
+const INSTALL_ACTION = getLocalePair('pwa', 'installAction');
 
 export function InstallBanner() {
   const t = useTranslations('pwa');
@@ -29,9 +37,13 @@ export function InstallBanner() {
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="font-semibold text-foreground">{t('installTitle')}</p>
+          <p className="font-semibold text-foreground">
+            <LocaleText pair={INSTALL_TITLE} />
+          </p>
           <p className="mt-1 text-sm text-muted-foreground">
-            {isIosHint ? t('installIOSHint') : t('installDescription')}
+            <LocaleText
+              pair={isIosHint ? INSTALL_IOS_HINT : INSTALL_DESCRIPTION}
+            />
           </p>
 
           {canNativePrompt ? (
@@ -40,7 +52,7 @@ export function InstallBanner() {
               onClick={() => void promptInstall()}
               className="mt-3 inline-flex h-10 items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              {t('installAction')}
+              <LocaleText pair={INSTALL_ACTION} />
             </button>
           ) : null}
         </div>

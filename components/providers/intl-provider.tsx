@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 
 import {
+  APP_LOCALE_STORAGE_KEY,
   applyAppLocaleToDocument,
   writeCachedAppLocale,
 } from '@/lib/app-locale';
@@ -37,6 +38,33 @@ export function IntlProvider({ children }: IntlProviderProps) {
     applyAppLocaleToDocument(locale);
     writeCachedAppLocale(locale);
   }, [initialized, locale]);
+
+  // Halaman yang dipulihkan dari bfcache membawa state lama, dan locale yang
+  // diubah di tab lain tidak terlihat di tab ini. `init()` membaca ulang Dexie
+  // (sumber kebenaran) lalu `IntlProvider` menyinkronkan atribut + cache.
+  useEffect(() => {
+    const resync = () => {
+      void useUserStore.getState().init();
+    };
+    const handlePageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) {
+        resync();
+      }
+    };
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key === APP_LOCALE_STORAGE_KEY) {
+        resync();
+      }
+    };
+
+    window.addEventListener('pageshow', handlePageShow);
+    window.addEventListener('storage', handleStorage);
+
+    return () => {
+      window.removeEventListener('pageshow', handlePageShow);
+      window.removeEventListener('storage', handleStorage);
+    };
+  }, []);
 
   // Sebelum `initialized`, pakai `id` agar render klien = HTML server
   // (tidak ada hydration mismatch). Teks bilingual & `data-app-locale`

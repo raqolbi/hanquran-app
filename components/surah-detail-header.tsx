@@ -5,6 +5,8 @@ import { ArrowLeft, Heart } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { NativeAwareLink } from '@/components/native-aware-link';
+import { LocaleText } from '@/components/shared/locale-text';
+import { COMMON_LABEL_PAIRS } from '@/lib/locale-text';
 import { routes } from '@/lib/routes';
 
 interface SurahDetailHeaderProps {
@@ -79,18 +81,26 @@ export function SurahDetailHeader({
 
         <div className="flex items-center gap-4 flex-wrap short-landscape:gap-2 short-landscape:mt-1">
           <span className="text-sm text-muted-foreground">
-            {ayahCount} {t('ayahs')}
+            {ayahCount} <LocaleText pair={COMMON_LABEL_PAIRS.ayahs} />
           </span>
           <span className="text-sm text-muted-foreground">•</span>
           <span className="text-sm text-muted-foreground">
-            {type === 'Meccan' ? t('meccan') : t('medinan')}
+            <LocaleText
+              pair={
+                type === 'Meccan'
+                  ? COMMON_LABEL_PAIRS.meccan
+                  : COMMON_LABEL_PAIRS.medinan
+              }
+            />
           </span>
           {isOfflineReady && (
             <>
               <span className="text-sm text-muted-foreground">•</span>
               <div className="flex items-center gap-1.5">
                 <div className="w-2 h-2 rounded-full bg-primary" />
-                <span className="text-sm text-foreground font-medium">{t('offlineReady')}</span>
+                <span className="text-sm text-foreground font-medium">
+                  <LocaleText pair={COMMON_LABEL_PAIRS.offlineReady} />
+                </span>
               </div>
             </>
           )}

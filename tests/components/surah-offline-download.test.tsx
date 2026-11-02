@@ -62,9 +62,10 @@ describe('SurahOfflineDownload', () => {
       <SurahOfflineDownload surahId={1} ayahCount={7} reciterId="Qari" />,
     );
 
-    expect(screen.getByRole('button', { name: 'saveOfflineAriaLabel' }).textContent).toContain(
-      'saveOffline',
-    );
+    // Label dirender dua bahasa (docs/21 §5.6); aria-label tetap satu bahasa.
+    const button = screen.getByRole('button', { name: 'saveOfflineAriaLabel' });
+    expect(button.textContent).toContain('Simpan Offline');
+    expect(button.textContent).toContain('Save Offline');
   });
 
   it('menampilkan progres unduhan', () => {
@@ -84,7 +85,8 @@ describe('SurahOfflineDownload', () => {
       <SurahOfflineDownload surahId={1} ayahCount={7} reciterId="Qari" />,
     );
 
-    expect(screen.getByText('2/7')).toBeTruthy();
+    expect(screen.getByText('2 dari 7 ayat diunduh')).toBeTruthy();
+    expect(screen.getByText('2 of 7 verses downloaded')).toBeTruthy();
     expect(screen.getAllByRole('status').length).toBeGreaterThan(0);
   });
 

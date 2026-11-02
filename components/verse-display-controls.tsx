@@ -1,8 +1,9 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-
+import { LocaleText } from '@/components/shared/locale-text';
+import { getLocalePair } from '@/lib/locale-text';
 import { cn } from '@/lib/utils';
+import type { ReactNode } from 'react';
 
 interface VerseDisplayControlsProps {
   showTranslation: boolean;
@@ -16,9 +17,14 @@ interface VerseDisplayControlsProps {
 
 interface ReadingToggleProps {
   checked: boolean;
-  label: string;
+  label: ReactNode;
   onClick: () => void;
 }
+
+// Label pra-paint (docs/21 §5.6): kontrol ini terlihat di atas lipatan surat.
+const TRANSLATION_LABEL = getLocalePair('surah', 'translation');
+const TRANSLITERATION_LABEL = getLocalePair('surah', 'transliteration');
+const FOCUS_LABEL = getLocalePair('surah', 'focus');
 
 function ReadingToggle({ checked, label, onClick }: ReadingToggleProps) {
   return (
@@ -54,8 +60,6 @@ export function VerseDisplayControls({
   onFocusMode,
   sticky = true,
 }: VerseDisplayControlsProps) {
-  const t = useTranslations('surah');
-
   return (
     <div
       className={cn(
@@ -67,12 +71,12 @@ export function VerseDisplayControls({
       <div className="flex items-stretch gap-2 sm:gap-3">
         <ReadingToggle
           checked={showTranslation}
-          label={t('translation')}
+          label={<LocaleText pair={TRANSLATION_LABEL} />}
           onClick={onToggleTranslation}
         />
         <ReadingToggle
           checked={showTransliteration}
-          label={t('transliteration')}
+          label={<LocaleText pair={TRANSLITERATION_LABEL} />}
           onClick={onToggleTransliteration}
         />
         <button
@@ -87,7 +91,9 @@ export function VerseDisplayControls({
           <span aria-hidden className="text-base leading-none">
             🎯
           </span>
-          <span className="truncate">{t('focus')}</span>
+          <span className="truncate">
+            <LocaleText pair={FOCUS_LABEL} />
+          </span>
         </button>
       </div>
     </div>

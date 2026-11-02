@@ -3,6 +3,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { InstallBanner } from '@/components/shared/install-banner';
 import { clearInstallBannerDismissal } from '@/lib/install-prompt';
+import { getLocalePair } from '@/lib/locale-text';
+
+const TITLE = getLocalePair('pwa', 'installTitle');
+const ACTION = getLocalePair('pwa', 'installAction');
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
@@ -36,8 +40,11 @@ describe('InstallBanner', () => {
   it('menampilkan tombol instal saat native prompt tersedia', () => {
     render(<InstallBanner />);
 
-    expect(screen.getByText('installTitle')).toBeTruthy();
-    expect(screen.getByText('installAction')).toBeTruthy();
+    // Kedua bahasa ada di DOM; CSS memilih lewat `data-app-locale`.
+    expect(screen.getByText(TITLE.id)).toBeTruthy();
+    expect(screen.getByText(TITLE.en)).toBeTruthy();
+    expect(screen.getByText(ACTION.id)).toBeTruthy();
+    expect(screen.getByText(ACTION.en)).toBeTruthy();
   });
 
   it('menyembunyikan diri saat showBanner false', () => {
@@ -45,7 +52,8 @@ describe('InstallBanner', () => {
 
     render(<InstallBanner />);
 
-    expect(screen.queryByText('installTitle')).toBeNull();
+    expect(screen.queryByText(TITLE.id)).toBeNull();
+    expect(screen.queryByText(TITLE.en)).toBeNull();
   });
 
   it('memanggil dismissBanner saat tombol tutup diklik', () => {

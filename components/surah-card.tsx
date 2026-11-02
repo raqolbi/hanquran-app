@@ -8,7 +8,7 @@ import type { ReactNode } from 'react';
 import { NativeAwareLink } from '@/components/native-aware-link';
 import { LocaleText } from '@/components/shared/locale-text';
 import { isAndroidBuild, isNativePlatform } from '@/lib/platform';
-import { getLocalePair, type LocalePair } from '@/lib/locale-text';
+import { COMMON_LABEL_PAIRS, type LocalePair } from '@/lib/locale-text';
 import { routes } from '@/lib/routes';
 
 export interface SurahCardProps {
@@ -24,10 +24,6 @@ export interface SurahCardProps {
   onToggleFavorite?: () => void;
   onClick?: () => void;
 }
-
-const AYAHS_LABEL = getLocalePair('common', 'ayahs');
-const MECCAN_LABEL = getLocalePair('common', 'meccan');
-const MEDINAN_LABEL = getLocalePair('common', 'medinan');
 
 export function SurahCard({
   number,
@@ -69,11 +65,15 @@ export function SurahCard({
           </p>
           <div className="flex items-center gap-3 flex-wrap">
             <span className="text-xs px-2.5 py-1 rounded-full bg-accent/10 text-accent-foreground font-medium">
-              {ayahCount} <LocaleText pair={AYAHS_LABEL} />
+              {ayahCount} <LocaleText pair={COMMON_LABEL_PAIRS.ayahs} />
             </span>
             <span className="text-xs px-2.5 py-1 rounded-full border border-border text-muted-foreground">
               <LocaleText
-                pair={type === 'Meccan' ? MECCAN_LABEL : MEDINAN_LABEL}
+                pair={
+                  type === 'Meccan'
+                    ? COMMON_LABEL_PAIRS.meccan
+                    : COMMON_LABEL_PAIRS.medinan
+                }
               />
             </span>
           </div>

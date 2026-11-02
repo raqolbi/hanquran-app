@@ -20,4 +20,20 @@ describe('getLocalePair', () => {
   it('mengembalikan string kosong untuk kunci yang tidak ada', () => {
     expect(getLocalePair('tidakAda', 'kunci')).toEqual({ id: '', en: '' });
   });
+
+  it('menginterpolasi nilai numerik di kedua bahasa', () => {
+    expect(
+      getLocalePair('surah', 'offlineDownloadProgress', {
+        completed: 2,
+        total: 7,
+      }),
+    ).toEqual({
+      id: '2 dari 7 ayat diunduh',
+      en: '2 of 7 verses downloaded',
+    });
+  });
+
+  it('membiarkan token yang tidak diberi nilai', () => {
+    expect(getLocalePair('surah', 'ayahLabel').id).toBe('Ayat {number}');
+  });
 });

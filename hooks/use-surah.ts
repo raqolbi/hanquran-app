@@ -8,9 +8,12 @@ import {
   isMatchingSurahSeed,
   shouldFetchSurah,
 } from '@/lib/surah-seed';
-import { getTranslationLanguage } from '@/lib/translation-language';
+import {
+  getAlternateTranslationLanguage,
+  getTranslationLanguage,
+} from '@/lib/translation-language';
 import type { SurahData } from '@/services/quran';
-import { getSurah } from '@/services/quran';
+import { getSurah, prefetchSurahTranslation } from '@/services/quran';
 import { useUserStore } from '@/stores/userStore';
 import type { AppLocale } from '@/types';
 
@@ -66,6 +69,12 @@ export function useSurah(surahId: string, initialSurah?: SurahData | null): UseS
       setContentLocale('id');
       setError(null);
       setLoading(false);
+      // Panaskan terjemahan bahasa lain agar ganti bahasa tidak menunggu
+      // jaringan (docs/21 §5.6).
+      prefetchSurahTranslation(
+        surahId,
+        getAlternateTranslationLanguage(translationLanguage),
+      );
       return;
     }
 
@@ -78,6 +87,10 @@ export function useSurah(surahId: string, initialSurah?: SurahData | null): UseS
           setSurah(data);
           setContentLocale(translationLanguage);
           setError(null);
+          prefetchSurahTranslation(
+            surahId,
+            getAlternateTranslationLanguage(translationLanguage),
+          );
         }
       })
       .catch(() => {

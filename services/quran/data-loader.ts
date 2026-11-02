@@ -12,6 +12,7 @@ async function fetchJson<T>(url: string): Promise<T> {
 const manifestCache: { value: DatasetManifest | null } = { value: null };
 const surahFileCache = new Map<number, DatasetSurahFile>();
 const translationFileCache = new Map<string, DatasetTranslationFile>();
+const translationInFlight = new Map<string, Promise<DatasetTranslationFile | null>>();
 
 export async function loadManifest(): Promise<DatasetManifest> {
   if (manifestCache.value) {
@@ -40,15 +41,43 @@ export async function loadTranslationFile(
   if (translationFileCache.has(cacheKey)) {
     return translationFileCache.get(cacheKey) ?? null;
   }
-  try {
-    const data = await fetchJson<DatasetTranslationFile>(
-      translationPath(surahNumber, language),
-    );
-    translationFileCache.set(cacheKey, data);
-    return data;
-  } catch {
-    return null;
+
+  // Dedupe: prefetch latar + permintaan nyata tidak boleh saling menimpa.
+  const inFlight = translationInFlight.get(cacheKey);
+  if (inFlight) {
+    return inFlight;
   }
+
+  const request = fetchJson<DatasetTranslationFile>(
+    translationPath(surahNumber, language),
+  )
+    .then((data) => {
+      translationFileCache.set(cacheKey, data);
+      return data;
+    })
+    .catch(() => null)
+    .finally(() => {
+      translationInFlight.delete(cacheKey);
+    });
+
+  translationInFlight.set(cacheKey, request);
+  return request;
+}
+
+/**
+ * Isi cache terjemahan `language` di latar belakang (docs/21 §5.6).
+ *
+ * Dipakai setelah surat tampil: bila pengguna berganti bahasa, terjemahan
+ * locale lain sudah ada di memori sehingga konten tidak kosong menunggu
+ * jaringan. Gagal prefetch tidak berdampak — `getSurah` tetap memuat normal.
+ */
+export function warmTranslationFile(surahNumber: number, language: string): void {
+  const cacheKey = `${language}:${surahNumber}`;
+  if (translationFileCache.has(cacheKey)) {
+    return;
+  }
+
+  void loadTranslationFile(surahNumber, language);
 }
 
 export function parseSurahId(id: string): number {

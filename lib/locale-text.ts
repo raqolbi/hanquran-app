@@ -39,10 +39,39 @@ function readMessage(messages: unknown, namespace: string, key: string): string 
   return typeof node === 'string' ? node : '';
 }
 
+/**
+ * Substitusi `{token}` sederhana, cukup untuk pesan yang dipakai pra-paint
+ * (angka/nama). Aturan plural/ICU kompleks tetap ditangani `next-intl`.
+ */
+function interpolate(
+  message: string,
+  values?: Record<string, string | number>,
+): string {
+  if (!values) {
+    return message;
+  }
+
+  return message.replace(/\{(\w+)\}/g, (match, token: string) =>
+    token in values ? String(values[token]) : match,
+  );
+}
+
 /** Ambil teks `id` dan `en` untuk namespace/kunci pesan yang sama. */
-export function getLocalePair(namespace: string, key: string): LocalePair {
+export function getLocalePair(
+  namespace: string,
+  key: string,
+  values?: Record<string, string | number>,
+): LocalePair {
   return {
-    id: readMessage(messagesByLocale.id, namespace, key),
-    en: readMessage(messagesByLocale.en, namespace, key),
+    id: interpolate(readMessage(messagesByLocale.id, namespace, key), values),
+    en: interpolate(readMessage(messagesByLocale.en, namespace, key), values),
   };
 }
+
+/** Label `common` yang sering dipakai di beberapa komponen. */
+export const COMMON_LABEL_PAIRS = {
+  ayahs: getLocalePair('common', 'ayahs'),
+  meccan: getLocalePair('common', 'meccan'),
+  medinan: getLocalePair('common', 'medinan'),
+  offlineReady: getLocalePair('common', 'offlineReady'),
+} as const;
