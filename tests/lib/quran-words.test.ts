@@ -4,7 +4,6 @@ import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { splitAyahWords } from '@/lib/quran-words';
-// @ts-expect-error — modul .mjs tanpa deklarasi tipe
 import { countAyahWords } from '@/scripts/build-word-timings.mjs';
 
 const ROOT = resolve(process.cwd());

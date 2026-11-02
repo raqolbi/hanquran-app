@@ -264,7 +264,8 @@ export class DownloadManager {
   private handleWorkerMessage(message: DownloadWorkerMessage): void {
     if (!message?.type) return;
 
-    const pending = this.pending.get(message.requestId);
+    const pending =
+      'requestId' in message ? this.pending.get(message.requestId) : undefined;
 
     switch (message.type) {
       case 'download-progress':

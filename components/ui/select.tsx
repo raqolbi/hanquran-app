@@ -2,10 +2,13 @@
 
 import * as React from 'react';
 import { Select as SelectPrimitive } from '@base-ui/react/select';
-import type { Padding, Side } from '@base-ui/react/utils/useAnchorPositioning';
 import { Check, ChevronDown } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+
+type PositionerProps = React.ComponentPropsWithoutRef<typeof SelectPrimitive.Positioner>;
+type Side = PositionerProps['side'];
+type Padding = PositionerProps['collisionPadding'];
 
 const Select = SelectPrimitive.Root;
 const SelectValue = SelectPrimitive.Value;
@@ -115,5 +118,4 @@ export {
   SelectTrigger,
   SelectContent,
   SelectItem,
-  type SelectContentProps,
 };

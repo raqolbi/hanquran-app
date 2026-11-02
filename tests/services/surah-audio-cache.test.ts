@@ -5,7 +5,7 @@ import { isSurahAudioFullyCached } from '@/services/surah-audio-cache';
 import { AUDIO_CACHE_NAME } from '@/services/audio-cache-constants';
 
 describe('isSurahAudioFullyCached', () => {
-  const cacheMatch = vi.fn(async () => undefined as Response | undefined);
+  const cacheMatch = vi.fn(async (_url: string) => undefined as Response | undefined);
 
   beforeEach(() => {
     cacheMatch.mockReset();

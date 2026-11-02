@@ -137,7 +137,9 @@ export default function SettingsPage() {
   );
   const selectedQariName = selectedReciter?.name ?? t('qari.selectPlaceholder');
 
-  const handleReciterChange = (value: string) => {
+  const handleReciterChange = (value: string | null) => {
+    // Select base-ui bisa mengirim `null` (tanpa pilihan) — abaikan.
+    if (!value) return;
     void updateSettings({ reciterId: value });
   };
 

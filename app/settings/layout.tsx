@@ -1,4 +1,5 @@
-import type { Metadata, ReactNode } from 'react';
+import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 
 // Halaman settings tidak bernilai cari — tidak untuk diindeks
 // (docs/35 §3, §4 T7). Sitemap juga tidak mencantumkannya.

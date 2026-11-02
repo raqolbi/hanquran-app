@@ -26,8 +26,9 @@ type SwHelpers = {
 };
 
 function loadSwHelpers(overrides?: {
-  caches?: Partial<CacheStorage>;
-  fetch?: typeof fetch;
+  // Mock longgar — helper SW hanya memakai `open` + `match`/`put`.
+  caches?: { open?: (...args: never[]) => Promise<unknown> };
+  fetch?: (...args: never[]) => Promise<unknown>;
 }): { helpers: SwHelpers; cachesOpen: ReturnType<typeof vi.fn> } {
   const self: { SwHelpers?: SwHelpers } = {};
   const cacheStore = {
@@ -52,11 +53,11 @@ function loadSwHelpers(overrides?: {
     `${script}\nreturn self.SwHelpers;`,
   ) as (
     self: { SwHelpers?: SwHelpers },
-    caches: CacheStorage,
-    fetch: typeof fetch,
+    cacheStorage: unknown,
+    fetchImpl: unknown,
   ) => SwHelpers;
 
-  const helpers = run(self, caches as CacheStorage, fetchFn as typeof fetch);
+  const helpers = run(self, caches, fetchFn);
   return { helpers, cachesOpen };
 }
 

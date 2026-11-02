@@ -72,6 +72,8 @@ Prioritas: **P1** = berdampak langsung ke pengguna/CI · **P2** = kualitas & aks
 
 ### C1. Error TypeScript tersembunyi — P1
 
+✅ **Selesai 2 Nov 2026** — 0 error `tsc --noEmit`; `ignoreBuildErrors` dihapus; skrip `npm run typecheck` + langkah CI di `android-export.yml`.
+
 **Masalah:** `next.config.mjs` memakai `typescript.ignoreBuildErrors: true`; ada ±14 error di kode aplikasi + ±12 di test (impor `@base-ui/react/utils/useAnchorPositioning` tidak ada, `Metadata` diimpor dari `'react'`, tipe payload analytics, `Dexie.Transaction`, `requestId` di `DownloadWorkerMessage`, `onValueChange` Select menerima `null`).
 
 **Usulan:** perbaiki semua error, lalu **matikan** `ignoreBuildErrors` dan tambahkan langkah `tsc --noEmit` di CI.

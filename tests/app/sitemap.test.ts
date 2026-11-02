@@ -18,7 +18,7 @@ describe('sitemap', () => {
   it('setiap entri punya lastModified valid', () => {
     for (const e of sitemap()) {
       expect(e.lastModified, e.url).toBeInstanceOf(Date);
-      expect(Number.isNaN(e.lastModified!.getTime()), e.url).toBe(false);
+      expect(Number.isNaN(new Date(e.lastModified!).getTime()), e.url).toBe(false);
       expect(e.changeFrequency, 'tanpa changefreq').toBeUndefined();
       expect(e.priority, 'tanpa priority').toBeUndefined();
     }

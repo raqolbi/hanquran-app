@@ -23,12 +23,12 @@ describe('PwaSplashDismisser', () => {
   beforeEach(() => {
     splashState.isLaunching = true;
     vi.mocked(dismissPwaSplash).mockClear();
-    vi.spyOn(window, 'setTimeout').mockImplementation((fn) => {
+    vi.spyOn(window, 'setTimeout').mockImplementation(((fn: unknown) => {
       if (typeof fn === 'function') {
         fn();
       }
       return 0;
-    });
+    }) as unknown as typeof setTimeout);
   });
 
   afterEach(() => {

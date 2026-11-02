@@ -14,6 +14,7 @@
     "native-audio:patch": "node scripts/apply-native-audio-complete-patch.mjs",
     "start": "next start",
     "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "perf:bundle": "node scripts/measure-bundle.mjs",

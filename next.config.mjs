@@ -4,9 +4,8 @@ const isAndroidTarget =
   process.env.NEXT_PUBLIC_HANQURAN_TARGET === 'android';
 
 const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  // Error tipe kini menggagalkan build (docs/39 C1) — sebelumnya
+  // `ignoreBuildErrors: true` menyembunyikan ±26 error.
   images: {
     // Tetap unoptimized GLOBAL (docs/35 §4 T8): SW precache + Capacitor
     // mengandalkan URL aset apa adanya (`/branding/*.png`), bukan `/_next/image`.

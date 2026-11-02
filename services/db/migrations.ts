@@ -13,6 +13,7 @@
  */
 
 import type Dexie from 'dexie';
+import type { Transaction } from 'dexie';
 
 import { DOWNLOAD_MANIFEST_VERSION } from '@/services/audio-cache-constants';
 import { getDefaultReciterId } from '@/services/quran';
@@ -71,7 +72,7 @@ export const SCHEMA_V3 = {
 } as const;
 
 async function migrateLegacyManifestRows(
-  tx: Dexie.Transaction,
+  tx: Transaction,
 ): Promise<void> {
   const legacy = await tx.table(DOWNLOAD_MANIFEST_LEGACY_TABLE).toArray();
   if (legacy.length === 0) return;

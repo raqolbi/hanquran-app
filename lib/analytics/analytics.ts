@@ -30,15 +30,21 @@ export function isAnalyticsEnabled(): boolean {
   return true;
 }
 
-function sendEvent(
+type AnalyticsValue = AnalyticsPayload[string];
+
+/**
+ * Payload event bertipe interface (tanpa index signature) — generik ini
+ * tetap memastikan setiap nilainya primitif yang diterima Vercel Analytics.
+ */
+function sendEvent<T extends { [K in keyof T]: AnalyticsValue }>(
   name: AnalyticsEventName,
-  payload: AnalyticsPayload,
+  payload: T,
 ): void {
   if (!isAnalyticsEnabled()) {
     return;
   }
 
-  track(name, payload);
+  track(name, payload as AnalyticsPayload);
 }
 
 export function trackSurahOpened(payload: SurahOpenedPayload): void {
