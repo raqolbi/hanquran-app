@@ -82,7 +82,8 @@
     "exitAriaLabel": "Keluar dari Mode Fokus",
     "ayahCounter": "Ayat {current} / {total}",
     "previousAyah": "Ayat Sebelum",
-    "nextAyah": "Ayat Berikut"
+    "nextAyah": "Ayat Berikut",
+    "heading": "Mode Fokus — {surah}"
   },
   "settings": {
     "title": "Pengaturan",

@@ -149,6 +149,10 @@ function FocusModeLoaded({
         </p>
       </motion.header>
 
+      <h1 className="sr-only">
+        {tFocus('heading', { surah: surah.englishName })}
+      </h1>
+
       <main
         className="relative z-10 flex flex-1 items-center justify-center px-4 sm:px-8"
         style={{ paddingBottom: bottomInset }}

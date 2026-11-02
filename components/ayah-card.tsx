@@ -54,11 +54,26 @@ export function AyahCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
       onClick={onClick}
+      // Bisa dipilih dengan keyboard (Tab lalu Enter/Spasi), sama seperti ketuk.
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      aria-current={isActive ? 'true' : undefined}
+      onKeyDown={
+        onClick
+          ? (event) => {
+              if (event.target !== event.currentTarget) return;
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                onClick();
+              }
+            }
+          : undefined
+      }
       style={{
         scrollMarginTop: SURAH_DETAIL_READING_CONTROLS_HEIGHT,
         scrollMarginBottom: SURAH_DETAIL_MIN_SCROLL_INSET,
       }}
-      className={`p-6 rounded-2xl border-2 cursor-pointer transition-all duration-200 ${
+      className={`p-6 rounded-2xl border-2 cursor-pointer transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
         isActive
           ? 'border-primary bg-emerald-50'
           : isCompleted
@@ -68,10 +83,10 @@ export function AyahCard({
     >
       <div className="flex items-center gap-3 mb-4">
         {isActive && (
-          <div className="text-lg">▶</div>
+          <div className="text-lg" aria-hidden="true">▶</div>
         )}
         {isCompleted && !isActive && (
-          <div className="text-lg text-primary">✓</div>
+          <div className="text-lg text-primary" aria-hidden="true">✓</div>
         )}
         <span className="text-sm font-medium text-muted-foreground">
           {t('ayahLabel', { number })}

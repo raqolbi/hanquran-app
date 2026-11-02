@@ -82,7 +82,8 @@
     "exitAriaLabel": "Exit Focus Mode",
     "ayahCounter": "Verse {current} / {total}",
     "previousAyah": "Previous Verse",
-    "nextAyah": "Next Verse"
+    "nextAyah": "Next Verse",
+    "heading": "Focus Mode — {surah}"
   },
   "settings": {
     "title": "Settings",
