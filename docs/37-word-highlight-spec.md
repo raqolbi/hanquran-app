@@ -105,7 +105,11 @@ Aturan perilaku:
 - Sorotan hanya pada ayat yang **sedang diputar** dengan qari yang sama (`currentTrack` cocok surat + ayat + qari).
 - Sebelum kata pertama mulai → tidak ada sorotan; di celah antar-kata → kata terakhir tetap tersorot (tidak berkedip).
 - Saat dijeda → sorotan tetap di kata posisi jeda; setelah ayat selesai → hilang.
-- Gaya: latar `emerald-200/80`, teks `emerald-900`, transisi warna 150 ms, **tanpa** padding/margin (tidak menggeser layout).
+- Gaya (`app/globals.css`, `.quran-word[data-state]`, spek visual `docs/09` Word Highlight):
+  - **Sedang dibaca** (`active`): "pil" hijau lembut — gradasi `#ECFDF5 → #A7F3D0`, teks `#065F46`, cincin `box-shadow` 0,12em + glow halus. Ruang di sekitar kata dari bayangan, **bukan** padding → tidak ada pergeseran layout.
+  - **Sudah dibaca** (`read`): teks `#047857` sebagai jejak bacaan di ayat itu.
+  - Transisi 220–260 ms ease-out; dimatikan otomatis saat Animasi Halus OFF.
+  - Kontras tinggi: kata aktif latar `#064E3B` teks putih; kata sudah dibaca `#064E3B` (tanpa garis bawah agar tidak menabrak harakat bawah).
 
 ---
 
@@ -154,4 +158,5 @@ Menambah qari: pastikan folder ada di EveryAyah (`https://everyayah.com/data/{fo
 | Tanggal | Perubahan |
 |---------|-----------|
 | 2 November 2026 | Dokumen awal — implementasi dengan data quran-align untuk 3 qari |
+| 2 November 2026 | Tampilan sorotan dipercantik: pil bergradasi + cincin/glow, jejak kata yang sudah dibaca, varian kontras tinggi |
 | 2 November 2026 | Diperluas ke 12 qari (9 qari baru di aplikasi); qari default → Alafasy; tanda Populer / Untuk hafalan / Sorot kata (§8) |

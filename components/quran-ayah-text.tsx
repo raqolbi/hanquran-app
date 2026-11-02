@@ -25,8 +25,9 @@ interface QuranAyahTextProps {
  * Teks Arab satu ayat dengan font Al-Qur'an dan sorot kata opsional
  * (data quran-align — `services/quran/word-timings.ts`).
  *
- * Sorotan hanya mengubah warna latar/teks (tanpa padding/margin) agar tidak
- * ada pergeseran layout saat kata berpindah.
+ * Gaya sorotan ada di `app/globals.css` (`.quran-word[data-state]`):
+ * `active` = kata yang sedang dibaca, `read` = sudah dibaca. Tanpa
+ * padding/margin agar tidak ada pergeseran layout saat kata berpindah.
  */
 export const QuranAyahText = memo(function QuranAyahText({
   text,
@@ -49,20 +50,21 @@ export const QuranAyahText = memo(function QuranAyahText({
     >
       {wordMode
         ? words.map((word, index) => {
-            const active =
-              !!activeRange &&
-              index >= activeRange.from &&
-              index < activeRange.to;
+            const state = !activeRange
+              ? undefined
+              : index >= activeRange.from && index < activeRange.to
+                ? 'active'
+                : index < activeRange.from
+                  ? 'read'
+                  : undefined;
             return (
               <span key={index}>
                 {index > 0 ? ' ' : null}
                 <span
                   data-word-index={index}
-                  aria-current={active ? 'true' : undefined}
-                  className={cn(
-                    'rounded-md transition-colors duration-150 [box-decoration-break:clone]',
-                    active && 'bg-emerald-200/80 text-emerald-900',
-                  )}
+                  data-state={state}
+                  aria-current={state === 'active' ? 'true' : undefined}
+                  className="quran-word"
                 >
                   {word}
                 </span>

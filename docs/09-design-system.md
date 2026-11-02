@@ -598,10 +598,17 @@ Text       : Emerald
 ## Word Highlight
 
 ```text
-Background : #D1FAE5
+Background : #D1FAE5 (fallback) + gradasi #ECFDF5 → #A7F3D0
 Text       : #065F46
-Radius     : 8px
+Radius     : 0.32em (ikut ukuran teks Arab)
+Ring       : box-shadow 0 0 0 0.12em #A7F3D0  ← ruang tanpa padding (tanpa layout shift)
+Glow       : 0 0.08em 0.45em 0.08em rgba(16,185,129,.28)
+Transisi   : warna 220ms, bayangan 260ms ease-out (mati di mode animasi dikurangi)
+Sudah dibaca: teks #047857 (jejak bacaan)
+Kontras tinggi: aktif = latar #064E3B teks putih; sudah dibaca = #064E3B
 ```
+
+Implementasi: `.quran-word[data-state='active' | 'read']` di `app/globals.css` (`docs/37` §6).
 
 ---
 

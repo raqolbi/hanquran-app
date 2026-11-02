@@ -540,13 +540,13 @@ Text:
 Radius:
 
 ```text
-8px
+0.32em (±8px pada ukuran sedang)
 ```
 
 Animasi:
 
 ```text
-200ms fade
+220ms fade warna + cincin/glow (lihat docs/09 Word Highlight)
 ```
 
 ---

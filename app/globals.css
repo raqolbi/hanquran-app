@@ -185,3 +185,51 @@ html[data-app-locale='en'] [data-content-locale='id'],
 html[data-app-locale='id'] [data-content-locale='en'] {
   visibility: hidden;
 }
+
+/*
+ * Sorot kata saat tilawah (docs/37 §6, docs/09 Word Highlight).
+ *
+ * - `active`  : kata yang sedang dibaca — "pil" hijau lembut dengan gradasi,
+ *               cincin & bayangan halus. Ruang ekstra dibuat dengan
+ *               `box-shadow` (bukan padding) agar tidak ada pergeseran layout.
+ * - `read`    : kata yang sudah dibaca di ayat ini — sedikit kehijauan
+ *               sebagai jejak bacaan.
+ * - (tanpa)   : kata yang belum dibaca.
+ * Ukuran memakai `em` agar ikut ukuran teks Arab (kecil/sedang/besar).
+ * Mode animasi dikurangi → transisi dimatikan oleh aturan global
+ * `html[data-motion='reduced']`.
+ */
+.quran-word {
+  border-radius: 0.32em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition:
+    color 220ms ease-out,
+    background-color 220ms ease-out,
+    box-shadow 260ms ease-out;
+}
+
+.quran-word[data-state='read'] {
+  color: #047857; /* emerald-700 */
+}
+
+.quran-word[data-state='active'] {
+  color: #065f46; /* emerald-800 */
+  background-color: #d1fae5; /* emerald-100 — fallback */
+  background-image: linear-gradient(180deg, #ecfdf5 0%, #a7f3d0 100%);
+  box-shadow:
+    0 0 0 0.12em #a7f3d0,
+    0 0.08em 0.45em 0.08em rgb(16 185 129 / 0.28);
+}
+
+/* Tanpa garis bawah: bertabrakan dengan harakat bawah (kasrah, dll.). */
+html[data-contrast='high'] .quran-word[data-state='read'] {
+  color: #064e3b;
+}
+
+html[data-contrast='high'] .quran-word[data-state='active'] {
+  color: #ffffff;
+  background-color: #064e3b;
+  background-image: none;
+  box-shadow: 0 0 0 0.12em #064e3b;
+}
