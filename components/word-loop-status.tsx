@@ -46,7 +46,17 @@ export function WordLoopStatus({ surahId, bottomOffset }: WordLoopStatusProps) {
     if (!visible) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== 'Escape' || event.defaultPrevented) return;
-      if (document.querySelector('[role="dialog"][data-open], [role="dialog"][open]')) return;
+      // Esc milik dialog/menu yang sedang terbuka (gerbang tersembunyi tetap di DOM).
+      const overlayOpen = [
+        ...document.querySelectorAll<HTMLElement>(
+          '[role="dialog"], [role="alertdialog"], [role="listbox"], [role="menu"]',
+        ),
+      ].some((el) =>
+        typeof el.checkVisibility === 'function'
+          ? el.checkVisibility()
+          : el.offsetParent !== null,
+      );
+      if (overlayOpen) return;
       stopWordLoop('user');
     };
     window.addEventListener('keydown', onKeyDown);

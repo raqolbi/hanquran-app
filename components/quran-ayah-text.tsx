@@ -67,6 +67,8 @@ export const QuranAyahText = memo(function QuranAyahText({
   });
   const selectionFrom = selection ? Math.min(selection.anchor, selection.current) : -1;
   const selectionTo = selection ? Math.max(selection.anchor, selection.current) : -1;
+  // Satu tab stop per ayat: kata yang diulang, atau kata pertama.
+  const rovingIndex = loopRange?.from ?? 0;
 
   return (
     <p
@@ -103,7 +105,7 @@ export const QuranAyahText = memo(function QuranAyahText({
                   data-selecting={selecting ? 'true' : undefined}
                   aria-current={state === 'active' ? 'true' : undefined}
                   role={interactive ? 'button' : undefined}
-                  tabIndex={interactive ? 0 : undefined}
+                  tabIndex={interactive ? (index === rovingIndex ? 0 : -1) : undefined}
                   aria-pressed={interactive ? looping : undefined}
                   aria-label={
                     interactive

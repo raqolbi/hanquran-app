@@ -46,7 +46,8 @@ function wordIndexOf(target: EventTarget | null, container: HTMLElement): number
  * - sentuh: tekan lama ±350 ms lalu seret → `onRange` (gulir biasa tidak
  *   memicu pilihan karena gerak sebelum 350 ms membatalkan)
  * - mouse: tekan lalu seret ke kata lain → `onRange`
- * - keyboard: Enter/Spasi (+Shift) pada kata → `onTap`
+ * - keyboard: Enter/Spasi (+Shift) pada kata → `onTap`; ←/→/Home/End
+ *   memindah fokus antar-kata (roving tabindex — satu tab stop per ayat)
  *
  * Seluruhnya lewat event delegation pada wadah teks ayat, jadi tidak ada
  * listener per kata.
@@ -179,12 +180,29 @@ export function useWordGestures(
     };
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Enter' && event.key !== ' ') return;
       const index = wordIndexOf(event.target, container);
       if (index === null) return;
+
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        event.stopPropagation();
+        handlers.current.onTap(index, event.shiftKey);
+        return;
+      }
+
+      // Roving focus antar-kata (hanya satu kata di urutan Tab). Teks RTL:
+      // panah kiri = kata berikutnya, panah kanan = kata sebelumnya.
+      const words = container.querySelectorAll<HTMLElement>('[data-word-index]');
+      let target: number | null = null;
+      if (event.key === 'ArrowLeft') target = index + 1;
+      else if (event.key === 'ArrowRight') target = index - 1;
+      else if (event.key === 'Home') target = 0;
+      else if (event.key === 'End') target = words.length - 1;
+      if (target === null || event.altKey || event.ctrlKey || event.metaKey) return;
+
       event.preventDefault();
       event.stopPropagation();
-      handlers.current.onTap(index, event.shiftKey);
+      words[Math.min(Math.max(target, 0), words.length - 1)]?.focus();
     };
 
     container.addEventListener('pointerdown', onPointerDown);

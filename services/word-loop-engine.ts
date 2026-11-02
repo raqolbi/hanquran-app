@@ -110,7 +110,11 @@ function tick(): void {
   const loop = currentLoop();
   const controller = getAudioController();
   if (!loop || loop.phase !== 'playing' || !controller) return;
-  if (!useAudioStore.getState().isPlaying) return;
+  if (!useAudioStore.getState().isPlaying) {
+    // Jeda yang terlewat oleh listener (mis. saat audio sedang dimuat).
+    useWordLoopStore.getState().patch({ phase: 'paused' });
+    return;
+  }
 
   if (controller.getPosition() >= endSeconds(loop, controller)) {
     void finishCycle();
@@ -152,12 +156,25 @@ async function playFromStart(afterEnded = false): Promise<void> {
   const latest = currentLoop();
   if (!latest) return;
   if (!useAudioStore.getState().isPlaying) {
-    // Gagal memutar (mis. offline) — hentikan, jangan berputar diam-diam.
-    stopWordLoop('track');
+    settleNotPlaying();
     return;
   }
   ensureAtStart(latest, controller);
   scheduleTick();
+}
+
+/**
+ * Setelah `play()` selesai tetapi audio tidak berjalan: error → hentikan;
+ * tanpa error (pengguna menjeda saat audio dimuat) → mode tetap, status dijeda.
+ * @returns `false` bila mode dihentikan.
+ */
+function settleNotPlaying(): boolean {
+  if (useAudioStore.getState().error) {
+    stopWordLoop('track');
+    return false;
+  }
+  useWordLoopStore.getState().patch({ phase: 'paused' });
+  return true;
 }
 
 async function finishCycle(): Promise<void> {
@@ -212,8 +229,9 @@ function handleAudioChange(
     return;
   }
 
-  if (state.isPlaying && loop.phase !== 'playing') {
-    // Dilanjutkan pengguna — kembali ke awal potongan bila di luar potongan.
+  if (state.isPlaying) {
+    // Dilanjutkan pengguna (tombol, layar kunci, tab lain) — kembali ke awal
+    // potongan bila posisi di luar potongan.
     clearGapTimer();
     useWordLoopStore.getState().patch({ phase: 'playing' });
     const controller = getAudioController();
@@ -292,8 +310,7 @@ export async function startWordLoop({ track, clip }: StartWordLoopInput): Promis
   if (token !== generation) return true;
 
   if (!useAudioStore.getState().isPlaying) {
-    stopWordLoop('track');
-    return false;
+    return settleNotPlaying();
   }
   ensureAtStart(loop, controller);
   scheduleTick();
@@ -336,11 +353,12 @@ export function toggleWordLoopPause(): void {
   const controller = getAudioController();
   if (!loop || !controller || !loopTrack) return;
 
-  if (loop.phase === 'playing') {
+  // Berdasarkan status audio sebenarnya (bukan `phase`) agar tidak macet.
+  if (useAudioStore.getState().isPlaying) {
     controller.pause();
     return;
   }
-  // gap/paused → lanjut dari awal potongan (lihat handleAudioChange).
+  // gap/paused → lanjut; di luar potongan kembali ke awal (handleAudioChange).
   void controller.play(loopTrack);
 }
 

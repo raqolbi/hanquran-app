@@ -13,6 +13,7 @@ const fake = vi.hoisted(() => {
     duration: 10,
     endedHandlers: new Set<() => void>(),
     calls: [] as string[],
+    playImpl: null as null | (() => void),
   };
   return state;
 });
@@ -28,6 +29,10 @@ vi.mock('@/services/audio-controller', () => {
     play: async (track: AudioTrack) => {
       fake.calls.push('play');
       useAudioStore.getState().play(track);
+      if (fake.playImpl) {
+        await Promise.resolve();
+        fake.playImpl();
+      }
     },
     pause: () => {
       fake.calls.push('pause');
@@ -75,6 +80,7 @@ describe('word-loop-engine', () => {
     fake.duration = 10;
     fake.calls = [];
     fake.endedHandlers.clear();
+    fake.playImpl = null;
     useAudioStore.getState().reset();
     useUserStore.setState((s) => ({ settings: { ...s.settings, wordLoopGapMs: 1000 } }));
   });
@@ -169,6 +175,26 @@ describe('word-loop-engine', () => {
     stopWordLoop('user');
     expect(useWordLoopStore.getState().loop).toBeNull();
     expect(useAudioStore.getState().isPlaying).toBe(false);
+  });
+
+  it('play gagal (error) → mode berhenti, startWordLoop = false', async () => {
+    fake.playImpl = () => {
+      useAudioStore.getState().setError('network');
+      useAudioStore.getState().pause();
+    };
+    expect(await startWordLoop({ track, clip })).toBe(false);
+    expect(useWordLoopStore.getState().loop).toBeNull();
+  });
+
+  it('dijeda pengguna saat audio dimuat → mode tetap, status dijeda; Play melanjutkan', async () => {
+    fake.playImpl = () => useAudioStore.getState().pause(); // tanpa error
+    expect(await startWordLoop({ track, clip })).toBe(true);
+    expect(useWordLoopStore.getState().loop?.phase).toBe('paused');
+    fake.playImpl = null;
+    toggleWordLoopPause();
+    await Promise.resolve();
+    expect(useAudioStore.getState().isPlaying).toBe(true);
+    expect(useWordLoopStore.getState().loop?.phase).toBe('playing');
   });
 
   it('cadangan ended → putar ulang segera dan hitung siklus', async () => {

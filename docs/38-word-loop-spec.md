@@ -188,6 +188,8 @@ Tambahkan ke `docs/analytics.md` saat implementasi.
 - **Chip** menampilkan hitungan mulai 1× (bukan 0×) serta keterangan "jeda"/"dijeda". `aria-live` hanya mengumumkan mulai/ganti rentang/berhenti.
 - **Esc** menghentikan Ulang Kata kecuali sedang ada dialog terbuka. Di Mode Fokus, Spasi = Play/Pause siklus dan ←/→ = pindah ayat (menghentikan Ulang Kata).
 - **Kartu ayat aktif** tidak lagi ber-`role="button"` agar kata-kata di dalamnya (tombol) tidak bersarang dalam tombol.
+- **Keyboard:** satu tab stop per ayat (roving tabindex — kata yang diulang atau kata pertama); ←/→ memindah fokus antar-kata (RTL: ← = kata berikutnya), Home/End ke kata pertama/terakhir. Di Mode Fokus, panah pada kata tidak memindah ayat.
+- **Status audio sebagai acuan:** Play/Pause saat Ulang Kata aktif mengikuti status audio sebenarnya; bila pengguna menjeda saat audio masih dimuat, mode tetap aktif dengan status "dijeda" (bukan berhenti). Mode baru berhenti sendiri bila pemutaran gagal dengan error.
 - **Seek butuh dukungan Range** dari sumber audio: CDN EveryAyah, Cache Storage SW (206 sejak P14-3), atau `blob:` offline. Sumber tanpa Range akan kembali ke 0 saat seek.
 
 ### 8.2 Hasil spike presisi (P15-1)
