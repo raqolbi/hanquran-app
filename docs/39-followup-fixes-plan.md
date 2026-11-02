@@ -26,6 +26,8 @@ Prioritas: **P1** = berdampak langsung ke pengguna/CI · **P2** = kualitas & aks
 
 ### A2. Aksesibilitas Gerbang Threads — P2
 
+✅ **Selesai 2 Nov 2026** — focus trap Tab/Shift+Tab, `inert` pada semua saudara overlay hingga `<body>`, fokus dikembalikan saat ditutup.
+
 **Masalah:** overlay `role="dialog"` tanpa focus trap; Tab bisa keluar ke konten di belakang; tidak ada `inert` pada latar.
 
 **Usulan:** focus trap sederhana (Tab/Shift+Tab berputar di dua tombol), `inert` pada `<main>` saat overlay tampil, kembalikan fokus setelah tutup. **Esc tidak menutup** (gerbang memang wajib — sesuai `docs/34`), tetapi diumumkan lewat deskripsi.

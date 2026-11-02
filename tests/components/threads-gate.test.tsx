@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ThreadsGate } from '@/components/shared/threads-gate';
@@ -80,5 +80,34 @@ describe('ThreadsGate', () => {
     render(<ThreadsGate />);
 
     expect(screen.queryByText('Dukung HanQuran')).toBeNull();
+  });
+
+  it('membuat konten di belakang overlay inert dan memulihkannya', () => {
+    const background = document.createElement('main');
+    background.textContent = 'konten';
+    document.body.appendChild(background);
+
+    const { unmount } = render(<ThreadsGate />);
+    expect(background.inert).toBe(true);
+
+    unmount();
+    expect(background.inert).toBe(false);
+    background.remove();
+  });
+
+  it('Tab berputar di dalam overlay', () => {
+    gateState.isContinueEnabled = true;
+    render(<ThreadsGate />);
+    const link = screen.getByRole('link', { name: /Buka Threads/ });
+    const button = screen.getByRole('button', { name: /Lanjut/ });
+    const dialog = screen.getByRole('dialog');
+
+    button.focus();
+    fireEvent.keyDown(dialog, { key: 'Tab' });
+    expect(document.activeElement).toBe(link);
+
+    link.focus();
+    fireEvent.keyDown(dialog, { key: 'Tab', shiftKey: true });
+    expect(document.activeElement).toBe(button);
   });
 });

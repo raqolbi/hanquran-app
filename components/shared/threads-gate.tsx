@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useRef } from 'react';
+import { useEffect, useId, useRef, type KeyboardEvent } from 'react';
 
 import { LocaleText } from '@/components/shared/locale-text';
 import { Logo } from '@/components/shared/Logo';
@@ -32,6 +32,7 @@ export function ThreadsGate() {
   const titleId = useId();
   const bodyId = useId();
   const threadsLinkRef = useRef<HTMLAnchorElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
   const {
     showOverlay,
     isContinueEnabled,
@@ -56,12 +57,37 @@ export function ThreadsGate() {
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    const previousFocus = document.activeElement as HTMLElement | null;
+    const restoreInert = makeBackgroundInert(overlayRef.current);
     threadsLinkRef.current?.focus();
 
     return () => {
       document.body.style.overflow = previousOverflow;
+      restoreInert();
+      previousFocus?.focus?.();
     };
   }, [showOverlay]);
+
+  // Fokus berputar di dalam overlay (Tab / Shift+Tab). Esc sengaja tidak
+  // menutup — gerbang memang wajib diselesaikan (docs/34).
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== 'Tab') return;
+    const focusables = getFocusable(overlayRef.current);
+    if (focusables.length === 0) {
+      event.preventDefault();
+      return;
+    }
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    const active = document.activeElement;
+    if (event.shiftKey && (active === first || !overlayRef.current?.contains(active))) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && (active === last || !overlayRef.current?.contains(active))) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
 
   if (!showOverlay) {
     return null;
@@ -69,7 +95,9 @@ export function ThreadsGate() {
 
   return (
     <div
+      ref={overlayRef}
       data-threads-gate-overlay=""
+      onKeyDown={handleKeyDown}
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
     >
       <div className="absolute inset-0 bg-black/40" aria-hidden="true" />
@@ -125,3 +153,43 @@ export function ThreadsGate() {
     </div>
   );
 }
+
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+function getFocusable(root: HTMLElement | null): HTMLElement[] {
+  if (!root) return [];
+  return Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
+}
+
+/**
+ * Tandai semua saudara overlay (di setiap tingkat hingga `<body>`) sebagai
+ * `inert`: tidak bisa difokus/diklik dan tidak dibaca pembaca layar selama
+ * gerbang tampil (docs/39 A2). Mengembalikan fungsi pemulih.
+ */
+function makeBackgroundInert(overlay: HTMLElement | null): () => void {
+  if (!overlay || typeof document === 'undefined') return () => {};
+
+  const changed: HTMLElement[] = [];
+  let node: HTMLElement | null = overlay;
+  while (node && node !== document.body && node.parentElement) {
+    for (const sibling of Array.from(node.parentElement.children)) {
+      if (
+        sibling !== node &&
+        sibling instanceof HTMLElement &&
+        !sibling.inert &&
+        sibling.tagName !== 'SCRIPT' &&
+        sibling.tagName !== 'STYLE'
+      ) {
+        sibling.inert = true;
+        changed.push(sibling);
+      }
+    }
+    node = node.parentElement;
+  }
+
+  return () => {
+    for (const element of changed) element.inert = false;
+  };
+}
+

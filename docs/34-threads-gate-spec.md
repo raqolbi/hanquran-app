@@ -364,4 +364,5 @@ Hasil: observed LCP first-visit **±3,9 s → 0,10–0,15 s**; Lighthouse perfor
 | 17 Agustus 2026 | Spek awal — gimmick sekali, Lanjut aktif 5 detik setelah Threads diketuk |
 | 17 Agustus 2026 | Implementasi client-side (`lib/threads-gate.ts`, overlay di `AppProviders`) |
 | 31 Oktober 2026 | Overlay di-SSR + skrip pra-paint & `<noscript>`; observed LCP ±3,9 s → 0,10–0,15 s (§14) |
+| 2 November 2026 | Aksesibilitas: focus trap + `inert` pada latar (Esc tetap tidak menutup) |
 | 2 November 2026 | URL Threads dapat diganti env, dikosongkan → gate dimatikan (§5); copy `body` memakai token `{handle}` (§10); `completeThreadsGate()` aman bila storage diblokir (§14) |
