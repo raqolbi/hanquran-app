@@ -76,7 +76,7 @@ Dokumen ini adalah **single source of truth** untuk seluruh backlog implementasi
 | 11b       | LCP Threads Gate (SSR pra-paint)  | 3      | 0      | 3      | 0      | 3       | ✅ Selesai (P11b-1–P11b-3) — 31 Okt 2026     |
 | 12        | Locale Paint Pertama (F8)         | 4      | 0      | 0      | 4      | 4       | ✅ Selesai (P12-1–P12-4) — 1 Nov 2026        |
 | 12b       | Audit Bug & Hardening             | 13     | 3      | 7      | 3      | 13      | ✅ Selesai (P12b-1–P12b-13) — 2 Nov 2026     |
-| 13        | Sorot Kata (quran-align)          | 7      | 0      | 6      | 1      | 7       | ✅ Selesai (P13-1–P13-7) — 2 Nov 2026        |
+| 13        | Sorot Kata (quran-align)          | 10     | 0      | 8      | 2      | 10      | ✅ Selesai (P13-1–P13-10) — 2 Nov 2026       |
 | **TOTAL** |                                   | **110** | **50** | **37** | **23** | **83**  | (+ Phase 9; + Phase 10 SEO; + Phase 10b hardening; + Phase 11 CWV; + Phase 11b LCP gate; + Phase 12 F8; + Phase 12b audit) |
 
 
@@ -1466,6 +1466,9 @@ Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan de
 | P13-5 | Pengaturan **Sorot Kata** (`settings.wordHighlight`, default ON) + atribusi CC BY 4.0 di layar Tentang | [NEW] | P1 | §1 |
 | P13-6 | Offline: dikecualikan dari precache install; ikut **Simpan Offline**; perbaiki `SHELL_CACHE_NAME` `-v1` → `-v2` (repair precache berjalan tiap buka app) | [FIX] | P1 | §5 |
 | P13-7 | Test: tokenizer = skrip di seluruh dataset, validitas semua file waktu, pencarian rentang, loader, URL Simpan Offline | [TEST] | P2 | — |
+| P13-8 | Tambah 9 qari EveryAyah yang punya data quran-align (total 14 qari, 12 bersorot kata); verifikasi durasi file | [NEW] | P1 | §2, §8 |
+| P13-9 | Qari default pengguna baru → Alafasy (`DEFAULT_RECITER_ID`) | [UPDATE] | P1 | §8 |
+| P13-10 | Tanda qari di Pengaturan: ★ Populer (kurasi), Untuk hafalan, Sorot kata; daftar bisa digulir | [NEW] | P2 | §8 |
 
 - [x] [NEW] P13-1 — skrip data (P1)
 - [x] [TEST] P13-2 — verifikasi audio (P1)
@@ -1474,10 +1477,13 @@ Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan de
 - [x] [NEW] P13-5 — pengaturan + atribusi (P1)
 - [x] [FIX] P13-6 — offline + perbaikan nama cache shell (P1)
 - [x] [TEST] P13-7 — test (P2)
+- [x] [NEW] P13-8 — 9 qari baru (P1)
+- [x] [UPDATE] P13-9 — default Alafasy (P1)
+- [x] [NEW] P13-10 — tanda qari (P2)
 
 **Hasil verifikasi (2 Nov 2026):** Playwright dengan audio CDN diganti file uji — qari Alafasy, 1:1 menyorot `بِسْمِ` → `ٱللَّهِ` → `ٱلرَّحْمَٰنِ` → `ٱلرَّحِيمِ` sesuai waktu data; Mode Fokus Husary 2:2 menyorot kata 0→1→2 (7 kata, tanda waqaf ikut kata sebelumnya); qari default Al-Juhaynee tidak memecah teks (0 span kata). 0 error konsol. Suite test **445 lulus / 15 gagal (460)** — 15 kegagalan lama (jsdom).
 
-**Residual:** qari default & Warsh belum didukung; ketuk kata untuk memutar dari kata itu belum ada.
+**Residual:** Al-Juhaynee & Warsh belum didukung sorot kata; ketuk kata untuk memutar dari kata itu belum ada; label "Populer" masih kurasi (belum ada data popularitas).
 ---
 
 # 🏁 6. MVP Checklist

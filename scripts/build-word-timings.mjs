@@ -34,14 +34,36 @@ const QURAN_DIR = join(ROOT, 'public', 'data', 'quran');
 /**
  * Qari aplikasi (`data/reciters.json`) → file quran-align.
  * Hanya pasangan yang rekamannya terverifikasi sama (durasi file EveryAyah
- * cocok dengan akhir segmen terakhir). Husary 128 kbps memakai data 64 kbps:
- * rekaman sama, selisih durasi file ±34 ms (di bawah galat data ±73 ms).
+ * cocok dengan akhir segmen terakhir, `docs/37` §2). Husary 128 kbps &
+ * Abdul Basit Murattal 192 kbps memakai data 64 kbps: rekaman sama, selisih
+ * durasi file ±31–34 ms (di bawah galat data ±73 ms).
  */
 const RECITER_SOURCES = {
   Alafasy_128kbps: 'Alafasy_128kbps.json',
+  // Folder 192 kbps memakai data 64 kbps (rekaman sama, +±31 ms padding).
+  Abdul_Basit_Murattal_192kbps: 'Abdul_Basit_Murattal_64kbps.json',
+  Abdul_Basit_Mujawwad_128kbps: 'Abdul_Basit_Mujawwad_128kbps.json',
+  'Abdurrahmaan_As-Sudais_192kbps': 'Abdurrahmaan_As-Sudais_192kbps.json',
+  'Abu_Bakr_Ash-Shaatree_128kbps': 'Abu_Bakr_Ash-Shaatree_128kbps.json',
+  Hani_Rifai_192kbps: 'Hani_Rifai_192kbps.json',
   Husary_128kbps: 'Husary_64kbps.json',
+  Husary_Muallim_128kbps: 'Husary_Muallim_128kbps.json',
   Minshawy_Mujawwad_192kbps: 'Minshawy_Mujawwad_192kbps.json',
+  Minshawy_Murattal_128kbps: 'Minshawy_Murattal_128kbps.json',
+  Mohammad_al_Tablaway_128kbps: 'Mohammad_al_Tablaway_128kbps.json',
+  'Saood_ash-Shuraym_128kbps': 'Saood_ash-Shuraym_128kbps.json',
 };
+
+/**
+ * Sebagian file rilis (mis. As-Sudais) diawali log "Crashed Command …"
+ * sebelum JSON — ambil mulai dari `[{`.
+ */
+function readQuranAlignJson(path) {
+  const raw = readFileSync(path, 'utf8');
+  const start = raw.indexOf('[{');
+  if (start < 0) throw new Error(`Format tidak dikenal: ${path}`);
+  return JSON.parse(raw.slice(start));
+}
 
 /** Token yang hanya berisi tanda (waqaf, tanda kecil, tatweel) — bukan kata. */
 const MARK_ONLY = /^[ؐ-ؚۖ-ۭـٰ]+$/u;
@@ -75,7 +97,7 @@ function main() {
 
   const reciters = [];
   for (const [reciterId, sourceFile] of Object.entries(RECITER_SOURCES)) {
-    const rows = JSON.parse(readFileSync(join(srcDir, sourceFile), 'utf8'));
+    const rows = readQuranAlignJson(join(srcDir, sourceFile));
     const bySurah = new Map();
     let kept = 0;
     let dropped = 0;

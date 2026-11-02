@@ -102,7 +102,12 @@
       "title": "Reciter",
       "description": "Choose your preferred reciter for audio playback.",
       "selectPlaceholder": "Select reciter",
-      "selectAriaLabel": "Select reciter"
+      "selectAriaLabel": "Select reciter",
+      "badgePopular": "Popular",
+      "badgeMemorization": "For memorization",
+      "badgeWordHighlight": "Word highlight",
+      "noWordHighlight": "This reciter does not support word highlight yet.",
+      "legend": "★ Popular = widely known reciters (HanQuran curation). For memorization = teaching-style recording (Muallim). Word highlight = the recited word is highlighted during playback."
     },
     "playback": {
       "title": "Playback",
@@ -111,7 +116,7 @@
       "autoFollowDescription": "Automatically scroll so the playing verse stays visible.",
       "autoFollowAriaLabel": "Enable auto follow playback",
       "wordHighlight": "Word Highlight",
-      "wordHighlightDescription": "Highlights the word being recited during playback. Available for: {reciters}.",
+      "wordHighlightDescription": "Highlights the word being recited during playback. Available for {count} reciters marked \"Word highlight\" in the Reciter list.",
       "wordHighlightAriaLabel": "Enable word highlight",
       "murotalEnabled": "Murotal Mode",
       "murotalEnabledDescription": "Play tilawah continuously: advance to the next verse or surah until you stop.",

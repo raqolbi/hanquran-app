@@ -10,8 +10,17 @@ export function getReciters(): Reciter[] {
   return reciters;
 }
 
+/**
+ * Qari default pengguna baru. Dipilih karena didukung sorot kata
+ * (`docs/37`) dan termasuk qari paling dikenal. Pengguna lama tetap
+ * memakai qari yang tersimpan di Dexie.
+ */
+export const DEFAULT_RECITER_ID = 'Alafasy_128kbps';
+
 export function getDefaultReciterId(): string {
-  return reciters[0]?.id ?? 'Alafasy_128kbps';
+  return reciters.some((reciter) => reciter.id === DEFAULT_RECITER_ID)
+    ? DEFAULT_RECITER_ID
+    : (reciters[0]?.id ?? DEFAULT_RECITER_ID);
 }
 
 export function getReciterById(id: string): Reciter | undefined {

@@ -1,22 +1,16 @@
 [
-  {
-    "id": "Abdullaah_3awwaad_Al-Juhaynee_128kbps",
-    "name": "Abdullaah Awaad Al-Juhaynee"
-  },
-  {
-    "id": "warsh/warsh_ibrahim_aldosary_128kbps",
-    "name": "Ibrahim Al Dosary"
-  },
-  {
-    "id": "Husary_128kbps",
-    "name": "Mahmoud Khalil Al-Husary"
-  },
-  {
-    "id": "Alafasy_128kbps",
-    "name": "Mishary Rashid Alafasy"
-  },
-  {
-    "id": "Minshawy_Mujawwad_192kbps",
-    "name": "Muhammad Siddiq Al-Minshawi"
-  }
+  { "id": "Alafasy_128kbps", "name": "Mishary Rashid Alafasy", "popular": true },
+  { "id": "Abdul_Basit_Murattal_192kbps", "name": "Abdul Basit Abdus Samad (Murattal)", "popular": true },
+  { "id": "Abdurrahmaan_As-Sudais_192kbps", "name": "Abdurrahman As-Sudais", "popular": true },
+  { "id": "Saood_ash-Shuraym_128kbps", "name": "Saud Ash-Shuraim", "popular": true },
+  { "id": "Husary_128kbps", "name": "Mahmoud Khalil Al-Husary (Murattal)", "popular": true },
+  { "id": "Minshawy_Murattal_128kbps", "name": "Muhammad Siddiq Al-Minshawi (Murattal)", "popular": true },
+  { "id": "Husary_Muallim_128kbps", "name": "Mahmoud Khalil Al-Husary (Muallim)", "memorization": true },
+  { "id": "Abdul_Basit_Mujawwad_128kbps", "name": "Abdul Basit Abdus Samad (Mujawwad)" },
+  { "id": "Minshawy_Mujawwad_192kbps", "name": "Muhammad Siddiq Al-Minshawi (Mujawwad)" },
+  { "id": "Abu_Bakr_Ash-Shaatree_128kbps", "name": "Abu Bakr Ash-Shatri" },
+  { "id": "Hani_Rifai_192kbps", "name": "Hani Ar-Rifai" },
+  { "id": "Mohammad_al_Tablaway_128kbps", "name": "Mohamed Al-Tablawi" },
+  { "id": "Abdullaah_3awwaad_Al-Juhaynee_128kbps", "name": "Abdullaah Awaad Al-Juhaynee" },
+  { "id": "warsh/warsh_ibrahim_aldosary_128kbps", "name": "Ibrahim Al Dosary (Warsh)" }
 ]

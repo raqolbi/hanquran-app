@@ -77,7 +77,9 @@ Rilis gabungan sejak 0.5.0: aplikasi Android (Capacitor), Gerbang Threads, SEO &
 - **Bahasa sejak paint pertama:** pengguna `en` tidak lagi melihat kedipan teks Indonesia (`docs/21` §5.6)
 - **Tautan pembuat via env** `NEXT_PUBLIC_AUTHOR_*` / `NEXT_PUBLIC_ORGANIZATION_URL` — dikosongkan/`-` = disembunyikan (`docs/26` §4.5)
 - **Pemberitahuan penyimpanan** di Pengaturan bila browser tidak mengizinkan penyimpanan data (mode privat)
-- **Sorot kata saat tilawah** di Surah Detail & Mode Fokus untuk qari Alafasy, Husary, dan Minshawi — data waktu dari quran-align (CC BY 4.0); bisa dimatikan di Pengaturan → Playback → Sorot Kata (`docs/37`)
+- **Sorot kata saat tilawah** di Surah Detail & Mode Fokus untuk 12 qari — data waktu dari quran-align (CC BY 4.0); bisa dimatikan di Pengaturan → Playback → Sorot Kata (`docs/37`)
+- **9 qari baru:** Abdul Basit (Murattal & Mujawwad), Abdurrahman As-Sudais, Saud Ash-Shuraim, Al-Husary (Muallim — untuk hafalan), Al-Minshawi (Murattal), Abu Bakr Ash-Shatri, Hani Ar-Rifai, Mohamed Al-Tablawi
+- **Tanda qari** di Pengaturan: ★ Populer, Untuk hafalan, Sorot kata
 
 #### Perbaikan
 
@@ -101,6 +103,8 @@ Rilis gabungan sejak 0.5.0: aplikasi Android (Capacitor), Gerbang Threads, SEO &
 - Tidak ada perubahan skema Dexie; settings lama dilengkapi otomatis saat aplikasi dibuka
 - Service Worker baru terpasang otomatis; pengguna cukup membuka aplikasi online sekali
 - Default tautan Threads kini `@qolcore` (ubah lewat env bila perlu)
+- Qari default **pengguna baru** kini Mishary Alafasy; pengguna lama tetap memakai qari yang tersimpan
+- Data sorot kata menambah ±5 MB (terkompresi) ke APK Android
 - Versi `package.json` **0.6.0** — tampil otomatis di layar Tentang HanQuran
 
 #### Masalah yang diketahui
@@ -108,7 +112,7 @@ Rilis gabungan sejak 0.5.0: aplikasi Android (Capacitor), Gerbang Threads, SEO &
 - 15 unit test Cache Storage gagal karena lingkungan jsdom (bukan kode aplikasi)
 - Gerbang Threads belum punya focus trap / tombol Esc
 - Membuka surat apa pun menimpa posisi "Lanjutkan Hafalan" ke ayat 1
-- Sorot kata belum tersedia untuk qari default (Al-Juhaynee) dan Ibrahim Al Dosary (Warsh)
+- Sorot kata belum tersedia untuk Al-Juhaynee dan Ibrahim Al Dosary (Warsh)
 - Rincian lengkap: `docs/18` Phase 12b — residual
 
 #### Uji sebelum rilis

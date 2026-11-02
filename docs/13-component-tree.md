@@ -70,7 +70,7 @@ Mode Fokus — app/focus/[id]/page.tsx (client)
 Pengaturan — app/settings/page.tsx (client)
 ├─ SettingsHeader
 ├─ pemberitahuan "Data tidak dapat disimpan" (degraded mode, docs/15 §12.5)
-├─ SettingsSection × n                   (Bahasa, Qari, Playback, Ukuran Teks + TextSizePreview,
+├─ SettingsSection × n                   (Bahasa, Qari + ReciterBadges, Playback, Ukuran Teks + TextSizePreview,
 │                                         Offline & Cache + OfflineStatusBadge, Aksesibilitas)
 │  └─ SettingsRow + Select / Switch / SegmentedControl
 ├─ ClearCacheDialog

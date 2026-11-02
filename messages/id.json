@@ -102,7 +102,12 @@
       "title": "Qari",
       "description": "Pilih suara qari favorit untuk bacaan audio.",
       "selectPlaceholder": "Pilih qari",
-      "selectAriaLabel": "Pilih qari"
+      "selectAriaLabel": "Pilih qari",
+      "badgePopular": "Populer",
+      "badgeMemorization": "Untuk hafalan",
+      "badgeWordHighlight": "Sorot kata",
+      "noWordHighlight": "Qari ini belum mendukung sorot kata.",
+      "legend": "★ Populer = qari yang dikenal luas (kurasi HanQuran). Untuk hafalan = rekaman metode belajar (Muallim). Sorot kata = kata yang dibaca disorot saat tilawah."
     },
     "playback": {
       "title": "Playback",
@@ -111,7 +116,7 @@
       "autoFollowDescription": "Otomatis menggulir layar agar ayat yang sedang diputar tetap terlihat.",
       "autoFollowAriaLabel": "Aktifkan auto follow playback",
       "wordHighlight": "Sorot Kata",
-      "wordHighlightDescription": "Menyorot kata yang sedang dibaca saat tilawah diputar. Tersedia untuk qari: {reciters}.",
+      "wordHighlightDescription": "Menyorot kata yang sedang dibaca saat tilawah diputar. Tersedia untuk {count} qari bertanda \"Sorot kata\" di pilihan Qari.",
       "wordHighlightAriaLabel": "Aktifkan sorot kata",
       "murotalEnabled": "Mode Murotal",
       "murotalEnabledDescription": "Putar tilawah secara berkelanjutan: lanjut ke ayat berikutnya atau surat berikutnya hingga Anda berhenti.",

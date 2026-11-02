@@ -8,12 +8,48 @@
       "source": "Alafasy_128kbps"
     },
     {
+      "reciterId": "Abdul_Basit_Murattal_192kbps",
+      "source": "Abdul_Basit_Murattal_64kbps"
+    },
+    {
+      "reciterId": "Abdul_Basit_Mujawwad_128kbps",
+      "source": "Abdul_Basit_Mujawwad_128kbps"
+    },
+    {
+      "reciterId": "Abdurrahmaan_As-Sudais_192kbps",
+      "source": "Abdurrahmaan_As-Sudais_192kbps"
+    },
+    {
+      "reciterId": "Abu_Bakr_Ash-Shaatree_128kbps",
+      "source": "Abu_Bakr_Ash-Shaatree_128kbps"
+    },
+    {
+      "reciterId": "Hani_Rifai_192kbps",
+      "source": "Hani_Rifai_192kbps"
+    },
+    {
       "reciterId": "Husary_128kbps",
       "source": "Husary_64kbps"
     },
     {
+      "reciterId": "Husary_Muallim_128kbps",
+      "source": "Husary_Muallim_128kbps"
+    },
+    {
       "reciterId": "Minshawy_Mujawwad_192kbps",
       "source": "Minshawy_Mujawwad_192kbps"
+    },
+    {
+      "reciterId": "Minshawy_Murattal_128kbps",
+      "source": "Minshawy_Murattal_128kbps"
+    },
+    {
+      "reciterId": "Mohammad_al_Tablaway_128kbps",
+      "source": "Mohammad_al_Tablaway_128kbps"
+    },
+    {
+      "reciterId": "Saood_ash-Shuraym_128kbps",
+      "source": "Saood_ash-Shuraym_128kbps"
     }
   ]
 }

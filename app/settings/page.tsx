@@ -75,10 +75,9 @@ export default function SettingsPage() {
   const textSize = fontSizeToTextSize(fontSize);
 
   const { reciters } = useReciters();
-  const wordTimingReciterNames = reciters
-    .filter((reciter) => hasWordTimings(reciter.id))
-    .map((reciter) => reciter.name)
-    .join(', ');
+  const wordTimingReciterCount = reciters.filter((reciter) =>
+    hasWordTimings(reciter.id),
+  ).length;
   const contrastMode = useUserStore((s) => s.settings.contrastMode);
   const smoothAnimation = useUserStore((s) => s.settings.smoothAnimation);
   const autoFollowPlayback = useUserStore((s) => s.settings.autoFollowPlayback);
@@ -133,9 +132,10 @@ export default function SettingsPage() {
     label: t(`language.${option.value}`),
   }));
 
-  const selectedQariName =
-    reciters.find((reciter) => reciter.id === reciterId)?.name ??
-    t('qari.selectPlaceholder');
+  const selectedReciter = reciters.find(
+    (reciter) => reciter.id === normalizeReciterId(reciterId),
+  );
+  const selectedQariName = selectedReciter?.name ?? t('qari.selectPlaceholder');
 
   const handleReciterChange = (value: string) => {
     void updateSettings({ reciterId: value });
@@ -233,14 +233,34 @@ export default function SettingsPage() {
                 {selectedQariName}
               </SelectValue>
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="max-h-[min(24rem,60vh)] overflow-y-auto">
               {reciters.map((option) => (
                 <SelectItem key={option.id} value={option.id}>
-                  {option.name}
+                  <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <span>{option.name}</span>
+                    <ReciterBadges
+                      popular={option.popular}
+                      memorization={option.memorization}
+                      wordHighlight={hasWordTimings(option.id)}
+                    />
+                  </span>
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+          {selectedReciter ? (
+            <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+              <ReciterBadges
+                popular={selectedReciter.popular}
+                memorization={selectedReciter.memorization}
+                wordHighlight={hasWordTimings(selectedReciter.id)}
+              />
+              {!hasWordTimings(selectedReciter.id) ? (
+                <span>{t('qari.noWordHighlight')}</span>
+              ) : null}
+            </div>
+          ) : null}
+          <p className="mt-2 text-xs text-muted-foreground">{t('qari.legend')}</p>
         </SettingsSection>
 
         <SettingsSection
@@ -265,7 +285,7 @@ export default function SettingsPage() {
               <SettingsRow
                 label={t('playback.wordHighlight')}
                 description={t('playback.wordHighlightDescription', {
-                  reciters: wordTimingReciterNames,
+                  count: wordTimingReciterCount,
                 })}
                 control={
                   <Switch
@@ -414,6 +434,40 @@ export default function SettingsPage() {
         isClearing={isClearingCache}
       />
     </div>
+  );
+}
+
+/** Tanda qari: Populer (kurasi), Untuk Hafalan (Muallim), Sorot Kata (data quran-align). */
+function ReciterBadges({
+  popular,
+  memorization,
+  wordHighlight,
+}: {
+  popular?: boolean;
+  memorization?: boolean;
+  wordHighlight: boolean;
+}) {
+  const t = useTranslations('settings.qari');
+  const badge =
+    'inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium leading-none';
+  return (
+    <>
+      {popular ? (
+        <span className={`${badge} bg-amber-100 text-amber-900`}>
+          ★ {t('badgePopular')}
+        </span>
+      ) : null}
+      {memorization ? (
+        <span className={`${badge} bg-sky-100 text-sky-900`}>
+          {t('badgeMemorization')}
+        </span>
+      ) : null}
+      {wordHighlight ? (
+        <span className={`${badge} bg-emerald-100 text-emerald-900`}>
+          {t('badgeWordHighlight')}
+        </span>
+      ) : null}
+    </>
   );
 }
 
