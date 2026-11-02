@@ -1520,7 +1520,7 @@ Catatan lingkungan: `npm run lint` tidak dapat dijalankan karena ESLint bukan de
 - [x] [A11Y] P14-6 — gerbang Threads (P2)
 - [x] [NEW] P14-7 — ESLint (P2)
 - [x] [TEST] P14-8 — 15 test jsdom (P2)
-- [ ] [FIX] P14-9 — celah kecil (P2)
+- [x] [FIX] P14-9 — celah kecil (P2)
 - [ ] [TEST] P14-10 — kebersihan test (P3)
 
 **Sudah dikerjakan di luar fase ini (2 Nov 2026):** `package-lock.json` disinkronkan (`npm ci` hijau di lingkungan bersih); 5 komponen tidak terpakai dihapus; atribusi pihak ketiga di `THIRD_PARTY_NOTICES.md`.

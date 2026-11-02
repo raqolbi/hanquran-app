@@ -20,7 +20,6 @@
     "addFavorite": "Tambahkan ke favorit",
     "removeFavorite": "Hapus dari favorit",
     "backToSurahList": "Kembali ke daftar surat",
-    "done": "Selesai",
     "repeat": "Repeat",
     "target": "Target",
     "play": "Putar",
@@ -42,7 +41,8 @@
     "dataLoadTitle": "Gagal memuat data",
     "dataLoadHint": "Periksa koneksi internet Anda, lalu coba lagi.",
     "retryLoad": "Coba lagi",
-    "backToHome": "Ke beranda"
+    "backToHome": "Ke beranda",
+    "saveFavoriteFailed": "Favorit gagal disimpan. Coba lagi."
   },
   "home": {
     "searchPlaceholder": "Cari surat...",
@@ -52,7 +52,6 @@
     "memorizedProgress": "Terakhir dibaca: ayat {current} dari {total}",
     "encouragement": "Terus semangat! Kamu hebat.",
     "continueReadingAria": "Lanjutkan {surah} ayat {ayah}",
-    "myFavorites": "Favorit Saya",
     "favoritesEmpty": "Tandai surat favorit untuk melihatnya di sini",
     "footer": {
       "madeBy": "Dibuat oleh <author>{name}</author>",
@@ -70,11 +69,9 @@
     "previousAyah": "Ayat sebelumnya",
     "nextAyah": "Ayat berikutnya",
     "audioProgress": "Progres audio",
-    "ayahRemaining": "Ayat {ayah} • {count} tersisa",
     "saveOffline": "Simpan Offline",
     "saveOfflineDownloading": "Mengunduh audio...",
     "saveOfflineAriaLabel": "Simpan audio surat untuk pemakaian offline",
-    "saveOfflineUnavailable": "Penyimpanan offline memerlukan browser yang mendukung cache.",
     "offlineDownloadProgress": "{completed} dari {total} ayat diunduh"
   },
   "audio": {
@@ -84,8 +81,6 @@
     "exit": "Keluar",
     "exitAriaLabel": "Keluar dari Mode Fokus",
     "ayahCounter": "Ayat {current} / {total}",
-    "openRepeatSettings": "Buka Pengaturan Repeat",
-    "repeatSyncedHint": "Pengaturan repeat disinkronkan dengan halaman Surat.",
     "previousAyah": "Ayat Sebelum",
     "nextAyah": "Ayat Berikut"
   },
@@ -121,14 +116,6 @@
       "murotalEnabledDescription": "Putar tilawah secara berkelanjutan: lanjut ke ayat berikutnya atau surat berikutnya hingga Anda berhenti.",
       "murotalEnabledAriaLabel": "Aktifkan mode murotal",
       "quranComplete": "Anda telah mencapai akhir Al-Qur'an."
-    },
-    "translation": {
-      "title": "Terjemahan",
-      "description": "Atur tampilan terjemahan ayat secara default.",
-      "show": "Tampilkan terjemahan",
-      "hide": "Sembunyikan terjemahan",
-      "scope": "Berlaku pada semua surat.",
-      "toggleAriaLabel": "Tampilkan terjemahan"
     },
     "textSize": {
       "title": "Ukuran Teks",
@@ -253,12 +240,8 @@
     "toAyah": "Sampai Ayat",
     "rangeInvalid": "Range harus di antara 1 dan {max}, serta Dari ≤ Sampai.",
     "statusActiveAyah": "Ayat Aktif",
-    "statusAyahDetail": "Ayat {ayah} • {remaining}",
     "statusRange": "Range Ayat {from}-{to}",
     "statusSurah": "Surat {name}",
-    "remainingInfinite": "∞ tersisa",
-    "remainingCount": "{count}x tersisa",
-    "cycleProgress": "Siklus {current} / {total}",
     "progressAriaLabel": "Pengulangan ke-{current} dari {total}",
     "atAyah": "Sedang di Ayat {ayah}",
     "atAyahOfTotal": "Sedang di Ayat {current} dari {total}",
@@ -280,9 +263,5 @@
     "openThreads": "Buka Threads",
     "continue": "Lanjut",
     "openFailedHint": "Jika Threads tidak terbuka, ketuk Lanjut."
-  },
-  "nav": {
-    "home": "Beranda",
-    "settings": "Pengaturan"
   }
 }

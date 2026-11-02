@@ -108,6 +108,8 @@ Prioritas: **P1** = berdampak langsung ke pengguna/CI · **P2** = kualitas & aks
 
 ### C5. Celah kecil — P2
 
+✅ **Selesai 2 Nov 2026** — `install-prompt` aman storage diblokir; gagal simpan favorit → toast "Favorit gagal disimpan"; `null` di Select qari diabaikan (P14-5); 12 kunci i18n tak terpakai + namespace `nav` dihapus.
+
 | Lokasi | Masalah | Usulan |
 |--------|---------|--------|
 | `lib/install-prompt.ts` | `localStorage.setItem` tanpa `try/catch` (sama seperti bug gerbang yang sudah diperbaiki) | Bungkus `try/catch` |

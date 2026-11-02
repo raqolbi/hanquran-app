@@ -69,7 +69,11 @@ export function dismissInstallBanner(now = Date.now()): void {
   }
 
   const record: DismissRecord = { dismissedAt: now };
-  window.localStorage.setItem(DISMISS_STORAGE_KEY, JSON.stringify(record));
+  try {
+    window.localStorage.setItem(DISMISS_STORAGE_KEY, JSON.stringify(record));
+  } catch {
+    // Storage diblokir — banner tetap tertutup untuk sesi ini (state React).
+  }
 }
 
 export function clearInstallBannerDismissal(): void {
@@ -77,7 +81,11 @@ export function clearInstallBannerDismissal(): void {
     return;
   }
 
-  window.localStorage.removeItem(DISMISS_STORAGE_KEY);
+  try {
+    window.localStorage.removeItem(DISMISS_STORAGE_KEY);
+  } catch {
+    // Storage tidak tersedia — tidak ada yang perlu dihapus.
+  }
 }
 
 export type InstallPromptOutcome = 'accepted' | 'dismissed' | 'unavailable';

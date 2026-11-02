@@ -14,6 +14,7 @@ import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
 import { useSurahList } from '@/hooks/use-surah-list';
 import { matchesSurahSearch } from '@/lib/surah-search';
 import type { SurahSummary } from '@/services/quran';
+import { showAppToast } from '@/lib/app-toast';
 import { useUserStore } from '@/stores/userStore';
 
 interface HomeClientProps {
@@ -100,7 +101,11 @@ export function HomeClient({ initialSurahs }: HomeClientProps) {
                     ayahCount={surah.ayahCount}
                     type={surah.type}
                     isFavorited={surah.isFavorited}
-                    onToggleFavorite={() => void toggleFavorite(surah.number)}
+                    onToggleFavorite={() =>
+                      toggleFavorite(surah.number).catch(() =>
+                        showAppToast(t('saveFavoriteFailed')),
+                      )
+                    }
                   />
                 ))
               ) : (

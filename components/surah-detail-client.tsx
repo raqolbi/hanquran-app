@@ -36,6 +36,7 @@ import { scrollToAyahAfterPaint } from '@/lib/ayah-scroll';
 import { parseSurahIdFromPathname, routes } from '@/lib/routes';
 import { navigateApp } from '@/lib/navigate';
 import type { SurahData } from '@/services/quran';
+import { showAppToast } from '@/lib/app-toast';
 import { useUserStore } from '@/stores/userStore';
 import type { AppLocale } from '@/types';
 
@@ -102,6 +103,7 @@ function SurahDetailView({
 }) {
   const router = useRouter();
   const tPlayback = useTranslations('settings.playback');
+  const tErrors = useTranslations('errors');
   const {
     showTranslation,
     showTransliteration,
@@ -213,7 +215,9 @@ function SurahDetailView({
           isFavorited={isFavorited}
           isOfflineReady={isOfflineReady}
           onToggleFavorite={() =>
-            void toggleFavorite(surah.number, { ayahNumber: activeAyah })
+            toggleFavorite(surah.number, { ayahNumber: activeAyah }).catch(() =>
+              showAppToast(tErrors('saveFavoriteFailed')),
+            )
           }
         />
 

@@ -1,3 +1,5 @@
+import { Blob as NodeBlob } from 'node:buffer';
+
 import { beforeEach } from 'vitest';
 import 'fake-indexeddb/auto';
 
@@ -67,7 +69,6 @@ if (typeof globalThis.MediaError === 'undefined') {
  * Pakai `Blob` Node agar test Cache Storage berjalan (docs/39 C3).
  */
 if (typeof window !== 'undefined') {
-  const { Blob: NodeBlob } = await import('node:buffer');
   if (typeof (new globalThis.Blob([]) as Blob & { stream?: unknown }).stream !== 'function') {
     globalThis.Blob = NodeBlob as unknown as typeof Blob;
   }

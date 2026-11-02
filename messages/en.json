@@ -20,7 +20,6 @@
     "addFavorite": "Add to favorites",
     "removeFavorite": "Remove from favorites",
     "backToSurahList": "Back to surah list",
-    "done": "Done",
     "repeat": "Repeat",
     "target": "Target",
     "play": "Play",
@@ -42,7 +41,8 @@
     "dataLoadTitle": "Failed to load data",
     "dataLoadHint": "Check your internet connection and try again.",
     "retryLoad": "Try again",
-    "backToHome": "Back to home"
+    "backToHome": "Back to home",
+    "saveFavoriteFailed": "Could not save favorite. Please try again."
   },
   "home": {
     "searchPlaceholder": "Search surahs...",
@@ -52,7 +52,6 @@
     "memorizedProgress": "Last read: verse {current} of {total}",
     "encouragement": "Keep going — you're doing great!",
     "continueReadingAria": "Continue {surah} at verse {ayah}",
-    "myFavorites": "My Favorites",
     "favoritesEmpty": "Mark surahs as favorites to see them here",
     "footer": {
       "madeBy": "Made by <author>{name}</author>",
@@ -70,11 +69,9 @@
     "previousAyah": "Previous verse",
     "nextAyah": "Next verse",
     "audioProgress": "Audio progress",
-    "ayahRemaining": "Verse {ayah} • {count} remaining",
     "saveOffline": "Save Offline",
     "saveOfflineDownloading": "Downloading audio...",
     "saveOfflineAriaLabel": "Save surah audio for offline use",
-    "saveOfflineUnavailable": "Offline storage requires a browser that supports cache.",
     "offlineDownloadProgress": "{completed} of {total} verses downloaded"
   },
   "audio": {
@@ -84,8 +81,6 @@
     "exit": "Exit",
     "exitAriaLabel": "Exit Focus Mode",
     "ayahCounter": "Verse {current} / {total}",
-    "openRepeatSettings": "Open repeat settings",
-    "repeatSyncedHint": "Repeat settings stay in sync with the Surah page.",
     "previousAyah": "Previous Verse",
     "nextAyah": "Next Verse"
   },
@@ -121,14 +116,6 @@
       "murotalEnabledDescription": "Play tilawah continuously: advance to the next verse or surah until you stop.",
       "murotalEnabledAriaLabel": "Enable murotal mode",
       "quranComplete": "You have reached the end of the Quran."
-    },
-    "translation": {
-      "title": "Translation",
-      "description": "Set the default translation display for verses.",
-      "show": "Show translation",
-      "hide": "Hide translation",
-      "scope": "Applies to all surahs.",
-      "toggleAriaLabel": "Show translation"
     },
     "textSize": {
       "title": "Text Size",
@@ -253,12 +240,8 @@
     "toAyah": "To Verse",
     "rangeInvalid": "Range must be between 1 and {max}, and From ≤ To.",
     "statusActiveAyah": "Active Verse",
-    "statusAyahDetail": "Verse {ayah} • {remaining}",
     "statusRange": "Verse Range {from}-{to}",
     "statusSurah": "Surah {name}",
-    "remainingInfinite": "∞ remaining",
-    "remainingCount": "{count}x remaining",
-    "cycleProgress": "Cycle {current} / {total}",
     "progressAriaLabel": "Repeat {current} of {total}",
     "atAyah": "Currently on Verse {ayah}",
     "atAyahOfTotal": "Currently on Verse {current} of {total}",
@@ -280,9 +263,5 @@
     "openThreads": "Open Threads",
     "continue": "Continue",
     "openFailedHint": "If Threads doesn’t open, tap Continue."
-  },
-  "nav": {
-    "home": "Home",
-    "settings": "Settings"
   }
 }
