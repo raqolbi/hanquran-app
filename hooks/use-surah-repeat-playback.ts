@@ -48,6 +48,7 @@ import { useUserStore } from '@/stores/userStore';
 import { isWordLoopActive } from '@/stores/wordLoopStore';
 import { stopWordLoop, toggleWordLoopPause } from '@/services/word-loop-engine';
 import type { RepeatStatusProps } from '@/components/repeat-status';
+import { isRelayNeeded, useBackgroundRelay } from '@/hooks/use-background-relay';
 
 function toRepeatCountValue(count: number): RepeatCount {
   const match = REPEAT_OPTIONS.find((option) => option.value === count);
@@ -143,6 +144,15 @@ export function useSurahRepeatPlayback({
     [surahId, reciterId, totalAyahs, surahName],
   );
 
+  // Estafet latar: Mode Murotal lintas surat saat layar mati (`docs/32` §10.1).
+  const { startRelay, advanceRelay, relayPrevious } = useBackgroundRelay({
+    reciterId,
+    routeMode,
+    playAyah,
+    pause,
+    ensureAyahPlayable,
+  });
+
   const advanceMurotal = useCallback(
     (murotal: ReturnType<typeof resolveMurotalAfterAyahEnd>) => {
       resetRuntime();
@@ -170,6 +180,10 @@ export function useSurahRepeatPlayback({
               surahId,
               nextSurahId: murotal.surahId,
             });
+            if (isRelayNeeded()) {
+              startRelay(murotal.surahId, murotal.ayahNumber);
+              return;
+            }
             void useUserStore
               .getState()
               .setLastViewed(murotal.surahId, murotal.ayahNumber);
@@ -205,12 +219,16 @@ export function useSurahRepeatPlayback({
       pause,
       ensureAyahPlayable,
       tAudio,
+      startRelay,
     ],
   );
 
   const handleAyahEnded = useCallback(() => {
     // Ulang Kata menangguhkan Repeat ayat & Murotal (docs/38 §4.4).
     if (isWordLoopActive()) return;
+
+    // Estafet latar: ayat yang selesai milik surat lain.
+    if (advanceRelay()) return;
 
     const state = useRepeatStore.getState();
     const murotalEnabled = useUserStore.getState().settings.murotalEnabled;
@@ -264,6 +282,7 @@ export function useSurahRepeatPlayback({
     pause,
     setActiveAyah,
     advanceMurotal,
+    advanceRelay,
   ]);
 
   useAudioOnEnded(handleAyahEnded);
@@ -280,6 +299,12 @@ export function useSurahRepeatPlayback({
 
     pendingPlayConsumedRef.current = surahId;
     setActiveAyah(pendingAyah);
+    // Dari estafet latar: ayat ini sudah diputar, jangan diulang dari awal.
+    const audio = useAudioStore.getState();
+    const track = audio.currentTrack;
+    if (audio.isPlaying && track?.surahId === surahId && track.ayahNumber === pendingAyah) {
+      return;
+    }
     void playAyah(playParams(pendingAyah));
   }, [surahId, setActiveAyah, playAyah, playParams]);
 
@@ -419,14 +444,17 @@ export function useSurahRepeatPlayback({
   );
 
   const goToPreviousTrack = useCallback(() => {
+    // ⏮/⏭ (juga di layar kunci) mengikuti posisi estafet latar.
+    if (relayPrevious()) return;
     applyPlaybackTrackStep(
       resolvePlaybackTrackStep('previous', trackNavParams),
     );
-  }, [applyPlaybackTrackStep, trackNavParams]);
+  }, [applyPlaybackTrackStep, trackNavParams, relayPrevious]);
 
   const goToNextTrack = useCallback(() => {
+    if (advanceRelay()) return;
     applyPlaybackTrackStep(resolvePlaybackTrackStep('next', trackNavParams));
-  }, [applyPlaybackTrackStep, trackNavParams]);
+  }, [applyPlaybackTrackStep, trackNavParams, advanceRelay]);
 
   useEffect(() => {
     return setMediaSessionTrackNavigation({

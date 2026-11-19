@@ -590,7 +590,7 @@ Sebelum coding Capacitor dimulai, tim harus menyepakati:
 | Satu ayat selesai (Repeat/Murotal) | Hanya **satu** advance — event `complete` di-debounce |
 | Putar ulang ayat yang sama setelah selesai | Mulai dari awal (`restart`), bukan `resume` di akhir trek |
 | Mode Murotal antar ayat (satu surat) + background | Lanjut ayat berikutnya via `playAyah` (tanpa reload) |
-| Mode Murotal lintas surat | Intent di `sessionStorage` + hard nav; auto-play surat berikutnya |
+| Mode Murotal lintas surat | Intent di `sessionStorage` + hard nav; auto-play surat berikutnya. **Saat layar mati/aplikasi di latar:** estafet latar, tanpa pindah halaman (lihat catatan di bawah) |
 | PWA production | Identik sebelum fitur ini |
 
 **Catatan Murotal + background:** `backgroundPlayback` bersifat global pada NativeAudio (bukan flag khusus Murotal). Antar-ayat dalam surat tidak perlu navigasi — cocok di background. Lintas surat memakai hard `location.replace` di APK; tanpa persist intent, auto-play surat berikutnya hilang (diperbaiki lewat `sessionStorage` di `lib/murotal-pending-play.ts`).
@@ -600,6 +600,8 @@ Sebelum coding Capacitor dimulai, tim harus menyepakati:
 **Jeda antar ayat (bukan delay produk):** tidak ada `setTimeout` antar ayat. Jedanya dari reload native per ayat (`unload` → resolve path/cache → `preload` → `play`) demi andal ExoPlayer setelah `STATE_ENDED`.
 
 **Skip notifikasi / seek ujung:** tombol samping tidak lagi seek ±15 dtk (hindari `complete` palsu di ayat pendek). Prev/next menekan `complete` residual ~800ms; seek scrubber ke ujung juga tidak memicu advance murotal/repeat.
+
+**Lintas surat saat layar mati (19 Nov 2026):** halaman `.html` baru tidak selesai hydrate selama WebView tersembunyi (diuji di Huawei JEF-NX9, Android 10: hanya kerangka layout), sehingga auto-play surat berikutnya tertahan sampai layar menyala. Kini halaman lama memutar surat berikutnya sendiri ("estafet latar", `services/background-relay/`, `hooks/use-background-relay.ts`): ayat-ayat berikutnya mengikuti Mode Murotal, ⏮/⏭ di layar kunci mengikuti posisi estafet, dan setelah layar menyala ≥ 1,5 detik halaman pindah ke surat & ayat yang sedang diputar tanpa mengulang ayat itu. Di PWA/web tidak berubah.
 
 **Keluar saat async lintas surat:** `cancelCrossSurahNavigation` membatalkan token + pending; Back/`history_back` dari halaman putar memanggil `stopPlaybackSession` agar tidak ada notifikasi yatim.
 
