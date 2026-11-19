@@ -2,7 +2,7 @@ export type RepeatTarget = 'current_ayah' | 'ayah_range' | 'entire_surah';
 
 export const INFINITE = Number.POSITIVE_INFINITY;
 
-export type RepeatCount = 1 | 5 | 10 | 25 | 50 | typeof INFINITE;
+export type RepeatCount = 1 | 3 | 5 | 10 | 25 | 50 | typeof INFINITE;
 
 export interface RepeatOption {
   value: RepeatCount;
@@ -11,7 +11,8 @@ export interface RepeatOption {
 }
 
 export const REPEAT_OPTIONS: RepeatOption[] = [
-  { value: 1, emoji: '🐣', label: '1x' },
+  { value: 1, emoji: '🥚', label: '1x' },
+  { value: 3, emoji: '🐣', label: '3x' },
   { value: 5, emoji: '🐥', label: '5x' },
   { value: 10, emoji: '🐤', label: '10x' },
   { value: 25, emoji: '🦜', label: '25x' },
@@ -21,7 +22,9 @@ export const REPEAT_OPTIONS: RepeatOption[] = [
 
 export function getRepeatOption(value: number): RepeatOption {
   return (
-    REPEAT_OPTIONS.find((opt) => opt.value === value) ?? REPEAT_OPTIONS[1]
+    REPEAT_OPTIONS.find((opt) => opt.value === value) ??
+    // Nilai tak dikenal → 5× (bawaan), bukan posisi indeks yang bisa bergeser.
+    REPEAT_OPTIONS.find((opt) => opt.value === 5)!
   );
 }
 

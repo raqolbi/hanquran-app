@@ -80,7 +80,9 @@ export function RepeatSelector({
       }}
     >
       <SelectTrigger
-        aria-label={tCommon('repeat')}
+        aria-label={`${tCommon('repeat')}: ${
+          count === INFINITE ? t('infinite') : t('countTimes', { n: count })
+        }`}
         className={cn(
           variant === 'inline' &&
             'h-9 w-auto min-w-[5.5rem] shrink-0 px-2 text-xs',
@@ -122,7 +124,13 @@ export function RepeatSelector({
                 <span className="text-lg" aria-hidden>
                   {option.emoji}
                 </span>
-                {option.label}
+                {/* Pembaca layar: "5 kali", bukan "5x". */}
+                <span aria-hidden>{option.label}</span>
+                <span className="sr-only">
+                  {option.value === INFINITE
+                    ? option.label
+                    : t('countTimes', { n: option.value })}
+                </span>
               </span>
             </SelectItem>
           );

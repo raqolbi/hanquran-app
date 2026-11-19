@@ -261,7 +261,8 @@
     "atAyahOfTotal": "Sedang di Ayat {current} dari {total}",
     "previewAyah": "Ayat {ayah} • {count}",
     "previewRange": "Ayat {from}-{to} • {count}",
-    "previewSurah": "{surah} • {count}"
+    "previewSurah": "{surah} • {count}",
+    "countTimes": "{n} kali"
   },
   "pwa": {
     "installTitle": "Instal HanQuran",

@@ -261,7 +261,8 @@
     "atAyahOfTotal": "Currently on Verse {current} of {total}",
     "previewAyah": "Verse {ayah} • {count}",
     "previewRange": "Verses {from}-{to} • {count}",
-    "previewSurah": "{surah} • {count}"
+    "previewSurah": "{surah} • {count}",
+    "countTimes": "{n, plural, one {# time} other {# times}}"
   },
   "pwa": {
     "installTitle": "Install HanQuran",

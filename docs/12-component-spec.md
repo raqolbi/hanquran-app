@@ -1085,7 +1085,7 @@ Konten `toolbarStart`:
 
 ```text
 RepeatSelector (variant="inline")
-  ├── Select jumlah (🐣 1x … ♾️)
+  ├── Select jumlah (🥚 1x … ♾️)
   ├── RepeatProgressBadge (x/y) — saat sesi repeat aktif
   └── Settings Button (⚙) → RepeatSettingsDialog
 ```
@@ -1152,13 +1152,16 @@ interface RepeatSelectorProps {
 Setiap nilai memiliki ikon child-friendly:
 
 ```text
-🐣 1x
+🥚 1x
+🐣 3x
 🐥 5x
 🐤 10x
 🦜 25x
 🦅 50x
 ♾️ Infinite
 ```
+
+3x ditambahkan 19 Nov 2026 untuk hafalan bertahap yang lebih ringan; ikon 1x menjadi 🥚 agar urutan tetap tumbuh (telur → menetas → anak ayam). Dialog pengulangan memakai grid 4 kolom. Pembaca layar membaca angka ("5 kali"), bukan label "5x" atau nama emoji.
 
 Label utama selalu memakai
 ikon + angka.
@@ -1278,7 +1281,8 @@ Urutan field mengikuti wireframe:
 ## Repeat Count
 
 ```text
-○ 🐣 1x
+○ 🥚 1x
+○ 🐣 3x
 ● 🐥 5x
 ○ 🐤 10x
 ○ 🦜 25x

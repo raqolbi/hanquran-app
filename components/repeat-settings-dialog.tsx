@@ -176,7 +176,7 @@ function RepeatSettingsForm({
         <h3 className="text-sm font-semibold text-foreground">
           {t('countTitle')}
         </h3>
-        <div className="grid grid-cols-3 gap-2 short-landscape:gap-1.5" role="radiogroup" aria-label={t('countAriaLabel')}>
+        <div className="grid grid-cols-4 gap-2 short-landscape:gap-1.5" role="radiogroup" aria-label={t('countAriaLabel')}>
           {repeatOptions.map((option) => {
             const selected = draftCount === option.value;
             return (
@@ -195,8 +195,12 @@ function RepeatSettingsForm({
                     : 'border-border bg-white text-foreground hover:border-primary/40 hover:bg-muted/40',
                 )}
               >
-                <span className="text-2xl leading-none short-landscape:text-xl">{option.emoji}</span>
-                <span className="text-xs font-medium">{option.label}</span>
+                <span className="text-2xl leading-none short-landscape:text-xl" aria-hidden="true">{option.emoji}</span>
+                <span className="text-xs font-medium" aria-hidden="true">{option.label}</span>
+                {/* Pembaca layar: "5 kali", bukan "5x" atau nama emoji. */}
+                <span className="sr-only">
+                  {option.value === INFINITE ? option.label : t('countTimes', { n: option.value })}
+                </span>
               </button>
             );
           })}
