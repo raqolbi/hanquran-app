@@ -74,6 +74,25 @@ Dexie downloadManifest (metadata: surahId + reciterId, status ready)
 - **Unduh Audio Otomatis** (opt-in, default OFF): saat play ayat online, cache file MP3 ayat tersebut ke `hanquran-audio-v1` — lihat `docs/31-auto-download-audio-spec.md`.
 - Saat Simpan Offline selesai, precache juga shell route `/surah/[id]` + data JSON surat tersebut (`services/offline-surah-precache.ts`).
 
+### 2.2a Audio di APK: folder data aplikasi (19 Nov 2026)
+
+Di APK (Capacitor), audio offline **tidak** lagi disimpan di Cache Storage WebView, karena:
+
+- Cache Storage bisa dibersihkan sistem saat ruang penyimpanan menipis, sehingga surat yang sudah disimpan offline diam-diam hilang.
+- Pemutar native menyalin berkas dari Cache Storage ke `Directory.Cache` setiap kali diputar, sehingga audio yang sama tersimpan dua kali.
+
+Aturan baru (`services/audio-store/`):
+
+| Bagian | Perilaku |
+|--------|----------|
+| Lokasi | `Directory.Data/audio/<qari>/<SSSAAA>.mp3` (`/` di id qari → `__`). Terhapus hanya bila aplikasi dihapus atau datanya dihapus |
+| Pemutar native | Memakai berkas di folder data langsung (`file://`), tanpa menyalin; bila belum ada, URL CDN |
+| Simpan per surat, unduh saat diputar | Menulis ke folder data |
+| Status offline & ukuran di Pengaturan | Dihitung dari isi folder data |
+| Hapus Audio Tersimpan | Menghapus folder `audio/` |
+| Pindah otomatis | Sekali per perangkat saat aplikasi dibuka: audio di Cache Storage dipindah ke folder data, lalu Cache Storage audio & salinan lama di `Directory.Cache/hanquran-audio` dihapus; `downloadManifest` disamakan dengan berkas yang ada (`components/offline/audio-store-sync.tsx`) |
+| Web/PWA | Tidak berubah (Cache Storage `hanquran-audio-v1`) |
+
 ### 2.3 Preferensi pengguna
 
 Dexie (`settings`, `favorites`, `lastRead`, dll.) — selalu lokal, tidak bergantung jaringan.

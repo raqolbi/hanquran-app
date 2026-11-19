@@ -13,6 +13,12 @@ import {
   DOWNLOAD_MANIFEST_VERSION,
 } from '@/services/audio-cache-constants';
 import { precacheSurahForOffline } from '@/services/offline-surah-precache';
+import {
+  parseAyahAudioUrl,
+  storedAudioUri,
+  usesFileAudioStore,
+  writeStoredAudio,
+} from '@/services/audio-store/audio-store';
 import type {
   DownloadProgressHandler,
   DownloadSurahParams,
@@ -84,10 +90,40 @@ async function responseSize(response: Response): Promise<number> {
   return blob.size;
 }
 
+/** Satu ayat ke folder data (APK, `docs/30` §2.2a); mengembalikan ukurannya. */
+async function storeUrlAsFile(url: string): Promise<number> {
+  const ref = parseAyahAudioUrl(url);
+  if (!ref) throw new Error(`URL audio tidak dikenal: ${url}`);
+  if (await storedAudioUri(ref)) return 0;
+  const response = await fetch(url, { mode: 'cors' });
+  if (!response.ok) {
+    throw new Error(`Gagal mengunduh audio: ${url} (${response.status})`);
+  }
+  const blob = await response.blob();
+  await writeStoredAudio(ref, blob);
+  return blob.size;
+}
+
 async function downloadUrlsWithConcurrency(
   urls: string[],
   onProgress: (completed: number, total: number) => void,
 ): Promise<number> {
+  if (usesFileAudioStore()) {
+    let completed = 0;
+    let totalSize = 0;
+    for (let offset = 0; offset < urls.length; offset += DOWNLOAD_CONCURRENCY) {
+      const sizes = await Promise.all(
+        urls.slice(offset, offset + DOWNLOAD_CONCURRENCY).map(async (url) => {
+          const size = await storeUrlAsFile(url);
+          completed += 1;
+          onProgress(completed, urls.length);
+          return size;
+        }),
+      );
+      totalSize += sizes.reduce((a, b) => a + b, 0);
+    }
+    return totalSize;
+  }
   const cache = await caches.open(AUDIO_CACHE_NAME);
   let completed = 0;
   let totalSize = 0;

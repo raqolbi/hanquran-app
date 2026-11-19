@@ -1,12 +1,16 @@
 /**
  * Resolve path audio untuk player native Capacitor (bukan HTMLAudioElement).
- * Cache Storage → file di Directory.Cache; selain itu URL HTTPS CDN.
+ * Berkas di folder data (`docs/30` §2.2a) → `file://` tanpa menyalin; audio lama
+ * di Cache Storage dipindah ke folder data saat diputar; selain itu URL CDN.
  * Hanya dipakai saat isNativePlatform() — docs/32 §10.1.
  */
 
-import { Directory, Filesystem } from '@capacitor/filesystem';
-
-import { AUDIO_CACHE_NAME } from '@/services/audio-cache-constants';
+import { AUDIO_CACHE_NAME } from "@/services/audio-cache-constants";
+import {
+  parseAyahAudioUrl,
+  storedAudioUri,
+  writeStoredAudio,
+} from "@/services/audio-store/audio-store";
 
 export interface NativePlayablePath {
   /** file:// atau https:// untuk NativeAudio.preload */
@@ -15,73 +19,35 @@ export interface NativePlayablePath {
   fromCache: boolean;
 }
 
-function cacheFileName(url: string): string {
-  let hash = 0;
-  for (let i = 0; i < url.length; i += 1) {
-    hash = (Math.imul(31, hash) + url.charCodeAt(i)) | 0;
-  }
-  return `hq-audio-${Math.abs(hash)}.mp3`;
-}
-
-async function blobToBase64(blob: Blob): Promise<string> {
-  const buffer = await blob.arrayBuffer();
-  const bytes = new Uint8Array(buffer);
-  let binary = '';
-  const chunk = 0x8000;
-  for (let i = 0; i < bytes.length; i += chunk) {
-    binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
-  }
-  return btoa(binary);
-}
-
-async function writeCacheBlob(url: string, blob: Blob): Promise<string> {
-  const path = `hanquran-audio/${cacheFileName(url)}`;
+/** Pindahkan satu entri Cache Storage lama ke folder data (`docs/30` §2.2a). */
+async function moveLegacyCacheEntry(url: string): Promise<string | null> {
+  const ref = parseAyahAudioUrl(url);
+  if (!ref || typeof caches === "undefined") return null;
   try {
-    await Filesystem.mkdir({
-      path: 'hanquran-audio',
-      directory: Directory.Cache,
-      recursive: true,
-    });
+    const cache = await caches.open(AUDIO_CACHE_NAME);
+    const response = await cache.match(url);
+    if (!response?.ok) return null;
+    const blob = await response.blob();
+    if (blob.size === 0) return null;
+    const uri = await writeStoredAudio(ref, blob);
+    await cache.delete(url);
+    return uri;
   } catch {
-    // sudah ada
+    return null;
   }
-
-  const data = await blobToBase64(blob);
-  await Filesystem.writeFile({
-    path,
-    data,
-    directory: Directory.Cache,
-  });
-
-  const { uri } = await Filesystem.getUri({
-    path,
-    directory: Directory.Cache,
-  });
-  return uri;
 }
 
 export async function resolveNativePlayablePath(
-  url: string,
+  url: string
 ): Promise<NativePlayablePath> {
   if (!url) {
     return { assetPath: url, isUrl: true, fromCache: false };
   }
 
-  if (typeof caches !== 'undefined') {
-    try {
-      const cache = await caches.open(AUDIO_CACHE_NAME);
-      const response = await cache.match(url);
-      if (response?.ok) {
-        const blob = await response.blob();
-        if (blob.size > 0) {
-          const assetPath = await writeCacheBlob(url, blob);
-          return { assetPath, isUrl: true, fromCache: true };
-        }
-      }
-    } catch {
-      // jatuh ke CDN
-    }
-  }
+  const ref = parseAyahAudioUrl(url);
+  const stored = ref ? await storedAudioUri(ref) : null;
+  const assetPath = stored ?? (await moveLegacyCacheEntry(url));
+  if (assetPath) return { assetPath, isUrl: true, fromCache: true };
 
   return { assetPath: url, isUrl: true, fromCache: false };
 }

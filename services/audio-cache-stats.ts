@@ -1,4 +1,5 @@
 import { AUDIO_CACHE_NAME } from '@/services/audio-cache-constants';
+import { storedAudioUsage, usesFileAudioStore } from '@/services/audio-store/audio-store';
 
 export interface AudioCacheStats {
   entryCount: number;
@@ -7,6 +8,11 @@ export interface AudioCacheStats {
 
 /** Ukur ukuran aktual cache audio di Cache Storage (sumber kebenaran tampilan Settings). */
 export async function measureAudioCacheStats(): Promise<AudioCacheStats> {
+  // APK: audio di folder data (`docs/30` §2.2a).
+  if (usesFileAudioStore()) {
+    const usage = await storedAudioUsage();
+    return { entryCount: usage.files, totalSizeBytes: usage.bytes };
+  }
   if (typeof caches === 'undefined') {
     return { entryCount: 0, totalSizeBytes: 0 };
   }

@@ -4,12 +4,23 @@
  */
 
 import { AUDIO_CACHE_NAME } from '@/services/audio-cache-constants';
+import {
+  parseAyahAudioUrl,
+  storedAudioUri,
+  usesFileAudioStore,
+  writeStoredAudio,
+} from '@/services/audio-store/audio-store';
 import { useOfflineStore } from '@/stores/offlineStore';
 import { useUserStore } from '@/stores/userStore';
 
-/** Apakah URL audio sudah ada di Cache Storage. */
+/** Apakah URL audio sudah tersimpan (folder data di APK, Cache Storage di web). */
 export async function isAyahAudioCached(url: string): Promise<boolean> {
-  if (typeof caches === 'undefined' || !url) return false;
+  if (!url) return false;
+  if (usesFileAudioStore()) {
+    const ref = parseAyahAudioUrl(url);
+    return ref ? (await storedAudioUri(ref)) !== null : false;
+  }
+  if (typeof caches === 'undefined') return false;
 
   try {
     const cache = await caches.open(AUDIO_CACHE_NAME);
@@ -25,7 +36,12 @@ export async function isAyahAudioCached(url: string): Promise<boolean> {
  * Tidak memperbarui Dexie `downloadManifest`.
  */
 export async function cacheAyahAudioOnPlay(url: string): Promise<void> {
-  if (typeof caches === 'undefined' || !url) return;
+  if (!url) return;
+  if (usesFileAudioStore()) {
+    await storeAyahFile(url);
+    return;
+  }
+  if (typeof caches === 'undefined') return;
 
   try {
     const cache = await caches.open(AUDIO_CACHE_NAME);
@@ -39,6 +55,23 @@ export async function cacheAyahAudioOnPlay(url: string): Promise<void> {
     if (!response.ok) return;
 
     await cache.put(url, response.clone());
+    useOfflineStore.getState().notifyAudioCacheUpdated();
+    void useOfflineStore.getState().refreshManifest();
+  } catch {
+    // best-effort — kegagalan tidak memengaruhi streaming
+  }
+}
+
+/** APK: unduh ayat ke folder data (`docs/30` §2.2a), best-effort. */
+async function storeAyahFile(url: string): Promise<void> {
+  const ref = parseAyahAudioUrl(url);
+  if (!ref) return;
+  try {
+    if (!(await storedAudioUri(ref))) {
+      const response = await fetch(url, { mode: 'cors' });
+      if (!response.ok) return;
+      await writeStoredAudio(ref, await response.blob());
+    }
     useOfflineStore.getState().notifyAudioCacheUpdated();
     void useOfflineStore.getState().refreshManifest();
   } catch {

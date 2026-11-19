@@ -5,6 +5,7 @@
  */
 
 import { AUDIO_CACHE_NAME } from '@/services/audio-cache-constants';
+import { storedAudioCounts, usesFileAudioStore } from '@/services/audio-store/audio-store';
 import { buildSurahAudioUrls } from '@/services/download-manager';
 
 /** Semua file MP3 ayat surat+qari ada di `hanquran-audio-v1`. */
@@ -13,7 +14,12 @@ export async function isSurahAudioFullyCached(
   reciterId: string,
   ayahCount: number,
 ): Promise<boolean> {
-  if (typeof caches === 'undefined' || ayahCount <= 0) {
+  if (ayahCount <= 0) return false;
+  // APK: hitung berkas di folder data (`docs/30` §2.2a).
+  if (usesFileAudioStore()) {
+    return ((await storedAudioCounts(reciterId))[surahId] ?? 0) >= ayahCount;
+  }
+  if (typeof caches === 'undefined') {
     return false;
   }
 

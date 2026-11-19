@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 
 import { initStores } from '@/stores';
+import { AudioStoreSync } from '@/components/offline/audio-store-sync';
 import { AccessibilityProvider } from '@/components/providers/accessibility-provider';
 import { IntlProvider } from '@/components/providers/intl-provider';
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
@@ -30,6 +31,7 @@ export function AppProviders({ children }: AppProvidersProps) {
           <PwaSplashDismisser />
           <ThreadsGate />
           <AppToastHost />
+          <AudioStoreSync />
           {children}
         </AccessibilityProvider>
       </IntlProvider>
