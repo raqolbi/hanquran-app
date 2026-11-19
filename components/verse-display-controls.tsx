@@ -65,7 +65,7 @@ export function VerseDisplayControls({
       className={cn(
         'max-w-3xl mx-auto px-4 py-3 short-landscape:py-2',
         sticky &&
-          'sticky top-[env(safe-area-inset-top,0px)] z-30 border-b border-border bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/90',
+          'sticky top-0 z-30 pt-[calc(0.75rem+var(--app-safe-top))] border-b border-border bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/90',
       )}
     >
       <div className="flex items-stretch gap-2 sm:gap-3">

@@ -67,7 +67,7 @@ export function WordLoopHint({ surahId, available, bottomOffset }: WordLoopHintP
           <div
             role="note"
             aria-live="polite"
-            className="pointer-events-auto w-full max-w-md rounded-2xl border border-emerald-200 bg-white/95 p-3 text-sm shadow-lg backdrop-blur-sm"
+            className="pointer-events-auto w-full max-w-md rounded-2xl border border-emerald-200 bg-white p-3 text-sm shadow-lg"
           >
             <div className="flex gap-2.5">
               <Lightbulb size={18} aria-hidden="true" className="mt-0.5 shrink-0 text-amber-500" />

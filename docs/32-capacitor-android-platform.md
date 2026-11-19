@@ -128,6 +128,20 @@ Detail operasional dual pipeline: §6.5. Task implementasi: §13.
 
 ---
 
+### 3.4a Edge-to-edge Android 15/16 (status bar menimpa header)
+
+Temuan 18 Nov 2026: di HP Android 15/16 status bar menimpa header Beranda.
+
+- **Penyebab:** `targetSdkVersion = 36`, sehingga Android memaksa edge-to-edge. `StatusBar.setOverlaysWebView(false)` dan `setBackgroundColor` diabaikan OS (README `@capacitor/status-bar`). Capacitor 8 (`SystemBars.java`) meneruskan inset ke CSS (`env(safe-area-inset-*)` plus variabel `--safe-area-inset-*`) karena layout memakai `viewport-fit=cover`.
+- **Perbaikan:**
+  - `app/globals.css` mendefinisikan `--app-safe-top` dan `--app-safe-bottom` (dari `env(safe-area-inset-*)`; variabel `--safe-area-inset-*` Capacitor sengaja tidak dipakai karena di Android 10 bernilai 37px padahal status bar tidak menimpa konten) serta utility `pt-safe`.
+  - Header Beranda, subhalaman, Pengaturan, chrome surat, dan Mode Fokus kini `top-0` dengan padding status bar, sehingga latar header memanjang di belakang status bar.
+  - `body` diberi padding bawah setinggi bilah navigasi.
+- **Ikon status bar:** `lib/status-bar-style.ts` mengatur warna ikon.
+  - Bila edge-to-edge aktif (jarak aman atas > 0), ikon terang di Beranda bergradien dan ikon gelap di halaman berlatar putih.
+  - Di Android lama status bar tetap teal dengan ikon terang.
+- **Uji:** tata letak disimulasikan di HP Android 10 dengan jarak 36px lewat CDP; dipastikan juga jarak = 0 di Android 10 tanpa simulasi. Uji akhir di perangkat Android 15/16.
+
 ## 4. Verdict Kelayakan
 
 ### 4.1 Keputusan audit

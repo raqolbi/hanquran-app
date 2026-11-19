@@ -54,6 +54,15 @@
 
 :root {
   color-scheme: only light;
+  /*
+   * Jarak aman status bar / bilah navigasi. Android 15+ (targetSdk 36) memaksa
+   * edge-to-edge: konten digambar di belakang status bar. Capacitor 8 meneruskan
+   * inset ke env() bila WebView >= 140; WebView lebih lama diberi padding native.
+   * Variabel --safe-area-inset-* dari Capacitor TIDAK dipakai: di Android 10
+   * nilainya 37px padahal status bar tidak menimpa konten. docs/32 §3.4a.
+   */
+  --app-safe-top: env(safe-area-inset-top, 0px);
+  --app-safe-bottom: env(safe-area-inset-bottom, 0px);
   --background: oklch(0.995 0.001 0);
   --foreground: oklch(0.12 0.02 280);
   --card: oklch(1 0 0);
@@ -88,12 +97,19 @@
   --sidebar-ring: oklch(0.54 0.14 170);
 }
 
+/* Padding atas setinggi status bar (0 di web & Android lama). */
+@utility pt-safe {
+  padding-top: var(--app-safe-top);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+    /* Konten terakhir tidak tertutup bilah navigasi gestur (edge-to-edge). */
+    padding-bottom: var(--app-safe-bottom);
   }
   html {
     @apply font-sans;

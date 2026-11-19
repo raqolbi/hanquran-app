@@ -26,7 +26,7 @@ describe('VerseDisplayControls', () => {
     const root = container.firstElementChild;
 
     expect(root?.className.includes('sticky')).toBe(true);
-    expect(root?.className.includes('safe-area-inset-top')).toBe(true);
+    expect(root?.className.includes('var(--app-safe-top)')).toBe(true);
     expect(root?.className.includes('z-30')).toBe(true);
     expect(root?.className.includes('border-b')).toBe(true);
   });

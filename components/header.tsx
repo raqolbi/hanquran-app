@@ -22,7 +22,7 @@ export function Header() {
       initial={false}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="sticky top-0 z-40"
+      className="sticky top-0 z-40 pt-safe"
       style={{
         background: 'linear-gradient(135deg, #C4844A 0%, #2D9B8C 100%)',
       }}

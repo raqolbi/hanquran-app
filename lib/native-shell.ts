@@ -12,6 +12,7 @@ import { attachNativeBackgroundAudioKeepAlive } from '@/lib/native-background-au
 import { cancelCrossSurahNavigation } from '@/lib/murotal-pending-play';
 import { isNativePlatform } from '@/lib/platform';
 import { routes } from '@/lib/routes';
+import { syncStatusBarIcons } from '@/lib/status-bar-style';
 import {
   dismissOrphanPlaybackIfNeeded,
   isPlaybackPathname,
@@ -98,6 +99,7 @@ export async function initNativeShell(): Promise<void> {
   dismissOrphanPlaybackIfNeeded();
 
   await applyStatusBar();
+  await syncStatusBarIcons(window.location.pathname);
   attachBackButton();
   attachNativeBackgroundAudioKeepAlive();
   await hideSplash();

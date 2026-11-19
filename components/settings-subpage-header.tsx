@@ -6,12 +6,15 @@ import { ArrowLeft } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Logo } from '@/components/shared/Logo';
+import { useScrolled } from '@/hooks/use-scrolled';
+import { cn } from '@/lib/utils';
 import { navigateApp } from '@/lib/navigate';
 import { isAndroidBuild, isNativePlatform } from '@/lib/platform';
 import { routes } from '@/lib/routes';
 
 /** Header halaman turunan Pengaturan (Tentang, Cara Pakai): kembali + judul. */
 export function SettingsSubpageHeader({ title }: { title: string }) {
+  const scrolled = useScrolled();
   const router = useRouter();
   const tCommon = useTranslations('common');
 
@@ -32,7 +35,10 @@ export function SettingsSubpageHeader({ title }: { title: string }) {
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25, ease: 'easeOut' }}
-      className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur"
+      className={cn(
+        'sticky top-0 z-30 border-b bg-background pt-safe transition-[box-shadow,border-color] duration-200',
+        scrolled ? 'border-border shadow-[0_2px_12px_-6px_rgb(0_0_0/0.18)]' : 'border-transparent',
+      )}
     >
       <div className="mx-auto flex w-full max-w-2xl items-center gap-3 px-4 py-3 sm:px-6">
         <button

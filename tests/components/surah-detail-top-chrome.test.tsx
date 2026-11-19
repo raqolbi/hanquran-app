@@ -19,7 +19,7 @@ describe('SurahDetailTopChrome', () => {
 
     const root = container.firstElementChild;
     expect(root?.className.includes('sticky')).toBe(true);
-    expect(root?.className.includes('safe-area-inset-top')).toBe(true);
+    expect(root?.className.includes('pt-safe')).toBe(true);
     expect(root?.className.includes('z-30')).toBe(true);
     expect(screen.getByText('Surah Header')).toBeTruthy();
     expect(screen.getByText('Reading Controls')).toBeTruthy();

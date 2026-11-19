@@ -20,8 +20,9 @@ export function SurahDetailTopChrome({
     <div
       data-surah-detail-top-chrome
       className={cn(
-        'sticky top-[env(safe-area-inset-top,0px)] z-30',
-        'border-b border-border bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/90',
+        'sticky top-0 z-30 pt-safe',
+        // Solid: di WebView Android ayat yang digulir tembus lewat latar transparan.
+        'border-b border-border bg-background',
         'short-landscape:static short-landscape:z-auto',
         className,
       )}
