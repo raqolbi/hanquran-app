@@ -27,19 +27,19 @@ export type AndroidBackAction = 'history_back' | 'go_home' | 'exit_app';
 
 /**
  * Putuskan aksi Back.
+ * - Di Beranda → keluar (walau ada riwayat: Beranda adalah akar aplikasi)
  * - Ada history WebView → mundur
  * - Tidak di root → ke Beranda (deep link / cold start)
- * - Di Beranda → keluar
  */
 export function resolveAndroidBackAction(input: {
   pathname: string;
   canGoBack: boolean;
 }): AndroidBackAction {
-  if (input.canGoBack) {
-    return 'history_back';
-  }
   if (isRootAppPath(input.pathname)) {
     return 'exit_app';
+  }
+  if (input.canGoBack) {
+    return 'history_back';
   }
   return 'go_home';
 }

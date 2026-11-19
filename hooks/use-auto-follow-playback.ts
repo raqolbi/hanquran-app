@@ -25,6 +25,11 @@ interface UseAutoFollowPlaybackOptions {
 /**
  * Menggulir layar agar ayat aktif tetap terlihat saat playback.
  * Spesifikasi: `docs/28-playback-settings.md`.
+ *
+ * Gulir manual menangguhkan auto-follow sebentar, tetapi menekan Putar
+ * (pemutaran baru dimulai, termasuk "Ulangi lagi") adalah niat eksplisit:
+ * penangguhan diabaikan agar layar membawa pengguna ke ayat yang terdengar
+ * (`docs/28-playback-settings.md`).
  */
 export function useAutoFollowPlayback({
   activeAyah,
@@ -36,6 +41,7 @@ export function useAutoFollowPlayback({
   const suspendedUntilRef = useRef(0);
   const isAutoScrollingRef = useRef(false);
   const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const wasPlayingRef = useRef(false);
 
   useEffect(() => {
     const suspendAutoFollow = () => {
@@ -89,8 +95,15 @@ export function useAutoFollowPlayback({
   }, []);
 
   useEffect(() => {
+    const justStarted = isPlaying && !wasPlayingRef.current;
+    wasPlayingRef.current = isPlaying;
+
     if (!enabled || !isPlaying) {
       return;
+    }
+
+    if (justStarted) {
+      suspendedUntilRef.current = 0;
     }
 
     const element = document.getElementById(getAyahElementId(activeAyah));

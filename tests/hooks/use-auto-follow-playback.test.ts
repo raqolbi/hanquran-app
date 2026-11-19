@@ -168,4 +168,29 @@ describe('useAutoFollowPlayback', () => {
 
     expect(scrollTo.mock.calls.length).toBeGreaterThan(callsAfterFirst);
   });
+
+  it('menekan Putar setelah gulir manual tetap membawa layar ke ayat aktif', () => {
+    createOffscreenAyah('ayah-1', -1800, -1600);
+
+    const { rerender } = renderHook(
+      ({ isPlaying }) =>
+        useAutoFollowPlayback({
+          activeAyah: 1,
+          isPlaying,
+          enabled: true,
+          smoothAnimation: false,
+          bottomInset: 200,
+        }),
+      { initialProps: { isPlaying: false } },
+    );
+
+    act(() => {
+      window.dispatchEvent(new Event('touchmove'));
+    });
+    expect(scrollTo).not.toHaveBeenCalled();
+
+    rerender({ isPlaying: true });
+
+    expect(scrollTo).toHaveBeenCalledTimes(1);
+  });
 });

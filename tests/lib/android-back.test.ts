@@ -30,8 +30,11 @@ describe('resolveAndroidBackAction', () => {
     expect(
       resolveAndroidBackAction({ pathname: '/surah/1.html', canGoBack: true }),
     ).toBe('history_back');
+  });
+
+  it('Beranda adalah akar: Back keluar walau ada riwayat', () => {
     expect(resolveAndroidBackAction({ pathname: '/', canGoBack: true })).toBe(
-      'history_back',
+      'exit_app',
     );
   });
 

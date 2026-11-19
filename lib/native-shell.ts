@@ -56,9 +56,13 @@ function attachBackButton(): void {
   backListenerAttached = true;
 
   void App.addListener('backButton', ({ canGoBack }) => {
+    // Di APK, `canGoBack` native selalu false (navigasi .html static export),
+    // padahal riwayat WebView ada, sehingga Back selalu ke Beranda. Navigation
+    // API (Chrome 102+) melihat riwayat yang sebenarnya.
+    const nav = (window as Window & { navigation?: { canGoBack?: boolean } }).navigation;
     const action = resolveAndroidBackAction({
       pathname: window.location.pathname,
-      canGoBack,
+      canGoBack: canGoBack || nav?.canGoBack === true,
     });
 
     switch (action) {
