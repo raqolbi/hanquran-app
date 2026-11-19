@@ -47,7 +47,7 @@
   "home": {
     "searchPlaceholder": "Cari surat...",
     "searchAriaLabel": "Cari surat",
-    "continueMemorization": "Lanjutkan Hafalan",
+    "continueMemorization": "Lanjutkan Membaca",
     "ayahProgress": "Ayat {ayah} • {percent}% surat",
     "memorizedProgress": "Terakhir dibaca: ayat {current} dari {total}",
     "encouragement": "Terus semangat! Kamu hebat.",
@@ -195,7 +195,7 @@
         "focusMode": "Mode Fokus — satu ayat, minim distraksi",
         "murotal": "Mode Murotal — tilawah berkelanjutan lintas ayat dan surat",
         "mediaSession": "Kontrol audio dari lock screen (Media Session)",
-        "continueReading": "Lanjutkan Hafalan dari posisi terakhir",
+        "continueReading": "Lanjutkan membaca dari posisi terakhir",
         "offline": "Baca seluruh Al-Qur'an offline sejak terpasang; unduh audio per surat untuk didengar tanpa internet",
         "preferences": "Preferensi lokal (bahasa UI, qari, tampilan ayat, aksesibilitas)"
       }
@@ -349,9 +349,9 @@
         ]
       },
       "continue": {
-        "title": "Lanjutkan Hafalan",
+        "title": "Lanjutkan Membaca",
         "items": [
-          "Posisi terakhir disimpan saat Anda memutar audio atau mengetuk ayat — kartu Lanjutkan Hafalan di Beranda membawa Anda kembali ke sana.",
+          "Posisi terakhir disimpan saat Anda memutar audio atau mengetuk ayat — kartu Lanjutkan Membaca di Beranda membawa Anda kembali ke sana.",
           "Tandai surat favorit dengan ikon hati; lihat lewat filter Favorit di Beranda."
         ]
       },

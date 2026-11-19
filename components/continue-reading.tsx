@@ -77,7 +77,7 @@ export function ContinueReading({
   );
 }
 
-/** Kartu Lanjutkan Hafalan — hanya tampil jika `lastRead` tersedia di Dexie. */
+/** Kartu Lanjutkan Membaca — hanya tampil jika `lastRead` tersedia di Dexie. */
 export function ContinueReadingSection({
   surahs,
 }: {

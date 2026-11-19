@@ -44,7 +44,7 @@ Buka aplikasi → Pilih surat → Putar audio → Aktifkan repeat → Mode fokus
 - **Ulang Kata** — ketuk kata (atau seret beberapa kata) untuk diulang terus, dengan jeda menirukan
 - Audio tilawah **per ayat** dari 14 qari, **sorot kata** yang sedang dibaca, kecepatan 0.5×–1.5×
 - **Mode Fokus** — satu ayat, minim distraksi
-- **Lanjutkan Hafalan** dari posisi terakhir
+- **Lanjutkan Membaca** dari posisi terakhir
 - Preferensi lokal (bahasa UI, qari, tampilan ayat, aksesibilitas)
 
 ### Status project saat ini
@@ -89,8 +89,8 @@ Buka aplikasi → Pilih surat → Putar audio → Aktifkan repeat → Mode fokus
 Pratinjau antarmuka HanQuran — mobile-first, UI Bahasa Indonesia (diambil dari build 0.6.0, 2 Nov 2026).
 
 <p align="center">
-  <img src="./docs/images/beranda.png" alt="Beranda HanQuran — kartu Lanjutkan Hafalan, pencarian, filter favorit, dan daftar 114 surat" width="400" />
-  <br><sub><strong>Beranda</strong> — Lanjutkan Hafalan, pencarian, filter favorit, daftar surat</sub>
+  <img src="./docs/images/beranda.png" alt="Beranda HanQuran — kartu Lanjutkan Membaca, pencarian, filter favorit, dan daftar 114 surat" width="400" />
+  <br><sub><strong>Beranda</strong> — Lanjutkan Membaca, pencarian, filter favorit, daftar surat</sub>
 </p>
 
 | Detail surat | Ulang Kata |
@@ -116,7 +116,7 @@ Pratinjau antarmuka HanQuran — mobile-first, UI Bahasa Indonesia (diambil dari
 
 | Fitur | Deskripsi |
 |-------|-----------|
-| **Beranda** | 114 surat, pencarian (nama, arti, nomor), filter favorit, kartu Lanjutkan Hafalan (posisi terakhir dibaca) |
+| **Beranda** | 114 surat, pencarian (nama, arti, nomor), filter favorit, kartu Lanjutkan Membaca (posisi terakhir dibaca) |
 | **Detail Surat** | Ayat rasm Utsmani (font Amiri Quran), **sorot kata saat tilawah** (12 dari 14 qari), terjemahan & transliterasi (toggle), favorit, audio per ayat, unduh offline |
 | **Pengulangan** | 1×, 3×, 5×, 10×, 25×, 50×, tanpa batas — untuk ayat aktif, rentang ayat, atau seluruh surat; badge progres `x/y` |
 | **Mode Murotal** | Tilawah berkelanjutan ke ayat & surat berikutnya sampai dihentikan |

@@ -17,7 +17,7 @@ describe('Halaman Cara Pakai', () => {
       </NextIntlClientProvider>,
     );
     expect(screen.getByRole('heading', { level: 1, name: 'Cara Pakai' })).toBeTruthy();
-    for (const title of ['Pengulangan', 'Ulang Kata', 'Sorot Kata', 'Kecepatan Putar', 'Mode Murotal', 'Mode Fokus', 'Lanjutkan Hafalan', 'Offline', 'Pintasan Keyboard']) {
+    for (const title of ['Pengulangan', 'Ulang Kata', 'Sorot Kata', 'Kecepatan Putar', 'Mode Murotal', 'Mode Fokus', 'Lanjutkan Membaca', 'Offline', 'Pintasan Keyboard']) {
       expect(screen.getByRole('heading', { level: 2, name: title })).toBeTruthy();
     }
   });

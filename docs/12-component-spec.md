@@ -239,8 +239,10 @@ Tidak menampilkan total ayat.
 
 HanQuran bukan dashboard.
 Continue Reading harus terasa
-sebagai "Lanjutkan Hafalan",
-bukan "Lihat Progress".
+sebagai "Lanjutkan Membaca"
+(posisi baca terakhir, bukan
+progres hafalan), bukan
+"Lihat Progress".
 ```
 
 ---

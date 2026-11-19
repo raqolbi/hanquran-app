@@ -47,7 +47,7 @@
   "home": {
     "searchPlaceholder": "Search surahs...",
     "searchAriaLabel": "Search surahs",
-    "continueMemorization": "Continue Memorizing",
+    "continueMemorization": "Continue Reading",
     "ayahProgress": "Verse {ayah} • {percent}% of surah",
     "memorizedProgress": "Last read: verse {current} of {total}",
     "encouragement": "Keep going — you're doing great!",
@@ -349,7 +349,7 @@
         ]
       },
       "continue": {
-        "title": "Continue Memorizing",
+        "title": "Continue Reading",
         "items": [
           "Your last position is saved when you play audio or tap a verse — the Continue card on Home takes you back.",
           "Mark favorite surahs with the heart icon; see them with the Favorites filter on Home."
