@@ -10,7 +10,8 @@ interface SurahDetailTopChromeProps {
 }
 
 /**
- * Chrome atas Surah Detail — header + Reading Controls dalam satu blok sticky.
+ * Chrome atas Surah Detail — header + Reading Controls. Ikut tergulir; setelah
+ * keluar layar, `SurahCompactBar` menempel di atas.
  */
 export function SurahDetailTopChrome({
   children,
@@ -20,10 +21,10 @@ export function SurahDetailTopChrome({
     <div
       data-surah-detail-top-chrome
       className={cn(
-        'sticky top-0 z-30 pt-safe',
+        // Tidak sticky: saat digulir digantikan `SurahCompactBar` supaya area baca lebih luas.
+        'relative pt-safe',
         // Solid: di WebView Android ayat yang digulir tembus lewat latar transparan.
         'border-b border-border bg-background',
-        'short-landscape:static short-landscape:z-auto',
         className,
       )}
     >

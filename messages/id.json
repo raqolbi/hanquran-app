@@ -72,7 +72,9 @@
     "saveOffline": "Simpan Offline",
     "saveOfflineDownloading": "Mengunduh audio...",
     "saveOfflineAriaLabel": "Simpan audio surat untuk pemakaian offline",
-    "offlineDownloadProgress": "{completed} dari {total} ayat diunduh"
+    "offlineDownloadProgress": "{completed} dari {total} ayat diunduh",
+    "compactAyah": "Ayat {n}",
+    "compactFocus": "Mode Fokus"
   },
   "audio": {
     "offlineUnavailableToast": "Audio tidak tersedia offline. Simpan surat ini saat online untuk mendengarkan tanpa internet.",

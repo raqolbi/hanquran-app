@@ -72,7 +72,9 @@
     "saveOffline": "Save Offline",
     "saveOfflineDownloading": "Downloading audio...",
     "saveOfflineAriaLabel": "Save surah audio for offline use",
-    "offlineDownloadProgress": "{completed} of {total} verses downloaded"
+    "offlineDownloadProgress": "{completed} of {total} verses downloaded",
+    "compactAyah": "Verse {n}",
+    "compactFocus": "Focus mode"
   },
   "audio": {
     "offlineUnavailableToast": "Audio isn't available offline. Save this surah while online to listen without internet.",

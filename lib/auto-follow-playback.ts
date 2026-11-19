@@ -14,8 +14,12 @@ export const AUTO_FOLLOW_READABLE_PADDING = 8;
 /** Toleransi (px) dari pusat zona baca sebelum auto follow menggeser lagi. */
 export const AUTO_FOLLOW_CENTER_TOLERANCE = 32;
 
+/** Header penuh halaman surat (ikut tergulir; bilah tipis menempel setelahnya). */
+export const SURAH_DETAIL_FULL_CHROME_SELECTOR = '[data-surah-detail-top-chrome]';
+
+/** Semua chrome atas yang bisa menutupi ayat: header penuh + bilah tipis. */
 export const SURAH_DETAIL_TOP_CHROME_SELECTOR =
-  '[data-surah-detail-top-chrome]';
+  '[data-surah-detail-top-chrome],[data-surah-detail-compact-bar]';
 
 export interface ReadableViewport {
   topInset: number;
@@ -84,12 +88,17 @@ export function measureSurahDetailTopInset(
     return fallback;
   }
 
-  const chrome = document.querySelector(SURAH_DETAIL_TOP_CHROME_SELECTOR);
-  if (!chrome) {
+  const chromes = Array.from(
+    document.querySelectorAll(SURAH_DETAIL_TOP_CHROME_SELECTOR),
+  );
+  if (chromes.length === 0) {
     return fallback;
   }
 
-  const { bottom } = chrome.getBoundingClientRect();
+  // Bagian chrome yang paling bawah masih terlihat (header penuh atau bilah tipis).
+  const bottom = Math.max(
+    ...chromes.map((chrome) => chrome.getBoundingClientRect().bottom),
+  );
 
   if (bottom <= AUTO_FOLLOW_READABLE_PADDING) {
     return AUTO_FOLLOW_READABLE_PADDING;

@@ -21,6 +21,7 @@ import { StartAyahSync } from '@/components/start-ayah-sync';
 import { SurahDetailHeader } from '@/components/surah-detail-header';
 import { SurahDetailScrollSpacer } from '@/components/surah-detail-scroll-spacer';
 import { SurahDetailTopChrome } from '@/components/surah-detail-top-chrome';
+import { SurahCompactBar } from '@/components/surah-compact-bar';
 import { SurahOfflineDownload } from '@/components/surah-offline-download';
 import { DataLoadErrorFallback } from '@/components/shared/ErrorFallback';
 import { VerseDisplayControls } from '@/components/verse-display-controls';
@@ -259,6 +260,15 @@ function SurahDetailView({
           }
         />
       </SurahDetailTopChrome>
+      <SurahCompactBar
+        surahName={surah.englishName}
+        activeAyah={activeAyah}
+        onFocusMode={() =>
+          navigateApp(routes.focus(surahIdParam, activeAyah), (href) =>
+            router.push(href),
+          )
+        }
+      />
 
       <div className="max-w-3xl mx-auto px-4 py-6 short-landscape:py-3">
         <motion.div
